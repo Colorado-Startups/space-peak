@@ -172,6 +172,27 @@ def main():
     check("C6 no call site carries its own exempt list", not dupes,
           f"local copies found in: {dupes}")
 
+    # C5 tests the globs with its OWN fnmatch. is_exempt() is what actually
+    # runs in the hooks and CI. Those two agreeing is not automatic, and
+    # when they diverged the result was silent: is_exempt used
+    # path.lstrip("./"), which takes a SET OF CHARACTERS rather than a
+    # prefix and therefore ate the leading dot of every dotfile path. Every
+    # exemption whose glob began with a dot matched nothing, while C5 kept
+    # reporting the list healthy. An exempt list that silently matches
+    # nothing is the exact rot the house rule warns about, so the contract
+    # is tested through the real function.
+    dead = []
+    for e in entries:
+        glob = e["glob"]
+        sample = next((p for p in paths
+                       if fnmatch.fnmatch(p, glob) or p == glob
+                       or (glob.endswith("/*") and p.startswith(glob[:-1]))),
+                      None)
+        if sample and not R.is_exempt(rules, sample):
+            dead.append(f"{glob} (is_exempt said False for {sample})")
+    check("C13 is_exempt() honours every exempt glob", not dead,
+          f"globs the real function ignores: {dead}")
+
     # --- frozen sites -----------------------------------------------------
     print()
     print("frozen sites")

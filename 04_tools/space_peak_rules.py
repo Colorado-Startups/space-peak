@@ -107,18 +107,36 @@ def exempt_globs(rules):
     return [e["glob"] for e in rules["exempt_paths"]["entries"]]
 
 
+def normalize_rel(path):
+    """Strip a leading './' from a path, and nothing else.
+
+    NOT path.lstrip("./"). lstrip takes a SET OF CHARACTERS, not a prefix,
+    so it eats the leading dot of every dotfile: ".claude/agents/x.md"
+    became "claude/agents/x.md". That silently killed every exemption
+    whose glob began with a dot, which is most of them. The bug was
+    invisible for a while because those paths are not markdown and so
+    never reached the content checks anyway.
+    """
+    while path.startswith("./"):
+        path = path[2:]
+    return path
+
+
 def is_exempt(rules, path):
     """True when a path's job is to describe the rules it would break.
 
     One definition, read by the git hooks, the Claude Code hooks, and CI.
-    An earlier version of this repository duplicated this logic in two
+    An earlier version of this repository duplicated this logic into two
     shell scripts, which is exactly the drift the house rule names.
     """
     import fnmatch
-    norm = path.lstrip("./")
+    norm = normalize_rel(path)
     for glob in exempt_globs(rules):
         if fnmatch.fnmatch(norm, glob) or norm == glob:
             return True
+        # fnmatch's '*' already spans '/', but a trailing '/*' should also
+        # match deeper paths, so ".claude/skills/*" covers
+        # ".claude/skills/space-peak-voice-check/SKILL.md".
         if glob.endswith("/*") and norm.startswith(glob[:-1]):
             return True
     return False

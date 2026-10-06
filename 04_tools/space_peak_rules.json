@@ -182,6 +182,9 @@
     "entries": [
       { "glob": ".githooks/*", "reason": "Routes the checks; quotes the banned terms to describe them." },
       { "glob": ".claude/hooks/*", "reason": "Same, for the Claude Code harness surface." },
+      { "glob": ".claude/agents/*", "reason": "Reviewer prompts list the hedge words and AI tells by name so the reviewer knows what to look for. Added after the first push, where these files produced 7 warnings for quoting the terms they enforce." },
+      { "glob": ".claude/skills/*", "reason": "Skill instructions quote the banned terms and bad examples beside good ones." },
+      { "glob": ".claude/commands/*", "reason": "Slash commands restate the rules they invoke." },
       { "glob": ".github/scripts/*", "reason": "Same, for the CI surface." },
       { "glob": ".github/workflows/*", "reason": "Workflow headers explain what the checks ban." },
       { "glob": "04_tools/space_peak_lint.py", "reason": "Defines the em-dash constant it enforces." },

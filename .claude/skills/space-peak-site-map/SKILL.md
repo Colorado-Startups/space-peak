@@ -9,6 +9,21 @@ description: Build or update the Space Peak candidate-site map in Felt from the 
 
 Turns the register into a Felt map, following the pipeline Photon Mountain already uses in `03_deliverables/maps/` (`MAP_NOTES.md`, a GeoJSON export, a KML sibling).
 
+## Before you start: check the Felt plan
+
+**Verified 2026-10-05: Felt's MCP server is not available on the Colorado Startups, Ltd. workspace plan.** `create_map` returns:
+
+> Felt's MCP server isn't included in the "Colorado Startups, Ltd." workspace's plan, so creating and analyzing maps through MCP isn't available here. MCP access is available on the Business plan and above.
+
+Only `who_am_i`, `help_center`, and `developer_docs` respond. So the Felt API steps below cannot run today. Two routes that do work:
+
+1. **Build the GeoJSON here, import it by hand.** Everything except the API calls is ordinary work: read the register, write `03_deliverables/maps/space-peak-sites.geojson` with one feature per `S-` row carrying its status, and a human imports it through the Felt web app. Recommended, and it keeps the register as the single source.
+2. **Felt AI inside the app** may still work even though MCP does not.
+
+Re-check the plan before assuming this is still true. If it has changed, update this section and the note in `03_deliverables/maps/README.md`.
+
+**Do not report a map as created when only the GeoJSON was written.** Say which happened.
+
 ## The rule that makes this different from an ordinary map
 
 **Render the two permanent exclusions as exclusions, not as low-ranked candidates.**

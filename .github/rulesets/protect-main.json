@@ -1,23 +1,45 @@
 {
   "_comment": [
-    "DORMANT ON THE CURRENT PLAN. GitHub does not enforce rulesets on private",
-    "repositories in a GitHub Free organization. Applying this file will succeed and",
-    "the API will even report enforcement:active, but nothing is enforced. That",
-    "silent-success behaviour is the reason .githooks/ blocks and",
-    ".github/workflows/guardrails.yml exists.",
-    "The day Colorado-Startups moves to GitHub Team this turns on with no rework:",
+    "UNAVAILABLE ON THE CURRENT PLAN. Verified 2026-10-05 by applying it:",
+    "  POST repos/Colorado-Startups/space-peak/rulesets",
+    "  -> HTTP 403 'Upgrade to GitHub Pro or make this repository public to",
+    "     enable this feature.'",
+    "GitHub REJECTS the ruleset outright rather than accepting it and quietly",
+    "not enforcing it. That is the better of the two behaviours, and it means",
+    "there is no risk of a reader seeing enforcement:active and trusting a",
+    "rule that does nothing. An earlier draft of this file claimed the silent",
+    "variant; it was wrong, and this is the corrected record.",
+    "",
+    "So nothing here is live. .githooks/pre-commit and pre-push block, and",
+    ".github/workflows/ runs the same checkers advisory, for the web-UI and",
+    "cloud-agent paths the hooks never see.",
+    "",
+    "The day Colorado-Startups moves to a paid plan this turns on with no",
+    "rework:",
     "  gh api -X POST repos/Colorado-Startups/space-peak/rulesets --input .github/rulesets/protect-main.json",
     "Mirrors the 'Protect main' ruleset live on Colorado-AI/colorado-ai.",
-    "required_approving_review_count is 0 on purpose: the repo is solo-maintained and",
-    "a review requirement would block the maintainer's own pull requests."
+    "required_approving_review_count is 0 on purpose: the repo is",
+    "solo-maintained and a review requirement would block the maintainer's own",
+    "pull requests."
   ],
   "name": "Protect main",
   "target": "branch",
   "enforcement": "active",
-  "conditions": { "ref_name": { "include": ["~DEFAULT_BRANCH"], "exclude": [] } },
+  "conditions": {
+    "ref_name": {
+      "include": [
+        "~DEFAULT_BRANCH"
+      ],
+      "exclude": []
+    }
+  },
   "rules": [
-    { "type": "deletion" },
-    { "type": "non_fast_forward" },
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "non_fast_forward"
+    },
     {
       "type": "pull_request",
       "parameters": {
@@ -26,7 +48,11 @@
         "require_code_owner_review": false,
         "require_last_push_approval": false,
         "required_review_thread_resolution": false,
-        "allowed_merge_methods": ["squash", "merge", "rebase"]
+        "allowed_merge_methods": [
+          "squash",
+          "merge",
+          "rebase"
+        ]
       }
     },
     {
@@ -35,12 +61,24 @@
         "strict_required_status_checks_policy": false,
         "do_not_enforce_on_create": false,
         "required_status_checks": [
-          { "context": "selftests" },
-          { "context": "guardrails" },
-          { "context": "fact-guardrails" },
-          { "context": "voice-check" },
-          { "context": "secret-scan" },
-          { "context": "docs-lint" }
+          {
+            "context": "selftests"
+          },
+          {
+            "context": "guardrails"
+          },
+          {
+            "context": "fact-guardrails"
+          },
+          {
+            "context": "voice-check"
+          },
+          {
+            "context": "secret-scan"
+          },
+          {
+            "context": "docs-lint"
+          }
         ]
       }
     }

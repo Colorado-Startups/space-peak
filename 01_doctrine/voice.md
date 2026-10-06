@@ -94,5 +94,5 @@ From the house rules, and worth repeating because this project is unusually expo
 Deliberate gaps, to be filled when there is something real to say rather than filled now for completeness:
 
 - Tone in long-form versus short-form. There is one draft; there is no evidence yet.
-- Terminology, including the live conflict between "Space Peak" (the project) and "Satellite Peak" (the name the concept brief argues for). See issue #1 and row N-04 of the register. Once that resolves, the resolution belongs here.
+- Terminology, including the live conflict between "Space Peak" (the project) and "Satellite Peak" (the name the concept brief argues for). See issue #2 and row N-04 of the register. Once that resolves, the resolution belongs here.
 - Visual voice. The Felt map and the SVGs need a convention for marking speculative sites and permanent exclusions differently. That convention belongs here once the map exists.

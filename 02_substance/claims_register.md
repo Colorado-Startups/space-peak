@@ -98,7 +98,7 @@ The brief calls the physics sound and the engineering 2040s-hard. These are the 
 | N-01 | Colorado Springs sits in a valley at 6,035 ft | `unverified` | | |
 | N-02 | Colorado Springs was named in 1871, springs actually in Manitou | `unverified` | | |
 | N-03 | "America the Beautiful" was written on the summit of Pikes Peak | `unverified` | | |
-| N-04 | The project name is **Space Peak**; the brief argues for "Satellite Peak" | `open` | | See issue #1. A live conflict, not a fact to verify |
+| N-04 | The project name is **Space Peak**; the brief argues for "Satellite Peak" | `open` | | See issue #2. A live conflict, not a fact to verify |
 
 ## How to add a row
 

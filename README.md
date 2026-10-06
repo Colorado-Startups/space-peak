@@ -52,7 +52,7 @@ Every term, cue list, severity, limit and exemption, in one machine-readable fil
 
 **Every CI check here is advisory. None can block a merge.**
 
-That is a plan limitation, not a design choice. `Colorado-Startups` is on **GitHub Free**, and GitHub does not enforce rulesets on private repositories below the Team plan. Push rulesets, where "nothing under `local/`" and "nothing oversized" would normally live, require Team even to create. Applying a branch ruleset on Free *appears* to work and reports `enforcement: active` while enforcing nothing, which is worse than an error.
+That is a plan limitation, not a design choice. `Colorado-Startups` is on **GitHub Free**, and rulesets are unavailable for private repositories on that plan. Verified on 2026-10-05 by applying both definitions in `.github/rulesets/`: GitHub answered `HTTP 403, Upgrade to GitHub Pro or make this repository public to enable this feature.` It rejects them outright rather than accepting them and quietly enforcing nothing, so nobody will read an `enforcement: active` and trust a rule that does nothing.
 
 So enforcement moved client-side and got teeth:
 
@@ -83,7 +83,7 @@ A checker that cannot run exits 3 and the caller treats it as a warning and pass
 
 ### Turning on real enforcement
 
-Move the org to GitHub Team (GitHub lists Team at about four dollars per seat per month with no seat minimum; check current pricing first), then apply the dormant rulesets, which are already written and version-controlled:
+Move the org to a paid plan (GitHub lists Team at about four dollars per seat per month with no seat minimum; check current pricing first), then apply the two definitions, which are already written and version-controlled:
 
 ```bash
 gh api -X POST repos/Colorado-Startups/space-peak/rulesets --input .github/rulesets/protect-main.json

@@ -66,7 +66,7 @@ The map and any SVG shipping with the piece carry the same labelling discipline 
 
 ### 9. Naming
 
-Issue #1 and register row N-04, the Space Peak versus Satellite Peak conflict, is resolved and the draft is internally consistent with the resolution. **If it is unresolved, this gate fails:** the draft cannot argue for a name the project does not use.
+Issue #2 and register row N-04, the Space Peak versus Satellite Peak conflict, is resolved and the draft is internally consistent with the resolution. **If it is unresolved, this gate fails:** the draft cannot argue for a name the project does not use.
 
 ## Output
 

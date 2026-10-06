@@ -18,15 +18,15 @@ Space Peak is documents. There is no product, no service, no user data, and no c
 
 | Control | Status | What covers it instead |
 | --- | --- | --- |
-| Branch rulesets | **Not enforced** on private repos below Team, and silently so | `.githooks/pre-commit` and `pre-push`, both blocking |
-| Push rulesets (`local/**`, file size) | **Unavailable** below Team | `04_tools/space_peak_files.py`, called from the hooks and CI |
+| Branch rulesets | **Rejected** on private repos on Free (HTTP 403, verified 2026-10-05) | `.githooks/pre-commit` and `pre-push`, both blocking |
+| Push rulesets (`local/**`, file size) | **Rejected** on Free (HTTP 403, verified 2026-10-05) | `04_tools/space_peak_files.py`, called from the hooks and CI |
 | Required status checks | **Unavailable** | Nothing. Checks are advisory; read them |
 | GitHub secret scanning | **Unavailable** (needs Secret Protection) | gitleaks binary |
 | CodeQL code scanning | **Unavailable** (needs Code Security) | semgrep, in `sast.yml` |
 | CODEOWNERS auto-review | **Non-functional** below Team | Nothing. Staged for the upgrade |
 | Dependabot security updates | **Available and enabled** | Native |
 
-Dormant ruleset definitions live in `.github/rulesets/` and are version-controlled so upgrading is one command with no rework.
+The two ruleset definitions live in `.github/rulesets/` and are version-controlled so upgrading the plan is one command with no rework. Applying them today returns 403, which is recorded in each file's own comment block.
 
 **Do not read a green CI check as a merge gate.** It is not one.
 

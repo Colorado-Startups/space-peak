@@ -1,0 +1,56 @@
+<svg viewBox="0 0 740 520" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+  <rect width="740" height="520" fill="#ffffff"/>
+  <title>Cross-section of a hypothetical electromagnetic launch tunnel through a granite peak</title>
+
+  <text x="370" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1a1a2e">The Satellite Peak Sling (hypothetical)</text>
+  <text x="370" y="50" text-anchor="middle" font-size="12" fill="#555">Side view, looking north &#183; west on left, east on right</text>
+
+  <path d="M 20 300 L 90 290 L 150 270 L 230 230 L 300 150 L 340 118 L 360 110 L 380 122 L 420 190 L 460 280 L 520 330 L 620 340 L 720 342 L 720 500 L 20 500 Z"
+        fill="#eceef2" stroke="#dcdfe6" stroke-width="1"/>
+
+  <text x="80" y="330" font-size="10" fill="#999">HIGH COUNTRY &#8776; 9,000 ft</text>
+  <text x="360" y="98" text-anchor="middle" font-size="12" font-weight="700" fill="#1a1a2e">granite summit &#183; ~14,000 ft</text>
+  <text x="530" y="360" font-size="10" fill="#999">CITY / VALLEY &#183; ~6,000 ft</text>
+  <text x="660" y="362" font-size="10" fill="#999">plains &#8594; downrange</text>
+
+  <circle cx="520" cy="330" r="4" fill="#fff" stroke="#666" stroke-width="1.5"/>
+
+  <line x1="60" y1="370" x2="352" y2="128" stroke="#c0392b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="60" y1="370" x2="352" y2="128" stroke="#ffffff" stroke-width="2" stroke-dasharray="8 8" stroke-linecap="round"/>
+
+  <rect x="30" y="352" width="46" height="34" rx="5" fill="#f3f4f7" stroke="#888" stroke-width="1.5"/>
+  <text x="53" y="373" text-anchor="middle" font-size="9" font-weight="600" fill="#555">PORTAL</text>
+  <text x="53" y="404" text-anchor="middle" font-size="10" fill="#555">loading dock &#183; vacuum pumps</text>
+  <text x="53" y="418" text-anchor="middle" font-size="10" fill="#555">capacitor banks</text>
+
+  <text x="175" y="285" font-size="11" font-weight="600" fill="#1a1a2e" transform="rotate(-39 175 285)">vacuum maglev tunnel &#183; ~15 mi through granite</text>
+  <text x="205" y="262" font-size="10" fill="#555" transform="rotate(-39 205 262)">0 &#8594; Mach 23 at ~200 g (satellites only)</text>
+
+  <g transform="translate(352,128) rotate(-39)">
+    <rect x="-4" y="-8" width="22" height="16" rx="3" fill="#f3f4f7" stroke="#888" stroke-width="1.5"/>
+  </g>
+  <text x="300" y="140" text-anchor="end" font-size="10" fill="#555">muzzle: membrane keeps</text>
+  <text x="300" y="152" text-anchor="end" font-size="10" fill="#555">vacuum in, projectile out</text>
+
+  <path d="M 366 116 C 480 20, 620 -10, 730 -20" fill="none" stroke="#666" stroke-width="2.5" stroke-dasharray="2 7" stroke-linecap="round"/>
+
+  <g transform="translate(430,64) rotate(-16)">
+    <path d="M -14 -5 L 8 -5 L 18 0 L 8 5 L -14 5 Z" fill="#1a1a2e"/>
+  </g>
+  <text x="430" y="42" text-anchor="middle" font-size="10" fill="#555">aeroshell ablating &#183; ~40 sec of drag</text>
+
+  <text x="590" y="46" font-size="10" fill="#555">above atmosphere: panels unfold,</text>
+  <text x="590" y="59" font-size="10" fill="#555">onboard thruster circularizes orbit</text>
+  <text x="672" y="20" font-size="10" font-weight="600" fill="#1a1a2e">to orbit &#8594;</text>
+
+  <text x="392" y="176" font-size="10" font-weight="600" fill="#1a1a2e">exit: ~8 km/s, angled ~15&#176; up</text>
+  <text x="392" y="189" font-size="10" fill="#555">at 14,000 ft &#8594; ~40% of air already below</text>
+
+  <path d="M 470 240 q 8 -6 0 -14 q -8 -6 0 -14" fill="none" stroke="#888" stroke-width="1.5"/>
+  <path d="M 484 246 q 12 -9 0 -22 q -12 -9 0 -20" fill="none" stroke="#888" stroke-width="1.5"/>
+  <text x="500" y="238" font-size="10" fill="#555">sonic boom corridor</text>
+  <text x="500" y="251" font-size="10" fill="#555">(the city council problem)</text>
+
+  <text x="110" y="452" font-size="10" fill="#999">Power: grid + capacitors charge between shots &#8212; the &#8220;fuel&#8221; is electricity.</text>
+  <text x="110" y="468" font-size="10" fill="#999">Nothing staged, nothing dropped: one hardened slug per shot, kept whole to orbit.</text>
+</svg>

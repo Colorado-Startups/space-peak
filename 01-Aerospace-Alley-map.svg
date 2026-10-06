@@ -1,0 +1,88 @@
+<svg viewBox="0 0 720 820" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+  <rect width="720" height="820" fill="#ffffff"/>
+  <title>Map of Aerospace Alley along Colorado's Front Range</title>
+
+  <text x="360" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a2e">Aerospace Alley</text>
+  <text x="360" y="54" text-anchor="middle" font-size="12" fill="#555">Colorado&#8217;s Front Range corridor &#183; ~180 miles along I-25</text>
+
+  <g transform="translate(660,90)">
+    <line x1="0" y1="26" x2="0" y2="0" stroke="#888" stroke-width="1.5"/>
+    <path d="M 0 -4 L 5 6 L 0 3 L -5 6 Z" fill="#555"/>
+    <text x="0" y="42" text-anchor="middle" font-size="11" fill="#888">N</text>
+  </g>
+
+  <g transform="translate(36,84)" font-size="11">
+    <circle cx="6" cy="0" r="5" fill="none" stroke="#666" stroke-width="2"/>
+    <text x="18" y="4" fill="#555">Company hub</text>
+    <path d="M 6 22 L 12 32 L 0 32 Z" fill="#c0392b"/>
+    <text x="18" y="31" fill="#555">Military installation</text>
+  </g>
+
+  <path d="M 0 140 L 30 190 L 55 150 L 85 220 L 110 170 L 140 250 L 120 300 L 150 340 L 125 400 L 155 460 L 130 520 L 160 560 L 135 620 L 170 660 L 140 720 L 160 790 L 0 790 Z"
+        fill="#eceef2" stroke="#dcdfe6" stroke-width="1"/>
+  <text x="60" y="330" font-size="11" fill="#999" transform="rotate(-90 60 330)">ROCKY MOUNTAINS</text>
+
+  <path d="M 150 636 L 172 674 L 128 674 Z" fill="#f3f4f7" stroke="#888" stroke-width="1.5"/>
+  <text x="150" y="690" text-anchor="middle" font-size="10" fill="#999">Pikes Peak</text>
+
+  <line x1="300" y1="110" x2="300" y2="795" stroke="#888" stroke-width="4" stroke-linecap="round"/>
+  <g transform="translate(300,128)">
+    <rect x="-14" y="-11" width="28" height="22" rx="4" fill="#f3f4f7" stroke="#888"/>
+    <text x="0" y="4" text-anchor="middle" font-size="10" font-weight="700" fill="#555">I-25</text>
+  </g>
+
+  <circle cx="300" cy="170" r="6" fill="#fff" stroke="#666" stroke-width="2"/>
+  <text x="320" y="167" font-size="13" font-weight="600" fill="#1a1a2e">Fort Collins</text>
+  <text x="320" y="182" font-size="11" fill="#555">CSU research, avionics suppliers</text>
+
+  <circle cx="300" cy="222" r="6" fill="#fff" stroke="#666" stroke-width="2"/>
+  <text x="320" y="219" font-size="13" font-weight="600" fill="#1a1a2e">Boulder</text>
+  <text x="320" y="234" font-size="11" fill="#555">BAE Space &amp; Mission Systems (ex-Ball), CU/LASP</text>
+
+  <circle cx="300" cy="274" r="6" fill="#fff" stroke="#666" stroke-width="2"/>
+  <text x="320" y="271" font-size="13" font-weight="600" fill="#1a1a2e">Louisville &#183; Broomfield</text>
+  <text x="320" y="286" font-size="11" fill="#555">Sierra Space (Dream Chaser)</text>
+
+  <circle cx="300" cy="326" r="6" fill="#fff" stroke="#666" stroke-width="2"/>
+  <text x="320" y="323" font-size="13" font-weight="600" fill="#1a1a2e">Westminster</text>
+  <text x="320" y="338" font-size="11" fill="#555">Maxar (satellite imagery)</text>
+
+  <circle cx="300" cy="382" r="8" fill="#fff" stroke="#666" stroke-width="2.5"/>
+  <text x="320" y="379" font-size="14" font-weight="700" fill="#1a1a2e">Denver</text>
+  <text x="320" y="394" font-size="11" fill="#555">Metro hub &#183; suppliers, startups</text>
+
+  <circle cx="300" cy="434" r="6" fill="#fff" stroke="#666" stroke-width="2"/>
+  <text x="320" y="431" font-size="13" font-weight="600" fill="#1a1a2e">Centennial</text>
+  <text x="320" y="446" font-size="11" fill="#555">United Launch Alliance HQ &#183; Boom Supersonic</text>
+
+  <circle cx="300" cy="486" r="6" fill="#fff" stroke="#666" stroke-width="2"/>
+  <text x="320" y="483" font-size="13" font-weight="600" fill="#1a1a2e">Littleton</text>
+  <text x="320" y="498" font-size="11" fill="#555">Lockheed Martin Space HQ</text>
+
+  <path d="M 300 528 L 308 542 L 292 542 Z" fill="#c0392b"/>
+  <text x="320" y="535" font-size="13" font-weight="600" fill="#1a1a2e">Aurora</text>
+  <text x="320" y="550" font-size="11" fill="#555">Buckley SFB &#183; missile warning</text>
+
+  <rect x="284" y="576" width="410" height="180" rx="10" fill="#f3f4f7" stroke="#dcdfe6"/>
+  <text x="304" y="598" font-size="12" font-weight="700" fill="#999">COLORADO SPRINGS CLUSTER</text>
+
+  <path d="M 300 612 L 308 626 L 292 626 Z" fill="#c0392b"/>
+  <text x="320" y="623" font-size="13" font-weight="600" fill="#1a1a2e">U.S. Air Force Academy</text>
+
+  <circle cx="300" cy="656" r="8" fill="#fff" stroke="#666" stroke-width="2.5"/>
+  <text x="320" y="653" font-size="14" font-weight="700" fill="#1a1a2e">Colorado Springs</text>
+  <text x="320" y="668" font-size="11" fill="#555">Northrop, L3Harris, Boeing, Boecore, Bluestaq</text>
+
+  <path d="M 300 686 L 308 700 L 292 700 Z" fill="#c0392b"/>
+  <text x="320" y="697" font-size="12" font-weight="600" fill="#1a1a2e">Peterson SFB <tspan font-weight="400" fill="#555">&#183; NORAD / NORTHCOM</tspan></text>
+
+  <path d="M 300 716 L 308 730 L 292 730 Z" fill="#c0392b"/>
+  <text x="320" y="727" font-size="12" font-weight="600" fill="#1a1a2e">Schriever SFB <tspan font-weight="400" fill="#555">&#183; GPS ops</tspan></text>
+  <path d="M 244 686 L 252 700 L 236 700 Z" fill="#c0392b"/>
+  <text x="228" y="697" font-size="12" font-weight="600" text-anchor="end" fill="#1a1a2e">Cheyenne Mtn</text>
+  <text x="228" y="711" font-size="10" text-anchor="end" fill="#555">the bunker</text>
+
+  <circle cx="300" cy="786" r="6" fill="#fff" stroke="#666" stroke-width="2"/>
+  <text x="320" y="783" font-size="13" font-weight="600" fill="#1a1a2e">Pueblo</text>
+  <text x="320" y="798" font-size="11" fill="#555">Southern anchor &#183; testing, manufacturing</text>
+</svg>

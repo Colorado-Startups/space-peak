@@ -1,0 +1,43 @@
+name: fact-guardrails
+
+# The project-specific gate, and the reason this repository has CI at all.
+#
+# The concept brief's subtitle says every fact about a specific mountain is
+# a starting point for real diligence, not a verified site assessment. That
+# discipline is lost slowly, one confident sentence at a time, usually
+# while writing for an audience. This job notices.
+#
+# Blocking findings:
+#   frozen-row-edit     a frozen row in the register was weakened or removed
+#   exclusion-proposed  prose proposes Blanca Peak or the Crestones as viable
+#
+# Warning findings (heuristics, per "block on the certain, warn on the
+# likely"): unregistered-claim, unlabeled-claim.
+#
+# Policy lives in classify_claim() in 04_tools/space_peak_claims.py. This
+# workflow does not reimplement any of it.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fact-guardrails-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fact-guardrails:
+    name: fact-guardrails
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - name: Register integrity and claim check
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: bash .github/scripts/changed-md.sh claims

@@ -1,0 +1,23 @@
+# Dependabot keeps the GitHub Actions used by the workflows current and
+# opens a pull request when one has a known vulnerability. Low-risk
+# updates are grouped to keep review light.
+#
+# Dependabot security updates are free on private repositories, which makes
+# this one of the few GitHub-native security features actually available on
+# the Free plan. Worth having for that reason alone.
+#
+# Only the github-actions ecosystem: 04_tools/ is standard library Python
+# with no requirements.txt, and there is no package.json. Add a pip entry
+# the day 04_tools/ grows a dependency.
+#
+# Every PR is merged by hand. See SECURITY.md.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]

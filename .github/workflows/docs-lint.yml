@@ -1,0 +1,36 @@
+name: docs-lint
+
+# Link integrity and XML well-formedness for the SVGs. This repository's
+# deliverable IS documents, so these are not incidental checks.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs-lint:
+    name: docs-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Relative link check
+        run: bash .github/scripts/link-check.sh
+      - name: SVG well-formedness
+        run: |
+          set -uo pipefail
+          rc=0
+          while IFS= read -r f; do
+            [ -f "$f" ] || continue
+            if python3 -c "import xml.dom.minidom,sys; xml.dom.minidom.parse(sys.argv[1])" "$f" 2>/dev/null; then
+              echo "  OK $f"
+            else
+              echo "::error file=$f::not well-formed XML"; rc=1
+            fi
+          done < <(git ls-files '*.svg')
+          exit $rc

@@ -1,0 +1,38 @@
+name: Tooling
+description: A checker, hook, or workflow misbehaved.
+title: "[tooling] "
+labels: ["tooling"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        False positives matter as much as false negatives. A guard that fires
+        wrongly gets ignored, and an ignored guard looks like coverage while
+        providing none. Report both.
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Which surface
+      options:
+        - 04_tools/space_peak_lint.py
+        - 04_tools/space_peak_claims.py
+        - 04_tools/space_peak_files.py
+        - 04_tools/space_peak_contract_test.py
+        - 04_tools/space_peak_rules.json
+        - .githooks (pre-commit / pre-push)
+        - .claude hooks
+        - GitHub Actions
+        - Other
+    validations: { required: true }
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What went wrong
+      options: [False positive, False negative, Crash or error, Wrong severity, Other]
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes:
+      label: The input that caused it
+      description: Paste the exact sentence or file content.
+    validations: { required: true }

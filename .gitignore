@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+**/.DS_Store
+._*
+
+# Operational files. Never leaves the machine.
+#
+# A push ruleset would normally back this up, but GitHub Free does not
+# enforce those on private repos, so 04_tools/space_peak_files.py blocks it
+# from .githooks/pre-commit and pre-push, and guardrails.yml catches the
+# web-UI path. Even `git add -f local/x` is refused by the hooks.
+local/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Claude Code personal overrides (each member's own; never shared)
+.claude/settings.local.json
+
+# Claude Code git worktrees (local isolation runs; never shared)
+.claude/worktrees/
+
+# Third-party skills installed into .claude/skills/ by other tools. That
+# folder is a shared surface: Claude Code reads it, and so do other desktop
+# tools, so a skill appearing there is not evidence this project wrote it.
+#
+# The rule is this project's naming convention: our skills are namespaced
+# space-peak-, so anything else belongs to somebody else and stays out.
+# Naming no vendor keeps it self-maintaining, so the next tool that installs
+# a skill here is covered on the day it lands. Vendor one deliberately with
+# `git add -f`.
+#
+# Borrowed from Colorado-AI/colorado-ai, which learned it the hard way.
+.claude/skills/*
+!.claude/skills/space-peak-*

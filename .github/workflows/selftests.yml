@@ -1,0 +1,38 @@
+name: selftests
+
+# Runs every gate's own self-test, plus the cross-file contract test.
+#
+# This job runs FIRST and everything else depends on it. A checker that has
+# broken reports files clean, which is the worst failure mode a gate has:
+# it looks exactly like success. Required by the house rule "Every gate
+# ships a self-test. It seeds a known-bad sample and a known-clean sample,
+# and it fails if either behaves wrong."
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: selftests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  selftests:
+    name: selftests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Rules file loads
+        run: python3 04_tools/space_peak_rules.py
+      - name: Voice lint self-test
+        run: python3 04_tools/space_peak_lint.py --self-test
+      - name: Claims guardrail self-test
+        run: python3 04_tools/space_peak_claims.py --self-test
+      - name: Path and size guardrail self-test
+        run: python3 04_tools/space_peak_files.py --self-test
+      - name: Contract test
+        run: python3 04_tools/space_peak_contract_test.py

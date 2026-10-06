@@ -1,0 +1,38 @@
+name: Claim correction
+description: A claim in the register is wrong, out of date, or now verifiable.
+title: "[claim] "
+labels: ["claim", "diligence"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this when a row in `02_substance/claims_register.md` should change
+        status, or when you have found a source for something marked `unverified`.
+
+        **Not for the two frozen rows.** Blanca Peak and the Crestones / Great
+        Sand Dunes are permanent exclusions, not claims awaiting diligence.
+        Neither is an engineering judgement and neither changes because the
+        engineering case improves.
+  - type: input
+    id: claim-id
+    attributes:
+      label: Claim ID
+      description: The ID from the register, for example S-06 or P-03.
+      placeholder: S-06
+    validations: { required: true }
+  - type: dropdown
+    id: new-status
+    attributes:
+      label: Proposed new status
+      options: [verified, corrected, unverifiable]
+    validations: { required: true }
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: The source, with enough detail that a reader can follow it. A bare assertion is what the register exists to prevent.
+    validations: { required: true }
+  - type: textarea
+    id: correction
+    attributes:
+      label: Corrected value, if the claim was wrong

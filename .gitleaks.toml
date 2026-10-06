@@ -1,0 +1,20 @@
+# gitleaks configuration for Space Peak.
+#
+# Extends the upstream default ruleset rather than replacing it, so new
+# upstream detections arrive for free.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Space Peak false positives"
+paths = [
+  # Documents that quote example credential names while explaining rules.
+  '''SECURITY\.md''',
+  '''CONTRIBUTING\.md''',
+  '''\.github/workflows/deploy-site\.yml''',
+]
+regexes = [
+  # The brief and the register are full of long digit strings that are
+  # elevations and g-forces, not keys.
+  '''1[0-4],\d{3}''',
+]

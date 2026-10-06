@@ -1,0 +1,48 @@
+{
+  "_comment": [
+    "DORMANT ON THE CURRENT PLAN. GitHub does not enforce rulesets on private",
+    "repositories in a GitHub Free organization. Applying this file will succeed and",
+    "the API will even report enforcement:active, but nothing is enforced. That",
+    "silent-success behaviour is the reason .githooks/ blocks and",
+    ".github/workflows/guardrails.yml exists.",
+    "The day Colorado-Startups moves to GitHub Team this turns on with no rework:",
+    "  gh api -X POST repos/Colorado-Startups/space-peak/rulesets --input .github/rulesets/protect-main.json",
+    "Mirrors the 'Protect main' ruleset live on Colorado-AI/colorado-ai.",
+    "required_approving_review_count is 0 on purpose: the repo is solo-maintained and",
+    "a review requirement would block the maintainer's own pull requests."
+  ],
+  "name": "Protect main",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": { "ref_name": { "include": ["~DEFAULT_BRANCH"], "exclude": [] } },
+  "rules": [
+    { "type": "deletion" },
+    { "type": "non_fast_forward" },
+    {
+      "type": "pull_request",
+      "parameters": {
+        "required_approving_review_count": 0,
+        "dismiss_stale_reviews_on_push": false,
+        "require_code_owner_review": false,
+        "require_last_push_approval": false,
+        "required_review_thread_resolution": false,
+        "allowed_merge_methods": ["squash", "merge", "rebase"]
+      }
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": false,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          { "context": "selftests" },
+          { "context": "guardrails" },
+          { "context": "fact-guardrails" },
+          { "context": "voice-check" },
+          { "context": "secret-scan" },
+          { "context": "docs-lint" }
+        ]
+      }
+    }
+  ]
+}

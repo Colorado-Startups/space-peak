@@ -1,0 +1,20 @@
+{
+  "_comment": [
+    "DORMANT, AND TWICE OVER. Push rulesets require GitHub Team even to create; on",
+    "Free they are unavailable for private repositories outright, so applying this",
+    "file is REJECTED rather than silently ignored. Version controlled anyway so the",
+    "intent is recorded and the upgrade is one command.",
+    "Until then 04_tools/space_peak_files.py enforces both rules, called from",
+    ".githooks/ (blocking) and .github/workflows/guardrails.yml (advisory).",
+    "max_file_size must stay in sync with limits.max_file_size_mb in",
+    "04_tools/space_peak_rules.json.",
+    "Mirrors 'Block local/ and oversized files' on Colorado-AI/colorado-ai."
+  ],
+  "name": "Block local/ and oversized files",
+  "target": "push",
+  "enforcement": "active",
+  "rules": [
+    { "type": "file_path_restriction", "parameters": { "restricted_file_paths": ["local/**"] } },
+    { "type": "max_file_size", "parameters": { "max_file_size": 25 } }
+  ]
+}

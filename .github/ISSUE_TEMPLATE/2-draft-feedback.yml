@@ -1,0 +1,21 @@
+name: Draft feedback
+description: A note on the thought-leadership draft or the concept brief.
+title: "[draft] "
+labels: ["draft"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: File and line
+      placeholder: 03_deliverables/DRAFT-thought-leadership.md:42
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of feedback
+      options: [Voice, Structure, Accuracy, Framing, Visuals, Other]
+    validations: { required: true }
+  - type: textarea
+    id: detail
+    attributes:
+      label: The note
+    validations: { required: true }

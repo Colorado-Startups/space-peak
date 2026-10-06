@@ -1,0 +1,216 @@
+{
+  "_README": [
+    "THE SINGLE SOURCE OF TRUTH for every Space Peak gate.",
+    "",
+    "Required by ~/.claude/rules/writing-and-gates.md: 'Rules belong in data, not in",
+    "a regex. Put the terms, tokens and figures in one machine-readable file. Have a",
+    "test assert that every human-facing surface still agrees with it.' That test is",
+    "04_tools/space_peak_contract_test.py and it runs in CI and in the hooks.",
+    "",
+    "Nothing in this repository may hardcode a term that belongs here. A new rule",
+    "cannot be added without being registered, which is the point: it stops the",
+    "prose surfaces (README, CLAUDE.md, voice.md) from drifting away from the",
+    "checkers in silence.",
+    "",
+    "If this file and ~/.claude/rules/writing-and-gates.md disagree, that file wins",
+    "and this one gets corrected in the same session."
+  ],
+
+  "severity": {
+    "_README": [
+      "'Block on the certain, warn on the likely.' Blocking on a heuristic teaches",
+      "people to bypass the gate, which costs more than it saves.",
+      "",
+      "A check belongs in 'blocking' only if it is deterministic, fast, and",
+      "auto-fixable by the author without judgement. Everything a tool's own",
+      "documentation would call a heuristic goes in 'warning'.",
+      "",
+      "The contract test asserts these two lists are disjoint and that together they",
+      "name every check either checker can emit. An unclassified check is a defect."
+    ],
+    "blocking": [
+      "em-dash",
+      "local-path",
+      "oversized-file",
+      "secret",
+      "exclusion-proposed",
+      "frozen-row-edit"
+    ],
+    "warning": [
+      "spaced-en-dash",
+      "sentence-length",
+      "hedge-word",
+      "unattributed-figure",
+      "unregistered-claim",
+      "unlabeled-claim"
+    ],
+    "_notes": {
+      "exclusion-proposed": "Blocks despite using cue lists, because the site names are literal string matches against a closed two-item list and the consequence is not a style question. The cue lists only decide whether the sentence proposes rather than mentions.",
+      "unattributed-figure": "Warns, not blocks. The upstream Photon Mountain script graded this FAIL, but its own docstring calls it a heuristic that 'flags candidates for human review'. Demoted here to match the house rule.",
+      "unregistered-claim": "Warns. Regex detection of place-shaped proper nouns is a heuristic by construction."
+    }
+  },
+
+  "frozen_sites": {
+    "_README": [
+      "The two permanent exclusions. Not engineering judgements, so not revisable by",
+      "better engineering. These are duplicated in the checker's own constant on",
+      "purpose: deleting a row from 02_substance/claims_register.md must not disable",
+      "the check that protects it. The contract test asserts the two stay in sync and",
+      "that every human-facing surface still names both."
+    ],
+    "blanca": {
+      "label": "Blanca Peak",
+      "reason": "Sisnaajini, sacred to the Navajo.",
+      "aliases": ["blanca peak", "blanca", "sisnaajini", "sisnaajiní"]
+    },
+    "crestones": {
+      "label": "Crestones / Great Sand Dunes",
+      "reason": "National Park.",
+      "aliases": ["crestones", "crestone", "great sand dunes", "sand dunes"]
+    }
+  },
+
+  "known_places": [
+    "greenhorn", "wet mountains", "wet mtns",
+    "culebra", "cielo vista",
+    "spanish peaks", "comanche",
+    "almagre", "baldy",
+    "pikes peak", "pikes",
+    "crestones", "crestone", "sand dunes",
+    "blanca", "sisnaajini",
+    "mauna kea", "chimborazo",
+    "pinon canyon", "fort carson"
+  ],
+
+  "proposal_cues": [
+    "candidate", "viable", "best site", "top site", "preferred", "recommend",
+    "we should", "bore through", "boring through", "tunnel through",
+    "tunnel under", "build at", "build on", "site the", "sited at",
+    "launch from", "fires east from", "the winner", "engineering winner",
+    "reconsider", "worth another look", "second interview"
+  ],
+
+  "negation_cues": {
+    "_README": [
+      "Inverts a proposal cue. Found by running the checker over this repository's",
+      "own documentation, which states the exclusion rule and was flagged for",
+      "breaking it. An exemption would have been cheaper and wrong: the same",
+      "construction appears in ordinary prose ('Blanca is not a candidate'), where",
+      "an exemption does not help and a false positive teaches the reader to ignore",
+      "the guard."
+    ],
+    "terms": [
+      "never", "not ", "n't", "cannot", "no longer", "excluded", "exclusion",
+      "rule out", "ruled out", "off the table", "rather than", "instead of",
+      "must not", "may not", "do not", "refuse", "forbid"
+    ]
+  },
+
+  "attribution_cues": {
+    "_README": [
+      "A figure in a sentence carrying one of these counts as attributed, labelled a",
+      "goal, or labelled speculative. The last group is this project's own honest",
+      "labelling: the concept brief's discipline is that a mountain fact is",
+      "unverified until diligenced, so 'unverified' is as good as a citation for the",
+      "purpose of this check."
+    ],
+    "terms": [
+      "according to", "per ", "source", "cite", "cites", "cited", "reports",
+      "reported", "says", "said", "estimate", "estimates", "estimated",
+      "announced", "association", "study", "survey", "census", "data from",
+      "figures from", "goal", "target", "on the order of",
+      "unverified", "speculative", "starting point", "not a verified",
+      "hypothesis", "order-of-magnitude", "back-of-envelope",
+      "to be diligenced", "needs diligence"
+    ]
+  },
+
+  "speculative_cues": [
+    "unverified", "speculative", "starting point", "not a verified",
+    "hypothesis", "to be diligenced", "needs diligence", "not yet checked",
+    "on the order of", "approximately", "roughly", "about ", "goal", "target",
+    "according to", "per ", "source", "cited", "reported"
+  ],
+
+  "hedge_words": {
+    "_README": [
+      "From ~/.claude/rules/writing-and-gates.md, which is canonical and wins.",
+      "",
+      "'potentially' appears here because the house rules name it. An earlier draft",
+      "of 01_doctrine/voice.md argued that conditionals are honest framing for",
+      "technology that does not exist yet and un-flagged it. The house file wins; the",
+      "divergence now covers only 'could', 'might' and 'may', which the house rules",
+      "do not name."
+    ],
+    "terms": [
+      "arguably", "perhaps", "somewhat", "potentially", "seemingly",
+      "essentially", "basically", "virtually", "sort of", "more or less",
+      "to some extent", "maybe", "fairly", "rather", "quite", "relatively",
+      "appears to", "seems to", "kind of", "in some sense"
+    ],
+    "deliberately_absent": {
+      "_why": "Conditional, not hedging. Space Peak is a thesis about technology that does not exist, and conditionals are the precise register for a claim you are explicitly not making. The house rules do not name these three.",
+      "terms": ["could be", "might be", "may be"]
+    }
+  },
+
+  "ai_tells": {
+    "_README": [
+      "From ~/.claude/rules/writing-and-gates.md 'No AI tells'. Canonical there; this",
+      "is the machine-readable copy the checker reads. Warning severity: a tell is a",
+      "judgement call about register, not a certainty."
+    ],
+    "terms": [
+      "delve", "tapestry", "plethora", "seamless", "seamlessly",
+      "game-changer", "a testament to", "it's important to note",
+      "fast-paced", "ever-evolving", "navigating the complexities",
+      "look no further", "in conclusion", "in summary", "in essence"
+    ]
+  },
+
+  "exempt_paths": {
+    "_README": [
+      "'Exempt lists are a smell. A hand-maintained list of files to skip will rot.",
+      "If you need one, it needs its own contract test.' It does: the contract test",
+      "asserts every entry still resolves to a tracked path, so a rename cannot",
+      "silently widen the exemption, and asserts every call site reads THIS list",
+      "rather than carrying its own copy.",
+      "",
+      "Each entry needs a reason. An entry without one fails the contract test."
+    ],
+    "entries": [
+      { "glob": ".githooks/*", "reason": "Routes the checks; quotes the banned terms to describe them." },
+      { "glob": ".claude/hooks/*", "reason": "Same, for the Claude Code harness surface." },
+      { "glob": ".github/scripts/*", "reason": "Same, for the CI surface." },
+      { "glob": ".github/workflows/*", "reason": "Workflow headers explain what the checks ban." },
+      { "glob": "04_tools/space_peak_lint.py", "reason": "Defines the em-dash constant it enforces." },
+      { "glob": "04_tools/space_peak_claims.py", "reason": "Defines the exclusion cue lists it enforces." },
+      { "glob": "04_tools/space_peak_contract_test.py", "reason": "Asserts on the banned terms by name." },
+      { "glob": "04_tools/space_peak_rules.json", "reason": "Is the list of banned terms." },
+      { "glob": "01_doctrine/voice.md", "reason": "States the rules, so it quotes bad examples beside good ones." },
+      { "glob": "00_project_system/MASTER_PLAN.md", "reason": "Historical planning record, frozen as written 2026-07-14." }
+    ]
+  },
+
+  "limits": {
+    "max_file_size_mb": 25,
+    "max_sentence_words": 30
+  },
+
+  "required_surface_agreement": {
+    "_README": [
+      "'Have a test assert that every human-facing surface still agrees with it.'",
+      "These files must each still name both frozen sites. If someone rewrites the",
+      "README and drops the exclusions, the contract test fails rather than the",
+      "omission going unnoticed."
+    ],
+    "files": [
+      "README.md",
+      "CLAUDE.md",
+      "01_doctrine/voice.md",
+      "CONTRIBUTING.md",
+      "02_substance/claims_register.md"
+    ]
+  }
+}

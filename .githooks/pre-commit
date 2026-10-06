@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Space Peak pre-commit. Routes to 04_tools/ via .githooks/space-peak-route.sh.
+# Enable once per clone:  git config core.hooksPath .githooks
+set -uo pipefail
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+export REPO_ROOT
+# shellcheck source=.githooks/space-peak-route.sh
+. "$REPO_ROOT/.githooks/space-peak-route.sh"
+route_all "pre-commit" "$(git diff --cached --name-only --diff-filter=ACMR)"

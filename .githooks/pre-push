@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Space Peak pre-push. Deliberately redundant with pre-commit.
+#
+# `git commit --no-verify` skips pre-commit entirely. On a repo with a
+# server-side ruleset that gap is survivable, because the server catches
+# what the client missed. GitHub Free does not enforce rulesets on private
+# repositories, so a single bypassable hook would be the whole defence.
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+set -uo pipefail
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+export REPO_ROOT
+# shellcheck source=.githooks/space-peak-route.sh
+. "$REPO_ROOT/.githooks/space-peak-route.sh"
+
+ZERO="0000000000000000000000000000000000000000"
+changed=""
+while read -r _lref lsha _rref rsha; do
+  [ "$lsha" = "$ZERO" ] && continue
+  if [ "$rsha" = "$ZERO" ] || ! git rev-parse --verify --quiet "$rsha" >/dev/null 2>&1; then
+    base="$(git merge-base "$lsha" origin/main 2>/dev/null || true)"
+    if [ -n "$base" ]; then
+      files="$(git diff --name-only --diff-filter=ACMR "$base" "$lsha" 2>/dev/null)"
+    else
+      # No common base: a new branch, or the first push of a new repository.
+      #
+      # NOT `git diff --name-only <sha>`, which compares that commit to the
+      # WORKING TREE. Just after a commit those are identical, so that form
+      # returns an empty list and this hook approves the whole push without
+      # reading a byte of it. That is exactly the first-push case this repo
+      # starts from, and it silently passed before being caught in testing.
+      files="$(git ls-tree -r --name-only "$lsha" 2>/dev/null)"
+    fi
+  else
+    files="$(git diff --name-only --diff-filter=ACMR "$rsha" "$lsha" 2>/dev/null)"
+  fi
+  changed="$changed$files
+"
+done
+
+route_all "pre-push" "$(printf '%s\n' "$changed" | sort -u | sed '/^$/d')"

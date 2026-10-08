@@ -109,8 +109,16 @@ Every checker is standard library Python, deterministic, and offline. Each ships
 
 ## A note on the old folder
 
-This repository's working copy is `~/Developer/space-peak`. The original `~/Developer/Space Peak` folder is owned by a different macOS account (`soulcraft`) and is not writable here, which is why git lives in a new directory rather than in place. That folder is now a stale read-only snapshot superseded by this repository's first commit, which captured all six of its files byte-identical. It can be deleted once its ownership is fixed:
+This repository's working copy is `~/Developer/space-peak`. The original `~/Developer/Space Peak` folder is owned by a different macOS account (`soulcraft`) and is not writable here, which is why git lives in a new directory rather than in place.
+
+**Nothing depends on that folder any more.** Verified 2026-10-08: it holds six files and nothing hidden, and every one is byte-identical to its copy in this repository's first commit (`847a567`). Nothing in the repo reads from that path.
+
+So the folder is not a blocker to fix, it is a leftover to retire. Whenever the owner wants it gone:
 
 ```bash
-sudo chown -R coloradostartups:staff "/Users/coloradostartups/Developer/Space Peak"
+sudo rm -rf "/Users/coloradostartups/Developer/Space Peak"
 ```
+
+A plain `rm -rf` from this account fails, because unlinking the files inside needs write permission on the folder itself, which this account does not have. Moving it aside should work without `sudo`, since renaming only needs write permission on `~/Developer`, though that is reasoning from the permission bits rather than something tested here.
+
+An earlier version of this section presented the `chown` as a prerequisite. It never was. The repository was built without it.

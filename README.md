@@ -58,7 +58,7 @@ So enforcement moved client-side and got teeth:
 
 | Control | Where | Blocking? |
 | --- | --- | --- |
-| Paths, sizes, secrets, em dashes, exclusions | `.githooks/pre-commit` | **Yes** |
+| Paths, sizes, secrets, em dashes and spaced en dashes, exclusions | `.githooks/pre-commit` | **Yes** |
 | The same checks again, over what the push will send | `.githooks/pre-push` | **Yes** |
 | Permanent exclusions, during a Claude Code session | `.claude/hooks/space-peak-check-exclusions.sh` | **Yes** |
 | Everything, for web-UI and cloud-agent commits the hooks never see | `.github/workflows/` | No, advisory |
@@ -75,9 +75,11 @@ git config core.hooksPath .githooks
 
 Severity comes from `04_tools/space_peak_rules.json`, following the rule *block on the certain, warn on the likely*. Blocking on a heuristic teaches people to bypass the gate, which costs more than it saves.
 
-**Blocks** (deterministic, auto-fixable): `em-dash`, `local-path`, `oversized-file`, `secret`, `exclusion-proposed`, `frozen-row-edit`.
+**Blocks** (deterministic, auto-fixable): `em-dash`, `spaced-en-dash`, `local-path`, `oversized-file`, `secret`, `exclusion-proposed`, `frozen-row-edit`.
 
-**Warns** (heuristics): `unattributed-figure`, `unregistered-claim`, `unlabeled-claim`, `sentence-length`, `hedge-word`, `spaced-en-dash`.
+**Warns** (heuristics): `unattributed-figure`, `unregistered-claim`, `unlabeled-claim`, `sentence-length`, `hedge-word`.
+
+Contract C14 in `04_tools/space_peak_contract_test.py` fails if these two lists stop matching the rules file.
 
 A checker that cannot run exits 3 and the caller treats it as a warning and passes. Could not verify is not the same as verified and red.
 

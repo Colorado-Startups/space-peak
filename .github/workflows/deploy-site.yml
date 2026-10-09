@@ -27,8 +27,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Confirm intent
+        # The input reaches the shell through env, never through ${{ }} in
+        # the script, so a crafted value cannot inject commands.
+        env:
+          CONFIRM: ${{ github.event.inputs.confirm }}
         run: |
-          if [ "${{ github.event.inputs.confirm }}" != "PUBLISH" ]; then
+          if [ "$CONFIRM" != "PUBLISH" ]; then
             echo "::error::Type PUBLISH to confirm. See MASTER_PLAN.md UA 3.2."
             exit 1
           fi

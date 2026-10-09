@@ -18,6 +18,10 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    # Wait a week before proposing a new release, so a compromised or broken
+    # version has time to be caught upstream. Security updates skip this.
+    cooldown:
+      default-days: 7
     groups:
       minor-and-patch:
         update-types: ["minor", "patch"]

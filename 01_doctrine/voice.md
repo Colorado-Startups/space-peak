@@ -28,7 +28,7 @@ Severity for every rule below comes from `04_tools/space_peak_rules.json`, never
 
 Not in drafts, not in memos, not in commit messages, not in this file. Use a comma, a semicolon, a period, or parentheses. Four marks cover every job an em dash does, and each tells the reader more about the relationship between the clauses. A spaced en dash reads as an em dash, so that is out too.
 
-This blocks because it is deterministic, fast, and auto-fixable without judgement. It is the only purely stylistic rule that gets that treatment.
+Both checks block: `em-dash` and `spaced-en-dash`. Each is a literal character match, so each is deterministic, fast, and auto-fixable without judgement. No other purely stylistic rule gets that treatment.
 
 History: the original concept brief was written with 35 em dashes, before this rule existed. The repository's first commit preserves it exactly as written, and a later commit normalizes it. The history shows the project as it actually was, which matters more than a clean first commit.
 

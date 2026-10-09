@@ -30,6 +30,7 @@
     ],
     "blocking": [
       "em-dash",
+      "spaced-en-dash",
       "local-path",
       "oversized-file",
       "secret",
@@ -37,7 +38,6 @@
       "frozen-row-edit"
     ],
     "warning": [
-      "spaced-en-dash",
       "sentence-length",
       "hedge-word",
       "unattributed-figure",
@@ -45,6 +45,7 @@
       "unlabeled-claim"
     ],
     "_notes": {
+      "spaced-en-dash": "Blocks, moved from warning on 2026-10-08. ~/.claude/rules/writing-and-gates.md says a spaced en dash reads as an em dash, 'so that is out too', and that file wins. The test is a literal character match (space, U+2013, space), so it is deterministic, fast, and auto-fixable, the same as em-dash. An unspaced en dash in a range such as 3-4 does not match. Claude-OS voice_lint.py made the same correction in commit f3ece8b.",
       "exclusion-proposed": "Blocks despite using cue lists, because the site names are literal string matches against a closed two-item list and the consequence is not a style question. The cue lists only decide whether the sentence proposes rather than mentions.",
       "unattributed-figure": "Warns, not blocks. The upstream Photon Mountain script graded this FAIL, but its own docstring calls it a heuristic that 'flags candidates for human review'. Demoted here to match the house rule.",
       "unregistered-claim": "Warns. Regex detection of place-shaped proper nouns is a heuristic by construction."

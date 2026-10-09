@@ -26,6 +26,8 @@ files rather than inside one:
   C10 Every hook file on disk is actually wired in .claude/settings.json.
   C11 No workflow reimplements a check inline instead of calling a script.
   C12 voice.md does not contradict the data file on hedge words.
+  C13 is_exempt() honours every exempt glob C5 says is live.
+  C14 README's blocks and warns lists name exactly the data file's grades.
 
 C9 and C10 exist because of the house rule "a comment claiming a call site
 that the settings file does not wire is a defect in its own right. Check
@@ -308,6 +310,28 @@ def main():
     else:
         check("C12 voice.md does not permit a banned hedge", False,
               f"{voice_rel} is absent")
+
+    # README's "What blocks and what warns" lists every check by name and
+    # grade. Nothing asserted it, so when spaced-en-dash sat in "warning"
+    # here while voice.md filed it under Blocking, README agreed with the
+    # JSON and nobody noticed either was wrong. Compared as exact sets, so a
+    # check that moves grade, or is added, must be moved in README as well.
+    readme_rel = "README.md"
+    if os.path.exists(repo_file(readme_rel)):
+        readme = read(readme_rel)
+        drift = []
+        for label, key in (("Blocks", "blocking"), ("Warns", "warning")):
+            m = re.search(r"^\*\*" + label + r"\*\*[^\n]*$", readme, re.M)
+            named = set(re.findall(r"`([a-z-]+)`", m.group(0))) if m else set()
+            data = set(rules["severity"][key])
+            if named != data:
+                drift.append(f"**{label}** names {sorted(named)}, "
+                             f"severity.{key} has {sorted(data)}")
+        check("C14 README severity lists match the data file", not drift,
+              "; ".join(drift))
+    else:
+        check("C14 README severity lists match the data file", False,
+              f"{readme_rel} is absent")
 
     print()
     failed = [n for n, ok, _ in results if not ok]

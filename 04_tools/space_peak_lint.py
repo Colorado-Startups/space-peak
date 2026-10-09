@@ -14,7 +14,7 @@ the same session. The contract test enforces that 3 still agrees with 2.
 Deterministic, no network, standard library only.
 
 Lineage: ported from Photon Mountain's 04_tools/voice_lint.py (2026-07).
-Three deliberate changes:
+Four deliberate changes:
 
   * Term lists moved OUT of the source into space_peak_rules.json, per the
     house rule "Rules belong in data, not in a regex."
@@ -29,6 +29,10 @@ Three deliberate changes:
     candidates for human review." The house rule is "block on the certain,
     warn on the likely," so severity now comes from the JSON and this one
     warns. em-dash still blocks: it is deterministic and auto-fixable.
+  * spaced-en-dash BLOCKS, where upstream warns. The house rules say a
+    spaced en dash "reads as an em dash, so that is out too", and the
+    test is the same kind of literal character match as em-dash. Moved
+    2026-10-08; the reason is in the JSON's severity._notes.
 
 Severity is never hardcoded here. Every finding asks the data file.
 
@@ -201,6 +205,7 @@ def report(path, findings):
 
 SELF_TEST_BAD = (
     "The muzzle holds vacuum — the hard part is the membrane.\n"
+    "The barrel is the easy half – the membrane is the hard half.\n"
     "A 15 mile run at 200 g reaches 8 km/s.\n"
     "It is arguably the best granite in America for boring a tunnel, and this "
     "sentence keeps going and going, adding clause after clause, idea after "
@@ -215,6 +220,7 @@ SELF_TEST_CLEAN = (
     "starting point rather than a verified figure.\n"
     "Reaching one launch an hour is a goal, not a demonstrated cadence.\n"
     "A slug could be retained whole to orbit.\n"
+    "Sections 3–4 of the brief cover the muzzle.\n"
     "| S-04 | Culebra Peak | Elevation 14,047 ft | `unverified` | | |\n"
 )
 
@@ -230,21 +236,24 @@ def self_test():
     hit = {f[2] for f in bad}
     ok = True
 
-    for expected in ("em-dash", "unattributed-figure", "hedge-word",
-                     "sentence-length"):
+    for expected in ("em-dash", "spaced-en-dash", "unattributed-figure",
+                     "hedge-word", "sentence-length"):
         if expected in hit:
             print(f"self-test: seeded {expected} flagged: OK")
         else:
             print(f"self-test: seeded {expected} NOT flagged: FAIL")
             ok = False
 
-    # The bad sample's em dash must BLOCK and its figure must only WARN.
+    # The bad sample's em dash and spaced en dash must BLOCK, and its figure
+    # must only WARN. The house rule says a spaced en dash "reads as an em
+    # dash, so that is out too": same literal-character test, same grade.
     sev = {f[2]: f[1] for f in bad}
-    if sev.get("em-dash") != "FAIL":
-        print("self-test: em-dash should be FAIL (deterministic): FAIL")
-        ok = False
-    else:
-        print("self-test: em-dash blocks: OK")
+    for dash in ("em-dash", "spaced-en-dash"):
+        if sev.get(dash) != "FAIL":
+            print(f"self-test: {dash} should be FAIL (deterministic): FAIL")
+            ok = False
+        else:
+            print(f"self-test: {dash} blocks: OK")
     if sev.get("unattributed-figure") != "WARN":
         print("self-test: unattributed-figure should be WARN (heuristic): FAIL")
         ok = False

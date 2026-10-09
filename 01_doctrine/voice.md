@@ -89,10 +89,27 @@ From the house rules, and worth repeating because this project is unusually expo
 - **A hedged source set as an exact number in display type.** The brief's "about 200 g" becoming "200 g" in a pull quote.
 - **A status verb drifting under compression.** "The brief proposes" becoming "the plan is". Check both by hand before anything ships.
 
+## Terminology
+
+### The project is Space Peak
+
+Decided 2026-10-08. Not "Satellite Peak", which the concept brief argued for in its first draft. Register row N-04, issue #2, Route 2.
+
+Use **Space Peak** everywhere: the project, the repository, the tooling namespace, the venture, and the piece. There is no second name and no split between a project name and a venture name.
+
+Why, for anyone tempted to reopen it:
+
+- The naming formula is *the field plus the type of place*, not *the product plus the type of place*. A satellite is a product. Space is the field, and the corridor does launch, ground systems and space science as well as satellites.
+- The siblings name fields too: Photon Mountain, Fusion Canyon. "Satellite Peak" would have been the one product name in a family of fields.
+- A place brand works when there is one name to remember. Two names for one initiative split recall and need explaining every time either appears.
+
+The brief's naming section now makes this case directly, and lists "Satellite" among the rejected alternatives beside "Aero" and "Radar". `00_project_system/MASTER_PLAN.md` still carries the old name in places; it is a frozen planning record from 2026-07-14 and is left as written.
+
+This was decided by the cross-session orchestrator on Paul's delegation. Paul can reverse it, and the pull request that landed it is the place to say so.
+
 ## What this doctrine does not cover yet
 
 Deliberate gaps, to be filled when there is something real to say rather than filled now for completeness:
 
 - Tone in long-form versus short-form. There is one draft; there is no evidence yet.
-- Terminology, including the live conflict between "Space Peak" (the project) and "Satellite Peak" (the name the concept brief argues for). See issue #2 and row N-04 of the register. Once that resolves, the resolution belongs here.
 - Visual voice. The Felt map and the SVGs need a convention for marking speculative sites and permanent exclusions differently. That convention belongs here once the map exists.

@@ -66,7 +66,17 @@ The map and any SVG shipping with the piece carry the same labelling discipline 
 
 ### 9. Naming
 
-Issue #2 and register row N-04, the Space Peak versus Satellite Peak conflict, is resolved and the draft is internally consistent with the resolution. **If it is unresolved, this gate fails:** the draft cannot argue for a name the project does not use.
+**Resolved 2026-10-08.** The name is **Space Peak** everywhere, with no second name and no project-versus-venture split. Register row N-04 is `corrected`, issue #2 took Route 2, and `01_doctrine/voice.md` carries the decision under Terminology.
+
+So this is now a consistency check rather than a blocker:
+
+```bash
+grep -n "Satellite Peak" <draft>
+```
+
+Zero hits expected, with one legitimate exception: naming the rejected alternative while explaining why Space won. The brief's own naming section does exactly that. `00_project_system/MASTER_PLAN.md` also still carries the old name, because it is a frozen planning record from 2026-07-14 and is left as written.
+
+The gate fails if the draft uses "Satellite Peak" as the project's name, or argues for it. A draft cannot argue for a name the project does not use.
 
 ## Output
 

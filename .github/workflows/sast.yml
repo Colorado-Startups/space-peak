@@ -38,6 +38,11 @@ jobs:
       - name: Python compile
         run: python3 -m compileall -q 04_tools/
       - name: Semgrep
+        # Pinned, like every action here (by SHA). An unpinned install runs
+        # whatever PyPI serves that morning, inside a job with checkout
+        # access. The p/ci and p/python rule packs still come from the
+        # registry at scan time, so the rules stay current. Dependabot does
+        # not watch this line; bump it by hand. Matches colorado-ai #255.
         run: |
-          python3 -m pip install --quiet semgrep
+          python3 -m pip install --quiet semgrep==1.177.0
           semgrep --config p/ci --config p/python --error --quiet .

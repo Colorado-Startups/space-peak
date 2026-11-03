@@ -18,13 +18,10 @@ Short version: Blanca Peak and the Crestones are permanently excluded, and every
 
 ```bash
 git config core.hooksPath .githooks
-python3 04_tools/space_peak_lint.py --self-test
-python3 04_tools/space_peak_claims.py --self-test
-python3 04_tools/space_peak_files.py --self-test
-python3 04_tools/space_peak_contract_test.py
+gh run list --workflow selftests.yml --branch main --limit 1
 ```
 
-All four should pass. If one does not, the checks are broken and you should not trust a clean result from them. Open a Tooling issue.
+The self-tests do not run on the MacBook Air (Paul, 2026-11-02). `selftests.yml` runs them in CI on every pull request and every push to `main`, and `gh workflow run cloud-test.yml -f script=<name>` runs one on demand (names in `.github/cloud-test.json`). The latest `main` run should be green. If it is not, the checks are broken and you should not trust a clean result from them. Open a Tooling issue.
 
 ## 4. See the guardrails work (3 min)
 

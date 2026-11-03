@@ -1,6 +1,6 @@
 # Space Peak, Project Instructions
 
-*Router file. Last updated 2026-10-05 (repository created; MASTER_PLAN Phase 1 resolved to Publish, standalone, under the Space Peak name).*
+*Router file. Created 2026-10-05 (MASTER_PLAN Phase 1 resolved to Publish, standalone, under the Space Peak name). Last updated 2026-11-02 (the cloud-test caller and the compute rule).*
 
 ## Precedence
 
@@ -41,8 +41,13 @@ Per the house rule, this is stated explicitly rather than implied:
 | `.githooks/pre-commit`, `pre-push` | **Fire** on commit and push | Yes |
 | `/space-peak-*` slash commands | **Wait** for you to run them | No |
 | GitHub Actions | **Fire** on pull request | No, advisory (see README) |
+| `.github/workflows/cloud-test.yml` | **Fires** on a pull request that changes it or `.github/cloud-test.json`; otherwise **waits** for `gh workflow run cloud-test.yml` | No, advisory |
 
 `.claude/settings.json` is the authority on this wiring, not the header comment in any hook.
+
+**Compute:** nothing tests, builds, renders or uses a GPU on the MacBook Air; it runs in CI or on cloud compute (`.github/workflows/cloud-test.yml` here). House rule: `~/.claude/rules/compute.md` (canonical: Claude-OS `rules/compute.md`), which wins any disagreement.
+
+The git hooks run no self-test, test suite, build or deploy. They run the path and size guard, gitleaks, the voice and claims checkers over changed markdown, and the contract test, which only reads files. The self-tests run in `selftests.yml` on every pull request, and on demand through the names in `.github/cloud-test.json`.
 
 ## Folder map
 
@@ -70,6 +75,7 @@ local/               operational files, gitignored and blocked from commits
 | Building or editing the site map | Skill `space-peak-site-map` |
 | Committing, branching, opening a PR | `CONTRIBUTING.md` |
 | Changing a hook or workflow | `SECURITY.md`, then README "Enforcement" |
+| Running a self-test, semgrep or any other suite | `.github/cloud-test.json`, then `gh workflow run cloud-test.yml -f script=<name>` |
 
 ## Division of labor
 

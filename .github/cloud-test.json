@@ -1,0 +1,31 @@
+{
+  "$comment": [
+    "The only commands .github/workflows/cloud-test.yml can run. Format: cloud-test/README.md in Colorado-Startups/.github.",
+    "Each entry is a command an existing workflow already runs, as an argv list that no shell reads.",
+    "Not listed: voice-check and fact-guardrails' prose checks (changed-md.sh voice|claims) read BASE_SHA from the pull",
+    "request and, without it, scan every tracked file, including the historical concept brief; the register half of",
+    "fact-guardrails is claims:register. sast's bash -n and shellcheck loop, docs-lint's SVG parse and secret-scan's",
+    "gitleaks install are inline shell in their workflows, with no single command to list. All of those still run on",
+    "every pull request, or weekly for sast and secret-scan."
+  ],
+  "version": 1,
+  "scripts": {
+    "contract": { "run": ["python3", "04_tools/space_peak_contract_test.py"] },
+    "rules": { "run": ["python3", "04_tools/space_peak_rules.py"] },
+    "lint:self-test": { "run": ["python3", "04_tools/space_peak_lint.py", "--self-test"] },
+    "claims:self-test": { "run": ["python3", "04_tools/space_peak_claims.py", "--self-test"] },
+    "files:self-test": { "run": ["python3", "04_tools/space_peak_files.py", "--self-test"] },
+    "claims:register": {
+      "run": ["python3", "04_tools/space_peak_claims.py", "--register", "02_substance/claims_register.md", "/dev/null"]
+    },
+    "guardrails": { "run": ["bash", ".github/scripts/tracked-paths.sh"] },
+    "links": { "run": ["bash", ".github/scripts/link-check.sh"] },
+    "compile": { "run": ["python3", "-m", "compileall", "-q", "04_tools/"] },
+    "semgrep": {
+      "$comment": "The pin matches sast.yml; bump both together.",
+      "before": [["python3", "-m", "pip", "install", "--quiet", "semgrep==1.177.0"]],
+      "run": ["semgrep", "--config", "p/ci", "--config", "p/python", "--error", "--quiet", "."],
+      "timeout": 10
+    }
+  }
+}

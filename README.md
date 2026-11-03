@@ -62,6 +62,7 @@ So enforcement moved client-side and got teeth:
 | The same checks again, over what the push will send | `.githooks/pre-push` | **Yes** |
 | Permanent exclusions, during a Claude Code session | `.claude/hooks/space-peak-check-exclusions.sh` | **Yes** |
 | Everything, for web-UI and cloud-agent commits the hooks never see | `.github/workflows/` | No, advisory |
+| Any self-test or scan, on demand, for any ref | `.github/workflows/cloud-test.yml` | No, advisory |
 
 `pre-push` repeats `pre-commit` because `git commit --no-verify` skips the latter. On a repo with a server-side ruleset that gap is survivable, because the server catches what the client missed. Here there is no server-side catch, so a single bypassable hook would be the whole defence.
 
@@ -93,15 +94,16 @@ gh api -X POST repos/Colorado-Startups/space-peak/rulesets --input .github/rules
 
 No rework needed. The same files drop into `photon-mountain` and `fusion-canyon`.
 
-## Running the checks yourself
+## Running the checks
+
+Nothing tests, builds or renders on the MacBook Air (Paul, 2026-11-02). `selftests.yml` runs the rules loader, the three self-tests and the contract test on every pull request and every push to `main`. To run one of them, or semgrep, against any ref, dispatch it by name:
 
 ```bash
-python3 04_tools/space_peak_rules.py
-python3 04_tools/space_peak_lint.py --self-test
-python3 04_tools/space_peak_claims.py --self-test
-python3 04_tools/space_peak_files.py --self-test
-python3 04_tools/space_peak_contract_test.py
+gh workflow run cloud-test.yml -f ref=<sha or branch> -f script=lint:self-test
+gh run list --workflow cloud-test.yml --limit 1
 ```
+
+The names live in `.github/cloud-test.json`, the only commands a dispatch can reach. The shared workflow behind it is `cloud-test/README.md` in `Colorado-Startups/.github`. The git hooks still run the contract test on every commit and push, because it only reads files.
 
 Every checker is standard library Python, deterministic, and offline. Each ships a self-test that seeds a known-bad and a known-clean sample. CI runs all five before any real check, because a checker that has broken reports files clean, and that looks exactly like success.
 

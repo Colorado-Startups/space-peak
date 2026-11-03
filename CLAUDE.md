@@ -41,11 +41,11 @@ Per the house rule, this is stated explicitly rather than implied:
 | `.githooks/pre-commit`, `pre-push` | **Fire** on commit and push | Yes |
 | `/space-peak-*` slash commands | **Wait** for you to run them | No |
 | GitHub Actions | **Fire** on pull request | No, advisory (see README) |
-| `.github/workflows/cloud-test.yml` | **Fires** on a pull request that changes it or `.github/cloud-test.json`; otherwise **waits** for `gh workflow run cloud-test.yml` | No, advisory |
+| GitHub Actions `cloud-test` (`.github/workflows/cloud-test.yml`, a caller of the shared workflow in Colorado-Startups/.github) | **Waits** for a dispatch: `gh workflow run cloud-test.yml --ref <branch> -f script=<name>` runs a name from `.github/cloud-test.json` on a hosted runner. **Fires** on a pull request that changes the caller or the allowlist | No, advisory |
 
 `.claude/settings.json` is the authority on this wiring, not the header comment in any hook.
 
-**Compute:** nothing tests, builds, renders or uses a GPU on the MacBook Air; it runs in CI or on cloud compute (`.github/workflows/cloud-test.yml` here). House rule: `~/.claude/rules/compute.md` (canonical: Claude-OS `rules/compute.md`), which wins any disagreement.
+**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/cloud-test.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: `~/.claude/rules/compute.md` (canonical: Claude-OS `rules/compute.md`), which wins any disagreement.
 
 The git hooks run no self-test, test suite, build or deploy. They run the path and size guard, gitleaks, the voice and claims checkers over changed markdown, and the contract test, which only reads files. The self-tests run in `selftests.yml` on every pull request, and on demand through the names in `.github/cloud-test.json`.
 
@@ -75,7 +75,7 @@ local/               operational files, gitignored and blocked from commits
 | Building or editing the site map | Skill `space-peak-site-map` |
 | Committing, branching, opening a PR | `CONTRIBUTING.md` |
 | Changing a hook or workflow | `SECURITY.md`, then README "Enforcement" |
-| Running a self-test, semgrep or any other suite | `.github/cloud-test.json`, then `gh workflow run cloud-test.yml -f script=<name>` |
+| Running a self-test, semgrep or any other suite | `.github/cloud-test.json`, then `gh workflow run cloud-test.yml --ref <branch> -f script=<name>` |
 
 ## Division of labor
 

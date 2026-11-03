@@ -6,7 +6,7 @@
 
 This file restates rules from elsewhere. Where it does, the canonical source wins and this file gets corrected in the same session:
 
-- `~/.claude/rules/writing-and-gates.md` and `~/.claude/rules/working-agreements.md` are the house standards and win over anything here.
+- `~/.claude/rules/writing-and-gates.md` and `~/.claude/rules/compute.md` are the house standards and win over anything here.
 - `04_tools/space_peak_rules.json` is the machine-readable rule set every checker reads.
 - `02_substance/claims_register.md` is canonical for which claims exist and what their status is.
 - `01_doctrine/voice.md` is the project prose layer and must agree with the two above.

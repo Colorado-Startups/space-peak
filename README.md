@@ -94,7 +94,7 @@ gh api -X POST repos/Colorado-Startups/space-peak/rulesets --input .github/rules
 
 No rework needed. The same files drop into `photon-mountain` and `fusion-canyon`.
 
-## Running the checks
+## Running the checks yourself
 
 Cloud first, the Mac last and small (Paul, 2026-11-02). The default is CI: `selftests.yml` runs the rules loader, the three self-tests and the contract test on every pull request and every push to `main`. To run one of them, or semgrep, against a branch, dispatch it by name:
 

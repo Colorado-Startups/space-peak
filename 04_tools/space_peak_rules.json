@@ -2,7 +2,7 @@
   "_README": [
     "THE SINGLE SOURCE OF TRUTH for every Space Peak gate.",
     "",
-    "Required by ~/.claude/rules/writing-and-gates.md: 'Rules belong in data, not in",
+    "Required by Code-OS rules/writing-and-gates.md: 'Rules belong in data, not in",
     "a regex. Put the terms, tokens and figures in one machine-readable file. Have a",
     "test assert that every human-facing surface still agrees with it.' That test is",
     "04_tools/space_peak_contract_test.py and it runs in CI and in the hooks.",
@@ -12,7 +12,7 @@
     "prose surfaces (README, CLAUDE.md, voice.md) from drifting away from the",
     "checkers in silence.",
     "",
-    "If this file and ~/.claude/rules/writing-and-gates.md disagree, that file wins",
+    "If this file and Code-OS rules/writing-and-gates.md disagree, that file wins",
     "and this one gets corrected in the same session."
   ],
 
@@ -45,7 +45,7 @@
       "unlabeled-claim"
     ],
     "_notes": {
-      "spaced-en-dash": "Blocks, moved from warning on 2026-10-08. ~/.claude/rules/writing-and-gates.md says a spaced en dash reads as an em dash, 'so that is out too', and that file wins. The test is a literal character match (space, U+2013, space), so it is deterministic, fast, and auto-fixable, the same as em-dash. An unspaced en dash in a range such as 3-4 does not match. Claude-OS voice_lint.py made the same correction in commit f3ece8b.",
+      "spaced-en-dash": "Blocks, moved from warning on 2026-10-08. Code-OS rules/writing-and-gates.md says a spaced en dash reads as an em dash, 'so that is out too', and that file wins. The test is a literal character match (space, U+2013, space), so it is deterministic, fast, and auto-fixable, the same as em-dash. An unspaced en dash in a range such as 3-4 does not match. Claude-OS voice_lint.py made the same correction in commit f3ece8b.",
       "exclusion-proposed": "Blocks despite using cue lists, because the site names are literal string matches against a closed two-item list and the consequence is not a style question. The cue lists only decide whether the sentence proposes rather than mentions.",
       "unattributed-figure": "Warns, not blocks. The upstream Photon Mountain script graded this FAIL, but its own docstring calls it a heuristic that 'flags candidates for human review'. Demoted here to match the house rule.",
       "unregistered-claim": "Warns. Regex detection of place-shaped proper nouns is a heuristic by construction."
@@ -136,7 +136,7 @@
 
   "hedge_words": {
     "_README": [
-      "From ~/.claude/rules/writing-and-gates.md, which is canonical and wins.",
+      "From Code-OS rules/writing-and-gates.md, which is canonical and wins.",
       "",
       "'potentially' appears here because the house rules name it. An earlier draft",
       "of 01_doctrine/voice.md argued that conditionals are honest framing for",
@@ -158,7 +158,7 @@
 
   "ai_tells": {
     "_README": [
-      "From ~/.claude/rules/writing-and-gates.md 'No AI tells'. Canonical there; this",
+      "From Code-OS rules/writing-and-gates.md 'No AI tells'. Canonical there; this",
       "is the machine-readable copy the checker reads. Warning severity: a tell is a",
       "judgement call about register, not a certainty."
     ],

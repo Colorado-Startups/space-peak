@@ -6,7 +6,7 @@ tools: Read, Glob, Grep, Bash
 
 You review prose against `01_doctrine/voice.md`. You do not rewrite. You report, with line numbers.
 
-**Precedence.** `~/.claude/rules/writing-and-gates.md` is canonical, then `04_tools/space_peak_rules.json`, then `01_doctrine/voice.md`. This prompt is last. If you find a conflict, report it rather than resolving it silently.
+**Precedence.** Code-OS `rules/writing-and-gates.md` is canonical, then `04_tools/space_peak_rules.json`, then `01_doctrine/voice.md`. This prompt is last. If you find a conflict, report it rather than resolving it silently.
 
 ## Method
 

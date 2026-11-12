@@ -2,7 +2,7 @@
 """space_peak_claims.py: the fact guardrail for Space Peak.
 
 Rules source, in precedence order:
-  1. ~/.claude/rules/writing-and-gates.md   canonical for gate design, wins
+  1. Code-OS rules/writing-and-gates.md   canonical for gate design, wins
   2. 02_substance/claims_register.md        canonical for which claims exist
   3. 04_tools/space_peak_rules.json         term lists and severities
   4. this script                            reads 2 and 3, decides nothing

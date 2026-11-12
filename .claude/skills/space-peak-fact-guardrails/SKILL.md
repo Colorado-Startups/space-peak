@@ -5,7 +5,7 @@ description: Walk the Space Peak honesty gate against a named file, checking eve
 
 # space-peak-fact-guardrails
 
-**Precedence.** `02_substance/claims_register.md` is canonical for which claims exist and what their status is. `04_tools/space_peak_rules.json` is canonical for the term lists and severities. `~/.claude/rules/writing-and-gates.md` is canonical for gate design. If this skill disagrees with any of them, they win and **this file gets corrected in the same session**.
+**Precedence.** `02_substance/claims_register.md` is canonical for which claims exist and what their status is. `04_tools/space_peak_rules.json` is canonical for the term lists and severities. Code-OS `rules/writing-and-gates.md` is canonical for gate design. If this skill disagrees with any of them, they win and **this file gets corrected in the same session**.
 
 **This gate waits.** `.claude/hooks/space-peak-content-guard.sh` fires the mechanical half on every edit, advisory. This skill adds the web verification and the register update that no hook can do.
 

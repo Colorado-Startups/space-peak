@@ -2,7 +2,7 @@
 """space_peak_lint.py: the mechanical half of the Space Peak voice check.
 
 Rules source, in precedence order:
-  1. ~/.claude/rules/writing-and-gates.md   canonical, wins
+  1. Code-OS rules/writing-and-gates.md   canonical, wins
   2. 04_tools/space_peak_rules.json         machine-readable copy
   3. 01_doctrine/voice.md                   project prose, must agree with 2
   4. this script                            reads 2, decides nothing
@@ -170,8 +170,8 @@ def lint_text(text, rules, max_words=None):
             if tell_re.search(line):
                 findings.append((line_no, R.severity_of(rules, "hedge-word"),
                                  "hedge-word",
-                                 f'AI tell "{tell}"; see the table in '
-                                 "~/.claude/rules/writing-and-gates.md"))
+                                 f'AI tell "{tell}"; see ai_tells in '
+                                 "04_tools/space_peak_rules.json"))
 
         for sentence in SENTENCE_SPLIT_RE.split(line):
             words = sentence.split()

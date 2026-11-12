@@ -5,7 +5,7 @@ description: Run the Space Peak voice check on a named file. Mechanical pass via
 
 # space-peak-voice-check
 
-**Precedence.** Rules source, in order: `~/.claude/rules/writing-and-gates.md` (canonical, wins), then `04_tools/space_peak_rules.json`, then `01_doctrine/voice.md`. If this skill disagrees with any of them, they win and **this file gets corrected in the same session**. Do not work around a disagreement; fix it.
+**Precedence.** Rules source, in order: Code-OS `rules/writing-and-gates.md` (canonical, wins), then `04_tools/space_peak_rules.json`, then `01_doctrine/voice.md`. If this skill disagrees with any of them, they win and **this file gets corrected in the same session**. Do not work around a disagreement; fix it.
 
 **This gate waits.** It runs when someone invokes it. The gate that fires on every edit is `.claude/hooks/space-peak-content-guard.sh`, which runs the same script automatically and advisory. This skill adds the judgment pass that no hook can do.
 

@@ -2,6 +2,15 @@
 
 Planning architect document for the CodeCraft orchestration system. Written 2026-07-14. Plan only; nothing here authorizes building anything. Per the fleet brief, Space Peak is the lowest priority project in the fleet and is not a hero target, so this is deliberately the shortest master plan in the system: one decision, then branches.
 
+## Terms
+
+This plan predates the repository and uses the vocabulary of the owner's planning system:
+
+- **Astraeon:** the project owner. Only the owner takes a UA step.
+- **PT:** a Cowork project task. **DS:** a Claude Code desktop session. **UA:** a user action, taken by the owner.
+- **pt_protocol.md, the fleet brief, CodeCraft:** the owner's private planning documents and orchestration system. They are not in this repository. Every rule from them that applies here is restated in this file.
+- **Satellite Peak:** the project's earlier name.
+
 ## Mission
 
 Satellite Peak is a speculative venture thesis, not an engineering proposal: the choke point of the space economy is cost-to-orbit, and a ground-based electromagnetic mass driver bored through a Colorado granite peak would turn launch from an expensive per-vehicle event into a cheap continuous utility, sited at the foot of a Colorado Springs aerospace corridor that already builds, flies, and defends the things it would launch. The brief itself states the physics is sound, the engineering is 2040s-hard, and every mountain-specific claim (site elevations, land status, firing lanes, ownership, the candidate ranking of Greenhorn over Culebra over the Spanish Peaks) is a starting point for real diligence, not a verified site assessment. This plan inherits that framing: any step below that touches a mountain fact treats it as unverified until diligenced.
@@ -87,7 +96,7 @@ No git, no code, no external commitments. Per pt_protocol.md, work units below a
 ### PT 4.3 - Firing-lane and land-status pre-diligence memo
 
 - **Objective:** Research and write MEMO-3-sites-and-lanes.md covering the brief's top two candidates only, Greenhorn (DoD Piñon Canyon corridor) and Culebra (single private owner), from public sources. Desk research only; no outreach to any landowner, agency, or the Army.
-- **Acceptance checks:** Every land-status, ownership, and corridor claim in the brief's site table is confirmed, corrected, or marked unverifiable from public sources; the brief's hard exclusions (Blanca as sacred, the Crestones as National Park adjacent) are restated as permanent; no contact with any third party occurred.
+- **Acceptance checks:** Every land-status, ownership, and corridor claim in the brief's site table is confirmed, corrected, or marked unverifiable from public sources; the brief's hard exclusions (Blanca as sacred land; the Crestones and Great Sand Dunes National Park beside them) are restated as permanent; no contact with any third party occurred.
 - **Verification method:** PT Review gate: diff the memo's findings against the brief's site table row by row and log which cells changed.
 
 ### UA 4.4 - Go, pivot, or park

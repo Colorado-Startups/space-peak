@@ -1,6 +1,6 @@
 # Space Peak, Project Instructions
 
-*Router file. Created 2026-10-05 (MASTER_PLAN Phase 1 resolved to Publish, standalone, under the Space Peak name). Last updated 2026-11-02 (the cloud-test caller and the compute rule).*
+*Router file. Created 2026-10-05 (MASTER_PLAN Phase 1 resolved to Publish, standalone, under the Space Peak name). Last updated 2026-11-12 (open-source decision; publication rule narrowed).*
 
 ## Precedence
 
@@ -89,4 +89,4 @@ The one exception already taken: the repository's first commit was pushed to `ma
 
 ## Publication is not yours to do
 
-The repository is public (Paul, 2026-11-12; MASTER_PLAN "Decisions"), so every merged change is visible to anyone. That is not publication of the thought-leadership piece. MASTER_PLAN UA 3.2 makes publishing that piece a human decision. Do not post it, place it, deploy the site, or send it anywhere. Draft, check, open a pull request, and stop.
+Paul decided on 2026-11-12 to make the repository public (MASTER_PLAN "Decisions"), so every merged change is visible to anyone. That is not publication of the thought-leadership piece. MASTER_PLAN UA 3.2 makes publishing that piece a human decision. Do not post it, place it, deploy the site, or send it anywhere. Draft, check, open a pull request, and stop.

@@ -98,8 +98,8 @@ No git, no code, no external commitments. Per pt_protocol.md, work units below a
 
 ## Open questions for Astraeon
 
-1. UA 1.1 itself: park, publish, or develop? Everything below Phase 1 is inert until you answer.
-2. If publish: under the Photon Mountain umbrella or standalone? This changes voice, venue, and which review skills gate the draft.
+1. UA 1.1 itself: park, publish, or develop? Everything below Phase 1 is inert until you answer. **Answered: see Decision 2026-10-05.**
+2. If publish: under the Photon Mountain umbrella or standalone? This changes voice, venue, and which review skills gate the draft. **Answered: see Decision 2026-10-05.**
 3. If publish: do the three SVGs and the site-map HTML ship with the piece, or is it text-only?
 4. If develop: is the no-outreach constraint in PT 4.3 correct, or do you want quiet public-records-only inquiry to go further (still without contact)?
 5. Does this project stay lowest priority in the fleet even if a branch activates, or does a Publish or Develop decision raise it?
@@ -109,10 +109,10 @@ No git, no code, no external commitments. Per pt_protocol.md, work units below a
 
 ### Decision 2026-10-05: Publish, standalone (UA 1.1)
 
-Paul chose option (b), **Publish**, under the Space Peak name, standalone rather than under the Photon Mountain umbrella. Phase 3 is active; Phases 2 and 4 are struck. The decision was recorded in `README.md` and `CLAUDE.md` on 2026-10-05; this entry, added 2026-11-12, puts it under the dated heading Phase 1 asks for.
+Paul chose option (b), **Publish**, under the Space Peak name, standalone rather than under the Photon Mountain umbrella. Phase 3 is active; Phases 2 and 4 are inactive. The decision was recorded in `README.md` and `CLAUDE.md` on 2026-10-05; this entry, added 2026-11-12, puts it under the dated heading Phase 1 asks for.
 
 ### Decision 2026-11-12: Open source
 
-Paul asked for Space Peak to be an open-source repository, so outside contributors and the Colorado Startups community can contribute. The repository becomes public. On licensing, the same day: "as lenient as possible for everything... we're not gonna try and enforce it." Content is CC0 1.0; code is CC0 1.0 OR 0BSD.
+Paul asked for Space Peak to be an open-source repository, so outside contributors and the Colorado Startups community can contribute. The repository becomes public. On licensing, Paul said the same day: "as lenient as possible for everything... we're not gonna try and enforce it." Content is CC0 1.0; code is CC0 1.0 OR 0BSD.
 
 A public repository is not publication of the thought-leadership piece. UA 3.2 still governs that piece: it is posted, placed or sent only on the owner's action.

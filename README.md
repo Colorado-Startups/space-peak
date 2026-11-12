@@ -54,7 +54,7 @@ Every term, cue list, severity, limit and exemption, in one machine-readable fil
 
 ## Enforcement: what a green check means
 
-Seven CI checks are required on `main`: `selftests`, `guardrails`, `fact-guardrails`, `voice-check`, `secret-scan`, `docs-lint` and `DCO`. A pull request cannot merge until all seven pass. The org ruleset "Protect default branches" also blocks deletion and force-push, and sends every change through a pull request.
+Two checks are required on `main`: `ci / ci-ok` and `DCO`. `ci / ci-ok` is the verdict of `.github/workflows/ci.yml`, which calls Git Crafter's `ci-standard.yml` and runs every Space Peak checker in one short job. A pull request cannot merge until both pass. The org ruleset "Protect default branches" also blocks deletion and force-push, and sends every change through a pull request.
 
 The same checkers run in several places, from one definition:
 
@@ -63,8 +63,8 @@ The same checkers run in several places, from one definition:
 | Paths, sizes, secrets, em dashes and spaced en dashes, exclusions | `.githooks/pre-commit` | **Yes** |
 | The same checks again, over what the push will send | `.githooks/pre-push` | **Yes** |
 | Permanent exclusions, during a Claude Code session | `.claude/hooks/space-peak-check-exclusions.sh` | **Yes** |
-| Everything, on every pull request, forks included | `.github/workflows/` | **Yes**, required on `main` |
-| Any self-test or scan, on demand, for any ref | `.github/workflows/cloud-test.yml` | No, advisory |
+| Everything, on every pull request, forks included | `.github/workflows/ci.yml` | **Yes**, required on `main` |
+| Secrets | GitHub secret scanning with push protection | **Yes**, at push |
 
 The local hooks catch problems before a push. CI is the backstop for contributors who never turned the hooks on, and for web-UI and cloud-agent commits.
 
@@ -92,24 +92,19 @@ A checker that cannot run exits 3 and the caller treats it as a warning and pass
 
 ## Running the checks yourself
 
-Cloud first, the Mac last and small (Paul, 2026-11-02). The default is CI: `selftests.yml` runs the rules loader, the three self-tests and the contract test on every pull request and every push to `main`. To run one of them, or semgrep, against a branch, dispatch it by name:
+Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs both self-tests, the contract test, and the claims and voice checkers over every tracked Markdown file, in under a second of work. Its commands are the `short:` block in that file.
 
-```bash
-gh workflow run cloud-test.yml --ref <branch> -f script=lint:self-test
-gh run list --workflow cloud-test.yml --limit 1
-```
-
-The names live in `.github/cloud-test.json`, the only commands a dispatch can reach. Dispatching needs write access; a contributor gets the same runs from their pull request. A new name works by dispatch only after it merges. The shared workflow behind it is `cloud-test/README.md` in `Colorado-Startups/.github`.
-
-Paul's rule allows a rare, seconds-long check on the Mac, so a single self-test may still run locally while you change its checker:
+One checker on the Mac is fine while you change it:
 
 ```bash
 python3 04_tools/space_peak_lint.py --self-test
 ```
 
-The git hooks still run the contract test on every commit and push, because it only reads files.
+Every checker is standard library Python, deterministic, and offline. Each ships a self-test that seeds a known-bad and a known-clean sample. CI runs them before any real check, because a checker that has broken reports files clean, and that looks exactly like success.
 
-Every checker is standard library Python, deterministic, and offline. Each ships a self-test that seeds a known-bad and a known-clean sample. CI runs all five before any real check, because a checker that has broken reports files clean, and that looks exactly like success.
+## Quality and Process pages
+
+`.github/workflows/pages.yml` builds Git Crafter's Quality, Speed and Consumption page and its Process page from `quality/config.json` and `quality/process/config.json`. They measure this repository's pull requests, CI and Claude sessions. They are not the thought-leadership piece, and publishing them publishes nothing about a mountain.
 
 ## A template for sibling projects
 
@@ -117,7 +112,7 @@ This scaffolding is built to be copied into sibling projects such as Photon Moun
 
 ## License
 
-Everything Colorado Startups wrote here is dedicated to the public domain under [CC0 1.0](LICENSE). Use it for anything, with no credit needed. The code (`04_tools/`, `.githooks/`, `.github/scripts/`, `.claude/hooks/`) is also offered under [0BSD](LICENSES/0BSD.txt), whichever you prefer.
+Everything Colorado Startups wrote here is dedicated to the public domain under [CC0 1.0](LICENSE). Use it for anything, with no credit needed. The code (`04_tools/`, `.githooks/`, `.claude/hooks/`, `.github/workflows/`) is also offered under [0BSD](LICENSES/0BSD.txt), whichever you prefer.
 
 Two things here belong to others and keep their own terms:
 

@@ -1,0 +1,71 @@
+[
+ {
+  "id": "docs.dead_paths",
+  "params": {
+   "lint": {
+    "interpreter": "python3",
+    "script": "04_tools/space_peak_lint.py",
+    "args": [],
+    "scope": "every doc of the doc set"
+   },
+   "doc_set_left_out": [
+    {
+     "glob": ".github/pull_request_template.md",
+     "why": "a form GitHub copies into each pull request, not a doc read in the repo"
+    }
+   ],
+   "areas": [
+    {
+     "doc": "02_substance/*.md",
+     "area": [
+      "03_deliverables/"
+     ]
+    },
+    {
+     "doc": "00_project_system/MASTER_PLAN.md",
+     "area": []
+    },
+    {
+     "doc": "01_doctrine/voice.md",
+     "area": [
+      "04_tools/space_peak_rules.json",
+      "04_tools/space_peak_lint.py"
+     ]
+    },
+    {
+     "doc": "03_deliverables/maps/README.md",
+     "area": [
+      "03_deliverables/infographics/"
+     ]
+    },
+    {
+     "doc": ".claude/skills/**",
+     "area": [
+      "04_tools/",
+      "02_substance/claims_register.md"
+     ]
+    },
+    {
+     "doc": ".claude/agents/**",
+     "area": [
+      "04_tools/",
+      "02_substance/claims_register.md"
+     ]
+    },
+    {
+     "doc": "docs/START-HERE.md",
+     "area": [
+      "04_tools/",
+      ".github/workflows/"
+     ]
+    },
+    {
+     "doc": "**",
+     "area": [
+      "{dir}/"
+     ]
+    }
+   ]
+  }
+ }
+]

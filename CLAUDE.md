@@ -40,14 +40,14 @@ Per the house rule, this is stated explicitly rather than implied:
 | `space-peak-safety-snapshot.sh` | **Fires** at session end | No |
 | `.githooks/pre-commit`, `pre-push` | **Fire** on commit and push | Yes |
 | `/space-peak-*` slash commands | **Wait** for you to run them | No |
-| GitHub Actions: `selftests`, `guardrails`, `fact-guardrails`, `voice-check`, `secret-scan`, `docs-lint`, `DCO` | **Fire** on every pull request | **Yes**, required on `main` (`.github/rulesets/protect-main.json`) |
-| GitHub Actions `cloud-test` (`.github/workflows/cloud-test.yml`, a caller of the shared workflow in Colorado-Startups/.github) | **Waits** for a dispatch: `gh workflow run cloud-test.yml --ref <branch> -f script=<name>` runs a name from `.github/cloud-test.json` on a hosted runner. **Fires** on a pull request that changes the caller or the allowlist | No, advisory |
+| GitHub Actions `ci / ci-ok` (`.github/workflows/ci.yml`, Git Crafter `ci-standard.yml`) and `DCO` | **Fire** on every pull request | **Yes**, required on `main` (`.github/rulesets/protect-main.json`) |
+| GitHub Actions `pages` (`.github/workflows/pages.yml`): the Quality and Process pages | **Fires** on a pull request that touches Markdown or `quality/`, and on push to `main` | No, advisory |
 
 `.claude/settings.json` is the authority on this wiring, not the header comment in any hook.
 
-**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/cloud-test.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: Code-OS `rules/compute.md`, which wins any disagreement.
+**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/ci.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: Code-OS `rules/compute.md`, which wins any disagreement.
 
-The git hooks run no self-test, test suite, build or deploy. They run the path and size guard, gitleaks, the voice and claims checkers over changed markdown, and the contract test, which only reads files. The self-tests run in `selftests.yml` on every pull request, and on demand through the names in `.github/cloud-test.json`.
+The git hooks run no self-test, test suite, build or deploy. They run the path and size guard, gitleaks, the voice and claims checkers over changed markdown, and the contract test, which only reads files. The self-tests run in `ci.yml`'s one short job on every pull request.
 
 ## Folder map
 
@@ -75,7 +75,7 @@ local/               operational files, gitignored and blocked from commits
 | Building or editing the site map | Skill `space-peak-site-map` |
 | Committing, branching, opening a PR | `CONTRIBUTING.md` |
 | Changing a hook or workflow | `SECURITY.md`, then README "Enforcement" |
-| Running a self-test, semgrep or any other suite | `.github/cloud-test.json`, then `gh workflow run cloud-test.yml --ref <branch> -f script=<name>` |
+| Running the checks | Push the branch; `ci.yml` runs all of them. Locally, one checker at a time |
 
 ## Division of labor
 

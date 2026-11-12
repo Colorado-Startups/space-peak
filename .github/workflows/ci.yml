@@ -1,0 +1,29 @@
+name: ci
+
+# The Git Crafter CI standard (templates/ci/README.md, v4.1.0). The ruleset requires one check from it, ci / ci-ok,
+# plus DCO. One short job runs every Space Peak check in under a second: the claims checker (the two permanent
+# exclusions, the frozen register rows, claim labels), the voice lint (blocks only on dashes), both self-tests and
+# the contract test. No paths filter, so every pull request runs it. No standard job: there is no build or suite.
+# Dependabot's github-actions entry bumps the pin.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    uses: SoulCraft-Org/git-crafter/.github/workflows/ci-standard.yml@2967fa33452f5801caef9a85808e05cc89e286b1 # v4.1.0
+    with:
+      short: |
+        python3 -I 04_tools/space_peak_claims.py --self-test
+        python3 -I 04_tools/space_peak_lint.py --self-test
+        python3 -I 04_tools/space_peak_contract_test.py
+        git ls-files -z '*.md' | xargs -0 python3 -I 04_tools/space_peak_claims.py --register 02_substance/claims_register.md
+        git ls-files -z '*.md' | xargs -0 python3 -I 04_tools/space_peak_lint.py

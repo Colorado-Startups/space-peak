@@ -22,7 +22,7 @@ Fork the repository on GitHub, clone your fork, and turn on the hooks:
 git config core.hooksPath .githooks
 ```
 
-You need `python3`, and nothing else. CI runs the full self-tests on every pull request, so you do not need to run them yourself. The latest run on `main` should be green on the repository's [Actions page](https://github.com/Colorado-Startups/space-peak/actions/workflows/selftests.yml). If it is not, the checks are broken and a clean result from them means nothing. Open a Tooling issue.
+You need `python3`, and nothing else. CI runs the full self-tests on every pull request, so you do not need to run them yourself. The latest run on `main` should be green on the repository's [Actions page](https://github.com/Colorado-Startups/space-peak/actions/workflows/ci.yml). If it is not, the checks are broken and a clean result from them means nothing. Open a Tooling issue.
 
 One quick local check is fine while you change a checker: `python3 04_tools/space_peak_lint.py --self-test`.
 

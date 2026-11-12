@@ -4,19 +4,18 @@
     "  gh api -X PUT repos/Colorado-Startups/space-peak/rulesets/<id> --input <this file, _comment stripped>",
     "and read the live ruleset back afterwards.",
     "",
+    "Two checks, the Git Crafter shape Fusion Canyon also uses: ci / ci-ok, the one verdict of",
+    ".github/workflows/ci.yml (Git Crafter ci-standard.yml), and DCO. ci / ci-ok reports on every",
+    "pull request, because ci.yml has no paths filter and ci-ok runs with if: always().",
+    "integration_id 15368 is GitHub Actions, so only an Actions run can satisfy the ci context.",
+    "",
     "Only the required_status_checks rule lives here. The org ruleset 'Protect",
     "default branches' already blocks deletion and force-push and requires a",
     "pull request, so repeating those rules here would add nothing.",
     "",
-    "No approval is required: outside contributors cannot merge, and the",
-    "maintainer's account is the only one that can. Every merge follows the house",
-    "merging skill: a fresh-context review, then a merge at the literal reviewed",
-    "SHA.",
-    "",
-    "Every context must report on every pull request. A required check that",
-    "path filters skip never reports and blocks the pull request forever, which",
-    "is why voice-check runs on every pull request and lints only changed",
-    "markdown."
+    "No approval is required: outside contributors cannot merge. Every merge follows",
+    "the house merging skill: a fresh-context review, then a merge at the literal",
+    "reviewed SHA."
   ],
   "name": "main: required checks",
   "target": "branch",
@@ -37,22 +36,8 @@
         "do_not_enforce_on_create": false,
         "required_status_checks": [
           {
-            "context": "selftests"
-          },
-          {
-            "context": "guardrails"
-          },
-          {
-            "context": "fact-guardrails"
-          },
-          {
-            "context": "voice-check"
-          },
-          {
-            "context": "secret-scan"
-          },
-          {
-            "context": "docs-lint"
+            "context": "ci / ci-ok",
+            "integration_id": 15368
           },
           {
             "context": "DCO"

@@ -1,0 +1,22 @@
+{
+ "comment": "Space Peak's Quality, Speed and Consumption config, from Git Crafter templates/quality (v4.1.0). Dropped: design, usability and deploy (the repo serves no site; publishing the piece is Paul's call under MASTER_PLAN UA 3.2) and projects (no board). Keys: Git Crafter quality/CONFIG.md.",
+ "tabs": [
+  "code",
+  "documentation",
+  "issues",
+  "pull-requests",
+  "actions",
+  "tests",
+  "security",
+  "insights",
+  "settings",
+  "claude",
+  "claude-settings",
+  "desktop-app",
+  "blockers",
+  "tokens",
+  "instructions",
+  "credits",
+  "tools"
+ ]
+}

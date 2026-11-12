@@ -1,94 +1,10 @@
-# Space Peak, Project Instructions
+@AGENTS.md
 
-*Router file. Created 2026-10-05 (MASTER_PLAN Phase 1 resolved to Publish, standalone, under the Space Peak name). Last updated 2026-11-12 (open-source decision; publication rule narrowed).*
+## Claude Code only
 
-## Precedence
-
-This file restates rules from elsewhere. Where it does, the canonical source wins and this file gets corrected in the same session:
-
-- The maintainer's house standards, Code-OS `rules/writing-and-gates.md` and `rules/compute.md`, win over anything here. They are not public; `04_tools/space_peak_rules.json` carries every rule from them that applies here, so this repository is complete for contributors.
-- `04_tools/space_peak_rules.json` is the machine-readable rule set every checker reads.
-- `02_substance/claims_register.md` is canonical for which claims exist and what their status is.
-- `01_doctrine/voice.md` is the project prose layer and must agree with the two above.
-
-`04_tools/space_peak_contract_test.py` enforces that agreement.
-
-## Session start
-
-1. Read this file.
-2. Read `00_project_system/MASTER_PLAN.md`. Phase 3 is active; Phases 2 and 4 are struck.
-3. Read `01_doctrine/voice.md` before writing any prose.
-4. Skim `02_substance/claims_register.md`. It governs every factual claim you may make.
-5. Confirm `git config core.hooksPath` is `.githooks`. Without it there is no blocking enforcement on this repo at all.
-
-## The two things that are never negotiable
-
-**Blanca Peak** is Sisnaajini, sacred to the Navajo. **The Crestones and Great Sand Dunes** are a National Park. Neither is a viable site, neither is a candidate, and neither becomes one because the engineering case improves.
-
-You may name them. You may explain why they are excluded. You may not propose either as somewhere to build, bore, site, or launch from. `.claude/hooks/space-peak-check-exclusions.sh` blocks the write. It is the only Claude hook here that blocks rather than warns, and it fires on every Write and Edit.
-
-**Every mountain fact is unverified until diligenced.** State a checkable claim about a peak and it needs a row in `02_substance/claims_register.md`. If that row says `unverified`, the prose must say so too. There is no third option where a number appears bare.
-
-## Which gates fire and which wait
-
-Per the house rule, this is stated explicitly rather than implied:
-
-| Gate | When | Blocking |
-| --- | --- | --- |
-| `space-peak-check-exclusions.sh` | **Fires** on every Write and Edit | Yes |
-| `space-peak-content-guard.sh` | **Fires** on every Write and Edit | No, advisory |
-| `space-peak-safety-snapshot.sh` | **Fires** at session end | No |
-| `.githooks/pre-commit`, `pre-push` | **Fire** on commit and push | Yes |
-| `/space-peak-*` slash commands | **Wait** for you to run them | No |
-| GitHub Actions `ci / ci-ok` (`.github/workflows/ci.yml`, Git Crafter `ci-standard.yml`) and `DCO` | **Fire** on every pull request | **Yes**, required on `main` (`.github/rulesets/protect-main.json`) |
-| GitHub Actions `pages` (`.github/workflows/pages.yml`): the Quality and Process pages | **Fires** on a pull request that touches Markdown or `quality/`, and on push to `main` | No, advisory |
-
-`.claude/settings.json` is the authority on this wiring, not the header comment in any hook.
-
-**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/ci.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: Code-OS `rules/compute.md`, which wins any disagreement.
-
-The git hooks run no self-test, test suite, build or deploy. They run the path and size guard, gitleaks, the voice and claims checkers over changed markdown, and the contract test, which only reads files. The self-tests run in `ci.yml`'s one short job on every pull request.
-
-## Folder map
-
-```
-00_project_system/   MASTER_PLAN.md
-01_doctrine/         voice.md
-02_substance/        Space-Peak-Concept-Brief.md, claims_register.md
-03_deliverables/     maps/, infographics/, and the draft once written
-04_tools/            space_peak_rules.json and the four checkers
-docs/                contributor start-here
-local/               operational files, gitignored and blocked from commits
-```
-
-## Consult first
-
-| Before doing X | Read Y first |
+| Topic | Rule |
 | --- | --- |
-| Anything at all | `00_project_system/MASTER_PLAN.md` |
-| Writing or editing prose | `01_doctrine/voice.md` |
-| Stating a fact about a peak, elevation, land status, or firing lane | `02_substance/claims_register.md` |
-| Changing a rule, term, or severity | `04_tools/space_peak_rules.json`, then run the contract test |
-| Drafting the thought-leadership piece | MASTER_PLAN PT 3.1, then skill `space-peak-voice-check` |
-| Checking a draft before it ships | Skill `space-peak-publish-gate` |
-| Verifying a factual claim | Skill `space-peak-fact-guardrails` |
-| Building or editing the site map | Skill `space-peak-site-map` |
-| Committing, branching, opening a PR | `CONTRIBUTING.md` |
-| Changing a hook or workflow | `SECURITY.md`, then README "Enforcement" |
-| Running the checks | Push the branch; `ci.yml` runs all of them. Locally, one checker at a time |
-
-## Division of labor
-
-The repository is the source of truth. Cowork edits files, and Claude Code owns git.
-
-## Git
-
-Never push to `main`. Never force-push or hard-reset. `.claude/settings.json` denies all three, plus `--no-verify`, because a gate an agent can skip is not a gate. If a human needs one of those, they run it in their own terminal and say why.
-
-Merging is the orchestrator's job, under the house `merging` skill: a fresh-context review, a `Review: MERGE at <sha>` comment, then `gh pr merge <n> --squash --match-head-commit <literal sha>`. Never auto-merge and never `--admin`. The house bash guard blocks both, and blocks any merge without a literal reviewed SHA.
-
-The one exception already taken: the repository's first commit was pushed to `main` directly, because an empty repository has no `main` to open a pull request against. Named here rather than left silent. Every change since goes through a branch.
-
-## Publication is not yours to do
-
-Paul decided on 2026-11-12 to make the repository public (MASTER_PLAN "Decisions"), so once it is public, every merged change is visible to anyone. That is not publication of the thought-leadership piece. MASTER_PLAN UA 3.2 makes publishing that piece a human decision. Do not post it, place it, deploy the site, or send it anywhere. Draft, check, open a pull request, and stop.
+| The one hook | `.claude/settings.json` wires `space-peak-check-exclusions.sh` on every Write and Edit. It blocks a write that proposes an excluded site. The settings file is the authority on the wiring |
+| Skills | `space-peak-fact-guardrails` verifies a claim. `space-peak-publish-gate` runs before a draft goes to UA 3.2. The `space-peak-fact-reviewer` agent gives an independent read |
+| Git | Cowork edits files; Claude Code owns git. The settings deny `--no-verify`, force-push, a push to `main` and a hard reset |
+| Reviews | Load the `merging` skill before reviewing or merging a pull request. Never auto-merge and never `--admin` |

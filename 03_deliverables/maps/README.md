@@ -1,6 +1,6 @@
 # Maps
 
-Felt map exports land here. See `.claude/skills/space-peak-site-map`.
+Felt map exports land here. The labelling rule for the exclusions is step 9 of the `space-peak-publish-gate` skill.
 
 ## Status: not built, and two things block it
 

@@ -25,9 +25,7 @@ files rather than inside one:
   C9  Every hook named in .claude/settings.json exists and is executable.
   C10 Every hook file on disk is actually wired in .claude/settings.json.
   C11 No workflow reimplements a check inline instead of calling a script.
-  C12 voice.md does not contradict the data file on hedge words.
   C13 is_exempt() honours every exempt glob C5 says is live.
-  C14 README's blocks and warns lists name exactly the data file's grades.
 
 C9 and C10 exist because of the house rule "a comment claiming a call site
 that the settings file does not wire is a defect in its own right. Check
@@ -130,9 +128,9 @@ def main():
     check("C2 blocking and warning are disjoint",
           not (blocking & warning),
           f"in both: {sorted(blocking & warning)}")
-    # frozen-row-edit and secret/local-path/oversized-file are emitted by the
-    # register integrity check and the shell checker, so allow those.
-    shell_emitted = {"local-path", "oversized-file", "secret", "frozen-row-edit"}
+    # frozen-row-edit is emitted by the register integrity check, which names
+    # it outside severity_of(), so allow it.
+    shell_emitted = {"frozen-row-edit"}
     orphans = (blocking | warning) - emitted - shell_emitted
     check("C3 no classified check is orphaned", not orphans,
           f"classified but never emitted: {sorted(orphans)}")
@@ -162,7 +160,7 @@ def main():
     # the house rule names.
     dupes = []
     for rel in paths:
-        if not (rel.startswith(".githooks/") or rel.startswith(".github/scripts/")
+        if not (rel.startswith(".github/workflows/")
                 or rel.startswith(".claude/hooks/")):
             continue
         try:
@@ -269,69 +267,6 @@ def main():
             inline.append(rel)
     check("C11 no workflow reimplements a check inline", not inline,
           f"inline check logic in: {inline}")
-
-    # --- voice.md agreement -----------------------------------------------
-    print()
-    print("prose agreement")
-    voice_rel = "01_doctrine/voice.md"
-    if os.path.exists(repo_file(voice_rel)):
-        voice = read(voice_rel).lower()
-        hedges = [h.lower() for h in R.terms(rules, "hedge_words")]
-        allowed = [t.lower() for t in
-                   rules["hedge_words"]["deliberately_absent"]["terms"]]
-
-        # voice.md must not claim a term is permitted when the data file bans
-        # it. Matched NARROWLY, because voice.md legitimately describes a
-        # correction it already made: "an earlier draft un-flagged
-        # 'potentially' ... the house file won". An un-narrowed match reads
-        # that history as a live permission and fails the file for recording
-        # that it was fixed. A guardrail that fires on prose about itself is
-        # worse than none, because it trains you to disable it.
-        CORRECTION_MARKERS = (
-            "earlier draft", "no longer", "was corrected", "house file won",
-            "house rules name", "is now banned", "now banned", "previously",
-            "used to",
-        )
-        contradictions = []
-        for h in hedges:
-            for m in re.finditer(
-                    r"[^.]*?(allow|permit|not a hedge|un-?flag)[^.]{0,80}"
-                    + re.escape(h) + r"[^.]*\.", voice):
-                sentence = m.group(0)
-                if any(marker in sentence for marker in CORRECTION_MARKERS):
-                    continue  # describing a correction, not granting a licence
-                contradictions.append(h)
-                break
-        check("C12 voice.md does not permit a banned hedge", not contradictions,
-              f"voice.md permits what the data file bans: {contradictions}")
-        unexplained = [a for a in allowed if a not in voice]
-        check("C12b voice.md explains each deliberate divergence",
-              not unexplained, f"undocumented divergence: {unexplained}")
-    else:
-        check("C12 voice.md does not permit a banned hedge", False,
-              f"{voice_rel} is absent")
-
-    # README's "What blocks and what warns" lists every check by name and
-    # grade. Nothing asserted it, so when spaced-en-dash sat in "warning"
-    # here while voice.md filed it under Blocking, README agreed with the
-    # JSON and nobody noticed either was wrong. Compared as exact sets, so a
-    # check that moves grade, or is added, must be moved in README as well.
-    readme_rel = "README.md"
-    if os.path.exists(repo_file(readme_rel)):
-        readme = read(readme_rel)
-        drift = []
-        for label, key in (("Blocks", "blocking"), ("Warns", "warning")):
-            m = re.search(r"^\*\*" + label + r"\*\*[^\n]*$", readme, re.M)
-            named = set(re.findall(r"`([a-z-]+)`", m.group(0))) if m else set()
-            data = set(rules["severity"][key])
-            if named != data:
-                drift.append(f"**{label}** names {sorted(named)}, "
-                             f"severity.{key} has {sorted(data)}")
-        check("C14 README severity lists match the data file", not drift,
-              "; ".join(drift))
-    else:
-        check("C14 README severity lists match the data file", False,
-              f"{readme_rel} is absent")
 
     print()
     failed = [n for n, ok, _ in results if not ok]

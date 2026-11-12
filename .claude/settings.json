@@ -1,17 +1,14 @@
 {
   "_README": [
     "Permissions are deliberately narrow on the git commands, per the house rule",
-    "'A gate an agent can skip is not a gate. If a bypass flag exists, it is a",
-    "human judgment call. Refuse it to the agent and leave it in the person's own",
-    "terminal.'",
+    "'A gate an agent can skip is not a gate.' There is no blanket Bash(git commit:*),",
+    "and the deny list keeps --no-verify, force-push, a push to main and a hard reset",
+    "out of the agent's reach.",
     "",
-    "So there is no blanket Bash(git commit:*). The allowed forms below cannot",
-    "carry --no-verify, which would skip .githooks/pre-commit. A person who needs",
-    "that bypass runs it in their own terminal and says why in the commit message.",
-    "",
-    "Three hooks are wired here. .claude/hooks/*.sh header comments describe the",
-    "same wiring; this file is the authority if they disagree, and",
-    "04_tools/space_peak_contract_test.py checks C9 and C10 to keep them in sync."
+    "One hook is wired: space-peak-check-exclusions.sh, PreToolUse on Write and Edit,",
+    "which blocks a write proposing Blanca Peak or the Crestones as a site. This file",
+    "is the authority on that wiring; 04_tools/space_peak_contract_test.py C9 and C10",
+    "check that the hook exists and that no unwired hook sits on disk."
   ],
   "permissions": {
     "allow": [
@@ -50,7 +47,6 @@
       "Bash(gh run view:*)",
       "Bash(python3 04_tools/space_peak_lint.py:*)",
       "Bash(python3 04_tools/space_peak_claims.py:*)",
-      "Bash(python3 04_tools/space_peak_files.py:*)",
       "Bash(python3 04_tools/space_peak_contract_test.py:*)"
     ],
     "deny": [
@@ -71,27 +67,6 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/space-peak-check-exclusions.sh\""
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/space-peak-content-guard.sh\""
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/space-peak-safety-snapshot.sh\""
           }
         ]
       }

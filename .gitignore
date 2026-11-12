@@ -5,10 +5,7 @@
 
 # Operational files. Never leaves the machine.
 #
-# A push ruleset would normally back this up, but those do not apply to
-# public repositories, so 04_tools/space_peak_files.py blocks it
-# from .githooks/pre-commit and pre-push, and guardrails.yml catches the
-# web-UI path. Even `git add -f local/x` is refused by the hooks.
+# Never force-add it. The reviewer reads every path in a pull request.
 local/
 
 # Python

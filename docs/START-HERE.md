@@ -16,11 +16,7 @@ Short version: Blanca Peak and the Crestones are permanently excluded, and every
 
 ## 3. Set up (2 min)
 
-Fork the repository on GitHub, clone your fork, and turn on the hooks:
-
-```bash
-git config core.hooksPath .githooks
-```
+Fork the repository on GitHub and clone your fork.
 
 You need `python3`, and nothing else. CI runs the full self-tests on every pull request, so you do not need to run them yourself. The latest run on `main` should be green on the repository's [Actions page](https://github.com/Colorado-Startups/space-peak/actions/workflows/ci.yml). If it is not, the checks are broken and a clean result from them means nothing. Open a Tooling issue.
 

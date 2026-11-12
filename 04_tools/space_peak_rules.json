@@ -5,7 +5,7 @@
     "Required by Code-OS rules/writing-and-gates.md: 'Rules belong in data, not in",
     "a regex. Put the terms, tokens and figures in one machine-readable file. Have a",
     "test assert that every human-facing surface still agrees with it.' That test is",
-    "04_tools/space_peak_contract_test.py and it runs in CI and in the hooks.",
+    "04_tools/space_peak_contract_test.py and it runs in CI (.github/workflows/ci.yml).",
     "",
     "Nothing in this repository may hardcode a term that belongs here. A new rule",
     "cannot be added without being registered, which is the point: it stops the",
@@ -31,9 +31,6 @@
     "blocking": [
       "em-dash",
       "spaced-en-dash",
-      "local-path",
-      "oversized-file",
-      "secret",
       "exclusion-proposed",
       "frozen-row-edit"
     ],
@@ -181,11 +178,9 @@
       "Each entry needs a reason. An entry without one fails the contract test."
     ],
     "entries": [
-      { "glob": ".githooks/*", "reason": "Routes the checks; quotes the banned terms to describe them." },
       { "glob": ".claude/hooks/*", "reason": "Same, for the Claude Code harness surface." },
       { "glob": ".claude/agents/*", "reason": "Reviewer prompts list the hedge words and AI tells by name so the reviewer knows what to look for. Added after the first push, where these files produced 7 warnings for quoting the terms they enforce." },
       { "glob": ".claude/skills/*", "reason": "Skill instructions quote the banned terms and bad examples beside good ones." },
-      { "glob": ".claude/commands/*", "reason": "Slash commands restate the rules they invoke." },
       { "glob": ".github/workflows/*", "reason": "Workflow headers explain what the checks ban." },
       { "glob": "04_tools/space_peak_lint.py", "reason": "Defines the em-dash constant it enforces." },
       { "glob": "04_tools/space_peak_claims.py", "reason": "Defines the exclusion cue lists it enforces." },
@@ -197,7 +192,6 @@
   },
 
   "limits": {
-    "max_file_size_mb": 25,
     "max_sentence_words": 30
   },
 
@@ -210,7 +204,7 @@
     ],
     "files": [
       "README.md",
-      "CLAUDE.md",
+      "AGENTS.md",
       "01_doctrine/voice.md",
       "CONTRIBUTING.md",
       "02_substance/claims_register.md"

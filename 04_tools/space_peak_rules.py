@@ -136,7 +136,7 @@ def is_exempt(rules, path):
             return True
         # fnmatch's '*' already spans '/', but a trailing '/*' should also
         # match deeper paths, so ".claude/skills/*" covers
-        # ".claude/skills/space-peak-voice-check/SKILL.md".
+        # ".claude/skills/space-peak-publish-gate/SKILL.md".
         if glob.endswith("/*") and norm.startswith(glob[:-1]):
             return True
     return False

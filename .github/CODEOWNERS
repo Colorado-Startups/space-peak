@@ -13,7 +13,7 @@
 # The enforcement surface. A change here is a change to the repo's
 # safety posture.
 /04_tools/                        @paul-co-startups
-/.githooks/                       @paul-co-startups
+/quality/                         @paul-co-startups
 /.github/                         @paul-co-startups
 /.claude/                         @paul-co-startups
 /SECURITY.md                      @paul-co-startups

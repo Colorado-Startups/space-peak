@@ -33,13 +33,13 @@ Space Peak is documents. There is no product, no service, no user data, and no c
 
 Three properties, from the maintainer's house standard (Code-OS `rules/writing-and-gates.md`, not public). That standard wins; `04_tools/space_peak_rules.json` carries every rule from it that applies here, so this repository is complete for contributors.
 
-- **One definition, many call sites.** Every rule lives in `04_tools/space_peak_rules.json` and is applied by a checker in `04_tools/`. The Claude hooks, the git hooks, and CI all shell out to the same checker. No workflow reimplements a check in YAML, and the contract test asserts it.
+- **One definition, many call sites.** Every rule lives in `04_tools/space_peak_rules.json` and is applied by a checker in `04_tools/`. The Claude hook and CI both shell out to the same checker. No workflow reimplements a check in YAML, and the contract test asserts it.
 - **Block on the certain, warn on the likely.** Severity comes from the data file. Heuristics warn.
-- **Fail open on infrastructure.** A checker that cannot run exits 3, and every caller treats that as a warning and passes. A missing interpreter must never look like a content violation.
+- **Fail open on infrastructure.** A checker that cannot run exits 3. The Claude hook treats that as a pass, so a missing interpreter never looks like a content violation. CI fails on it, since a runner always has `python3`.
 
 ## Dependency policy
 
-`04_tools/` is standard library Python with no third-party dependencies, deliberately: the checks must run identically on a laptop, in a hook, and in CI, with nothing to install and nothing to go stale.
+`04_tools/` is standard library Python with no third-party dependencies, deliberately: the checks must run identically on a laptop, in the hook, and in CI, with nothing to install and nothing to go stale.
 
 GitHub Actions are **SHA-pinned**, not tagged, so a moved tag cannot change what runs. The pin to Git Crafter's `ci-standard.yml` is checked by that workflow's own conformance step. Dependabot proposes updates weekly and every one is merged by hand.
 

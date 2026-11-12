@@ -9,10 +9,9 @@ Every checkable claim in the Space Peak material, with a status. The concept bri
 This file is how that rule stops being a good intention and becomes something a machine can check. Three things read it:
 
 - `.claude/hooks/space-peak-check-exclusions.sh`, which blocks a write proposing a frozen site.
-- `.claude/hooks/space-peak-speculative-guard.sh`, which warns on a claim with no row here.
 - `.github/workflows/ci.yml`, which runs the same checker over every tracked Markdown file on a pull request.
 
-All three shell out to `04_tools/space_peak_claims.py`. There is one definition of the rule, not three.
+Both shell out to `04_tools/space_peak_claims.py`. There is one definition of the rule, not two.
 
 **The rule for writers:** if you state a checkable claim, it needs a row. If its row says `unverified`, the prose must label it as unverified. There is no third option where a number appears bare.
 

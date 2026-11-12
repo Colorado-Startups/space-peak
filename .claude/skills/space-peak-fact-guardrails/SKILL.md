@@ -7,14 +7,14 @@ description: Walk the Space Peak honesty gate against a named file, checking eve
 
 **Precedence.** `02_substance/claims_register.md` is canonical for which claims exist and what their status is. `04_tools/space_peak_rules.json` is canonical for the term lists and severities. Code-OS `rules/writing-and-gates.md` is canonical for gate design. If this skill disagrees with any of them, they win and **this file gets corrected in the same session**.
 
-**This gate waits.** `.claude/hooks/space-peak-content-guard.sh` fires the mechanical half on every edit, advisory. This skill adds the web verification and the register update that no hook can do.
+**This gate waits.** `ci.yml` runs the mechanical half on every pull request. This skill adds the web verification and the register update that no check can do.
 
 ## When to use
 
 - A file states facts, figures, or land statuses and is headed for external use.
 - MASTER_PLAN PT 3.3, the pre-ship gate.
 
-Do not use for: pure process docs with no factual claims. For voice mechanics use `space-peak-voice-check`.
+Do not use for: pure process docs with no factual claims. Voice is `space-peak-publish-gate`'s business.
 
 ## Inputs
 
@@ -69,8 +69,8 @@ Do not propose reopening a `frozen` row. Blanca Peak and the Crestones are not c
 
 ## Handoffs
 
-- Voice mechanics: `space-peak-voice-check`.
-- Paths, sizes, secrets: the git hooks.
+- Voice, and the full pre-ship gate: `space-peak-publish-gate`.
+- An independent read of the claims: the `space-peak-fact-reviewer` agent.
 
 ## Output
 

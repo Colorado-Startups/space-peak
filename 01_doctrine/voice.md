@@ -10,7 +10,7 @@ This file restates rules that live elsewhere. Where it does:
 2. **`04_tools/space_peak_rules.json` is the machine-readable copy** that the checkers read. It must agree with the house file.
 3. **This file is the project prose layer.** If it and the JSON disagree, the JSON wins. If the JSON and the house file disagree, the house file wins.
 
-**The remedy, not just the precedence:** when a disagreement is found, the losing file is corrected in the same session. `04_tools/space_peak_contract_test.py` checks C12 and C12b, which fail if this file permits a term the data file bans or leaves a deliberate divergence undocumented. Precedence without a remedy becomes a standing excuse for drift.
+**The remedy, not just the precedence:** when a disagreement is found, the losing file is corrected in the same session. Precedence without a remedy becomes a standing excuse for drift.
 
 One correction has already run through that path. An earlier draft of this file argued that conditionals are honest framing for technology that does not exist yet, and un-flagged "potentially" along with "could", "might" and "may". The house rules name **"potentially"** in the hedging cut list. The house file won: "potentially" is now banned here too, and the divergence covers only the three terms the house rules do not name.
 
@@ -18,7 +18,7 @@ One correction has already run through that path. An earlier draft of this file 
 
 Space Peak, Photon Mountain, and Fusion Canyon are driven by Colorado Startups and supported by Colorado AI. Space Peak ships under its own name, not the Photon Mountain brand. There was no reason to invent a voice from scratch when a working one exists next door, so this doctrine starts as Photon Mountain's and will earn its differences rather than assert them.
 
-The mechanical half is `04_tools/space_peak_lint.py`, ported from `Photon Mountain/04_tools/voice_lint.py`. The judgement half is below, and in the `space-peak-voice-check` skill.
+The mechanical half is `04_tools/space_peak_lint.py`, ported from `Photon Mountain/04_tools/voice_lint.py`. The judgement half is below, and in step 5 of the `space-peak-publish-gate` skill.
 
 ## The rules a machine enforces
 

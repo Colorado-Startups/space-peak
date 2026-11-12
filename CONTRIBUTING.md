@@ -24,16 +24,9 @@ Issues labelled `good first issue` are a good place to start.
 ## Making a pull request
 
 1. Fork the repository and clone your fork.
-2. Turn on the hooks, once per clone:
-
-   ```bash
-   git config core.hooksPath .githooks
-   ```
-
-   You need `python3`. `gitleaks` is optional (`brew install gitleaks`). Without it the hooks print an INFRA notice and continue, and GitHub's push protection still scans.
-3. Create a branch, write, and commit with a sign-off: `git commit -s`.
-4. Push to your fork and open a pull request against `main`. Fill in the template, including the claims checklist.
-5. Read the checks, and fix anything red.
+2. Create a branch, write, and commit with a sign-off: `git commit -s`.
+3. Push to your fork and open a pull request against `main`. Fill in the template, including the claims checklist.
+4. Read the checks, and fix anything red.
 
 ### Sign-off (DCO)
 
@@ -51,7 +44,7 @@ Using an AI agent is fine. Say so in the pull request. Agents follow `CLAUDE.md`
 
 ## What the checks do
 
-Two checks must pass before a pull request can merge: `ci / ci-ok` and `DCO`. `ci / ci-ok` runs every checker in `04_tools/` in one job. The hooks run the same checkers on your machine first, so most problems show up before you push.
+Two checks must pass before a pull request can merge: `ci / ci-ok` and `DCO`. `ci / ci-ok` runs every checker in `04_tools/` in one job. Run one checker locally if you want an earlier answer; the commands are the `short:` block in `.github/workflows/ci.yml`.
 
 GitHub holds the first workflow run from a new contributor until a maintainer approves it. That is GitHub's protection for public repositories, not a judgement on your pull request.
 
@@ -90,11 +83,11 @@ Rules live in `04_tools/space_peak_rules.json`, never in a script or a workflow.
 python3 04_tools/space_peak_contract_test.py
 ```
 
-It fails if a new check is unclassified, if an exempt entry has no reason or no longer matches a real path, if a prose surface stopped naming the exclusions, or if a hook is wired but missing.
+It fails if a new check is unclassified, if an exempt entry has no reason or no longer matches a real path, if a prose surface stopped naming the exclusions, or if the Claude hook is wired but missing.
 
 ### Bypassing
 
-`git commit --no-verify` skips the local `pre-commit` hook. `pre-push` still stops the push, deliberately. Every required check also runs in CI, so a bypassed commit cannot merge until it passes. The Claude Code harness is denied the flag outright.
+There are no git hooks to skip. Every check runs in CI, and a pull request cannot merge until `ci / ci-ok` passes. The Claude Code harness is also denied `--no-verify` and force-push outright.
 
 ## Who decides
 
@@ -103,5 +96,5 @@ Paul (`@paul-co-startups`), founder of Colorado Startups, sets the product and t
 ## For maintainers: reviewing outside pull requests
 
 - Read the diff on GitHub or with `gh pr diff <number>`. Never check out or run a fork's code on your own machine. CI runs it in the cloud with a read-only token and no secrets.
-- Approve the first workflow run only after reading what the pull request changes under `.github/`, `.githooks/`, `.claude/` and `04_tools/`.
+- Approve the first workflow run only after reading what the pull request changes under `.github/`, `.claude/`, `quality/` and `04_tools/`.
 - Squash merge, so `main` keeps one signed-off commit per pull request.

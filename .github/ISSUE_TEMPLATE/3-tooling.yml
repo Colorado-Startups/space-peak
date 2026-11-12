@@ -16,10 +16,8 @@ body:
       options:
         - 04_tools/space_peak_lint.py
         - 04_tools/space_peak_claims.py
-        - 04_tools/space_peak_files.py
         - 04_tools/space_peak_contract_test.py
         - 04_tools/space_peak_rules.json
-        - .githooks (pre-commit / pre-push)
         - .claude hooks
         - GitHub Actions
         - Other

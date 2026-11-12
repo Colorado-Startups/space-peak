@@ -30,7 +30,7 @@ No git, no code, no external commitments. Per pt_protocol.md, work units below a
 - **Acceptance checks:** A single unambiguous choice is stated; if (b), Astraeon also states whether it ships under Photon Mountain or standalone; the choice is appended to this file with the decision date.
 - **Verification method:** The orchestrator reads the appended Decision entry back to Astraeon in the next session and confirms it matches intent before activating a branch.
 
-## Phase 2: Park (conditional, only if UA 1.1 = Park)
+## Phase 2: Park (conditional, only if UA 1.1 = Park). Struck by Decision 2026-10-05
 
 **Goal:** Close the project cleanly so it costs zero attention until deliberately reopened.
 
@@ -66,7 +66,7 @@ No git, no code, no external commitments. Per pt_protocol.md, work units below a
 - **Acceptance checks:** Facts verified or labeled speculative; voice intact; no em dashes; visuals (the three SVGs and site-map HTML) either included with the same speculative labeling or excluded deliberately.
 - **Verification method:** PT Review gate per pt_protocol.md, checklist ticked item by item; a fact-check sweep on the final file with results logged.
 
-## Phase 4: Develop the thesis (conditional, only if UA 1.1 = Develop)
+## Phase 4: Develop the thesis (conditional, only if UA 1.1 = Develop). Struck by Decision 2026-10-05
 
 **Goal:** Convert the brief's four make-or-break items into researched memos with real sources, ending in an informed continue-or-park decision. Research and writing only; no engineering, no land contact, no filings.
 
@@ -109,7 +109,7 @@ No git, no code, no external commitments. Per pt_protocol.md, work units below a
 
 ### Decision 2026-10-05: Publish, standalone (UA 1.1)
 
-Paul chose option (b), **Publish**, under the Space Peak name, standalone rather than under the Photon Mountain umbrella. Phase 3 is active; Phases 2 and 4 are inactive. The decision was recorded in `README.md` and `CLAUDE.md` on 2026-10-05; this entry, added 2026-11-12, puts it under the dated heading Phase 1 asks for.
+Paul chose option (b), **Publish**, under the Space Peak name, standalone rather than under the Photon Mountain umbrella. Phase 3 is active; Phases 2 and 4 are struck, as the Phase 1 exit criteria require. The decision was recorded in `README.md` and `CLAUDE.md` on 2026-10-05; this entry, added 2026-11-12, puts it under the dated heading Phase 1 asks for.
 
 ### Decision 2026-11-12: Open source
 

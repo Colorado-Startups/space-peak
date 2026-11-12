@@ -40,7 +40,7 @@ Per the house rule, this is stated explicitly rather than implied:
 | `space-peak-safety-snapshot.sh` | **Fires** at session end | No |
 | `.githooks/pre-commit`, `pre-push` | **Fire** on commit and push | Yes |
 | `/space-peak-*` slash commands | **Wait** for you to run them | No |
-| GitHub Actions | **Fire** on pull request | No, advisory (see README) |
+| GitHub Actions: `selftests`, `guardrails`, `fact-guardrails`, `voice-check`, `secret-scan`, `docs-lint`, `DCO` | **Fire** on every pull request | **Yes**, required on `main` (`.github/rulesets/protect-main.json`) |
 | GitHub Actions `cloud-test` (`.github/workflows/cloud-test.yml`, a caller of the shared workflow in Colorado-Startups/.github) | **Waits** for a dispatch: `gh workflow run cloud-test.yml --ref <branch> -f script=<name>` runs a name from `.github/cloud-test.json` on a hosted runner. **Fires** on a pull request that changes the caller or the allowlist | No, advisory |
 
 `.claude/settings.json` is the authority on this wiring, not the header comment in any hook.

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Relative-link check for markdown. Offline on purpose: no network, so it
-# cannot flake, cannot be rate-limited, and costs nothing against the
-# 2,000 Actions minutes a Free private repo gets each month. External URLs
+# cannot flake, cannot be rate-limited, and adds no runner time. External URLs
 # are left to the human doing the pre-ship fact pass.
 set -uo pipefail
 rc=0

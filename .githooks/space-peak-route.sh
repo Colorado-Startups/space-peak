@@ -125,8 +125,8 @@ PYEOF
       echo "pre-push runs the same checks, so --no-verify only defers them." >&2
     else
       echo "Nothing was pushed. Fix the blocking findings and commit the fix." >&2
-      echo "This repo has no server-side ruleset (GitHub Free does not enforce" >&2
-      echo "them on private repos), so this hook is the last gate." >&2
+      echo "The required CI checks would block the same findings at merge;" >&2
+      echo "fixing them now saves the round trip." >&2
     fi
     return 1
   fi

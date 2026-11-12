@@ -9,7 +9,6 @@ name: voice-check
 # agent, which is the path least likely to have read 01_doctrine/voice.md.
 on:
   pull_request:
-    paths: ["**/*.md"]
   workflow_dispatch:
 
 permissions:

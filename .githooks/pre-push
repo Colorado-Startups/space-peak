@@ -3,8 +3,8 @@
 #
 # `git commit --no-verify` skips pre-commit entirely. On a repo with a
 # server-side ruleset that gap is survivable, because the server catches
-# what the client missed. GitHub Free does not enforce rulesets on private
-# repositories, so a single bypassable hook would be the whole defence.
+# what the client missed. Here the required CI checks are that server, and
+# this hook stops the problem before it reaches them.
 #
 # Enable once per clone:  git config core.hooksPath .githooks
 set -uo pipefail

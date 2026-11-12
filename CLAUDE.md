@@ -83,7 +83,9 @@ Per `Photon Mountain/00_project_system/github_setup_plan.md`: the folder is the 
 
 ## Git
 
-Never push to `main`. Never force-push or hard-reset. Never auto-merge a pull request. `.claude/settings.json` denies all four, plus `--no-verify`, because a gate an agent can skip is not a gate. If a human needs one of those, they run it in their own terminal and say why.
+Never push to `main`. Never force-push or hard-reset. `.claude/settings.json` denies all three, plus `--no-verify`, because a gate an agent can skip is not a gate. If a human needs one of those, they run it in their own terminal and say why.
+
+Merging is the orchestrator's job, under the house `merging` skill: a fresh-context review, a `Review: MERGE at <sha>` comment, then `gh pr merge <n> --squash --match-head-commit <literal sha>`. Never auto-merge and never `--admin`. The house bash guard blocks both, and blocks any merge without a literal reviewed SHA.
 
 The one exception already taken: the repository's first commit was pushed to `main` directly, because an empty repository has no `main` to open a pull request against. Named here rather than left silent. Every change since goes through a branch.
 

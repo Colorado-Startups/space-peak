@@ -1,28 +1,24 @@
 {
   "_comment": [
-    "UNAVAILABLE ON THE CURRENT PLAN. Verified 2026-10-05 by applying it:",
-    "  POST repos/Colorado-Startups/space-peak/rulesets",
-    "  -> HTTP 403 'Upgrade to GitHub Pro or make this repository public to",
-    "     enable this feature.'",
-    "GitHub REJECTS the ruleset outright rather than accepting it and quietly",
-    "not enforcing it. That is the better of the two behaviours, and it means",
-    "there is no risk of a reader seeing enforcement:active and trusting a",
-    "rule that does nothing. An earlier draft of this file claimed the silent",
-    "variant; it was wrong, and this is the corrected record.",
+    "Source of truth for the required status checks on main. Apply a change with",
+    "  gh api -X PUT repos/Colorado-Startups/space-peak/rulesets/<id> --input <this file, _comment stripped>",
+    "and read the live ruleset back afterwards.",
     "",
-    "So nothing here is live. .githooks/pre-commit and pre-push block, and",
-    ".github/workflows/ runs the same checkers advisory, for the web-UI and",
-    "cloud-agent paths the hooks never see.",
+    "Only the required_status_checks rule lives here. The org ruleset 'Protect",
+    "default branches' already blocks deletion and force-push and requires a",
+    "pull request, so repeating those rules here would add nothing.",
     "",
-    "The day Colorado-Startups moves to a paid plan this turns on with no",
-    "rework:",
-    "  gh api -X POST repos/Colorado-Startups/space-peak/rulesets --input .github/rulesets/protect-main.json",
-    "Mirrors the 'Protect main' ruleset live on Colorado-AI/colorado-ai.",
-    "required_approving_review_count is 0 on purpose: the repo is",
-    "solo-maintained and a review requirement would block the maintainer's own",
-    "pull requests."
+    "No approval is required: outside contributors cannot merge, and the",
+    "maintainer's account is the only one that can. Every merge follows the house",
+    "merging skill: a fresh-context review, then a merge at the literal reviewed",
+    "SHA.",
+    "",
+    "Every context must report on every pull request. A required check that",
+    "path filters skip never reports and blocks the pull request forever, which",
+    "is why voice-check runs on every pull request and lints only changed",
+    "markdown."
   ],
-  "name": "Protect main",
+  "name": "main: required checks",
   "target": "branch",
   "enforcement": "active",
   "conditions": {
@@ -34,27 +30,6 @@
     }
   },
   "rules": [
-    {
-      "type": "deletion"
-    },
-    {
-      "type": "non_fast_forward"
-    },
-    {
-      "type": "pull_request",
-      "parameters": {
-        "required_approving_review_count": 0,
-        "dismiss_stale_reviews_on_push": false,
-        "require_code_owner_review": false,
-        "require_last_push_approval": false,
-        "required_review_thread_resolution": false,
-        "allowed_merge_methods": [
-          "squash",
-          "merge",
-          "rebase"
-        ]
-      }
-    },
     {
       "type": "required_status_checks",
       "parameters": {
@@ -78,6 +53,9 @@
           },
           {
             "context": "docs-lint"
+          },
+          {
+            "context": "DCO"
           }
         ]
       }

@@ -12,6 +12,6 @@ Sync the current work to GitHub.
 6. Open a PR with `gh pr create` and fill in the template, including the claims checklist, honestly.
 7. Report the PR URL, then `gh pr checks`.
 
-Every check on this repo is advisory. A green run is information, not permission. Read the output.
+Seven checks are required on `main` (`.github/rulesets/protect-main.json`); `cloud-test` stays advisory. A green run means the gates passed, not that the change is right. Read the output.
 
 Do not merge. Do not publish.

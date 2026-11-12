@@ -21,14 +21,10 @@ not apply.
 
 ## Checks
 
-CI here is **advisory, not blocking**. Colorado-Startups is on GitHub Free,
-which does not enforce rulesets or required status checks on private
-repositories, so a red check will not stop a merge. Read them anyway; they
-are the only automated gate there is.
+Seven checks are **required** on `main`: `selftests`, `guardrails`, `fact-guardrails`, `voice-check`, `secret-scan`, `docs-lint` and `DCO`. A red one blocks the merge.
 
-- [ ] `selftests`, `guardrails`, `fact-guardrails`, `voice-check`, `secret-scan` and `docs-lint` are green, or each red one is explained below
-
-<!-- If a check is red and you are merging anyway, say why. -->
+- [ ] Every commit is signed off (`git commit -s`), or I am an org member with verified commits
+- [ ] If an AI agent helped, I say so here
 
 ## Publication
 

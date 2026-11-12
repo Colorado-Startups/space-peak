@@ -4,10 +4,9 @@
 Rules source: 04_tools/space_peak_rules.json. If this script and that file
 disagree, the file wins.
 
-This is the replacement for a GitHub push ruleset. Colorado-Startups is on
-GitHub Free, where push rulesets (restrict file paths, restrict file size)
-are unavailable for private repositories, so the two rules that would live
-server-side have no server-side home:
+This is the replacement for a GitHub push ruleset. Push rulesets (restrict
+file paths, restrict file size) do not apply to public repositories, so the
+two rules that would live server-side have no server-side home:
 
   local-path       nothing under local/ may be committed
   oversized-file   nothing over the configured limit may be committed

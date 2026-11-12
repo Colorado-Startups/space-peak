@@ -2,19 +2,13 @@ name: guardrails
 
 # The push-ruleset replacement.
 #
-# Colorado-Startups is on GitHub Free, where rulesets are NOT enforced on
-# private repositories and push rulesets are unavailable outright. The two
-# rules that would live server-side, "nothing under local/" and "nothing
-# over the size limit", have no server-side home. This job is where they
-# live, applied by 04_tools/space_peak_files.py.
+# GitHub push rulesets apply only to private and internal repositories, so
+# the two rules that would live there, "nothing under local/" and "nothing
+# over the size limit", have no server-side home on a public repository.
+# This job is where they live, applied by 04_tools/space_peak_files.py.
 #
-# ADVISORY BY NECESSITY, not by choice: Free cannot mark any check
-# required, so a red run does not block a merge. It is still the only
-# thing between a web-UI edit and main, because .githooks never run for a
-# browser or cloud-agent commit.
-#
-# See .github/rulesets/ for the dormant definitions that make this
-# redundant the day the org upgrades.
+# REQUIRED on main (.github/rulesets/protect-main.json). It is the gate for
+# web-UI, cloud-agent and fork commits, which never run .githooks.
 on:
   pull_request:
   push:

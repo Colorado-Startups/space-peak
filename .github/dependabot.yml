@@ -2,9 +2,7 @@
 # opens a pull request when one has a known vulnerability. Low-risk
 # updates are grouped to keep review light.
 #
-# Dependabot security updates are free on private repositories, which makes
-# this one of the few GitHub-native security features actually available on
-# the Free plan. Worth having for that reason alone.
+# Dependabot security updates are free and need no extra setup.
 #
 # Only the github-actions ecosystem: 04_tools/ is standard library Python
 # with no requirements.txt, and there is no package.json. Add a pip entry

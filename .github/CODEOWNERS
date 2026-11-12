@@ -1,25 +1,17 @@
 # Code owners for Space Peak.
 #
-# NON-FUNCTIONAL ON THE CURRENT PLAN, and staged deliberately.
-#
-# Two reasons it does nothing today:
-#   1. CODEOWNERS auto-review-request requires GitHub Team or above for
-#      private repositories. Colorado-Startups is on Free.
-#   2. Even with Team, the "Protect main" ruleset sets
-#      required_approving_review_count to 0 and require_code_owner_review
-#      to false, because the repository is solo-maintained and a review
-#      requirement would block the maintainer's own pull requests.
-#
-# It is here so that the moment either changes, these paths are gated
-# automatically rather than remembered.
+# GitHub requests a review from the owner on every pull request that touches
+# these paths. Review is not a merge requirement: the required status checks
+# in .github/rulesets/protect-main.json are, and every merge follows the house
+# merging skill.
 
 * @paul-co-startups
 
 # The permanent exclusions and every claim's verification status.
 /02_substance/claims_register.md  @paul-co-startups
 
-# The enforcement surface. Without a server-side ruleset these ARE the
-# controls, so a change here is a change to the repo's safety posture.
+# The enforcement surface. A change here is a change to the repo's
+# safety posture.
 /04_tools/                        @paul-co-startups
 /.githooks/                       @paul-co-startups
 /.github/                         @paul-co-startups

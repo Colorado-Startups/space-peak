@@ -60,8 +60,7 @@
       "Bash(git push --force:*)",
       "Bash(git push -f:*)",
       "Bash(git push origin main:*)",
-      "Bash(git reset --hard:*)",
-      "Bash(gh pr merge:*)"
+      "Bash(git reset --hard:*)"
     ]
   },
   "hooks": {

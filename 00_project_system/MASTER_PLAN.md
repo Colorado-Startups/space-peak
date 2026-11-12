@@ -96,7 +96,7 @@ No git, no code, no external commitments. Per pt_protocol.md, work units below a
 ### PT 4.3 - Firing-lane and land-status pre-diligence memo
 
 - **Objective:** Research and write MEMO-3-sites-and-lanes.md covering the brief's top two candidates only, Greenhorn (DoD Piñon Canyon corridor) and Culebra (single private owner), from public sources. Desk research only; no outreach to any landowner, agency, or the Army.
-- **Acceptance checks:** Every land-status, ownership, and corridor claim in the brief's site table is confirmed, corrected, or marked unverifiable from public sources; the brief's hard exclusions (Blanca as sacred, the Crestones / Great Sand Dunes as a National Park) are restated as permanent; no contact with any third party occurred.
+- **Acceptance checks:** Every land-status, ownership, and corridor claim in the brief's site table is confirmed, corrected, or marked unverifiable from public sources; the brief's hard exclusions (Blanca as sacred land; the Crestones and Great Sand Dunes National Park beside them) are restated as permanent; no contact with any third party occurred.
 - **Verification method:** PT Review gate: diff the memo's findings against the brief's site table row by row and log which cells changed.
 
 ### UA 4.4 - Go, pivot, or park

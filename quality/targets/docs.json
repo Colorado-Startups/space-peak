@@ -26,6 +26,40 @@
      "area": []
     },
     {
+     "doc": "01_doctrine/voice.md",
+     "area": [
+      "04_tools/space_peak_rules.json",
+      "04_tools/space_peak_lint.py"
+     ]
+    },
+    {
+     "doc": "03_deliverables/maps/README.md",
+     "area": [
+      "03_deliverables/infographics/"
+     ]
+    },
+    {
+     "doc": ".claude/skills/**",
+     "area": [
+      "04_tools/",
+      "02_substance/claims_register.md"
+     ]
+    },
+    {
+     "doc": ".claude/agents/**",
+     "area": [
+      "04_tools/",
+      "02_substance/claims_register.md"
+     ]
+    },
+    {
+     "doc": "docs/START-HERE.md",
+     "area": [
+      "04_tools/",
+      ".github/workflows/"
+     ]
+    },
+    {
      "doc": "**",
      "area": [
       "{dir}/"

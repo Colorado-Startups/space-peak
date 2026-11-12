@@ -15,7 +15,7 @@
 # Why block when every other content check warns: the two exclusions are
 # literal string matches against a closed two-item list, and the
 # consequence is not a style question. Blanca Peak is sacred to the Navajo.
-# The Crestones and Great Sand Dunes are a National Park. Neither is an
+# Great Sand Dunes is a National Park; the Crestones are the wilderness beside it. Neither is an
 # engineering judgement, so neither is revisable by better engineering.
 #
 # It blocks the WRITE, not the discussion. Naming either site, or

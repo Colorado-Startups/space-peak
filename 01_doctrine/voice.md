@@ -70,7 +70,7 @@ This is the rule `04_tools/space_peak_claims.py` and `02_substance/claims_regist
 
 ### The two permanent exclusions are stated, never argued
 
-**Blanca Peak** is Sisnaajini, sacred to the Navajo. **The Crestones and Great Sand Dunes** are a National Park.
+**Blanca Peak** is Sisnaajini, sacred to the Navajo. **Great Sand Dunes** is a National Park, and **the Crestones** are the protected wilderness beside it.
 
 Write these as settled, because they are. Do not stage them as a tension to be resolved, do not describe them as obstacles, and do not pair the exclusion with a note about how good the site would otherwise be. The concept brief calls Blanca high and south and on paper near-perfect one clause before excluding it, and that construction invites a reader to weigh the two against each other. They do not weigh against each other. One is an engineering observation and the other is not a matter for engineering.
 

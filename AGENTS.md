@@ -5,7 +5,7 @@ Instructions for every coding agent in this repo. OpenCode reads this file, and 
 | Topic | Rule |
 | --- | --- |
 | What this repo is | A speculative venture thesis for a mass driver in a Colorado peak, being drafted into one thought-leadership piece (`00_project_system/MASTER_PLAN.md`, Phase 3) |
-| Never negotiable | **Blanca Peak** (Sisnaajini, sacred to the Navajo) and **the Crestones and Great Sand Dunes** (a National Park) are permanent exclusions. Name them and explain the exclusion; never propose either as a place to build, bore, site or launch from. No engineering case reopens them |
+| Never negotiable | **Blanca Peak** (Sisnaajini, sacred to the Navajo) and **the Crestones and Great Sand Dunes** (a National Park and the wilderness beside it) are permanent exclusions. Name them and explain the exclusion; never propose either as a place to build, bore, site or launch from. No engineering case reopens them |
 | Mountain facts | Every checkable claim about a peak has a row in `02_substance/claims_register.md`. A row that says `unverified` makes the prose say so too. No number appears bare |
 | Before writing prose | Read `01_doctrine/voice.md` |
 | Publication | Paul decides it under MASTER_PLAN UA 3.2. Never post, place, deploy or send the piece: draft, check, open a pull request and stop. The Quality and Process pages from `pages.yml` are not the piece |

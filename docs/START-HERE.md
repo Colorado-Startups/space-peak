@@ -10,20 +10,21 @@ The sentence that matters: a speculative venture thesis, not an engineering prop
 
 ## 2. What you may not do (2 min)
 
-Read "The two things that are never negotiable" in `CLAUDE.md`.
+Read "Two rules before anything else" in `CONTRIBUTING.md`.
 
 Short version: Blanca Peak and the Crestones are permanently excluded, and every factual claim about a peak needs a register row.
 
 ## 3. Set up (2 min)
 
+Fork the repository on GitHub, clone your fork, and turn on the hooks:
+
 ```bash
 git config core.hooksPath .githooks
-gh run list --workflow selftests.yml --branch main --limit 1
 ```
 
-The self-tests run in CI by default: cloud first, the Mac last and small (Paul, 2026-11-02). `selftests.yml` runs them on every pull request and every push to `main`, and `gh workflow run cloud-test.yml --ref <branch> -f script=<name>` runs one on demand (names in `.github/cloud-test.json`). The latest `main` run should be green. If it is not, the checks are broken and you should not trust a clean result from them. Open a Tooling issue.
+You need `python3`, and nothing else. CI runs the full self-tests on every pull request, so you do not need to run them yourself. The latest run on `main` should be green on the repository's [Actions page](https://github.com/Colorado-Startups/space-peak/actions/workflows/selftests.yml). If it is not, the checks are broken and a clean result from them means nothing. Open a Tooling issue.
 
-Paul's rule still allows one rare, seconds-long check on the Mac, such as a single self-test: `python3 04_tools/space_peak_lint.py --self-test`.
+One quick local check is fine while you change a checker: `python3 04_tools/space_peak_lint.py --self-test`.
 
 ## 4. See the guardrails work (3 min)
 
@@ -55,3 +56,7 @@ python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md
 `00_project_system/MASTER_PLAN.md`, Phase 3.
 
 Phase 1's decision is made: publish, standalone, under the Space Peak name. Phases 2 and 4 are struck.
+
+## 6. Make your first contribution
+
+Pick an issue labelled `good first issue`, or bring a source for any `unverified` row in the claims register. `CONTRIBUTING.md` covers the pull request, the sign-off and what the checks do.

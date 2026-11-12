@@ -1,0 +1,14 @@
+title: "Question: "
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: About the thesis, the claims register, the checks or how to contribute.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: What you already read or tried
+      description: Files, links, commands and their output. Never paste a token or a key.

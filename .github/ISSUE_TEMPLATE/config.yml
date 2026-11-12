@@ -3,3 +3,9 @@ contact_links:
   - name: The two permanent exclusions
     url: https://github.com/Colorado-Startups/space-peak/blob/main/02_substance/claims_register.md
     about: Blanca Peak and the Crestones are not open questions. Read the register first.
+  - name: Ask a question or share an idea
+    url: https://github.com/Colorado-Startups/space-peak/discussions
+    about: Questions and early ideas go to Discussions, not issues.
+  - name: Report a vulnerability
+    url: https://github.com/Colorado-Startups/space-peak/security/advisories/new
+    about: Report security issues privately, never in a public issue.

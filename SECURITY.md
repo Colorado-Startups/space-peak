@@ -2,7 +2,12 @@
 
 ## Reporting
 
-A private, single-maintainer repository. Report anything sensitive directly to `@paul-co-startups`. Do not open a public issue.
+Report a vulnerability privately, never in a public issue:
+
+- **Preferred:** [GitHub private vulnerability reporting](https://github.com/Colorado-Startups/space-peak/security/advisories/new).
+- **Or email:** info@coloradostartups.org.
+
+There is no bounty. The goal is an acknowledgement within seven days.
 
 ## What this repository actually protects
 
@@ -12,27 +17,21 @@ Space Peak is documents. There is no product, no service, no user data, and no c
 2. **Operational files leaking.** `local/` holds working notes and must never reach the remote. Gitignored, and blocked by `04_tools/space_peak_files.py` even if force-added.
 3. **A speculative claim hardening into an asserted fact.** Not a conventional security issue, but the failure mode most likely to cause real harm to this project, so it is gated like one.
 
-## Known posture limitations, stated plainly
+## Posture, stated plainly
 
-`Colorado-Startups` is on the **GitHub Free** plan. That removes several controls a reader might assume are present:
-
-| Control | Status | What covers it instead |
-| --- | --- | --- |
-| Branch rulesets | **Rejected** on private repos on Free (HTTP 403, verified 2026-10-05) | `.githooks/pre-commit` and `pre-push`, both blocking |
-| Push rulesets (`local/**`, file size) | **Rejected** on Free (HTTP 403, verified 2026-10-05) | `04_tools/space_peak_files.py`, called from the hooks and CI |
-| Required status checks | **Unavailable** | Nothing. Checks are advisory; read them |
-| GitHub secret scanning | **Unavailable** (needs Secret Protection) | gitleaks binary |
-| CodeQL code scanning | **Unavailable** (needs Code Security) | semgrep, in `sast.yml` |
-| CODEOWNERS auto-review | **Non-functional** below Team | Nothing. Staged for the upgrade |
-| Dependabot security updates | **Available and enabled** | Native |
-
-The two ruleset definitions live in `.github/rulesets/` and are version-controlled so upgrading the plan is one command with no rework. Applying them today returns 403, which is recorded in each file's own comment block.
-
-**Do not read a green CI check as a merge gate.** It is not one.
+| Control | Status |
+| --- | --- |
+| Branch protection | Org ruleset "Protect default branches": no deletion, no force-push, every change through a pull request |
+| Required status checks | Ruleset "main: required checks" (`.github/rulesets/protect-main.json`): `selftests`, `guardrails`, `fact-guardrails`, `voice-check`, `secret-scan`, `docs-lint`, `DCO` |
+| `local/**` and file size | The required `guardrails` check, through `04_tools/space_peak_files.py`. GitHub push rulesets do not apply to public repositories |
+| Secret scanning | GitHub secret scanning with push protection, plus the gitleaks binary in the hooks and in `secret-scan.yml` over full history |
+| Code scanning | semgrep, in `sast.yml` |
+| Fork pull requests | Read-only token, no secrets, and the first run from a new contributor waits for maintainer approval |
+| Dependabot security updates | Enabled |
 
 ## Gate design
 
-Three properties, from `~/.claude/rules/writing-and-gates.md`:
+Three properties, from the maintainer's house standard (Code-OS `rules/writing-and-gates.md`, not public). That standard wins; `04_tools/space_peak_rules.json` carries every rule from it that applies here, so this repository is complete for contributors.
 
 - **One definition, many call sites.** Every rule lives in `04_tools/space_peak_rules.json` and is applied by a checker in `04_tools/`. The Claude hooks, the git hooks, and CI all shell out to the same checker. No workflow reimplements a check in YAML, and the contract test asserts it.
 - **Block on the certain, warn on the likely.** Severity comes from the data file. Heuristics warn.

@@ -1,0 +1,39 @@
+title: "Idea: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One idea per discussion. A maintainer turns an accepted idea into an issue.
+
+        Two rules hold for every idea. Blanca Peak and the Crestones / Great Sand
+        Dunes are permanent exclusions, so an idea that sites anything there is
+        closed. Every mountain fact stays unverified until it has a sourced row in
+        `02_substance/claims_register.md`.
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What would change in the thesis, a draft, a map or the tooling?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it makes Space Peak better
+      description: Who it helps, or which claim, gap or weakness it addresses.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: Links or citations for any fact the idea depends on. Leave blank if there are none yet.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you post
+      options:
+        - label: I searched Discussions and issues for this idea.
+          required: true
+        - label: It does not propose Blanca Peak or the Crestones as a site.
+          required: true

@@ -13,8 +13,8 @@ There is no bounty. The goal is an acknowledgement within seven days.
 
 Space Peak is documents. There is no product, no service, no user data, and no credentials in normal operation. The realistic risks, in order:
 
-1. **A credential committed by accident**, most likely a Cloudflare or GitHub token pasted into a note. Caught by gitleaks in `pre-commit` and `pre-push` (blocking), and by `secret-scan` over full history.
-2. **Operational files leaking.** `local/` holds working notes and must never reach the remote. Gitignored, and blocked by `04_tools/space_peak_files.py` even if force-added.
+1. **A credential committed by accident**, most likely a Cloudflare or GitHub token pasted into a note. Caught by GitHub push protection (blocking) and GitHub secret scanning, both on and free for a public repository.
+2. **Operational files leaking.** `local/` holds working notes and must never reach the remote. Gitignored, and read in every diff at review.
 3. **A speculative claim hardening into an asserted fact.** Not a conventional security issue, but the failure mode most likely to cause real harm to this project, so it is gated like one.
 
 ## Posture, stated plainly
@@ -22,10 +22,10 @@ Space Peak is documents. There is no product, no service, no user data, and no c
 | Control | Status |
 | --- | --- |
 | Branch protection | Org ruleset "Protect default branches": no deletion, no force-push, every change through a pull request |
-| Required status checks | Ruleset "main: required checks" (`.github/rulesets/protect-main.json`): `selftests`, `guardrails`, `fact-guardrails`, `voice-check`, `secret-scan`, `docs-lint`, `DCO` |
-| `local/**` and file size | The required `guardrails` check, through `04_tools/space_peak_files.py`. GitHub push rulesets do not apply to public repositories |
-| Secret scanning | GitHub secret scanning with push protection, plus the gitleaks binary in the hooks and in `secret-scan.yml` over full history |
-| Code scanning | semgrep, in `sast.yml` |
+| Required status checks | Ruleset "main: required checks" (`.github/rulesets/protect-main.json`): `ci / ci-ok` (`.github/workflows/ci.yml`) and `DCO` |
+| `local/**` | `.gitignore`, and the reviewer reads every path in the diff |
+| Secret scanning | GitHub secret scanning with push protection |
+| Code scanning | None. The only code is standard library Python in `04_tools/`, run by `ci.yml` on every pull request |
 | Fork pull requests | Read-only token, no secrets, and the first run from a new contributor waits for maintainer approval |
 | Dependabot security updates | Enabled |
 
@@ -41,8 +41,8 @@ Three properties, from the maintainer's house standard (Code-OS `rules/writing-a
 
 `04_tools/` is standard library Python with no third-party dependencies, deliberately: the checks must run identically on a laptop, in a hook, and in CI, with nothing to install and nothing to go stale.
 
-GitHub Actions are **SHA-pinned**, not tagged, so a moved tag cannot change what runs. Dependabot proposes updates weekly and every one is merged by hand.
+GitHub Actions are **SHA-pinned**, not tagged, so a moved tag cannot change what runs. The pin to Git Crafter's `ci-standard.yml` is checked by that workflow's own conformance step. Dependabot proposes updates weekly and every one is merged by hand.
 
 ## Secrets
 
-No repository secrets are configured. `deploy-site.yml` is staged and fails by design, precisely so nobody adds `CLOUDFLARE_API_TOKEN` before there is a reviewed decision to publish.
+No repository secrets are configured, and no workflow deploys the thought-leadership piece. Publishing it is Paul's decision under MASTER_PLAN UA 3.2. `pages.yml` publishes only the Quality and Process pages.

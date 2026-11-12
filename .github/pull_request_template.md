@@ -21,7 +21,7 @@ not apply.
 
 ## Checks
 
-Seven checks are **required** on `main`: `selftests`, `guardrails`, `fact-guardrails`, `voice-check`, `secret-scan`, `docs-lint` and `DCO`. A red one blocks the merge.
+Two checks are **required** on `main`: `ci / ci-ok` and `DCO`. A red one blocks the merge.
 
 - [ ] Every commit is signed off (`git commit -s`), or I am an org member with verified commits
 - [ ] If an AI agent helped, I say so here

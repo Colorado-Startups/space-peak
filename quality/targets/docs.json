@@ -1,0 +1,37 @@
+[
+ {
+  "id": "docs.dead_paths",
+  "params": {
+   "lint": {
+    "interpreter": "python3",
+    "script": "04_tools/space_peak_lint.py",
+    "args": [],
+    "scope": "every doc of the doc set"
+   },
+   "doc_set_left_out": [
+    {
+     "glob": ".github/pull_request_template.md",
+     "why": "a form GitHub copies into each pull request, not a doc read in the repo"
+    }
+   ],
+   "areas": [
+    {
+     "doc": "02_substance/*.md",
+     "area": [
+      "03_deliverables/"
+     ]
+    },
+    {
+     "doc": "00_project_system/MASTER_PLAN.md",
+     "area": []
+    },
+    {
+     "doc": "**",
+     "area": [
+      "{dir}/"
+     ]
+    }
+   ]
+  }
+ }
+]

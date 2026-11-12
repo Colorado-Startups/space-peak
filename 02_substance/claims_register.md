@@ -10,7 +10,7 @@ This file is how that rule stops being a good intention and becomes something a 
 
 - `.claude/hooks/space-peak-check-exclusions.sh`, which blocks a write proposing a frozen site.
 - `.claude/hooks/space-peak-speculative-guard.sh`, which warns on a claim with no row here.
-- `.github/workflows/fact-guardrails.yml`, which runs the same checker on a pull request.
+- `.github/workflows/ci.yml`, which runs the same checker over every tracked Markdown file on a pull request.
 
 All three shell out to `04_tools/space_peak_claims.py`. There is one definition of the rule, not three.
 

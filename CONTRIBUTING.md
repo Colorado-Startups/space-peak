@@ -30,7 +30,7 @@ Issues labelled `good first issue` are a good place to start.
    git config core.hooksPath .githooks
    ```
 
-   You need `python3`. `gitleaks` is optional (`brew install gitleaks`). Without it the hooks print an INFRA notice and continue, and CI still scans.
+   You need `python3`. `gitleaks` is optional (`brew install gitleaks`). Without it the hooks print an INFRA notice and continue, and GitHub's push protection still scans.
 3. Create a branch, write, and commit with a sign-off: `git commit -s`.
 4. Push to your fork and open a pull request against `main`. Fill in the template, including the claims checklist.
 5. Read the checks, and fix anything red.
@@ -51,7 +51,7 @@ Using an AI agent is fine. Say so in the pull request. Agents follow `CLAUDE.md`
 
 ## What the checks do
 
-Seven checks must pass before a pull request can merge: `selftests`, `guardrails`, `fact-guardrails`, `voice-check`, `secret-scan`, `docs-lint` and `DCO`. The hooks run the same checkers on your machine first, so most problems show up before you push.
+Two checks must pass before a pull request can merge: `ci / ci-ok` and `DCO`. `ci / ci-ok` runs every checker in `04_tools/` in one job. The hooks run the same checkers on your machine first, so most problems show up before you push.
 
 GitHub holds the first workflow run from a new contributor until a maintainer approves it. That is GitHub's protection for public repositories, not a judgement on your pull request.
 
@@ -59,9 +59,7 @@ GitHub holds the first workflow run from a new contributor until a maintainer ap
 
 **An em dash, anywhere.** Use a comma, semicolon, period, or parentheses. The rule is deterministic, so it blocks.
 
-**A path under `local/`, or an oversized file.** The `guardrails` check enforces both.
-
-**A detected secret.**
+**A detected secret.** GitHub's push protection rejects the push.
 
 **Proposing Blanca Peak or the Crestones as viable.** They are permanent exclusions: sacred land and a National Park. You may name them and explain the exclusion. You may not argue past it.
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Satellite Peak &#8212; Site &amp; Firing Lane</title>
+<title>Space Peak: site &amp; firing lane</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
  html,body{height:100%;margin:0}#map{position:absolute;inset:0;background:#16202a}
@@ -19,8 +19,8 @@
  .pm-lbl.star{color:#ffd54a;font-size:15px}
 </style></head><body>
 <div id="map"></div>
-<div class="pm-title pm-card"><h1>SATELLITE PEAK &#8212; site &amp; firing lane</h1>
-<p>Speculative mass-driver launch complex, southern Colorado. HQ &amp; brand on Pikes Peak; the leading <b>engineering</b> site is Greenhorn Mtn, firing east-southeast down a debris-safe corridor over the Army&#8217;s Pi&#241;on Canyon range and the empty plains. Candidate peaks are colored by verdict.</p>
+<div class="pm-title pm-card"><h1>SPACE PEAK: site &amp; firing lane</h1>
+<p>Speculative mass-driver launch complex, southern Colorado. HQ &amp; brand on Pikes Peak; the leading <b>engineering</b> site is Greenhorn Mtn, firing east-southeast toward the Army&#8217;s Pi&#241;on Canyon range and the plains. Candidate peaks are colored by verdict. Every figure, land status and ownership claim here is unverified; see the claims register.</p>
 <div class="btns"><button id="shadeBtn">Firing lane: on</button><button class="alt" id="resetBtn">Reset view</button></div></div>
 <div class="pm-legend pm-card">
 <div class="row"><span class="dot" style="background:#ffd54a;border-color:#fff"></span> HQ / brand (Pikes Peak)</div>
@@ -28,7 +28,7 @@
 <div class="row"><span class="dot" style="background:#3498db"></span> Tractable candidate</div>
 <div class="row"><span class="dot" style="background:#e74c3c"></span> Vetoed (sacred / National Park)</div>
 <div class="row"><span class="pm-line"></span> Downrange firing lane (ESE)</div>
-<div class="pm-note">Conceptual. Coordinates are real summits; the firing wedge is illustrative of a launch azimuth over empty land, not a surveyed range.</div></div>
+<div class="pm-note">Conceptual. Coordinates and figures are unverified, with no register rows for coordinates yet. The firing wedge is illustrative of a launch azimuth over empty land, not a surveyed range.</div></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
  var map=L.map('map',{zoomControl:true});
@@ -41,20 +41,20 @@
  var WEDGE=[[37.8867,-105.0142],[37.953,-102.626],[36.725,-103.131]];
  var FILL=0.18;
  var lane=L.polygon(WEDGE,{color:'#ff7a18',weight:3,opacity:.95,fillColor:'#ffb24d',fillOpacity:FILL,lineJoin:'round',dashArray:'6 6'}).addTo(map);
- lane.bindPopup('<b>Downrange firing lane</b><br>East-southeast launch azimuth over the Army&#8217;s Pi&#241;on Canyon Maneuver Site and the empty southeastern plains &#8212; land already kept clear. Gets Earth&#8217;s eastward spin boost.');
+ lane.bindPopup('<b>Downrange firing lane</b><br>East-southeast launch azimuth over the Army&#8217;s Pi&#241;on Canyon Maneuver Site and the southeastern plains (unverified). Gets Earth&#8217;s eastward spin boost.');
 
  // Sites: [name, lat, lon, color, star?, note]
  var SITES=[
-  ["Pikes Peak &#8212; HQ / brand",38.8409,-105.0423,"#ffd54a",true,"14,115 ft. The name, the workforce, the road &amp; cog rail. Headquarters &mdash; not the launch tunnel. Fires east over Kansas &amp; the metro; Nat&#39;l Historic Landmark."],
-  ["Colorado Springs",38.8339,-104.8214,"#ffd54a",false,"Aerospace workforce base &mdash; builds, flies &amp; defends satellites. The company town."],
-  ["Greenhorn Mtn &#8212; ENGINEERING WINNER",37.8867,-105.0142,"#2ecc71",false,"~12,300 ft. Fires east straight over Pi&#241;on Canyon Army land &mdash; DoD already keeps the corridor empty and controlled. The un-romantic winner."],
-  ["Culebra Peak",37.1224,-105.1856,"#3498db",false,"14,047 ft &mdash; southernmost 14er (best spin). Privately owned (Cielo Vista Ranch): one landowner, not the USFS + 3 counties."],
-  ["West Spanish Peak",37.3772,-104.9942,"#3498db",false,"~13,600 ft. Standalone cone with the emptiest sky &mdash; open SE shot over Comanche National Grassland. Less mountain to bore."],
-  ["Almagre Mtn (&#8216;Baldy&#8217;)",38.7358,-105.0064,"#3498db",false,"12,367 ft. Same granite batholith as Pikes, workforce next door, existing towers/road. Caveats: USFS land, city watershed on its flanks."],
-  ["Blanca Peak",37.5775,-105.4856,"#e74c3c",false,"14,345 ft &mdash; high &amp; south, near-perfect on paper. VETO: Sisnaaj&#237;n&#237;, sacred to the Navajo. Do not."],
-  ["Crestone Peak",37.9668,-105.5850,"#e74c3c",false,"~14,000 ft, grippy Crestone conglomerate. VETO: protected wilderness above the Great Sand Dunes."],
-  ["Great Sand Dunes",37.7920,-105.5108,"#e74c3c",false,"The most beautiful site on the list. VETO: National Park &mdash; absolute never."],
-  ["Pi&#241;on Canyon Maneuver Site",37.35,-103.95,"#ff7a18",false,"U.S. Army training range &mdash; the downrange land the Greenhorn lane fires over. Loud objects from the sky are the existing land use."]
+  ["Pikes Peak &#183; HQ / brand",38.8409,-105.0423,"#ffd54a",true,"14,115 ft. The name, the workforce, the road &amp; cog rail. Headquarters, not the launch tunnel. Fires east over Kansas &amp; the metro; Nat&#39;l Historic Landmark. Unverified."],
+  ["Colorado Springs",38.8339,-104.8214,"#ffd54a",false,"Aerospace workforce base: builds, flies &amp; defends satellites. The company town."],
+  ["Greenhorn Mtn &#183; ENGINEERING WINNER",37.8867,-105.0142,"#2ecc71",false,"~12,300 ft. Fires east straight over Pi&#241;on Canyon Army land, which DoD keeps empty and controlled. The un-romantic winner. Unverified."],
+  ["Culebra Peak",37.1224,-105.1856,"#3498db",false,"14,047 ft, southernmost 14er (best spin). Privately owned (Cielo Vista Ranch): one landowner, not the USFS + 3 counties. Unverified."],
+  ["West Spanish Peak",37.3772,-104.9942,"#3498db",false,"~13,600 ft. Standalone cone with the emptiest sky: open SE shot over Comanche National Grassland. Less mountain to bore. Unverified."],
+  ["Almagre Mtn (&#8216;Baldy&#8217;)",38.7358,-105.0064,"#3498db",false,"12,367 ft. Same granite batholith as Pikes, workforce next door, existing towers/road. Caveats: USFS land, city watershed on its flanks. Unverified."],
+  ["Blanca Peak",37.5775,-105.4856,"#e74c3c",false,"VETO: Sisnaaj&#237;n&#237;, sacred to the Navajo. Not a candidate."],
+  ["Crestone Peak",37.9668,-105.5850,"#e74c3c",false,"VETO: National Park. Absolute never. Not a candidate."],
+  ["Great Sand Dunes",37.7920,-105.5108,"#e74c3c",false,"VETO: National Park. Absolute never. Not a candidate."],
+  ["Pi&#241;on Canyon Maneuver Site",37.35,-103.95,"#ff7a18",false,"U.S. Army training range, the downrange land the Greenhorn lane would fire over. Unverified."]
  ];
  var group=[];
  SITES.forEach(function(s){
@@ -62,7 +62,7 @@
   var m=L.circleMarker([s[1],s[2]],{radius:r,color:'#fff',weight:2,fillColor:s[3],fillOpacity:1}).addTo(map).bindPopup('<b>'+s[0]+'</b><br>'+s[5]);
   group.push(m);
   if(s[4]||s[3]==="#2ecc71"){
-   L.tooltip({permanent:true,direction:'right',className:'pm-lbl'+(s[4]?' star':''),offset:[10,0]}).setLatLng([s[1],s[2]]).setContent(s[0].split(' &#8212;')[0]).addTo(map);
+   L.tooltip({permanent:true,direction:'right',className:'pm-lbl'+(s[4]?' star':''),offset:[10,0]}).setLatLng([s[1],s[2]]).setContent(s[0].split(' &#183;')[0]).addTo(map);
   }
  });
 

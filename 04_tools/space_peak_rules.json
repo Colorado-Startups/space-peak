@@ -64,7 +64,7 @@
     },
     "crestones": {
       "label": "Crestones / Great Sand Dunes",
-      "reason": "National Park.",
+      "reason": "A National Park and the wilderness beside it.",
       "aliases": ["crestones", "crestone", "great sand dunes", "sand dunes"]
     }
   },
@@ -82,7 +82,7 @@
   ],
 
   "proposal_cues": [
-    "candidate", "viable", "best site", "top site", "preferred", "recommend",
+    "candidate", "viable", "best site", "best launch", "ideal site", "top site", "preferred", "recommend",
     "we should", "bore through", "boring through", "tunnel through",
     "tunnel under", "build at", "build on", "site the", "sited at",
     "launch from", "fires east from", "the winner", "engineering winner",

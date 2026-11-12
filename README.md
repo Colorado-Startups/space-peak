@@ -10,7 +10,7 @@ A Colorado Startups project, supported by Colorado AI. Sibling projects: Photon 
 
 `00_project_system/MASTER_PLAN.md` gated everything behind one decision: park the idea, publish it, or develop it. That decision is made. **Publish**, under the Space Peak name, as a standalone piece rather than under the Photon Mountain umbrella.
 
-Phase 3 of the master plan is active. Phases 2 and 4 are struck. The live work is drafting `03_deliverables/DRAFT-thought-leadership.md`.
+Phase 3 of the master plan is active. Phases 2 and 4 are struck. The live work is drafting the thought-leadership piece, which will live in `03_deliverables/` once written.
 
 The repository is public so anyone can contribute. The thought-leadership piece itself has not been published: that is a separate human action under MASTER_PLAN UA 3.2. `deploy-site.yml` is manual-trigger-only and fails by design until someone configures it deliberately.
 
@@ -44,7 +44,7 @@ This project's real risk is not a leaked credential. It is a speculative mountai
 | Site | Why |
 | --- | --- |
 | **Blanca Peak** | Sisnaajini, sacred to the Navajo. |
-| **Crestones / Great Sand Dunes** | National Park. |
+| **Crestones / Great Sand Dunes** | A National Park and the wilderness beside it. |
 
 Neither is an engineering judgement, so neither is revisable by better engineering. The concept brief describes Blanca as high, southern, and on paper near-perfect, one clause before excluding it. That is precisely why the row is frozen rather than merely ranked low: a good engineering case is the pressure that erodes a non-engineering answer over time, one reasonable-sounding draft at a time.
 

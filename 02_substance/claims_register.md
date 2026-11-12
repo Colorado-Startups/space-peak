@@ -33,7 +33,7 @@ These are not engineering judgements and are not subject to diligence, revision,
 | Site | Status | Reason, as the brief states it |
 | --- | --- | --- |
 | **Blanca Peak** | `frozen` | Sisnaajini, sacred to the Navajo. Do not. |
-| **Crestones / Great Sand Dunes** | `frozen` | National Park. Absolute never. |
+| **Crestones / Great Sand Dunes** | `frozen` | A National Park and the wilderness beside it. Absolute never. |
 
 The brief describes Blanca Peak as high, southern, and on paper near-perfect. That is precisely why the row is frozen rather than merely ranked low. A good engineering case is the pressure that erodes a non-engineering answer over time, one reasonable-sounding draft at a time. The answer does not depend on the engineering case.
 
@@ -62,7 +62,7 @@ Transcribed from the brief's site tour. Every elevation, ownership status, land 
 | S-15 | Pikes Peak | About 39 N; fires east over Kansas and metro | `unverified` | | |
 | S-16 | Pikes Peak | National Historic Landmark | `unverified` | | |
 | S-17 | Crestones / Sand Dunes | Elevation about 14,000 ft | `frozen` | | Row exists only to record the exclusion |
-| S-18 | Crestones / Sand Dunes | National Park | `frozen` | | **Absolute never.** Do not reclassify |
+| S-18 | Crestones / Sand Dunes | Great Sand Dunes National Park & Preserve; the Crestones in the Sangre de Cristo Wilderness, Rio Grande National Forest, beside it | `frozen` | USGS Geolex (Crestone Peak quadrangle); NPS Great Sand Dunes "Nearby attractions" | **Absolute never.** Do not reclassify |
 | S-19 | Blanca Peak | Elevation 14,345 ft | `frozen` | | Row exists only to record the exclusion |
 | S-20 | Blanca Peak | Sisnaajini, sacred to the Navajo | `frozen` | | **Do not.** Do not reclassify |
 

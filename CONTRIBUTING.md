@@ -4,7 +4,7 @@ Space Peak is open to everyone. Corrections, sources, drafts, tooling fixes and 
 
 ## Two rules before anything else
 
-**Blanca Peak and the Crestones are permanent exclusions.** Blanca Peak is Sisnaajini, sacred to the Navajo. The Crestones and Great Sand Dunes are a National Park. You may name them and explain the exclusion. You may not propose either as a site, and you may not argue past it.
+**Blanca Peak and the Crestones are permanent exclusions.** Blanca Peak is Sisnaajini, sacred to the Navajo. Great Sand Dunes is a National Park, and the Crestones are the protected wilderness beside it. You may name them and explain the exclusion. You may not propose either as a site, and you may not argue past it.
 
 **Every mountain fact is unverified until diligenced.** A checkable claim about a peak needs a row in `02_substance/claims_register.md`. If that row says `unverified`, your prose says so too.
 
@@ -54,7 +54,7 @@ GitHub holds the first workflow run from a new contributor until a maintainer ap
 
 **A detected secret.** GitHub's push protection rejects the push.
 
-**Proposing Blanca Peak or the Crestones as viable.** They are permanent exclusions: sacred land and a National Park. You may name them and explain the exclusion. You may not argue past it.
+**Proposing Blanca Peak or the Crestones as viable.** They are permanent exclusions: sacred land, and a National Park with the wilderness beside it. You may name them and explain the exclusion. You may not argue past it.
 
 **Weakening a frozen row** in `02_substance/claims_register.md`.
 

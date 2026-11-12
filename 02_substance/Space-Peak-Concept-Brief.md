@@ -64,7 +64,7 @@ Selection criteria, in priority order: **southern latitude** (more free spin fro
 | **Spanish Peaks** | ~13,600 (unverified) | Standalone cones; **emptiest sky**, open SE shot over Comanche National Grassland; less mountain to bore | Federal land; lower |
 | **Almagre ("Baldy")** | 12,367 (unverified) | Same granite batholith as Pikes, workforce next door, existing towers/road; SE lane over Fort Carson ranges | USFS; city watershed on its flanks |
 | **Pikes Peak** | 14,115 (unverified) | The **brand** + workforce + road & cog rail; top-10 raw launcher real estate on the continent | 39°N, fires east over Kansas/metro; Nat'l Historic Landmark; donut shop |
-| **Crestones / Sand Dunes** | ~14,000 | South, high, empty east lane; grippy Crestone conglomerate | **National Park. Absolute never.** |
+| **Crestones / Sand Dunes** | ~14,000 | South, high, empty east lane; grippy Crestone conglomerate | **National Park, and the wilderness beside it. Absolute never.** |
 | **Blanca Peak** | 14,345 | High and south, on paper near-perfect | **Sisnaajiní, sacred to the Navajo. Do not.** |
 
 **Honest ranking for a real attempt:** Greenhorn (let the Army hand you the range) › Culebra (one landowner + best latitude) › Spanish Peaks (emptiest sky). Pikes and Almagre are the sentimental favorites, not the optimal ones.

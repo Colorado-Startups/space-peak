@@ -89,4 +89,4 @@ The one exception already taken: the repository's first commit was pushed to `ma
 
 ## Publication is not yours to do
 
-MASTER_PLAN UA 3.2 makes publication a human decision. Do not publish, post, deploy, or send anything externally. Draft, check, open a pull request, and stop.
+The repository is public (Paul, 2026-11-12; MASTER_PLAN "Decisions"), so every merged change is visible to anyone. That is not publication of the thought-leadership piece. MASTER_PLAN UA 3.2 makes publishing that piece a human decision. Do not post it, place it, deploy the site, or send it anywhere. Draft, check, open a pull request, and stop.

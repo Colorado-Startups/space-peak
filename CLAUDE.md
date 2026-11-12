@@ -6,7 +6,7 @@
 
 This file restates rules from elsewhere. Where it does, the canonical source wins and this file gets corrected in the same session:
 
-- `~/.claude/rules/writing-and-gates.md` and `~/.claude/rules/compute.md` are the house standards and win over anything here.
+- The maintainer's house standards, Code-OS `rules/writing-and-gates.md` and `rules/compute.md`, win over anything here. They are not public; `04_tools/space_peak_rules.json` carries every rule from them that applies here, so this repository is complete for contributors.
 - `04_tools/space_peak_rules.json` is the machine-readable rule set every checker reads.
 - `02_substance/claims_register.md` is canonical for which claims exist and what their status is.
 - `01_doctrine/voice.md` is the project prose layer and must agree with the two above.
@@ -45,7 +45,7 @@ Per the house rule, this is stated explicitly rather than implied:
 
 `.claude/settings.json` is the authority on this wiring, not the header comment in any hook.
 
-**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/cloud-test.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: `~/.claude/rules/compute.md` (canonical: Code-OS `rules/compute.md`), which wins any disagreement.
+**Compute:** cloud first, the Mac last and small (Paul, 2026-11-02). CI, test suites, builds, browsers, e2e, renders and GPU jobs run in the cloud (`.github/workflows/cloud-test.yml` here). The MacBook Air runs only rare, seconds-long checks, such as one test file or one lint. House rule: Code-OS `rules/compute.md`, which wins any disagreement.
 
 The git hooks run no self-test, test suite, build or deploy. They run the path and size guard, gitleaks, the voice and claims checkers over changed markdown, and the contract test, which only reads files. The self-tests run in `selftests.yml` on every pull request, and on demand through the names in `.github/cloud-test.json`.
 
@@ -55,7 +55,7 @@ The git hooks run no self-test, test suite, build or deploy. They run the path a
 00_project_system/   MASTER_PLAN.md
 01_doctrine/         voice.md
 02_substance/        Space-Peak-Concept-Brief.md, claims_register.md
-03_deliverables/     DRAFT-thought-leadership.md, maps/, infographics/
+03_deliverables/     maps/, infographics/, and the draft once written
 04_tools/            space_peak_rules.json and the four checkers
 docs/                contributor start-here
 local/               operational files, gitignored and blocked from commits
@@ -79,7 +79,7 @@ local/               operational files, gitignored and blocked from commits
 
 ## Division of labor
 
-Per `Photon Mountain/00_project_system/github_setup_plan.md`: the folder is the source of truth, Cowork edits files, and Claude Code owns git.
+The repository is the source of truth. Cowork edits files, and Claude Code owns git.
 
 ## Git
 

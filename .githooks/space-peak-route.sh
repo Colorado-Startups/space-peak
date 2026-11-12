@@ -3,7 +3,7 @@
 #
 # THIS FILE ROUTES. IT DOES NOT DECIDE.
 #
-# Required by ~/.claude/rules/writing-and-gates.md: "The hook routes, it
+# Required by Code-OS rules/writing-and-gates.md: "The hook routes, it
 # does not decide. A hook that carries the rules inside itself cannot be
 # reused, cannot be tested, and turns every rule change into a shell edit."
 # Every rule, term list, severity and exemption lives in

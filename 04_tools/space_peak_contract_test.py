@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """space_peak_contract_test.py: assert the gates and the prose still agree.
 
-Required by two house rules in ~/.claude/rules/writing-and-gates.md:
+Required by two house rules in Code-OS rules/writing-and-gates.md:
 
   "Rules belong in data, not in a regex. Put the terms, tokens and figures
    in one machine-readable file. Have a test assert that every human-facing

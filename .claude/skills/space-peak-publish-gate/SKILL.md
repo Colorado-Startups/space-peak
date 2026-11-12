@@ -5,7 +5,7 @@ description: Run the full Space Peak pre-ship gate on a draft, which is MASTER_P
 
 # space-peak-publish-gate
 
-**Precedence.** `00_project_system/MASTER_PLAN.md` PT 3.3 is canonical for what this gate must cover. `~/.claude/rules/writing-and-gates.md` is canonical for how a gate behaves. If this skill disagrees, they win and this file gets corrected in the same session.
+**Precedence.** `00_project_system/MASTER_PLAN.md` PT 3.3 is canonical for what this gate must cover. Code-OS `rules/writing-and-gates.md` is canonical for how a gate behaves. If this skill disagrees, they win and this file gets corrected in the same session.
 
 **This gate waits.** Nothing fires it automatically, by design: it is the deliberate stop before a human decision.
 

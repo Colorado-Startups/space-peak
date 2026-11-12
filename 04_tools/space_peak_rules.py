@@ -4,7 +4,7 @@ contract every Space Peak gate shares.
 
 Rules source: 04_tools/space_peak_rules.json. If this module and that file
 disagree, the file wins. If the file and
-~/.claude/rules/writing-and-gates.md disagree, that file wins and both get
+Code-OS rules/writing-and-gates.md disagree, that file wins and both get
 corrected in the same session.
 
 Two jobs.

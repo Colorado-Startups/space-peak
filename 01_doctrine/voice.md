@@ -6,7 +6,7 @@
 
 This file restates rules that live elsewhere. Where it does:
 
-1. **`~/.claude/rules/writing-and-gates.md` is canonical and wins.** It is the house writing standard for every project on this machine.
+1. **Code-OS `rules/writing-and-gates.md` is canonical and wins.** It is the maintainer's house writing standard (not public). `04_tools/space_peak_rules.json` carries every rule from it that applies here, so this repository is complete for contributors.
 2. **`04_tools/space_peak_rules.json` is the machine-readable copy** that the checkers read. It must agree with the house file.
 3. **This file is the project prose layer.** If it and the JSON disagree, the JSON wins. If the JSON and the house file disagree, the house file wins.
 

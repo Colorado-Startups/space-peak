@@ -27,7 +27,7 @@ Anyone can contribute: corrections, sources, drafts, questions and tooling. Star
 03_deliverables/     The draft, the map, the infographics.
 04_tools/            The rules file and the four checkers.
 docs/                Contributor start-here.
-local/               Operational files. Gitignored, and blocked from commits.
+local/               Operational files. Gitignored; the reviewer reads every path in the diff.
 .claude/             The exclusion hook, two skills, one agent, settings.
 .github/             CI, templates, CODEOWNERS, ruleset definitions.
 quality/             Git Crafter Quality and Process page configs.

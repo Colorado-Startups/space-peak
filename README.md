@@ -4,7 +4,9 @@ A concept for a ground-based electromagnetic mass driver bored through a Colorad
 
 **A speculative venture thesis, not an engineering proposal.** The physics is sound. The engineering is 2040s-hard. Every fact about a specific mountain in this repository is a starting point for real diligence, not a verified site assessment.
 
-A Colorado Startups project, supported by Colorado AI. Sibling projects: Photon Mountain, Fusion Canyon.
+A [Colorado Startups](https://coloradostartups.org) project, supported by Colorado AI. Sibling projects: Photon Mountain, Fusion Canyon.
+
+Brand: [Colorado Startups brand guide](https://colorado-startups.github.io/brand/)
 
 ## Where the project stands
 

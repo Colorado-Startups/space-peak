@@ -36,4 +36,4 @@ Report at most three Nits per review.
 | Every new figure names its source in its sentence, or is labeled a goal | prose |
 | Every `uses:` pins a full 40-hex SHA with a version comment | `.github/workflows/` |
 | No workflow checks out a pull request's head under `pull_request_target` | `.github/workflows/` |
-| `permissions.deny` loses no rule | `.claude/settings.json` |
+| `permissions.allow` gains no rule without a stated reason | `.claude/settings.json` |

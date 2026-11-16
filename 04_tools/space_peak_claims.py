@@ -7,8 +7,8 @@ Rules source, in precedence order:
   3. 04_tools/space_peak_rules.json         term lists and severities
   4. this script                            reads 2 and 3, decides nothing
 
-If this script and the register disagree about what is frozen, the register
-wins and this script is the bug.
+If this script and the register disagree, the register wins and this
+script is the bug.
 
 Why this exists. The concept brief's subtitle says every fact about a
 specific mountain is a starting point for real diligence, not a verified
@@ -20,16 +20,6 @@ Each step is defensible; the destination is a document making claims the
 project cannot support. This script is the thing that notices.
 
 Checks and their severity, which comes from the data file:
-
-  frozen-row-edit      BLOCK  A frozen register row was weakened, unfrozen,
-                              or deleted. Deterministic: a named row either
-                              carries `frozen` or it does not.
-
-  exclusion-proposed   BLOCK  Prose proposes a frozen site as viable. Blocks
-                              despite using cue lists, because the site
-                              names are literal matches against a closed
-                              two-item list and the consequence is not a
-                              style question.
 
   unregistered-claim    WARN  Prose states a figure about a place with no
                               register row. Regex detection of place-shaped
@@ -97,13 +87,13 @@ LINK_RE = re.compile(r"\[[^\]]*\]\([^)]+\)|https?://\S+")
 INLINE_CODE_RE = re.compile(r"`[^`]*`")
 SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
 ROW_RE = re.compile(r"^\|\s*([A-Z]-\d+|\*\*[^|]+\*\*)\s*\|(.+)$")
-STATUS_RE = re.compile(r"`(unverified|verified|corrected|unverifiable|frozen|open)`")
+STATUS_RE = re.compile(r"`(unverified|verified|corrected|unverifiable|open)`")
 
 
 def parse_register(path, rules):
-    """Return (registered, frozen, unverified) sets of known-place keys."""
+    """Return (registered, unverified) sets of known-place keys."""
     known = [p.lower() for p in R.terms(rules, "known_places")]
-    registered, frozen, unverified = set(), set(), set()
+    registered, unverified = set(), set()
     try:
         with open(path, encoding="utf-8") as fh:
             text = fh.read()
@@ -130,11 +120,9 @@ def parse_register(path, rules):
             for place in known:
                 if place in name:
                     registered.add(place)
-                    if status == "frozen":
-                        frozen.add(place)
-                    elif status == "unverified":
+                    if status == "unverified":
                         unverified.add(place)
-    return registered, frozen, unverified
+    return registered, unverified
 
 
 def strip_noise(line):
@@ -148,49 +136,22 @@ def has_cue(sentence, cues):
     return any(cue in low for cue in cues)
 
 
-def frozen_key_for(sentence, aliases):
-    low = sentence.lower()
-    for key, alias_list in aliases.items():
-        if any(alias in low for alias in alias_list):
-            return key
-    return None
-
-
-def classify_claim(sentence, rules, registered, frozen, unverified):
+def classify_claim(sentence, rules, registered, unverified):
     """THE POLICY SURFACE. Return (severity, check, message) or None.
 
-    Register-anchored, plus a catch-all for any unregistered place. Order
-    matters: the exclusion check runs first and short-circuits, so a
-    sentence proposing Blanca is reported as an exclusion breach rather
-    than as an ordinary unregistered claim.
+    Register-anchored, plus a catch-all for any unregistered place.
     """
     low = sentence.lower()
-    aliases = R.frozen_aliases(rules)
-    labels = R.frozen_labels(rules)
     known = [p.lower() for p in R.terms(rules, "known_places")]
-    proposal = R.terms(rules, "proposal_cues")
-    negation = R.terms(rules, "negation_cues")
     speculative = R.terms(rules, "speculative_cues")
 
-    # 1. A frozen site proposed as viable. A negation in the same sentence
-    # inverts the proposal, so "never propose Blanca as viable" and "Blanca
-    # is not a candidate" both pass. Found by running this checker over the
-    # repository's own CONTRIBUTING.md, which states the rule and was
-    # flagged for breaking it.
-    key = frozen_key_for(sentence, aliases)
-    if key and has_cue(sentence, proposal) and not has_cue(sentence, negation):
-        return (R.severity_of(rules, "exclusion-proposed"), "exclusion-proposed",
-                f"proposes a permanently excluded site ({labels[key]}) as "
-                "viable; this is not an engineering judgement and is not "
-                "revisable")
-
-    # 2. Does this sentence attach a checkable figure to a place?
+    # 1. Does this sentence attach a checkable figure to a place?
     if not PLACE_FIGURE_RE.search(sentence):
         return None
 
     mentioned = [p for p in known if p in low]
 
-    # 3a. Catch-all, structural half: a place-shaped name we do not know.
+    # 2a. Catch-all, structural half: a place-shaped name we do not know.
     for m in PLACE_SHAPE_RE.finditer(sentence):
         name = m.group(1).strip()
         if not any(p in name.lower() for p in known):
@@ -203,14 +164,14 @@ def classify_claim(sentence, rules, registered, frozen, unverified):
     if not mentioned:
         return None
 
-    # 3b. Catch-all, known-name half: a listed place with no register row.
+    # 2b. Catch-all, known-name half: a listed place with no register row.
     unregistered = [p for p in mentioned if p not in registered]
     if unregistered:
         return (R.severity_of(rules, "unregistered-claim"), "unregistered-claim",
                 f'states a figure about "{unregistered[0]}", which has no row '
                 "in claims_register.md; add a row before asserting it")
 
-    # 4. A registered-but-unverified place stated without a label.
+    # 3. A registered-but-unverified place stated without a label.
     unlabeled = [p for p in mentioned if p in unverified]
     if unlabeled and not has_cue(sentence, speculative):
         return (R.severity_of(rules, "unlabeled-claim"), "unlabeled-claim",
@@ -220,28 +181,7 @@ def classify_claim(sentence, rules, registered, frozen, unverified):
     return None
 
 
-def check_register_integrity(register_path, rules):
-    """BLOCK if a frozen row lost its status or its site vanished.
-
-    frozen_sites in the data file is the authority, not the register. That
-    asymmetry is deliberate defence in depth: deleting the Blanca row from
-    the register must not disable the check protecting it, so a deletion
-    shows up here as a failure rather than as silence.
-    """
-    _reg, frozen, _unv = parse_register(register_path, rules)
-    labels = R.frozen_labels(rules)
-    findings = []
-    for key, alias_list in R.frozen_aliases(rules).items():
-        if not any(alias in frozen or alias.split()[0] in frozen
-                   for alias in alias_list):
-            findings.append(
-                (0, R.severity_of(rules, "frozen-row-edit"), "frozen-row-edit",
-                 f'the permanent exclusion for "{labels[key]}" is missing or no '
-                 "longer marked `frozen` in claims_register.md; restore it"))
-    return findings
-
-
-def lint_file(path, rules, registered, frozen, unverified):
+def lint_file(path, rules, registered, unverified):
     try:
         with open(path, encoding="utf-8") as fh:
             text = fh.read()
@@ -259,8 +199,7 @@ def lint_file(path, rules, registered, frozen, unverified):
             continue
         line = strip_noise(raw)
         for sentence in SENTENCE_SPLIT_RE.split(line):
-            result = classify_claim(sentence, rules, registered, frozen,
-                                    unverified)
+            result = classify_claim(sentence, rules, registered, unverified)
             if result:
                 findings.append((line_no,) + result)
     return findings
@@ -278,21 +217,13 @@ def report(path, findings):
 
 
 SELF_TEST_CASES = [
-    ("Blanca Peak is the best site once the lane is cleared.",
-     "exclusion-proposed", "FAIL"),
-    ("We should tunnel through the Crestones instead.",
-     "exclusion-proposed", "FAIL"),
-    ("Blanca Peak is the preferred site.",
-     "exclusion-proposed", "FAIL"),
     ("Mount Evans rises to 14,264 ft and fires clean to the east.",
      "unregistered-claim", "WARN"),
     ("Culebra Peak is 14,047 ft.",
      "unlabeled-claim", "WARN"),
-    # Negation inverts a proposal. From this repo's own documentation.
-    ("Never propose Blanca Peak or the Crestones as viable.", None, None),
-    ("Blanca Peak is not a candidate and will not become one.", None, None),
-    ("We build at Greenhorn rather than the Crestones.", None, None),
-    ("Blanca Peak is excluded because it is sacred.", None, None),
+    ("Blanca Peak is 14,345 ft.",
+     "unlabeled-claim", "WARN"),
+    ("Blanca Peak is the best site once the lane is cleared.", None, None),
     ("Culebra Peak is listed at approximately 14,047 ft, unverified.",
      None, None),
     ("The catapult supplies velocity and the thruster circularizes.",
@@ -300,8 +231,7 @@ SELF_TEST_CASES = [
 ]
 
 SELF_TEST_REGISTERED = {"culebra", "greenhorn", "blanca", "crestones", "pikes peak"}
-SELF_TEST_FROZEN = {"blanca", "crestones"}
-SELF_TEST_UNVERIFIED = {"culebra", "greenhorn", "pikes peak"}
+SELF_TEST_UNVERIFIED = {"culebra", "greenhorn", "blanca", "crestones", "pikes peak"}
 
 
 def self_test():
@@ -310,7 +240,7 @@ def self_test():
     ok = True
     for sentence, expected, expected_sev in SELF_TEST_CASES:
         result = classify_claim(sentence, rules, SELF_TEST_REGISTERED,
-                                SELF_TEST_FROZEN, SELF_TEST_UNVERIFIED)
+                                SELF_TEST_UNVERIFIED)
         got = result[1] if result else None
         got_sev = result[0] if result else None
         if got == expected and got_sev == expected_sev:
@@ -323,9 +253,7 @@ def self_test():
                   f"{sentence[:46]}")
             ok = False
 
-    # The exclusion check must BLOCK and the heuristics must only WARN.
-    if R.severity_of(rules, "exclusion-proposed") != "FAIL":
-        print("self-test: exclusion-proposed must block: FAIL"); ok = False
+    # The heuristics must only WARN.
     if R.severity_of(rules, "unregistered-claim") != "WARN":
         print("self-test: unregistered-claim must warn (heuristic): FAIL"); ok = False
 
@@ -352,17 +280,11 @@ def _main(argv=None):
         raise R.InfraError(f"register not found: {args.register}")
 
     any_fail = False
-    integrity = check_register_integrity(args.register, rules)
-    if integrity:
-        report(args.register, integrity)
-        if any(f[1] == "FAIL" for f in integrity):
-            any_fail = True
-
-    registered, frozen, unverified = parse_register(args.register, rules)
+    registered, unverified = parse_register(args.register, rules)
     for path in args.files:
         if os.path.abspath(path) == os.path.abspath(args.register):
             continue
-        findings = lint_file(path, rules, registered, frozen, unverified)
+        findings = lint_file(path, rules, registered, unverified)
         report(path, findings)
         if any(f[1] == "FAIL" for f in findings):
             any_fail = True

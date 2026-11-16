@@ -5,10 +5,8 @@ body:
       value: |
         One idea per discussion. A maintainer turns an accepted idea into an issue.
 
-        Two rules hold for every idea. Blanca Peak and the Crestones / Great Sand
-        Dunes are permanent exclusions, so an idea that sites anything there is
-        closed. Every mountain fact stays unverified until it has a sourced row in
-        `02_substance/claims_register.md`.
+        A mountain fact needs a sourced row in `02_substance/claims_register.md`
+        before it counts as verified.
   - type: textarea
     id: idea
     attributes:
@@ -34,6 +32,4 @@ body:
       label: Before you post
       options:
         - label: I searched Discussions and issues for this idea.
-          required: true
-        - label: It does not propose Blanca Peak or the Crestones as a site.
           required: true

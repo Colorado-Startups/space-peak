@@ -68,12 +68,6 @@ Carry that framing into every piece. A reader should never have to infer that a 
 
 This is the rule `04_tools/space_peak_claims.py` and `02_substance/claims_register.md` exist to protect. Speculation left unlabelled does not stay speculation. It hardens into an asserted fact somewhere between a draft and a published piece, and nobody can point at the moment it happened.
 
-### The two permanent exclusions are stated, never argued
-
-**Blanca Peak** is Sisnaajini, sacred to the Navajo. **Great Sand Dunes** is a National Park, and **the Crestones** are the protected wilderness beside it.
-
-Write these as settled, because they are. Do not stage them as a tension to be resolved, do not describe them as obstacles, and do not pair the exclusion with a note about how good the site would otherwise be. The concept brief calls Blanca high and south and on paper near-perfect one clause before excluding it, and that construction invites a reader to weigh the two against each other. They do not weigh against each other. One is an engineering observation and the other is not a matter for engineering.
-
 ### Honest about the timeline
 
 The physics is sound. The engineering is 2040s-hard. Both halves ship together, every time. A piece carrying the first without the second is marketing, and this project has nothing to market yet.
@@ -121,7 +115,4 @@ Set 2026-11-15 with the first map, `03_deliverables/map/`. A symbol is an argume
 | Thing | Symbol | Label |
 | --- | --- | --- |
 | A summit in the brief | A dot | Its name and the word "speculative". Its claims carry their register status |
-| A permanent exclusion | A ring with a bar, in its own colour, in its own layer | Its name and its reason. Nothing about elevation or lane |
 | The Colorado Startups region loop | A road-drawn outline with a light fill | Whose definition it is: the website's region, not a launch complex |
-
-The exclusions never share a list, a ranking or a colour with the summits.

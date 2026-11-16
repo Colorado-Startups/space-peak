@@ -2,11 +2,7 @@
 
 Space Peak is open to everyone. Corrections, sources, drafts, tooling fixes and good questions all count. You do not need to be an engineer to help.
 
-## Two rules before anything else
-
-**Blanca Peak and the Crestones are permanent exclusions.** Blanca Peak is Sisnaajini, sacred to the Navajo. Great Sand Dunes is a National Park, and the Crestones are the protected wilderness beside it. You may name them and explain the exclusion. You may not propose either as a site, and you may not argue past it.
-
-**Every mountain fact is unverified until diligenced.** A checkable claim about a peak needs a row in `02_substance/claims_register.md`. If that row says `unverified`, your prose says so too.
+Mountain facts live in `02_substance/claims_register.md`, each with its status.
 
 ## Ways to help
 
@@ -54,10 +50,6 @@ GitHub holds the first workflow run from a new contributor until a maintainer ap
 
 **A detected secret.** GitHub's push protection rejects the push.
 
-**Proposing Blanca Peak or the Crestones as viable.** They are permanent exclusions: sacred land, and a National Park with the wilderness beside it. You may name them and explain the exclusion. You may not argue past it.
-
-**Weakening a frozen row** in `02_substance/claims_register.md`.
-
 ### What only warns you
 
 A bare figure, an unregistered mountain claim, an unlabelled one, a long sentence, a hedge word. All are heuristics, and the rule is to block on the certain and warn on the likely. Read the warnings; they are usually right. They do not stop you, because a gate that fires wrongly and blocks gets bypassed, and a bypassed gate is worse than none.
@@ -83,7 +75,7 @@ Rules live in `04_tools/space_peak_rules.json`, never in a script or a workflow.
 python3 04_tools/space_peak_contract_test.py
 ```
 
-It fails if a new check is unclassified, if an exempt entry has no reason or no longer matches a real path, if a prose surface stopped naming the exclusions, or if the Claude hook is wired but missing.
+It fails if a new check is unclassified, if an exempt entry has no reason or no longer matches a real path, or if a Claude hook is wired but missing.
 
 ### Bypassing
 

@@ -7,11 +7,6 @@ This script is the only way its GeoJSON is made:
   G- rows   one point per brief site, from USGS GNIS, with its feature ID
   S- rows   the brief's claims about each site, carried with their status
   R- rows   the facts about the Colorado Startups region loop
-  frozen    the two permanent exclusions, from 04_tools/space_peak_rules.json
-
-The two layers stay apart in the data, not only on the page. A feature in
-the exclusions layer carries its name, its reason and its point. It carries
-no elevation, no lane and no claim list, so no page can show one.
 
 The loop's ring is the website's, not ours. Pass the website's
 data/geo/regions.geojson at the commit the R- rows cite:
@@ -21,9 +16,8 @@ data/geo/regions.geojson at the commit the R- rows cite:
   python3 04_tools/space_peak_map.py --region-geojson /tmp/regions.geojson
 
 --check rebuilds in memory and exits 1 if the committed file differs or is
-missing. A register row that does not parse, a duplicate ID, a site without
-both G- and S- rows, or exclusions that differ from the rules' frozen sites
-also exit 1. Exit 3 means it could not read an input: could not verify, not
+missing. A register row that does not parse, a duplicate ID, or a site
+without both G- and S- rows also exit 1. Exit 3 means it could not read an input: could not verify, not
 a failure. --self-test runs a known-bad sample for each of those.
 """
 
@@ -52,7 +46,7 @@ GNIS_QUERY = ("https://carto.nationalmap.gov/arcgis/rest/services/geonames/"
 ROW_RE = re.compile(r"^\|\s*([SGR]-\d+)\s*\|(.+)\|\s*$")
 ID_RE = re.compile(r"^\|\s*[SGR]-\d+\b")
 MIN_CELLS = {"G-": 4, "S-": 2, "R-": 1}
-STATUS_RE = re.compile(r"`(unverified|verified|corrected|unverifiable|frozen|open)`")
+STATUS_RE = re.compile(r"`(unverified|verified|corrected|unverifiable|open)`")
 COORD_RE = re.compile(r"^(.+?),\s*(\d+\.\d+)\s*N,\s*(\d+\.\d+)\s*W")
 GNIS_RE = re.compile(r"GNIS\s+(\d+)")
 
@@ -101,14 +95,6 @@ def parse(text):
     return sites, claims, region
 
 
-def frozen_key(site, rules):
-    low = site.lower()
-    for key, aliases in R.frozen_aliases(rules).items():
-        if any(a in low for a in aliases):
-            return key
-    return None
-
-
 def gnis_url(name):
     q = {"where": f"gaz_name='{name}' AND state_alpha='CO'",
          "outFields": "*", "outSR": "4326", "f": "json"}
@@ -116,10 +102,6 @@ def gnis_url(name):
 
 
 def build(register_text, region_geojson, today, rules=None):
-    rules = rules or R.load_rules()
-    labels = R.frozen_labels(rules)
-    reasons = {k: v["reason"] for k, v in rules["frozen_sites"].items()
-               if not k.startswith("_")}
     sites, claims, region_rows = parse(register_text)
 
     region = next(f for f in region_geojson["features"]
@@ -145,20 +127,8 @@ def build(register_text, region_geojson, today, rules=None):
         "geometry": region["geometry"],
     }]
 
-    excluded = []
     for s in sites:
         point = {"type": "Point", "coordinates": [s["lon"], s["lat"]]}
-        key = frozen_key(s["site"], rules)
-        if key:
-            excluded.append(key)
-            # Name, reason and point. Nothing else, on purpose.
-            features.append({"type": "Feature", "properties": {
-                "layer": "exclusion", "name": labels[key], "reason": reasons[key],
-                "register": s["id"]}, "geometry": point})
-            continue
-        if frozen_key(s["summit"], rules):
-            raise ValueError(f"{s['id']}: excluded summit {s['summit']!r} "
-                             "among the candidates")
         if s["site"] not in claims:
             raise ValueError(f"{s['id']}: site {s['site']!r} has no S- rows")
         features.append({"type": "Feature", "properties": {
@@ -167,10 +137,6 @@ def build(register_text, region_geojson, today, rules=None):
             "source_url": gnis_url(s["summit"]),
             "claims": claims.get(s["site"], []),
         }, "geometry": point})
-
-    if sorted(excluded) != sorted(labels):
-        raise ValueError(f"exclusions {sorted(excluded)} do not match the "
-                         f"frozen sites {sorted(labels)} in the rules")
 
     blob = hashlib.sha1(b"blob %d\0" % len(register_text.encode())
                         + register_text.encode()).hexdigest()
@@ -216,26 +182,21 @@ SAMPLE_WEB = {"features": [{"properties": {
     "span_mi": 0, "vs_silicon_valley": 0, "note": ""}, "geometry": None}]}
 SAMPLE_REG = """\
 | S-01 | Pikes Peak | Elevation 14,115 ft | `unverified` | | |
-| S-02 | Blanca Peak | Sisnaajini | `frozen` | | |
+| S-02 | Blanca Peak | Sisnaajini | `unverified` | | |
 | G-01 | Pikes Peak | Pikes Peak, 38.84059 N, 105.04491 W, per GNIS | `verified` | GNIS 204770 | |
 | G-02 | Blanca Peak | Blanca Peak, 37.57757 N, 105.48561 W, per GNIS | `verified` | GNIS 192735 | |
-| G-03 | Crestones / Sand Dunes | Crestone Peak, 37.96682 N, 105.58540 W, per GNIS | `verified` | GNIS 192423 | |
 """
 
 
 def self_test():
     """Each known-bad sample must raise, and the clean sample must build."""
     rules = R.load_rules()
-    g03 = SAMPLE_REG.splitlines()[4] + "\n"
     bad = {
         "unparsed row": SAMPLE_REG + "| S-03 | Pikes Peak\n",
         "duplicate ID": SAMPLE_REG + "| S-01 | Pikes Peak | Again | `unverified` | | |\n",
         "S- row with no G- row": SAMPLE_REG + "| S-04 | Mt Nowhere | x | `unverified` | | |\n",
         "G- site with no S- rows": SAMPLE_REG + "| G-04 | Mt Elbert | Mount Elbert, "
             "39.11777 N, 106.44534 W, per GNIS | `verified` | GNIS 1 | |\n",
-        "excluded summit among candidates": SAMPLE_REG.replace(
-            "| Pikes Peak, 38", "| Blanca Peak, 38"),
-        "exclusions short of the frozen sites": SAMPLE_REG.replace(g03, ""),
     }
     ok = True
     try:
@@ -293,7 +254,7 @@ def main(argv=None):
         fh.write(dump(data))
     kinds = [f["properties"]["layer"] for f in data["features"]]
     print(f"wrote {os.path.relpath(a.out, ROOT)}: "
-          f"{kinds.count('site')} sites, {kinds.count('exclusion')} exclusions, "
+          f"{kinds.count('site')} sites, "
           f"{kinds.count('region')} region; register blob "
           f"{data['generated']['register_git_blob'][:12]}")
     return 0

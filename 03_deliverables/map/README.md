@@ -1,12 +1,11 @@
 # Map
 
-The Space Peak map: one MapLibre page over OpenFreeMap with Mapterhorn hillshade, built 2026-11-15. It is a repository deliverable, not the thought-leadership piece. Publishing the piece is Paul's decision under MASTER_PLAN UA 3.2.
+The Space Peak map: one MapLibre page over OpenFreeMap with Mapterhorn hillshade, built 2026-11-15. It is a repository deliverable, and the starting point for the spacepeak.co map.
 
 ```mermaid
 flowchart LR
   G("USGS GNIS<br/>summit points") --> REG("claims_register.md<br/>G-, S-, R- rows")
   W("coloradostartups.org<br/>regions.geojson at 3723243") --> REG
-  RULES("space_peak_rules.json<br/>frozen_sites") --> B
   REG --> B("04_tools/space_peak_map.py")
   W --> B
   B --> D("space_peak_map.geojson") --> P("index.html")
@@ -17,19 +16,18 @@ flowchart LR
 
 | File | Holds | Made by |
 | --- | --- | --- |
-| `index.html` | The page: three toggled layers, a facts panel for the loop, and the site lists that are its accessible alternative | Hand |
+| `index.html` | The page: two toggled layers, a facts panel for the loop, and the site lists that are its accessible alternative | Hand |
 | `space_peak_map.geojson` | Every feature the page draws, with the register revision it came from | `04_tools/space_peak_map.py`. Never edit by hand |
 | `README.md` | This file | Hand |
 
-## The three layers
+## The two layers
 
 | Layer | Symbol | Carries | Register rows |
 | --- | --- | --- | --- |
 | Region loop | Glow, casing and line over a fill | Roads, cities, area, span and size, each sourced | R-01 to R-05 |
-| Summits in the brief | Blue dot, labelled "speculative" | GNIS point and ID; each brief claim and its status | G-01 to G-05 and their `S-` rows |
-| Permanent exclusions | A ring with a bar, in its own colour | The name and the reason. No elevation, no lane, no claim list | G-06 and G-07; the exclusions are S-17 to S-20 |
+| Summits in the brief | Blue dot, labelled "speculative" | GNIS point and ID; each brief claim and its status | G-01 to G-07 and their `S-` rows |
 
-The two site layers never mix. The page lists them in separate sections, and the data keeps them in separate `layer` values, so no page built on this file can rank one against the other. The summits are in register order, which is not a ranking.
+The summits are in register order, which is not a ranking.
 
 The region loop is the website's, not this project's. On coloradostartups.org, "Space Peak" is also the name of the Colorado Startups region for Colorado Springs and Fountain. It is a loop of major roads, and it says nothing about where a mass driver would go.
 
@@ -37,14 +35,13 @@ The region loop is the website's, not this project's. On coloradostartups.org, "
 
 | Point | Source | Kept off the map |
 | --- | --- | --- |
-| Five summits in the brief | USGS GNIS, one feature ID each, register G-01 to G-05 | None. Every site in the brief has a GNIS summit |
-| Two exclusion markers | USGS GNIS, register G-06 and G-07 | The National Park is drawn as a marker on Crestone Peak, not as an area |
+| Seven summits in the brief | USGS GNIS, one feature ID each, register G-01 to G-07 | None. Every site in the brief has a GNIS summit |
 
-The brief names the Spanish Peaks as a pair. The map pins West Spanish Peak and records East Spanish Peak's feature ID in the register (G-03).
+The brief names the Spanish Peaks as a pair. The map pins West Spanish Peak and records East Spanish Peak's feature ID in the register (G-03). It pins Crestone Peak for the Crestones and Great Sand Dunes (G-07).
 
 ## Rebuild the data
 
-The script reads the register, the rules file and the website's region file. It writes the GeoJSON and records the register's git blob and the date in `generated`.
+The script reads the register and the website's region file. It writes the GeoJSON and records the register's git blob and the date in `generated`.
 
 ```bash
 gh api "repos/Colorado-Startups/coloradostartups.org/contents/data/geo/regions.geojson?ref=37232431f9bab6a2a3cb2e09701642f40b446187" \
@@ -53,7 +50,7 @@ python3 04_tools/space_peak_map.py --region-geojson /tmp/regions.geojson
 python3 04_tools/space_peak_map.py --region-geojson /tmp/regions.geojson --check
 ```
 
-The committed file was generated on 2026-11-15 from register blob `2a081370bfe7ba4122ad629bfd8a0d79bdee11f6`, which `git hash-object 02_substance/claims_register.md` reproduces. A new coordinate needs a `G-` row with its source first; the script reads nothing else.
+The committed file was generated on 2026-11-16 from register blob `ba87e01c657d2148ea3b80a49240ca0d7e43478b`, which `git hash-object 02_substance/claims_register.md` reproduces. A new coordinate needs a `G-` row with its source first; the script reads nothing else.
 
 ## Look at it locally
 

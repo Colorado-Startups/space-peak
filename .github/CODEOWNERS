@@ -7,7 +7,7 @@
 
 * @paul-co-startups
 
-# The permanent exclusions and every claim's verification status.
+# Every claim's verification status.
 /02_substance/claims_register.md  @paul-co-startups
 
 # The enforcement surface. A change here is a change to the repo's

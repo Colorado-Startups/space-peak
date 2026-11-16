@@ -1,8 +1,8 @@
 name: ci
 
 # The Git Crafter CI standard (templates/ci/README.md, v4.1.0). The ruleset requires one check from it, ci / ci-ok,
-# plus DCO. One short job runs every Space Peak check in under a second: the claims checker (the two permanent
-# exclusions, the frozen register rows, claim labels), the voice lint (blocks only on dashes), the self-tests, the
+# plus DCO. One short job runs every Space Peak check in under a second: the claims checker (claim
+# labels; it only warns), the voice lint (blocks only on dashes), the self-tests, the
 # contract test and the map --check. The map check reads the website's regions.geojson at the commit
 # 04_tools/space_peak_map.py pins as WEBSITE_COMMIT. No paths filter, so every pull request runs it. No standard job: there is no build or suite.
 # Dependabot's github-actions entry bumps the pin.

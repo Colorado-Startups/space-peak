@@ -103,7 +103,7 @@ def row_carries_label(raw_line, cues):
     This exists because of a real bug, worth recording so it is not
     reintroduced. strip_noise() removes inline code spans BEFORE the
     attribution check, and 02_substance/claims_register.md marks every
-    row's status as inline code (`unverified`, `frozen`). So the register
+    row's status as inline code (`unverified`, `verified`). So the register
     was labelling all 19 of its rows correctly, this script was deleting
     the labels one step before looking for them, and the file failed with
     13 findings for having no labels.
@@ -115,7 +115,7 @@ def row_carries_label(raw_line, cues):
     if not TABLE_ROW_RE.match(raw_line):
         return False
     low = raw_line.lower()
-    return any(cue in low for cue in cues) or "`frozen`" in low
+    return any(cue in low for cue in cues)
 
 
 def lint_text(text, rules, max_words=None):

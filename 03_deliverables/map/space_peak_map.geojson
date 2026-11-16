@@ -2,9 +2,9 @@
  "type": "FeatureCollection",
  "generated": {
   "by": "04_tools/space_peak_map.py",
-  "date": "2026-11-15",
+  "date": "2026-11-16",
   "register": "02_substance/claims_register.md",
-  "register_git_blob": "2a081370bfe7ba4122ad629bfd8a0d79bdee11f6",
+  "register_git_blob": "ba87e01c657d2148ea3b80a49240ca0d7e43478b",
   "license": "CC0-1.0"
  },
  "features": [
@@ -894,10 +894,24 @@
   {
    "type": "Feature",
    "properties": {
-    "layer": "exclusion",
+    "layer": "site",
     "name": "Blanca Peak",
-    "reason": "Sisnaajini, sacred to the Navajo.",
-    "register": "G-06"
+    "summit": "Blanca Peak",
+    "register": "G-06",
+    "gnis_id": 192735,
+    "source_url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/5/query?where=gaz_name%3D%27Blanca+Peak%27+AND+state_alpha%3D%27CO%27&outFields=%2A&outSR=4326&f=json",
+    "claims": [
+     {
+      "id": "S-19",
+      "claim": "Elevation 14,345 ft",
+      "status": "unverified"
+     },
+     {
+      "id": "S-20",
+      "claim": "Sisnaajini, sacred to the Navajo",
+      "status": "unverified"
+     }
+    ]
    },
    "geometry": {
     "type": "Point",
@@ -910,10 +924,24 @@
   {
    "type": "Feature",
    "properties": {
-    "layer": "exclusion",
-    "name": "Crestones / Great Sand Dunes",
-    "reason": "A National Park and the wilderness beside it.",
-    "register": "G-07"
+    "layer": "site",
+    "name": "Crestones / Sand Dunes",
+    "summit": "Crestone Peak",
+    "register": "G-07",
+    "gnis_id": 192423,
+    "source_url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/5/query?where=gaz_name%3D%27Crestone+Peak%27+AND+state_alpha%3D%27CO%27&outFields=%2A&outSR=4326&f=json",
+    "claims": [
+     {
+      "id": "S-17",
+      "claim": "Elevation about 14,000 ft",
+      "status": "unverified"
+     },
+     {
+      "id": "S-18",
+      "claim": "Great Sand Dunes National Park & Preserve; the Crestones in the Sangre de Cristo Wilderness, Rio Grande National Forest, beside it",
+      "status": "verified"
+     }
+    ]
    },
    "geometry": {
     "type": "Point",

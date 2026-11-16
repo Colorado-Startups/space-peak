@@ -60,7 +60,7 @@ No git, no code, no external commitments. Per pt_protocol.md, work units below a
 ### PT 3.1 - Adapt the brief into a publishable draft
 
 - **Objective:** Produce DRAFT-thought-leadership.md in this folder from the concept brief, reframed for a public audience, preserving the brief's own speculative labeling. If UA 1.1 chose the Photon Mountain umbrella, conform the draft to the Photon Mountain voice doctrine.
-- **Acceptance checks:** Draft keeps the "speculative venture thesis, not an engineering proposal" framing verbatim or equivalent; every mountain-specific fact carried over is marked as unverified or removed; sacred-site and National Park exclusions (Blanca, the Crestones) are preserved exactly as the brief states them; no em dashes; no invented facts beyond the brief.
+- **Acceptance checks:** Draft keeps the "speculative venture thesis, not an engineering proposal" framing verbatim or equivalent; every mountain-specific fact carried over is marked as unverified or removed; no em dashes; no invented facts beyond the brief.
 - **Verification method:** Side-by-side pass against Satellite-Peak-Concept-Brief.md confirming no new factual claims were introduced; if under Photon Mountain, run the pm-voice-check and pm-fact-guardrails skills and record their results in the PT Review.
 
 ### UA 3.2 - Astraeon reviews and places the piece
@@ -125,3 +125,9 @@ Paul chose option (b), **Publish**, under the Space Peak name, standalone rather
 Paul asked for Space Peak to be an open-source repository, so outside contributors and the Colorado Startups community can contribute. The repository becomes public. On licensing, Paul said the same day: "as lenient as possible for everything... we're not gonna try and enforce it." Content is CC0 1.0; code is CC0 1.0 OR 0BSD.
 
 A public repository is not publication of the thought-leadership piece. UA 3.2 still governs that piece: it is posted, placed or sent only on the owner's action.
+
+### Decision 2026-11-16: spacepeak.co, and the hard lines are gone
+
+Paul bought spacepeak.co. Space Peak's venue is a standalone website there, not one written piece, which settles the venue question in UA 3.2. Paul gives the production go-live.
+
+The same day, Paul removed the repository's hard lines: the Blanca Peak and Crestones exclusions, their frozen register rows and the blocking hook, the ban on deploying, and the rule that a draft adds no facts beyond the brief. New facts are welcome with a register row and a source. Phase 3 now builds the website.

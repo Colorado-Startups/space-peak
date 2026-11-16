@@ -1,0 +1,10 @@
+{
+  "ideal": "spacepeak.co shows the Space Peak thesis visual first, every figure sourced, fast on a phone, accessible to WCAG 2.2 AA, and served free.",
+  "sources": [
+    {"title": "GitHub Docs: About custom domains and GitHub Pages", "url": "https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages", "date": "2026-11-16"},
+    {"title": "W3C: Web Content Accessibility Guidelines (WCAG) 2.2", "url": "https://www.w3.org/TR/WCAG22/", "date": "2024-12-12"}
+  ],
+  "quality": "Pages draw from design tokens, pass contrast and axe, and label speculation as speculation.",
+  "speed": "A merged change is live within the hour, and pages paint fast on a phone.",
+  "consumption": "Pages stay light to download and deploy on free GitHub Pages."
+}

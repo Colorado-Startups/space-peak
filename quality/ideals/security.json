@@ -1,0 +1,9 @@
+{
+  "ideal": "Space Peak holds no secret, keeps a private reporting path, reads fork code as data only, and uses only free security features.",
+  "sources": [
+    {"title": "GitHub Docs: GitHub security features", "url": "https://docs.github.com/en/code-security/getting-started/github-security-features", "date": "2026-11-16"}
+  ],
+  "quality": "Private vulnerability reporting on, no key in any file or workflow, and fork code never run.",
+  "speed": "No alert stays open more than a week.",
+  "consumption": "No paid security feature; a public repo gets them free."
+}

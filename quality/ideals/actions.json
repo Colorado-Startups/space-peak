@@ -1,0 +1,10 @@
+{
+  "ideal": "Space Peak's one short CI job checks claims, voice, map and contract on every pull request in under a minute, on free public runners.",
+  "sources": [
+    {"title": "GitHub Docs: Secure use reference", "url": "https://docs.github.com/en/actions/reference/security/secure-use", "date": "2026-11-16"},
+    {"title": "GitHub Docs: GitHub Actions billing", "url": "https://docs.github.com/en/billing/concepts/product-billing/github-actions", "date": "2026-11-16"}
+  ],
+  "quality": "Actions pinned to full commits, least-privilege tokens, and a red main fixed before the next merge.",
+  "speed": "Push to all green within two minutes.",
+  "consumption": "Only standard runners, free for a public repo; no larger runner and no paid minute."
+}

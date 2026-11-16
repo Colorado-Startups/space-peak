@@ -1,0 +1,10 @@
+{
+  "ideal": "Each Space Peak change is a small signed-off pull request of 200 lines or fewer, in a table, reviewed and merged by the orchestrator.",
+  "sources": [
+    {"title": "GitHub Docs: Helping others review your changes", "url": "https://docs.github.com/en/pull-requests/concepts/helping-others-review-your-changes", "date": "2026-11-16"},
+    {"title": "Developer Certificate of Origin", "url": "https://developercertificate.org/", "date": "2026-11-16"}
+  ],
+  "quality": "Green at its head, with its own test, sign-off and issue link; never pushed to main.",
+  "speed": "Merged within the hour of going green.",
+  "consumption": "Few pushes per change, each running one short CI job."
+}

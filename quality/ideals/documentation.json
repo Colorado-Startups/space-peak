@@ -1,0 +1,10 @@
+{
+  "ideal": "Every Space Peak claim carries its status and source, in short visual CC0 docs a reader finishes in two minutes.",
+  "sources": [
+    {"title": "GitHub Docs: About the repository README file", "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes", "date": "2026-11-16"},
+    {"title": "Creative Commons: CC0 1.0 Universal", "url": "https://creativecommons.org/publicdomain/zero/1.0/", "date": "2026-11-16"}
+  ],
+  "quality": "Tables and diagrams first, one idea per sentence, no em dashes, and every peak fact matches the claims register.",
+  "speed": "Each doc reads in two minutes.",
+  "consumption": "No doc runs past its reading goal, so an agent loads few tokens."
+}

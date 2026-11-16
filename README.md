@@ -100,7 +100,7 @@ This scaffolding is built to be copied into sibling projects such as Photon Moun
 
 ## License
 
-Everything Colorado Startups wrote here is dedicated to the public domain under [CC0 1.0](LICENSE). Use it for anything, with no credit needed. The code (`04_tools/`, `.claude/hooks/`, `.github/workflows/`) is also offered under [0BSD](LICENSES/0BSD.txt), whichever you prefer.
+Everything Colorado Startups wrote here is dedicated to the public domain under [CC0 1.0](LICENSE). Use it for anything, with no credit needed. The code (`04_tools/`, `.github/workflows/`) is also offered under [0BSD](LICENSES/0BSD.txt), whichever you prefer.
 
 Two things here belong to others and keep their own terms:
 

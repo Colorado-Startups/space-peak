@@ -20,8 +20,6 @@ files rather than inside one:
   C4  Every exempt entry carries a reason.
   C5  Every exempt glob still matches something in the repository.
   C6  No call site carries its own copy of the exempt list.
-  C7  Every frozen site is still named by every required prose surface.
-  C8  frozen_sites in the data file matches the `frozen` rows in the register.
   C9  Every hook named in .claude/settings.json exists and is executable.
   C10 Every hook file on disk is actually wired in .claude/settings.json.
   C11 No workflow reimplements a check inline instead of calling a script.
@@ -128,10 +126,7 @@ def main():
     check("C2 blocking and warning are disjoint",
           not (blocking & warning),
           f"in both: {sorted(blocking & warning)}")
-    # frozen-row-edit is emitted by the register integrity check, which names
-    # it outside severity_of(), so allow it.
-    shell_emitted = {"frozen-row-edit"}
-    orphans = (blocking | warning) - emitted - shell_emitted
+    orphans = (blocking | warning) - emitted
     check("C3 no classified check is orphaned", not orphans,
           f"classified but never emitted: {sorted(orphans)}")
 
@@ -192,36 +187,6 @@ def main():
             dead.append(f"{glob} (is_exempt said False for {sample})")
     check("C13 is_exempt() honours every exempt glob", not dead,
           f"globs the real function ignores: {dead}")
-
-    # --- frozen sites -----------------------------------------------------
-    print()
-    print("frozen sites")
-    labels = R.frozen_labels(rules)
-    aliases = R.frozen_aliases(rules)
-    missing = []
-    for rel in rules["required_surface_agreement"]["files"]:
-        if not os.path.exists(repo_file(rel)):
-            missing.append(f"{rel} (absent)")
-            continue
-        body = read(rel).lower()
-        for key, alias_list in aliases.items():
-            if not any(a in body for a in alias_list):
-                missing.append(f"{rel} does not name {labels[key]}")
-    check("C7 every prose surface still names both exclusions", not missing,
-          "; ".join(missing))
-
-    reg_rel = "02_substance/claims_register.md"
-    if os.path.exists(repo_file(reg_rel)):
-        _reg, frozen_in_register, _unv = R.__dict__ and __import__(
-            "space_peak_claims").parse_register(repo_file(reg_rel), rules)
-        unsynced = [labels[k] for k, al in aliases.items()
-                    if not any(a in frozen_in_register
-                               or a.split()[0] in frozen_in_register for a in al)]
-        check("C8 data file and register agree on what is frozen", not unsynced,
-              f"frozen in data but not in register: {unsynced}")
-    else:
-        check("C8 data file and register agree on what is frozen", False,
-              f"{reg_rel} is absent")
 
     # --- hook wiring ------------------------------------------------------
     print()

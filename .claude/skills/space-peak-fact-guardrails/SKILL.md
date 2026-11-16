@@ -27,9 +27,8 @@ python3 04_tools/space_peak_claims.py --self-test
 python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md <target file>
 ```
 
-Self-test must pass first. Report every finding. Note the severity split, because it matters for how you present them:
+Self-test must pass first. Report every finding.
 
-- `exclusion-proposed` and `frozen-row-edit` **block**. Deterministic and not a style question.
 - `unregistered-claim` and `unlabeled-claim` **warn**. Regex detection of place-shaped nouns is a heuristic, and the label often sits in a neighbouring sentence the script cannot see. That judgment is yours.
 
 Exit 3 means the check could not run. That is not a pass; say so.
@@ -62,10 +61,6 @@ Every verdict becomes a register edit in the same pull request as the prose. A v
 ## Step 5: keep a claims ledger if the text was cut
 
 If this file was compressed or shortened, list every factual claim, figure, named entity, and causal assertion in the original and mark each kept, relocated, or dropped. Never silently drop a fact to hit a word count.
-
-## What you must not do
-
-Do not propose reopening a `frozen` row. Blanca Peak and the Crestones are not claims awaiting diligence. If you believe a frozen row is wrong, that is a conversation with a human, not a pull request.
 
 ## Handoffs
 

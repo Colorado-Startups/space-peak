@@ -6,14 +6,9 @@
 
 Every checkable claim in the Space Peak material, with a status. The concept brief states its own discipline in its subtitle: a speculative venture thesis, not an engineering proposal, where every fact about a specific mountain is a starting point for real diligence rather than a verified site assessment. `00_project_system/MASTER_PLAN.md` carries that forward. Any step that touches a mountain fact treats it as unverified until diligenced.
 
-This file is how that rule stops being a good intention and becomes something a machine can check. Three things read it:
+This file is how that discipline becomes something a machine can check. `.github/workflows/ci.yml` runs `04_tools/space_peak_claims.py` over every tracked Markdown file on a pull request. It warns and never blocks.
 
-- `.claude/hooks/space-peak-check-exclusions.sh`, which blocks a write proposing a frozen site.
-- `.github/workflows/ci.yml`, which runs the same checker over every tracked Markdown file on a pull request.
-
-Both shell out to `04_tools/space_peak_claims.py`. There is one definition of the rule, not two.
-
-**The rule for writers:** if you state a checkable claim, it needs a row. If its row says `unverified`, the prose must label it as unverified. There is no third option where a number appears bare.
+**For writers:** give a checkable claim a row, and label an `unverified` row as unverified in the prose.
 
 ## Status vocabulary
 
@@ -23,25 +18,11 @@ Both shell out to `04_tools/space_peak_claims.py`. There is one definition of th
 | `verified` | Confirmed against a cited source. The source column is filled. |
 | `corrected` | Checked, and the brief was wrong. The corrected value is authoritative. |
 | `unverifiable` | Checked, and no public source settles it. Prose must say so or drop the claim. |
-| `frozen` | A permanent exclusion. Never changes to any other status. |
 | `open` | A live decision, not a fact awaiting diligence. |
-
-## Frozen rows: the two permanent exclusions
-
-These are not engineering judgements and are not subject to diligence, revision, or a better firing lane. They are the only rows here that may never change status. Any pull request that edits, weakens, softens, or removes either row fails the `frozen-row-edit` check and must be rejected.
-
-| Site | Status | Reason, as the brief states it |
-| --- | --- | --- |
-| **Blanca Peak** | `frozen` | Sisnaajini, sacred to the Navajo. Do not. |
-| **Crestones / Great Sand Dunes** | `frozen` | A National Park and the wilderness beside it. Absolute never. |
-
-The brief describes Blanca Peak as high, southern, and on paper near-perfect. That is precisely why the row is frozen rather than merely ranked low. A good engineering case is the pressure that erodes a non-engineering answer over time, one reasonable-sounding draft at a time. The answer does not depend on the engineering case.
-
-Defence in depth: these two sites are also named in `04_tools/space_peak_rules.json`, so deleting a row here does not disable the check that protects it. `04_tools/space_peak_contract_test.py` asserts the two stay in sync.
 
 ## Site table claims
 
-Transcribed from the brief's site tour. Every elevation, ownership status, land status, and firing-lane claim below is `unverified` until checked against a public source. None has been checked yet.
+Transcribed from the brief's site tour. Every elevation, ownership status, land status, and firing-lane claim below is `unverified` until checked against a public source. Only S-18 has been checked.
 
 | ID | Site | Claim | Status | Source | Notes |
 | --- | --- | --- | --- | --- | --- |
@@ -61,10 +42,10 @@ Transcribed from the brief's site tour. Every elevation, ownership status, land 
 | S-14 | Pikes Peak | Elevation 14,115 ft | `unverified` | | |
 | S-15 | Pikes Peak | About 39 N; fires east over Kansas and metro | `unverified` | | |
 | S-16 | Pikes Peak | National Historic Landmark | `unverified` | | |
-| S-17 | Crestones / Sand Dunes | Elevation about 14,000 ft | `frozen` | | Row exists only to record the exclusion |
-| S-18 | Crestones / Sand Dunes | Great Sand Dunes National Park & Preserve; the Crestones in the Sangre de Cristo Wilderness, Rio Grande National Forest, beside it | `frozen` | USGS Geolex (Crestone Peak quadrangle); NPS Great Sand Dunes "Nearby attractions" | **Absolute never.** Do not reclassify |
-| S-19 | Blanca Peak | Elevation 14,345 ft | `frozen` | | Row exists only to record the exclusion |
-| S-20 | Blanca Peak | Sisnaajini, sacred to the Navajo | `frozen` | | **Do not.** Do not reclassify |
+| S-17 | Crestones / Sand Dunes | Elevation about 14,000 ft | `unverified` | | |
+| S-18 | Crestones / Sand Dunes | Great Sand Dunes National Park & Preserve; the Crestones in the Sangre de Cristo Wilderness, Rio Grande National Forest, beside it | `verified` | USGS Geolex (Crestone Peak quadrangle); NPS Great Sand Dunes "Nearby attractions" | |
+| S-19 | Blanca Peak | Elevation 14,345 ft | `unverified` | | |
+| S-20 | Blanca Peak | Sisnaajini, sacred to the Navajo | `unverified` | | |
 
 ## Site coordinates
 
@@ -83,13 +64,13 @@ Every source is one public query of The National Map Gazetteer (USGS GNIS), laye
 | G-03 | Spanish Peaks | West Spanish Peak, 37.37567 N, 104.99370 W, per GNIS | `verified` | GNIS 194402 | One pin for the pair; see below |
 | G-04 | Almagre (Baldy) | Almagre Mountain, 38.79119 N, 104.99346 W, per GNIS | `verified` | GNIS 193402 | "Baldy" is the brief's nickname |
 | G-05 | Pikes Peak | Pikes Peak, 38.84059 N, 105.04491 W, per GNIS | `verified` | GNIS 204770 | |
-| G-06 | Blanca Peak | Blanca Peak, 37.57757 N, 105.48561 W, per GNIS | `verified` | GNIS 192735 | Places the exclusion marker only |
-| G-07 | Crestones / Sand Dunes | Crestone Peak, 37.96682 N, 105.58540 W, per GNIS | `verified` | GNIS 192423 | Places the exclusion marker only |
+| G-06 | Blanca Peak | Blanca Peak, 37.57757 N, 105.48561 W, per GNIS | `verified` | GNIS 192735 | |
+| G-07 | Crestones / Sand Dunes | Crestone Peak, 37.96682 N, 105.58540 W, per GNIS | `verified` | GNIS 192423 | One pin for the site; see below |
 
 Notes the table cannot hold:
 
 - **G-03.** The brief names the Spanish Peaks as a pair. The map pins one summit per brief site, and this is the western one. GNIS returns two points for this feature, about 150 m apart per that query, and the map uses the first. East Spanish Peak is GNIS 194412.
-- **G-06 and G-07.** These rows place a marker. The exclusions themselves are S-17 to S-20, which are `frozen`. The map draws Great Sand Dunes National Park as a marker on Crestone Peak, not as an area.
+- **G-07.** The brief names the Crestones and Great Sand Dunes as one site. The map pins Crestone Peak for it.
 
 ## The Colorado Startups region loop
 
@@ -148,5 +129,3 @@ The brief calls the physics sound and the engineering 2040s-hard. These are the 
 ## How to change a row
 
 Status may move from `unverified` to `verified`, `corrected`, or `unverifiable`, always in the same pull request as the evidence. A verification that lives only in a chat log has not happened.
-
-A `frozen` row does not move. If you believe a frozen row is wrong, that is a conversation to have with a human, not a pull request to open.

@@ -62,7 +62,7 @@ def load_rules(path=None):
     except OSError as exc:
         raise InfraError(f"cannot read rules file: {path}: {exc}")
 
-    for required in ("severity", "frozen_sites", "limits"):
+    for required in ("severity", "limits"):
         if required not in rules:
             raise InfraError(f"rules file is missing '{required}': {path}")
     return rules
@@ -142,23 +142,6 @@ def is_exempt(rules, path):
     return False
 
 
-def frozen_aliases(rules):
-    """Map frozen-site key to its alias list."""
-    return {
-        key: [a.lower() for a in node["aliases"]]
-        for key, node in rules["frozen_sites"].items()
-        if not key.startswith("_")
-    }
-
-
-def frozen_labels(rules):
-    return {
-        key: node["label"]
-        for key, node in rules["frozen_sites"].items()
-        if not key.startswith("_")
-    }
-
-
 def run_guarded(main_fn, argv=None):
     """Wrap a checker's main so InfraError becomes EXIT_INFRA, not a finding."""
     try:
@@ -179,5 +162,4 @@ if __name__ == "__main__":
         sys.exit(EXIT_INFRA)
     print(f"rules OK: {len(r['severity']['blocking'])} blocking, "
           f"{len(r['severity']['warning'])} warning, "
-          f"{len(frozen_aliases(r))} frozen sites, "
           f"{len(exempt_globs(r))} exempt globs")

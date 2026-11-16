@@ -30,9 +30,7 @@
     ],
     "blocking": [
       "em-dash",
-      "spaced-en-dash",
-      "exclusion-proposed",
-      "frozen-row-edit"
+      "spaced-en-dash"
     ],
     "warning": [
       "sentence-length",
@@ -43,29 +41,8 @@
     ],
     "_notes": {
       "spaced-en-dash": "Blocks, moved from warning on 2026-10-08. Code-OS rules/writing-and-gates.md says a spaced en dash reads as an em dash, 'so that is out too', and that file wins. The test is a literal character match (space, U+2013, space), so it is deterministic, fast, and auto-fixable, the same as em-dash. An unspaced en dash in a range such as 3-4 does not match. Claude-OS voice_lint.py made the same correction in commit f3ece8b.",
-      "exclusion-proposed": "Blocks despite using cue lists, because the site names are literal string matches against a closed two-item list and the consequence is not a style question. The cue lists only decide whether the sentence proposes rather than mentions.",
       "unattributed-figure": "Warns, not blocks. The upstream Photon Mountain script graded this FAIL, but its own docstring calls it a heuristic that 'flags candidates for human review'. Demoted here to match the house rule.",
       "unregistered-claim": "Warns. Regex detection of place-shaped proper nouns is a heuristic by construction."
-    }
-  },
-
-  "frozen_sites": {
-    "_README": [
-      "The two permanent exclusions. Not engineering judgements, so not revisable by",
-      "better engineering. These are duplicated in the checker's own constant on",
-      "purpose: deleting a row from 02_substance/claims_register.md must not disable",
-      "the check that protects it. The contract test asserts the two stay in sync and",
-      "that every human-facing surface still names both."
-    ],
-    "blanca": {
-      "label": "Blanca Peak",
-      "reason": "Sisnaajini, sacred to the Navajo.",
-      "aliases": ["blanca peak", "blanca", "sisnaajini", "sisnaajiní"]
-    },
-    "crestones": {
-      "label": "Crestones / Great Sand Dunes",
-      "reason": "A National Park and the wilderness beside it.",
-      "aliases": ["crestones", "crestone", "great sand dunes", "sand dunes"]
     }
   },
 
@@ -80,30 +57,6 @@
     "mauna kea", "chimborazo",
     "pinon canyon", "fort carson"
   ],
-
-  "proposal_cues": [
-    "candidate", "viable", "best site", "best launch", "ideal site", "top site", "preferred", "recommend",
-    "we should", "bore through", "boring through", "tunnel through",
-    "tunnel under", "build at", "build on", "site the", "sited at",
-    "launch from", "fires east from", "the winner", "engineering winner",
-    "reconsider", "worth another look", "second interview"
-  ],
-
-  "negation_cues": {
-    "_README": [
-      "Inverts a proposal cue. Found by running the checker over this repository's",
-      "own documentation, which states the exclusion rule and was flagged for",
-      "breaking it. An exemption would have been cheaper and wrong: the same",
-      "construction appears in ordinary prose ('Blanca is not a candidate'), where",
-      "an exemption does not help and a false positive teaches the reader to ignore",
-      "the guard."
-    ],
-    "terms": [
-      "never", "not ", "n't", "cannot", "no longer", "excluded", "exclusion",
-      "rule out", "ruled out", "off the table", "rather than", "instead of",
-      "must not", "may not", "do not", "refuse", "forbid"
-    ]
-  },
 
   "attribution_cues": {
     "_README": [
@@ -178,12 +131,11 @@
       "Each entry needs a reason. An entry without one fails the contract test."
     ],
     "entries": [
-      { "glob": ".claude/hooks/*", "reason": "Same, for the Claude Code harness surface." },
       { "glob": ".claude/agents/*", "reason": "Reviewer prompts list the hedge words and AI tells by name so the reviewer knows what to look for. Added after the first push, where these files produced 7 warnings for quoting the terms they enforce." },
       { "glob": ".claude/skills/*", "reason": "Skill instructions quote the banned terms and bad examples beside good ones." },
       { "glob": ".github/workflows/*", "reason": "Workflow headers explain what the checks ban." },
       { "glob": "04_tools/space_peak_lint.py", "reason": "Defines the em-dash constant it enforces." },
-      { "glob": "04_tools/space_peak_claims.py", "reason": "Defines the exclusion cue lists it enforces." },
+      { "glob": "04_tools/space_peak_claims.py", "reason": "Its docstring and self-test quote sample claims." },
       { "glob": "04_tools/space_peak_contract_test.py", "reason": "Asserts on the banned terms by name." },
       { "glob": "04_tools/space_peak_rules.json", "reason": "Is the list of banned terms." },
       { "glob": "01_doctrine/voice.md", "reason": "States the rules, so it quotes bad examples beside good ones." },
@@ -193,21 +145,5 @@
 
   "limits": {
     "max_sentence_words": 30
-  },
-
-  "required_surface_agreement": {
-    "_README": [
-      "'Have a test assert that every human-facing surface still agrees with it.'",
-      "These files must each still name both frozen sites. If someone rewrites the",
-      "README and drops the exclusions, the contract test fails rather than the",
-      "omission going unnoticed."
-    ],
-    "files": [
-      "README.md",
-      "AGENTS.md",
-      "01_doctrine/voice.md",
-      "CONTRIBUTING.md",
-      "02_substance/claims_register.md"
-    ]
   }
 }

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Space Peak map</title>
-<meta name="description" content="Space Peak, a speculative venture thesis: the Colorado Startups region loop around Colorado Springs and Fountain, the summits in the concept brief, and the two permanent exclusions. Every point from USGS GNIS. CC0 data.">
+<meta name="description" content="Space Peak, a speculative venture thesis: the Colorado Startups region loop around Colorado Springs and Fountain and the summits in the concept brief. Every point from USGS GNIS. CC0 data.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
   color-scheme: light;
   --ground:#E9ECF0; --surface:#FFFFFF; --surface-2:#F2F4F7; --edge:#D0D6DE;
   --text:#0E1520; --dim:#4C5868; --faint:#77838F; --accent:#B4531A;
-  --c-region:#C2561B; --c-casing:#2A1A10; --c-site:#1D63A6; --c-excl:#7B1E44;
+  --c-region:#C2561B; --c-casing:#2A1A10; --c-site:#1D63A6;
   --shadow:0 6px 24px rgba(14,21,32,.14);
 }
 @media (prefers-color-scheme: dark){
@@ -22,7 +22,7 @@
     color-scheme: dark;
     --ground:#090D13; --surface:#111820; --surface-2:#18212B; --edge:#27323D;
     --text:#ECF0F5; --dim:#9AA6B3; --faint:#67737F; --accent:#F08A4B;
-    --c-region:#F08A4B; --c-casing:#05070A; --c-site:#6CB4F0; --c-excl:#E58AB0;
+    --c-region:#F08A4B; --c-casing:#05070A; --c-site:#6CB4F0;
     --shadow:0 6px 24px rgba(0,0,0,.45);
   }
 }
@@ -30,7 +30,7 @@
   color-scheme: dark;
   --ground:#090D13; --surface:#111820; --surface-2:#18212B; --edge:#27323D;
   --text:#ECF0F5; --dim:#9AA6B3; --faint:#67737F; --accent:#F08A4B;
-  --c-region:#F08A4B; --c-casing:#05070A; --c-site:#6CB4F0; --c-excl:#E58AB0;
+  --c-region:#F08A4B; --c-casing:#05070A; --c-site:#6CB4F0;
   --shadow:0 6px 24px rgba(0,0,0,.45);
 }
 *{box-sizing:border-box}
@@ -56,7 +56,6 @@ aside{width:360px;max-width:100%;background:var(--surface);border-left:1px solid
 .legend .tag{margin-left:auto;font-family:'DM Mono',ui-monospace,monospace;font-size:.66rem;color:var(--faint)}
 .sw-region{width:18px;height:12px;border:3px solid var(--c-region);background:color-mix(in srgb,var(--c-region) 18%,transparent);box-shadow:0 0 6px var(--c-region);flex:0 0 auto}
 .sw-site{width:12px;height:12px;border-radius:50%;background:var(--c-site);border:1.5px solid var(--surface);box-shadow:0 0 0 1px var(--c-site);flex:0 0 auto}
-.sw-excl{width:14px;height:14px;flex:0 0 auto}
 .controls{display:flex;gap:8px;flex-wrap:wrap}
 .controls button{font:500 .74rem 'DM Mono',ui-monospace,monospace;background:var(--surface-2);color:var(--text);border:1px solid var(--edge);padding:7px 10px;cursor:pointer;border-radius:4px}
 .controls button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
@@ -69,10 +68,9 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
 .lists li button:hover,.lists li button:focus-visible{background:var(--surface-2)}
 .lists .n{font-weight:700;font-size:.86rem;line-height:1.25}
 .lists .t{font-family:'DM Mono',ui-monospace,monospace;font-size:.68rem;color:var(--faint)}
-.lists .sw-site,.lists .sw-excl{margin-top:3px}
+.lists .sw-site{margin-top:3px}
 .lists .head{padding:14px 16px 4px;margin:0}
 .lists .why{padding:0 16px 8px;margin:0;font-size:.76rem;color:var(--dim)}
-.excl-block{border-top:3px solid var(--c-excl)}
 .note{font-family:'DM Mono',ui-monospace,monospace;font-size:.68rem;color:var(--faint);line-height:1.6;margin:0}
 .maplibregl-popup-content{background:var(--surface);color:var(--text);border:1px solid var(--edge);border-radius:6px;box-shadow:var(--shadow);padding:12px 14px;max-width:300px;font-family:'Archivo',system-ui,sans-serif}
 .maplibregl-popup-tip{border-top-color:var(--surface)!important;border-bottom-color:var(--surface)!important}
@@ -122,7 +120,6 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
       <ul class="legend">
         <li><label><input type="checkbox" id="t-region" checked><span class="sw-region"></span>Colorado Startups region loop<span class="tag">roads</span></label></li>
         <li><label><input type="checkbox" id="t-site" checked><span class="sw-site"></span>Summits in the brief<span class="tag">speculative</span></label></li>
-        <li><label><input type="checkbox" id="t-excl" checked><canvas class="sw-excl" width="28" height="28" aria-hidden="true"></canvas>Permanent exclusions<span class="tag">settled</span></label></li>
       </ul>
     </div>
     <div class="block">
@@ -140,13 +137,8 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
     </div>
     <div class="lists">
       <p class="eyebrow head">Summits in the brief</p>
-      <p class="why">Register order, not a ranking. Each claim is the brief's and is unverified.</p>
+      <p class="why">Register order, not a ranking. Each claim carries its register status.</p>
       <ul id="list-site"></ul>
-      <div class="excl-block">
-        <p class="eyebrow head">Permanent exclusions</p>
-        <p class="why">Stated, not argued. Shown so a reader knows where they are.</p>
-        <ul id="list-excl"></ul>
-      </div>
     </div>
     <div class="block" style="border-top:1px solid var(--edge);border-bottom:0">
       <p class="note" id="provenance">Every point is a USGS GNIS summit, recorded with its feature ID in the claims register. The region loop is the coloradostartups.org loop, traced from US Census TIGERweb road lines. No OpenStreetMap data is stored here, so the data stays CC0. Basemap: OpenFreeMap, OpenMapTiles, OpenStreetMap. Terrain: Mapterhorn.</p>
@@ -172,26 +164,12 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
   };
 
   let data = null, scheme0 = scheme(), terrainOn = false;
-  const show = { region: true, site: true, exclusion: true };
+  const show = { region: true, site: true };
   const GROUPS = {
     region: ['region-fill', 'region-glow', 'region-casing', 'region-line'],
     site: ['site-halo', 'site-dot', 'site-label'],
-    exclusion: ['excl-icon'],
   };
 
-  // The exclusion symbol: a ring with a bar. Its own shape and colour, never a site dot.
-  function exclusionImage(size, color, ground) {
-    const c = document.createElement('canvas'); c.width = c.height = size;
-    const g = c.getContext('2d'), r = size / 2, w = size * 0.13;
-    g.fillStyle = ground; g.beginPath(); g.arc(r, r, r - 1, 0, Math.PI * 2); g.fill();
-    g.strokeStyle = color; g.lineWidth = w; g.beginPath(); g.arc(r, r, r - w, 0, Math.PI * 2); g.stroke();
-    g.beginPath(); g.moveTo(r - (r - w) * 0.7, r + (r - w) * 0.7); g.lineTo(r + (r - w) * 0.7, r - (r - w) * 0.7); g.stroke();
-    return c;
-  }
-  function paintSwatch() {
-    const sw = document.querySelector('canvas.sw-excl'); const src = exclusionImage(28, css('--c-excl'), css('--surface'));
-    const g = sw.getContext('2d'); g.clearRect(0, 0, 28, 28); g.drawImage(src, 0, 0);
-  }
 
   const map = new maplibregl.Map({
     container: 'map',
@@ -248,13 +226,6 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
       layout: { 'text-field': ['format', ['get', 'name'], {}, '\n', {}, 'speculative', { 'font-scale': 0.8 }], 'text-font': ['Noto Sans Regular'], 'text-size': 12, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-max-width': 12 },
       paint: { 'text-color': site, 'text-halo-color': css('--surface'), 'text-halo-width': 1.5 } });
 
-    // Permanent exclusions: their own symbol and colour, labelled with the name and the reason only.
-    if (!map.hasImage('excl')) map.addImage('excl', exclusionImage(48, css('--c-excl'), css('--surface')).getContext('2d').getImageData(0, 0, 48, 48), { pixelRatio: 2 });
-    map.addLayer({ id: 'excl-icon', type: 'symbol', source: 'sp', filter: layerFilter('exclusion'),
-      layout: { 'icon-image': 'excl', 'icon-allow-overlap': true, 'text-allow-overlap': false,
-        'text-field': ['format', ['get', 'name'], {}, '\n', {}, ['get', 'reason'], { 'font-scale': 0.82 }],
-        'text-font': ['Noto Sans Regular'], 'text-size': 12, 'text-offset': [0, 1.4], 'text-anchor': 'top', 'text-max-width': 14 },
-      paint: { 'text-color': css('--c-excl'), 'text-halo-color': css('--surface'), 'text-halo-width': 1.5 } });
 
     applyVisibility();
     if (terrainOn) map.setTerrain({ source: 'dem-terrain', exaggeration: 1.4 });
@@ -270,12 +241,6 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
     const a = httpsLink(p.source_url, 'Point: USGS GNIS ' + p.gnis_id, 'pop-src'); if (a) box.append(a);
     return box;
   }
-  function exclusionPopup(p) {
-    const box = el('div');
-    const cat = el('p', 'pop-cat', 'Permanent exclusion'); cat.style.color = css('--c-excl');
-    box.append(cat, el('p', 'pop-name', p.name), el('p', 'pop-note', p.reason));
-    return box;
-  }
   function regionPopup(p) {
     const box = el('div');
     box.append(el('p', 'pop-cat', 'Colorado Startups region'), el('p', 'pop-name', p.name),
@@ -288,7 +253,7 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
     if (popup) popup.remove();
     const p = typeof f.properties.claims === 'string' ? { ...f.properties, claims: JSON.parse(f.properties.claims), roads: f.properties.roads } : f.properties;
     if (typeof p.roads === 'string') p.roads = JSON.parse(p.roads);
-    const content = p.layer === 'site' ? sitePopup(p) : p.layer === 'exclusion' ? exclusionPopup(p) : regionPopup(p);
+    const content = p.layer === 'site' ? sitePopup(p) : regionPopup(p);
     popup = new maplibregl.Popup({ offset: 14, maxWidth: '320px' }).setLngLat(lngLat || f.geometry.coordinates).setDOMContent(content).addTo(map);
   }
   const byLayer = kind => data.features.filter(f => f.properties.layer === kind);
@@ -311,7 +276,7 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
 
     const item = (f, swClass, sub) => {
       const li = el('li'); const b = el('button'); b.type = 'button';
-      const sw = swClass === 'sw-excl' ? (() => { const c = document.createElement('canvas'); c.width = c.height = 28; c.className = 'sw-excl'; c.getContext('2d').drawImage(exclusionImage(28, css('--c-excl'), css('--surface')), 0, 0); return c; })() : el('span', swClass);
+      const sw = el('span', swClass);
       const txt = el('span'); txt.append(el('span', 'n', f.properties.name), el('br'), el('span', 't', sub));
       b.append(sw, txt);
       b.addEventListener('click', () => { map.flyTo({ center: f.geometry.coordinates, zoom: Math.max(map.getZoom(), 10.5), speed: 1.4 }); open(f); });
@@ -319,10 +284,8 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
     };
     document.getElementById('list-site').replaceChildren(...byLayer('site').map(f =>
       item(f, 'sw-site', 'Speculative · ' + f.properties.claims.filter(c => c.status === 'unverified').length + ' of ' + f.properties.claims.length + ' claims unverified · GNIS ' + f.properties.gnis_id)));
-    document.getElementById('list-excl').replaceChildren(...byLayer('exclusion').map(f =>
-      item(f, 'sw-excl', f.properties.reason)));
 
-    [['t-region', 'region'], ['t-site', 'site'], ['t-excl', 'exclusion']].forEach(([id, k]) =>
+    [['t-region', 'region'], ['t-site', 'site']].forEach(([id, k]) =>
       document.getElementById(id).addEventListener('change', e => { show[k] = e.target.checked; applyVisibility(); }));
   }
 
@@ -337,13 +300,13 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
   // The data and the basemap style load in either order; whichever lands second adds the overlay.
   let styleReady = false;
   map.on('style.load', () => { styleReady = true; addOverlay(); });
-  ['site-dot', 'excl-icon'].forEach(id => {
+  ['site-dot'].forEach(id => {
     map.on('click', id, e => open(e.features[0]));
     map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; });
   });
   map.on('click', 'region-fill', e => {
-    const hit = map.queryRenderedFeatures(e.point, { layers: ['site-dot', 'excl-icon'].filter(id => map.getLayer(id)) });
+    const hit = map.queryRenderedFeatures(e.point, { layers: ['site-dot'].filter(id => map.getLayer(id)) });
     if (!hit.length) open(e.features[0], e.lngLat);
   });
 
@@ -356,10 +319,9 @@ table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;f
   document.getElementById('btn-region').addEventListener('click', fitRegion);
 
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    const s = scheme(); if (s === scheme0) return; scheme0 = s; paintSwatch(); map.setStyle(STYLES[s], { diff: false });
+    const s = scheme(); if (s === scheme0) return; scheme0 = s; map.setStyle(STYLES[s], { diff: false });
   });
 
-  paintSwatch();
   fetch('space_peak_map.geojson')
     .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(json => { data = json; buildPanel(); if (styleReady) addOverlay(); map.once('idle', fitAll); })

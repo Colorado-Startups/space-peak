@@ -10,8 +10,6 @@ not apply.
 
 - [ ] Every new mountain-specific claim has a row in `02_substance/claims_register.md`
 - [ ] Every claim marked `unverified` is labelled as such in the prose, or cited
-- [ ] No figure appears bare (no attribution, no source, no speculative label)
-- [ ] Neither permanent exclusion was weakened: **Blanca Peak** (sacred to the Navajo) and **the Crestones / Great Sand Dunes** (a National Park and the wilderness beside it)
 - [ ] No em dashes anywhere
 
 ## Two things no lint catches
@@ -25,8 +23,3 @@ Two checks are **required** on `main`: `ci / ci-ok` and `DCO`. A red one blocks 
 
 - [ ] Every commit is signed off (`git commit -s`), or I am an org member with verified commits
 - [ ] If an AI agent helped, I say so here
-
-## Publication
-
-- [ ] This PR does **not** publish anything externally. Publication is a
-      separate human action under MASTER_PLAN.md UA 3.2.

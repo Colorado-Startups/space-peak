@@ -8,11 +8,9 @@ Read `README.md`, then `02_substance/Space-Peak-Concept-Brief.md` as far as "The
 
 The sentence that matters: a speculative venture thesis, not an engineering proposal. Physics sound, engineering 2040s-hard, every mountain fact unverified.
 
-## 2. What you may not do (2 min)
+## 2. One habit (2 min)
 
-Read "Two rules before anything else" in `CONTRIBUTING.md`.
-
-Short version: Blanca Peak and the Crestones are permanently excluded, and every factual claim about a peak needs a register row.
+Put each checkable claim about a peak in `02_substance/claims_register.md`, with its status.
 
 ## 3. Set up (2 min)
 
@@ -22,7 +20,7 @@ You need `python3`, and nothing else. CI runs the full self-tests on every pull 
 
 One quick local check is fine while you change a checker: `python3 04_tools/space_peak_lint.py --self-test`.
 
-## 4. See the guardrails work (3 min)
+## 4. See the checks work (3 min)
 
 Worth doing once, so you know what they feel like before they surprise you mid-draft.
 
@@ -30,13 +28,6 @@ A warning, because the check is a heuristic:
 
 ```bash
 printf 'Mount Democrat reaches 14,148 ft with a clean eastern lane.\n' > /tmp/try.md
-python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md /tmp/try.md
-```
-
-A block, because the exclusions are certain:
-
-```bash
-printf 'Blanca Peak is the preferred site after all.\n' > /tmp/try.md
 python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md /tmp/try.md
 ```
 

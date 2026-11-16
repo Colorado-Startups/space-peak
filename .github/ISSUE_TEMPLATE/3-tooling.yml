@@ -18,7 +18,7 @@ body:
         - 04_tools/space_peak_claims.py
         - 04_tools/space_peak_contract_test.py
         - 04_tools/space_peak_rules.json
-        - .claude hooks
+        - .claude skills and agents
         - GitHub Actions
         - Other
     validations: { required: true }

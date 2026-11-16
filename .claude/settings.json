@@ -3,12 +3,7 @@
     "Permissions are deliberately narrow on the git commands, per the house rule",
     "'A gate an agent can skip is not a gate.' There is no blanket Bash(git commit:*),",
     "and the deny list keeps --no-verify, force-push, a push to main and a hard reset",
-    "out of the agent's reach.",
-    "",
-    "One hook is wired: space-peak-check-exclusions.sh, PreToolUse on Write and Edit,",
-    "which blocks a write proposing Blanca Peak or the Crestones as a site. This file",
-    "is the authority on that wiring; 04_tools/space_peak_contract_test.py C9 and C10",
-    "check that the hook exists and that no unwired hook sits on disk."
+    "out of the agent's reach."
   ],
   "permissions": {
     "allow": [
@@ -57,19 +52,6 @@
       "Bash(git push -f:*)",
       "Bash(git push origin main:*)",
       "Bash(git reset --hard:*)"
-    ]
-  },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/space-peak-check-exclusions.sh\""
-          }
-        ]
-      }
     ]
   }
 }

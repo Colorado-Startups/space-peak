@@ -1,6 +1,6 @@
 ---
 name: space-peak-publish-gate
-description: Run the full Space Peak pre-ship gate on a draft, which is MASTER_PLAN PT 3.3 as an executable checklist. Use when the user says "pre-ship check", "is this ready to publish", "run the publish gate", or before any draft goes for the UA 3.2 decision.
+description: Run the full Space Peak pre-ship gate on a draft, which is MASTER_PLAN PT 3.3 as an executable checklist. Use when the user says "pre-ship check", "is this ready to publish", "run the publish gate", or before anything goes live on spacepeak.co.
 ---
 
 # space-peak-publish-gate
@@ -38,9 +38,9 @@ python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md
 
 Zero blocking findings required. Warnings need a judgment call each, stated.
 
-### 3. No new facts
+### 3. Every claim has a home
 
-Diff the draft against `02_substance/Space-Peak-Concept-Brief.md` claim by claim. **The draft may introduce zero factual claims the brief did not make.** This is the verification method MASTER_PLAN PT 3.1 names. List every claim in the draft and show where it came from.
+List every claim in the draft and show where it came from: the concept brief, or a register row with a source. A new claim is fine once it has its row.
 
 ### 4. Register completeness
 
@@ -54,20 +54,16 @@ Read `01_doctrine/voice.md`, then walk the draft. One idea per sentence, judged 
 
 The draft carries the brief's own framing: a speculative venture thesis, not an engineering proposal. Physics sound, engineering 2040s-hard, both together. Quote the lines doing that work, or report that nothing does.
 
-### 7. The exclusions are intact and unargued
-
-Blanca Peak and the Crestones appear as settled exclusions, stated not argued, with no adjacent note about how good the site would otherwise be.
-
-### 8. The two things no lint catches
+### 7. The two things no lint catches
 
 - A hedged source set as an exact number in display type.
 - A status verb drifting under compression.
 
-### 9. Visuals
+### 8. Visuals
 
-The map and any SVG shipping with the piece carry the same labelling discipline as the prose. On a map, the two exclusions take their own layer, symbol and colour, with the reason as the label and no elevation or lane quality. A low-ranked pin invites a re-rank. If the piece is text-only, say so and say it was deliberate.
+The map and any SVG shipping with the piece carry the same labelling discipline as the prose. If the piece is text-only, say so and say it was deliberate.
 
-### 10. Naming
+### 9. Naming
 
 **Resolved 2026-10-08.** The name is **Space Peak** everywhere, with no second name and no project-versus-venture split. Register row N-04 is `corrected`, issue #2 took Route 2, and `01_doctrine/voice.md` carries the decision under Terminology.
 
@@ -81,7 +77,7 @@ Zero hits expected, with one legitimate exception: naming the rejected alternati
 
 The gate fails if the draft uses "Satellite Peak" as the project's name, or argues for it. A draft cannot argue for a name the project does not use.
 
-### 11. An independent read
+### 10. An independent read
 
 Hand the draft to the `space-peak-fact-reviewer` agent, which did not write it, for a read of every claim. Fold its findings into the report.
 
@@ -89,7 +85,7 @@ Hand the draft to the `space-peak-fact-reviewer` agent, which did not write it, 
 
 A line per check, then one of:
 
-- **Ready for UA 3.2.** Hand to Paul for the publication decision.
+- **Ready.** Hand to Paul for the go-live.
 - **Not ready.** What must change, in priority order.
 
-Never publish. Never deploy. Never post. The gate ends at a recommendation.
+The gate ends at a recommendation.

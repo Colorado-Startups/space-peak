@@ -55,7 +55,6 @@ jobs:
           quality-config: quality/config.json
 
       # The Space Peak map (03_deliverables/map) is served beside the two pages, at /map/.
-      # It is a repository deliverable, not the thought-leadership piece (MASTER_PLAN UA 3.2).
       - name: Add the map
         run: mkdir -p quality/dist/map && cp 03_deliverables/map/index.html 03_deliverables/map/space_peak_map.geojson quality/dist/map/
 

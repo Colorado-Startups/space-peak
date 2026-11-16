@@ -12,15 +12,15 @@ Brand: [Colorado Startups brand guide](https://colorado-startups.github.io/brand
 
 [![Map of the Space Peak region: the loop of I-25, Interquest Pkwy, Powers Blvd, Mesa Ridge Pkwy and US-85 around Colorado Springs and Fountain](https://coloradostartups.org/maps/space-peak.svg)](https://colorado-startups.github.io/space-peak/map/)
 
-The image shows the Colorado Startups region loop, which is the website's definition, not this project's launch complex (register R-01 to R-05). Click it for the live map, which adds the summits in the brief and the two permanent exclusions. The image is built and credited by coloradostartups.org, and this repository keeps no copy.
+The image shows the Colorado Startups region loop, which is the website's definition, not this project's launch complex (register R-01 to R-05). Click it for the live map, which adds the summits in the brief. The image is built and credited by coloradostartups.org, and this repository keeps no copy.
 
 ## Where the project stands
 
 `00_project_system/MASTER_PLAN.md` gated everything behind one decision: park the idea, publish it, or develop it. That decision is made. **Publish**, under the Space Peak name, as a standalone piece rather than under the Photon Mountain umbrella.
 
-Phase 3 of the master plan is active. Phases 2 and 4 are struck. The live work is drafting the thought-leadership piece, which will live in `03_deliverables/` once written.
+Phase 3 of the master plan is active, and its venue is the spacepeak.co website (Decision 2026-11-16). Phases 2 and 4 are struck.
 
-The repository is public so anyone can contribute. The thought-leadership piece itself has not been published: that is a separate human action under MASTER_PLAN UA 3.2. `deploy-site.yml` is manual-trigger-only and fails by design until someone configures it deliberately.
+The repository is public so anyone can contribute. It is also the source of the spacepeak.co website. Paul gives the production go-live.
 
 ## Contributing
 
@@ -36,7 +36,7 @@ Anyone can contribute: corrections, sources, drafts, questions and tooling. Star
 04_tools/            The rules file, the four checkers and the map data builder.
 docs/                Contributor start-here.
 local/               Operational files. Gitignored; the reviewer reads every path in the diff.
-.claude/             The exclusion hook, two skills, one agent, settings.
+.claude/             Two skills, one agent, settings.
 .github/             CI, templates, CODEOWNERS, ruleset definitions.
 quality/             Git Crafter Quality and Process page configs.
 ```
@@ -47,28 +47,18 @@ quality/             Git Crafter Quality and Process page configs.
 
 This project's real risk is not a leaked credential. It is a speculative mountain fact hardening into an asserted one somewhere between a draft and a published piece, with nobody able to point at the moment it happened. The register is every checkable claim with a status, machine-readable so a checker can act on it.
 
-**Two rows are frozen and never change:**
-
-| Site | Why |
-| --- | --- |
-| **Blanca Peak** | Sisnaajini, sacred to the Navajo. |
-| **Crestones / Great Sand Dunes** | A National Park and the wilderness beside it. |
-
-Neither is an engineering judgement, so neither is revisable by better engineering. The concept brief describes Blanca as high, southern, and on paper near-perfect, one clause before excluding it. That is precisely why the row is frozen rather than merely ranked low: a good engineering case is the pressure that erodes a non-engineering answer over time, one reasonable-sounding draft at a time.
-
 ### `04_tools/space_peak_rules.json`
 
-Every term, cue list, severity, limit and exemption, in one machine-readable file. Nothing in this repository hardcodes a rule that belongs there. `04_tools/space_peak_contract_test.py` asserts that the prose surfaces (this file, `AGENTS.md`, `voice.md`, `CONTRIBUTING.md`, the register) still agree with it, so a new rule cannot be added without being registered and the surfaces cannot drift apart in silence.
+Every term, cue list, severity, limit and exemption, in one machine-readable file. Nothing in this repository hardcodes a rule that belongs there. `04_tools/space_peak_contract_test.py` asserts that every check is classified there and that the exempt list stays honest, so a new rule cannot be added without being registered.
 
 ## Enforcement: what a green check means
 
 Two checks are required on `main`: `ci / ci-ok` and `DCO`. `ci / ci-ok` is the verdict of `.github/workflows/ci.yml`, which calls Git Crafter's `ci-standard.yml` and runs every Space Peak checker in one short job. A pull request cannot merge until both pass. The org ruleset "Protect default branches" also blocks deletion and force-push, and sends every change through a pull request.
 
-The checkers run in two places, from one definition:
+Where the checks run:
 
 | Control | Where | Blocking? |
 | --- | --- | --- |
-| Permanent exclusions, during a Claude Code session | `.claude/hooks/space-peak-check-exclusions.sh` | **Yes** |
 | Everything, on every pull request, forks included | `.github/workflows/ci.yml` | **Yes**, required on `main` |
 | Secrets | GitHub secret scanning with push protection | **Yes**, at push |
 
@@ -78,9 +68,9 @@ CI covers every path a change can take: a laptop, the web UI, a fork or a cloud 
 
 Severity comes from `04_tools/space_peak_rules.json`, following the rule *block on the certain, warn on the likely*. Blocking on a heuristic teaches people to bypass the gate, which costs more than it saves.
 
-Blocking: the two dash checks, `exclusion-proposed` and `frozen-row-edit`. Everything else warns. The lists live in `severity` in the rules file, and nowhere else.
+Blocking: the two dash checks. Everything else warns. The lists live in `severity` in the rules file, and nowhere else.
 
-A checker that cannot run exits 3. The exclusion hook treats that as a pass; in CI it fails the job, since a runner always has `python3`. Could not verify is not the same as verified and red.
+A checker that cannot run exits 3. In CI that fails the job, since a runner always has `python3`. Could not verify is not the same as verified and red.
 
 ### Where the required checks are defined
 
@@ -106,11 +96,11 @@ The same workflow serves the map in `03_deliverables/map/` at `/map/`. The map s
 
 ## A template for sibling projects
 
-This scaffolding is built to be copied into sibling projects such as Photon Mountain and Fusion Canyon. The parts worth copying are the rules-in-data pattern, the contract test and the one blocking hook. So is the one-definition-many-call-sites shape, which keeps the harness and CI from disagreeing.
+This scaffolding is built to be copied into sibling projects such as Photon Mountain and Fusion Canyon. The parts worth copying are the rules-in-data pattern and the contract test. So is the one-definition-many-call-sites shape, which keeps the harness and CI from disagreeing.
 
 ## License
 
-Everything Colorado Startups wrote here is dedicated to the public domain under [CC0 1.0](LICENSE). Use it for anything, with no credit needed. The code (`04_tools/`, `.claude/hooks/`, `.github/workflows/`) is also offered under [0BSD](LICENSES/0BSD.txt), whichever you prefer.
+Everything Colorado Startups wrote here is dedicated to the public domain under [CC0 1.0](LICENSE). Use it for anything, with no credit needed. The code (`04_tools/`, `.github/workflows/`) is also offered under [0BSD](LICENSES/0BSD.txt), whichever you prefer.
 
 Two things here belong to others and keep their own terms:
 

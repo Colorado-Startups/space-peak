@@ -8,11 +8,6 @@ body:
       value: |
         Use this when a row in `02_substance/claims_register.md` should change
         status, or when you have found a source for something marked `unverified`.
-
-        **Not for the two frozen rows.** Blanca Peak and the Crestones / Great
-        Sand Dunes are permanent exclusions, not claims awaiting diligence.
-        Neither is an engineering judgement and neither changes because the
-        engineering case improves.
   - type: input
     id: claim-id
     attributes:

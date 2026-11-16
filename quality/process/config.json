@@ -1,5 +1,5 @@
 {
- "comment": "Space Peak's Process page config and maps file, from Git Crafter templates/process (v4.1.0). Fusion Canyon's seven maps plus guard, which scores the one blocking Claude hook kept here (the permanent-exclusion guard). Steps whose metric sits on a dropped Quality tab are dropped. Keys: Git Crafter actions/pages/action.yml; maps: pages/maps/README.md.",
+ "comment": "Space Peak's Process page config and maps file, from Git Crafter templates/process (v4.1.0). Fusion Canyon's seven maps plus guard, which scores Claude hooks (none are wired now). Steps whose metric sits on a dropped Quality tab are dropped. Keys: Git Crafter actions/pages/action.yml; maps: pages/maps/README.md.",
  "repos": [
   "space-peak"
  ],

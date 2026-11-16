@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "spacepeak",
+  // The Colorado Startups account, so Wrangler never picks another account the same login sees.
+  "account_id": "437b80fdd39fee1c4daab6da32fa5aeb",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./site/dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "workers_dev": true,
+  "preview_urls": true,
+  "previews": {}
+}

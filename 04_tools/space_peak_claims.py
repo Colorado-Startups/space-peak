@@ -42,11 +42,13 @@ Retune there, not by scattering conditions through the file.
 Usage:
   python3 space_peak_claims.py --register 02_substance/claims_register.md FILE ...
   python3 space_peak_claims.py --self-test
+  python3 space_peak_claims.py --json [--register PATH]   every claim row as JSON
 
 Exit codes: 0 clean, 1 a blocking finding, 2 usage, 3 could not check.
 """
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -87,7 +89,57 @@ LINK_RE = re.compile(r"\[[^\]]*\]\([^)]+\)|https?://\S+")
 INLINE_CODE_RE = re.compile(r"`[^`]*`")
 SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
 ROW_RE = re.compile(r"^\|\s*([A-Z]-\d+|\*\*[^|]+\*\*)\s*\|(.+)$")
-STATUS_RE = re.compile(r"`(unverified|verified|corrected|unverifiable|open)`")
+STATUSES = ("unverified", "verified", "corrected", "unverifiable", "open")
+STATUS_RE = re.compile(r"`(" + "|".join(STATUSES) + r")`")
+# Claim tables: a header with these columns (Site is optional). The site's
+# site/src/lib/claims/parse.ts reads the same tables; claims-parse.test.ts
+# asserts both give equal rows.
+CLAIM_COLUMNS = ("id", "claim", "status", "source", "notes")
+ID_RE = re.compile(r"^([A-Z])-\d+$")
+HEADING_RE = re.compile(r"^##\s+(.+?)\s*$")
+
+
+def split_cells(raw):
+    return [c.strip() for c in raw.strip().strip("|").split("|")]
+
+
+def register_rows(text):
+    """Return every claim-table row as a dict; raise InfraError on a bad row."""
+    rows, seen, section, header = [], set(), "", None
+    for raw in text.splitlines():
+        line = raw.strip()
+        heading = HEADING_RE.match(line)
+        if heading:
+            section, header = heading.group(1), None
+            continue
+        if not line.startswith("|"):
+            header = None
+            continue
+        cells = split_cells(line)
+        if header is None:
+            names = [c.lower() for c in cells]
+            if all(col in names for col in CLAIM_COLUMNS):
+                header = names
+            continue
+        if set(line) <= set("|-: "):
+            continue
+        if len(cells) != len(header):
+            raise R.InfraError(f"claims row has {len(cells)} cells, header has {len(header)}: {line}")
+        cell = dict(zip(header, cells))
+        id_m = ID_RE.match(cell["id"])
+        if not id_m or cell["id"] in seen:
+            raise R.InfraError(f"bad or duplicate claim id: {cell['id']!r}")
+        seen.add(cell["id"])
+        status = cell["status"].strip("`")
+        if status not in STATUSES:
+            raise R.InfraError(f"{cell['id']}: unknown status {cell['status']!r}")
+        row = {"id": cell["id"], "series": id_m.group(1), "section": section}
+        if "site" in cell:
+            row["site"] = cell["site"]
+        row.update(claim=cell["claim"], status=status,
+                   source=cell["source"], notes=cell["notes"])
+        rows.append(row)
+    return rows
 
 
 def parse_register(path, rules):
@@ -103,7 +155,7 @@ def parse_register(path, rules):
     for raw in text.splitlines():
         if not ROW_RE.match(raw.strip()):
             continue
-        cells = [c.strip() for c in raw.strip().strip("|").split("|")]
+        cells = split_cells(raw)
         if len(cells) < 3:
             continue
         status_m = STATUS_RE.search(raw)
@@ -267,10 +319,20 @@ def _main(argv=None):
     parser.add_argument("--register", default="02_substance/claims_register.md")
     parser.add_argument("--rules", default=None)
     parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("--json", action="store_true",
+                        help="print every claim-table row of --register as JSON")
     args = parser.parse_args(argv)
 
     if args.self_test:
         return self_test()
+    if args.json:
+        try:
+            with open(args.register, encoding="utf-8") as fh:
+                text = fh.read()
+        except OSError as exc:
+            raise R.InfraError(f"cannot read register {args.register}: {exc}")
+        print(json.dumps(register_rows(text), indent=2, ensure_ascii=False))
+        return R.EXIT_OK
     if not args.files:
         parser.print_usage()
         return R.EXIT_USAGE

@@ -1,5 +1,30 @@
 # Space Peak
 
+| | |
+| --- | --- |
+| What | The spacepeak.co website, and the speculative thesis behind it |
+| Preview | [spacepeak.coloradostartups.workers.dev](https://spacepeak.coloradostartups.workers.dev), built from `main` |
+| Go-live on spacepeak.co | Paul gives it |
+| Start | `docs/START-HERE.md`, then `CONTRIBUTING.md` |
+
+```mermaid
+flowchart LR
+  D["data/ and 02_substance/"] --> A["Astro 7 static build<br/>site/ to site/dist"]
+  A --> B["Cloudflare Workers Builds<br/>main and each branch"]
+  B --> C["Workers static assets<br/>wrangler.jsonc, _headers"]
+  C --> P["Preview host"]
+  C -. "Paul's go-live" .-> S["spacepeak.co"]
+```
+
+### Where data lives
+
+| Data | File | Read by |
+| --- | --- | --- |
+| Organisations | `data/orgs/`, one YAML file each | `site/src/content.config.ts` |
+| Mountain claims | `02_substance/claims_register.md` | `site/src/lib/claims/parse.ts` |
+| Map summits and roads | `03_deliverables/map/` | `04_tools/space_peak_map.py` |
+| Brand art and tokens | `site/public/art/`, `site/src/styles/tokens.css` | `scripts/brand/pull.mjs` |
+
 A concept for a ground-based electromagnetic mass driver bored through a Colorado peak, and the case for why cost-to-orbit is the choke point worth attacking.
 
 **A speculative venture thesis, not an engineering proposal.** The physics is sound. The engineering is 2040s-hard. Every fact about a specific mountain in this repository is a starting point for real diligence, not a verified site assessment.
@@ -34,6 +59,9 @@ Anyone can contribute: corrections, sources, drafts, questions and tooling. Star
 02_substance/        The concept brief, and claims_register.md.
 03_deliverables/     The draft, the map (map/), the infographics.
 04_tools/            The rules file, the four checkers and the map data builder.
+site/                The Astro 7 website. wrangler.jsonc deploys site/dist.
+data/                Site data: one YAML file per organisation in data/orgs/.
+scripts/             The brand pull (scripts/brand/pull.mjs).
 docs/                Contributor start-here.
 local/               Operational files. Gitignored; the reviewer reads every path in the diff.
 .claude/             Two skills, one agent, settings.
@@ -78,7 +106,7 @@ A checker that cannot run exits 3. In CI that fails the job, since a runner alwa
 
 ## Running the checks yourself
 
-Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs both self-tests, the contract test, and the claims and voice checkers over every tracked Markdown file, in under a second of work. Its commands are the `short:` block in that file.
+Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs the self-tests, the contract test, and the claims and voice checkers over every tracked Markdown file (the `short:` block). When `site/` changes it also runs `astro check`, the build, vitest and the Playwright axe spec in Chromium (the `standard:` block).
 
 One checker on the Mac is fine while you change it:
 

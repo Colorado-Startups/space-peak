@@ -1,6 +1,11 @@
 # Start here
 
-Fifteen minutes to useful.
+| You want to | Go to |
+| --- | --- |
+| Run the site locally | [3. Set up](#3-set-up-5-min) |
+| Add an organisation | [6. Add an organisation](#6-add-an-organisation) |
+| Know where checks run | [7. Where checks run](#7-where-checks-run) |
+| Fix a mountain claim | `02_substance/claims_register.md` |
 
 ## 1. What this is (5 min)
 
@@ -12,13 +17,22 @@ The sentence that matters: a speculative venture thesis, not an engineering prop
 
 Put each checkable claim about a peak in `02_substance/claims_register.md`, with its status.
 
-## 3. Set up (2 min)
+## 3. Set up (5 min)
 
-Fork the repository on GitHub and clone your fork.
+Fork the repository on GitHub and clone your fork. You need Node 26 or later (`.nvmrc`) and `python3`.
 
-You need `python3`, and nothing else. CI runs the full self-tests on every pull request, so you do not need to run them yourself. The latest run on `main` should be green on the repository's [Actions page](https://github.com/Colorado-Startups/space-peak/actions/workflows/ci.yml). If it is not, the checks are broken and a clean result from them means nothing. Open a Tooling issue.
+```bash
+npm ci
+npm run dev
+```
 
-One quick local check is fine while you change a checker: `python3 04_tools/space_peak_lint.py --self-test`.
+| Command | Does |
+| --- | --- |
+| `npm run dev` | Serves the site at `http://localhost:3320/`; it exits if the port is taken |
+| `npm run build` | Writes the static site to `site/dist` |
+| `npm run check` | Runs `astro check` |
+
+The latest run on `main` should be green on the [Actions page](https://github.com/Colorado-Startups/space-peak/actions/workflows/ci.yml). If it is not, a clean result means nothing: open a Tooling issue.
 
 ## 4. See the checks work (3 min)
 
@@ -44,6 +58,22 @@ python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md
 
 Phase 1's decision is made: publish, standalone, under the Space Peak name. Phases 2 and 4 are struck.
 
-## 6. Make your first contribution
+## 6. Add an organisation
+
+| Way | How |
+| --- | --- |
+| No code | The **Add your organisation** issue form; a maintainer writes the file |
+| Pull request | One YAML file in `data/orgs/`, named for its `id` |
+| Its rules | `site/src/lib/orgs/schema.ts`; examples in `site/test/fixtures/orgs/valid/` |
+
+## 7. Where checks run
+
+| Check | Where |
+| --- | --- |
+| One checker, one test file, the dev server | Your machine, briefly |
+| Claims, voice, self-tests, contract test | CI, every pull request |
+| `astro check`, build, vitest, Playwright and axe | CI, when `site/` changes |
+
+## 8. Make your first contribution
 
 Pick an issue labelled `good first issue`, or bring a source for any `unverified` row in the claims register. `CONTRIBUTING.md` covers the pull request, the sign-off and what the checks do.

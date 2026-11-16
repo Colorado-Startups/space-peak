@@ -66,6 +66,45 @@ Transcribed from the brief's site tour. Every elevation, ownership status, land 
 | S-19 | Blanca Peak | Elevation 14,345 ft | `frozen` | | Row exists only to record the exclusion |
 | S-20 | Blanca Peak | Sisnaajini, sacred to the Navajo | `frozen` | | **Do not.** Do not reclassify |
 
+## Site coordinates
+
+Added 2026-11-15 for the map in `03_deliverables/map/`. Each row places one summit and says nothing else about it. A coordinate is the point USGS GNIS gives for the named summit, rounded to five decimal places. It verifies where the summit is, not any claim about it. The `S-` rows above keep their own status.
+
+Every source is one public query of The National Map Gazetteer (USGS GNIS), layer 5, Landforms, run 2026-11-15:
+
+`https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/5/query?where=gaz_name='NAME' AND state_alpha='CO'&outFields=*&outSR=4326&f=json`
+
+`NAME` is the GNIS name in the Claim column. The feature ID is the `gaz_id` the query returns.
+
+| ID | Site | Claim | Status | Source | Notes |
+| --- | --- | --- | --- | --- | --- |
+| G-01 | Greenhorn / Wet Mtns | Greenhorn Mountain, 37.88145 N, 105.01320 W, per GNIS | `verified` | GNIS 192544 | Not GNIS 175778, an Eagle County namesake |
+| G-02 | Culebra Peak | Culebra Peak, 37.12222 N, 105.18578 W, per GNIS | `verified` | GNIS 193131 | Agrees with the latitude in S-05 |
+| G-03 | Spanish Peaks | West Spanish Peak, 37.37567 N, 104.99370 W, per GNIS | `verified` | GNIS 194402 | One pin for the pair; see below |
+| G-04 | Almagre (Baldy) | Almagre Mountain, 38.79119 N, 104.99346 W, per GNIS | `verified` | GNIS 193402 | "Baldy" is the brief's nickname |
+| G-05 | Pikes Peak | Pikes Peak, 38.84059 N, 105.04491 W, per GNIS | `verified` | GNIS 204770 | |
+| G-06 | Blanca Peak | Blanca Peak, 37.57757 N, 105.48561 W, per GNIS | `verified` | GNIS 192735 | Places the exclusion marker only |
+| G-07 | Crestones / Sand Dunes | Crestone Peak, 37.96682 N, 105.58540 W, per GNIS | `verified` | GNIS 192423 | Places the exclusion marker only |
+
+Notes the table cannot hold:
+
+- **G-03.** The brief names the Spanish Peaks as a pair. The map pins one summit per brief site, and this is the western one. GNIS returns two points for this feature, about 150 m apart per that query, and the map uses the first. East Spanish Peak is GNIS 194412.
+- **G-06 and G-07.** These rows place a marker. The exclusions themselves are S-17 to S-20, which are `frozen`. The map draws Great Sand Dunes National Park as a marker on Crestone Peak, not as an area.
+
+## The Colorado Startups region loop
+
+These rows record the website's definition, not this repository's. On coloradostartups.org, "Space Peak" is also the Colorado Startups region for Colorado Springs and Fountain. That region is a loop of major roads. It is not a launch complex and says nothing about where a mass driver would go. The map draws it as its own layer.
+
+Every row cites one source: `Colorado-Startups/coloradostartups.org`, `data/geo/regions.geojson`, feature `space-peak`, at commit `37232431f9bab6a2a3cb2e09701642f40b446187`. That repository's `data/geo/README.md` says the loop is traced from US Census TIGERweb road lines and was measured on 2026-11-15.
+
+| ID | Claim | Status | Source | Notes |
+| --- | --- | --- | --- | --- |
+| R-01 | The loop is closed by I-25, Interquest Pkwy, Powers Blvd, Mesa Ridge Pkwy and US-85 | `verified` | Field `roads` | A proposal, not a legal line |
+| R-02 | Its corner cities are Colorado Springs and Fountain | `verified` | Field `cities` | |
+| R-03 | It encloses 89 sq mi, per the website | `verified` | Field `area_sq_mi` | A shoelace check of the ring here gave 89.2 sq mi |
+| R-04 | Its widest span is 22.7 mi, per the website | `verified` | Field `span_mi` | A haversine check of the ring here gave 22.85 mi |
+| R-05 | It is 0.94 times the website's Silicon Valley loop, per the website | `verified` | Field `vs_silicon_valley` | US-101, I-280, CA-84; 95 sq mi, per the website |
+
 ## Physics and engineering claims
 
 The brief calls the physics sound and the engineering 2040s-hard. These are the figures carrying that claim, and none is cited.
@@ -101,7 +140,7 @@ The brief calls the physics sound and the engineering 2040s-hard. These are the 
 
 ## How to add a row
 
-1. Give it an ID in the right series (`S-`, `P-`, `E-`, `N-`).
+1. Give it an ID in the right series (`S-`, `G-`, `R-`, `P-`, `E-`, `N-`).
 2. State the claim in one sentence, no em dashes.
 3. Start it at `unverified` unless you are adding it with a source in hand.
 4. If you verified it, fill the source column with something a reader can follow.

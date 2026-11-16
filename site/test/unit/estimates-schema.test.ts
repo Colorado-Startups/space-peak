@@ -30,5 +30,6 @@ describe("draft estimates", () => {
     expect(() => parseEstimate("q-01.yaml", good.replace("approved: false", "approved: true"))).toThrow();
     expect(() => parseEstimate("q-01.yaml", good.replace("p: 0.07", "p: 1"))).toThrow();
     expect(() => parseEstimate("q-09.yaml", good)).toThrow(/filename/);
+    expect(() => parseEstimate("q-01.yaml", good.replace(/^sources:[\s\S]*?(?=^estimator:)/m, ""))).toThrow();
   });
 });

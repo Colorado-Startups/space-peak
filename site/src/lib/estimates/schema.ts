@@ -2,6 +2,7 @@
 // An estimate is an opinion: it never counts as verified and never enters schema.org output.
 import { parse } from "yaml";
 import { z } from "zod";
+import { sourceSchema } from "../orgs/schema";
 
 const files = import.meta.glob("../../../../data/estimates/*.yaml", { query: "?raw", import: "default", eager: true });
 
@@ -15,6 +16,7 @@ export const estimateSchema = z.strictObject({
   p: z.number().gt(0).lt(1),
   reasoning: z.string().trim().refine((r) => sentences(r) >= 3 && sentences(r) <= 5, "reasoning is 3 to 5 sentences"),
   claims: z.array(z.string().regex(/^[A-Z]-\d+$/)).min(1),
+  sources: z.array(sourceSchema).min(1),
   estimator: z.literal(ESTIMATOR),
   date: z.iso.date(),
   approved: z.literal(false),

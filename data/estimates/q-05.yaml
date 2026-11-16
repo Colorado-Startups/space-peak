@@ -6,10 +6,15 @@ resolves:
 p: 0.3
 reasoning: >-
   Register row E-03 says reusable rockets already cut dollars per kilogram tenfold, and that row is unverified.
-  Wikipedia's Falcon 9 page, read 2026-11-16, gives 74 million dollars a launch and 17,500 kg to low Earth orbit when reused.
+  Wikipedia's Falcon 9 page gives 74 million dollars a launch and 17,500 kg to low Earth orbit when reused.
   That works out to about 4,230 dollars per kg, so the question needs another fourfold cut.
-  Starship could make that cut, but SpaceX has no published Starship price as of a search the same day.
+  A fully reusable heavy rocket is the likeliest route to that cut, and none has a published price in that source.
 claims: [E-03]
+sources:
+  - id: wikipedia-falcon-9
+    url: https://en.wikipedia.org/wiki/Falcon_9
+    publisher: Wikipedia
+    read: 2026-11-16
 estimator: Draft by Claude for Paul's review
 date: 2026-11-16
 approved: false

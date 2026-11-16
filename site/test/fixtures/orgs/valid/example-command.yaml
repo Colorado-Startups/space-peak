@@ -1,0 +1,27 @@
+# Fictional fixture: every field, every optional field set.
+id: example-command
+name: Example Space Command
+summary: A fictional command used only to test the organisation schema.
+kind: command_base
+subkind: command
+city: colorado-springs
+area: loop
+fact:
+  text: The example command is fictional.
+  source: example-page
+sources:
+  - id: example-page
+    url: https://example.org/command
+    publisher: Example Publisher
+    read: 2026-11-01
+    quote: This command does not exist.
+location:
+  lat: 38.8339
+  lon: -104.8214
+  precision: campus
+  method: Read from the example site map.
+  source: example-page
+cs_ref:
+  collection: orgs
+  id: example-command
+status: active

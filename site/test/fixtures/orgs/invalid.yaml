@@ -1,0 +1,21 @@
+# Each case patches valid/example-command.yaml and must fail at `path`.
+- { path: id, patch: { id: Not_Kebab } }
+- { path: name, patch: { name: "" } }
+- { path: summary, patch: { summary: "{long}" } }
+- { path: kind, patch: { kind: agency } }
+- { path: subkind, patch: { subkind: startup } }
+- { path: city, patch: { city: denver } }
+- { path: area, patch: { area: far } }
+- { path: fact.source, patch: { fact: { text: A fact., source: missing } } }
+- { path: sources, patch: { sources: [] } }
+- { path: sources.0.url, patch: { sources: [{ id: example-page, url: "http://example.org", publisher: P, read: 2026-11-01 }] } }
+- { path: sources.0.read, patch: { sources: [{ id: example-page, url: "https://example.org", publisher: P, read: 2999-01-01 }] } }
+- { path: sources.0.read, patch: { sources: [{ id: example-page, url: "https://example.org", publisher: P, read: 1 Nov 2026 }] } }
+- { path: sources.0.quote, patch: { sources: [{ id: example-page, url: "https://example.org", publisher: P, read: 2026-11-01, quote: "one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen" }] } }
+- { path: sources.1.id, patch: { sources: [{ id: example-page, url: "https://example.org", publisher: P, read: 2026-11-01 }, { id: example-page, url: "https://example.org", publisher: Q, read: 2026-11-01 }] } }
+- { path: location.source, patch: { location: { lat: 38.8, lon: -104.8, precision: point, method: GPS., source: missing } } }
+- { path: location.precision, patch: { location: { lat: 38.8, lon: -104.8, precision: street, method: GPS., source: example-page } } }
+- { path: location.lat, patch: { location: { lat: 91, lon: -104.8, precision: point, method: GPS., source: example-page } } }
+- { path: cs_ref.id, patch: { cs_ref: { collection: orgs, id: Bad Id } } }
+- { path: status, patch: { status: open } }
+- { path: "", patch: { website: "https://example.org" } }

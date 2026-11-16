@@ -4,7 +4,8 @@ name: ci
 # plus DCO. One short job runs every Space Peak check in under a second: the claims checker (claim
 # labels; it only warns), the voice lint (blocks only on dashes), the self-tests, the
 # contract test and the map --check. The map check reads the website's regions.geojson at the commit
-# 04_tools/space_peak_map.py pins as WEBSITE_COMMIT. No paths filter, so every pull request runs it. No standard job: there is no build or suite.
+# 04_tools/space_peak_map.py pins as WEBSITE_COMMIT. No paths filter, so every pull request runs it.
+# The standard job (npm ci, then astro check, astro build, vitest with v8 coverage) runs when the site's files change.
 # Dependabot's github-actions entry bumps the pin.
 on:
   pull_request:
@@ -31,3 +32,13 @@ jobs:
         python3 -I 04_tools/space_peak_map.py --check --region-geojson "$RUNNER_TEMP/regions.geojson"
         git ls-files -z '*.md' | xargs -0 python3 -I 04_tools/space_peak_claims.py --register 02_substance/claims_register.md
         git ls-files -z '*.md' | xargs -0 python3 -I 04_tools/space_peak_lint.py
+      standard-paths: |
+        site/**
+        package.json
+        package-lock.json
+        .nvmrc
+        wrangler.jsonc
+      standard: |
+        npm run check
+        npm run build
+        npm test

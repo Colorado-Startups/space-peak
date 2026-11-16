@@ -1,0 +1,10 @@
+---
+import Base from "../layouts/Base.astro";
+import { liveLinks } from "../lib/nav";
+const map = liveLinks().find((link) => link.label === "Map");
+---
+<Base title="Space Peak" description="Colorado's hub for the future of space.">
+  <h1>Space Peak</h1>
+  <p>Colorado's hub for the future of space.</p>
+  {map && <a class="button" href={map.href}>Explore the map</a>}
+</Base>

@@ -1,0 +1,8 @@
+---
+import { liveLinks } from "../lib/nav";
+const links = liveLinks();
+---
+<header>
+  <a class="brand" href="/">Space Peak</a>
+  {links.length > 0 && <nav aria-label="Main">{links.map((l) => <a href={l.href}>{l.label}</a>)}</nav>}
+</header>

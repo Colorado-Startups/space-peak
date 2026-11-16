@@ -1,0 +1,14 @@
+{
+  "name": "spacepeak-root",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=26" },
+  "workspaces": ["site"],
+  "scripts": {
+    "dev": "npm run -w @spacepeak/site dev",
+    "build": "npm run -w @spacepeak/site build",
+    "check": "npm run -w @spacepeak/site check",
+    "test": "npm run -w @spacepeak/site test"
+  },
+  "allowScripts": { "fsevents": false, "esbuild@0.28.2": true, "workerd@1.20261023.1": true }
+}

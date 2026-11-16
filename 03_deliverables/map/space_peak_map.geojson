@@ -4,7 +4,7 @@
   "by": "04_tools/space_peak_map.py",
   "date": "2026-11-16",
   "register": "02_substance/claims_register.md",
-  "register_git_blob": "ba87e01c657d2148ea3b80a49240ca0d7e43478b",
+  "register_git_blob": "d01dbd966afac918164f665abf05c48105688ce8",
   "license": "CC0-1.0"
  },
  "features": [
@@ -879,7 +879,7 @@
      {
       "id": "S-16",
       "claim": "National Historic Landmark",
-      "status": "unverified"
+      "status": "verified"
      }
     ]
    },

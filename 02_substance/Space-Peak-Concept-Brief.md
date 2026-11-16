@@ -78,14 +78,14 @@ Selection criteria, in priority order: **southern latitude** (more free spin fro
 The formula behind Silicon Valley: *the field* + *the type of place*, both words boring, poetry emerging on its own. The minute a name tries to be clever it becomes a condo development (RIP "Cloudstation Peak").
 
 - **Space** = the field, not one product inside it. (Not "Aero", nobody there builds airplanes. Not "Radar", too narrow. And not "Satellite", which an earlier draft of this brief argued for: a satellite is a product, and the corridor does launch, ground systems and space science as well as satellites. The field name covers all of that. The product name covers a quarter of it.)
-- **Peak** = geographically the city sits in a valley at 6,035 ft (unverified), but *culturally* Peak is the identity Colorado Springs actually chose: the "Pikes Peak Region," "Pikes Peak or Bust," "America the Beautiful," whose opening lines came to Katharine Lee Bates on the summit. "Colorado Springs" was itself borrowed branding in 1871 (the springs are in Manitou). The city has always named itself after the thing it looks *up* at.
+- **Peak** = geographically the city sits in a valley at 6,035 ft (unverified), but *culturally* Peak is the identity Colorado Springs actually chose: the "Pikes Peak Region," "Pikes Peak or Bust," "America the Beautiful," whose opening lines came to Katharine Lee Bates on the summit. "Colorado Springs" was itself borrowed branding in 1871 (unverified; the springs are in Manitou). The city has always named itself after the thing it looks *up* at.
 - And in the mass-driver future, "Peak" stops being a metaphor and becomes the **job description**, peaks as launch sites, the way "valley" meant fabs.
 
 **Naming lineage of this idea:** Silicon Valley → Space Peak. Each a bet on the era's defining field, named after the kind of place that field gets built in.
 
 It also matches its siblings. Photon Mountain and Fusion Canyon name a field plus a landform. "Satellite Peak" would have been the one product name in a family of fields.
 
-*(Nature footnote, because it's the good kind of true: evolution independently prototyped nearly every component of spaceflight and never assembled the rocket, because it never needed to leave; the jet (squid), the catapult (mantis shrimp / firing spores, the mass-driver's ancestor), the cable (spider silk, the tether's), the vacuum grip (gecko feet, already tested by NASA aboard the space station), the survival suit (tardigrade), the deploy mechanism (pinecone). We're the assembly step.)*
+*(Nature footnote, because it's the good kind of true: evolution independently prototyped nearly every component of spaceflight and never assembled the rocket, because it never needed to leave; the jet (squid), the catapult (mantis shrimp / firing spores, the mass-driver's ancestor), the cable (spider silk, the tether's), the vacuum grip (gecko feet; NASA has tested gecko-inspired grippers aboard the space station), the survival suit (tardigrade), the deploy mechanism (pinecone). We're the assembly step.)*
 
 ---
 

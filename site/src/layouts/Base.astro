@@ -1,4 +1,5 @@
 ---
+import "../styles/index.css";
 import HeadMeta from "../components/HeadMeta.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -8,11 +9,3 @@ const { title, description } = Astro.props as { title: string; description: stri
   <head><HeadMeta title={title} description={description} /></head>
   <body><Header /><main><slot /></main><Footer /></body>
 </html>
-<style is:global>
-  :root { --ink: #000; --paper: #fff; --pink: #c67273; color-scheme: light; }
-  body { margin: 0; padding: 0 1rem; background: var(--paper); color: var(--ink); font-family: system-ui, sans-serif; }
-  header, main, footer { max-width: 60rem; margin: 0 auto; padding-block: 1rem; }
-  header { display: flex; gap: 1rem; justify-content: space-between; }
-  a { color: inherit; }
-  .button { display: inline-block; padding: 0.75rem 1.25rem; background: var(--pink); color: var(--paper); text-decoration: none; }
-</style>

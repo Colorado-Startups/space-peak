@@ -1,0 +1,12 @@
+/* Space Peak's own tokens, on top of the brand's light tokens.css. White pages,
+   black only for text, granite pink leads the colour (issue #48). */
+:root {
+  --c-ink: #000000;
+  --c-text: var(--c-ink);
+  --c-region-space-peak: #C67273;
+  --c-on-region-space-peak: #000A33;
+  --c-kind-blue: #001970;
+  --c-kind-green: #245D38;
+  --c-kind-purple: #6D3A5D;
+  --c-kind-yellow: #FFD100;
+}

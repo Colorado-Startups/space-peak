@@ -26,6 +26,8 @@ files rather than inside one:
   C13 is_exempt() honours every exempt glob C5 says is live.
   C14 Every Git Crafter pin is one full SHA with its version comment, and
       every Quality pack is pinned by a full SHA.
+  C15 .claude/settings.json denies every rule claude_settings.required_deny
+      lists in the rules file.
 
 C9 and C10 exist because of the house rule "a comment claiming a call site
 that the settings file does not wire is a defect in its own right. Check
@@ -214,6 +216,11 @@ def main():
         unwired = sorted(on_disk - wired)
         check("C10 every hook on disk is wired in settings", not unwired,
               f"present but never fires: {unwired}")
+        deny = set(settings.get("permissions", {}).get("deny", []))
+        required = R.terms(rules, "claude_settings", "required_deny")
+        lost = [r for r in required if r not in deny]
+        check("C15 settings deny every required rule", bool(required) and not lost,
+              f"missing deny rules: {lost}" if required else "required_deny is empty")
     else:
         check("C9 every wired hook exists", False, f"{settings_rel} is absent")
         check("C10 every hook on disk is wired in settings", False,

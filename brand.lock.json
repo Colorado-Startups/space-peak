@@ -1,0 +1,26 @@
+{
+  "comment": "The brand release Space Peak uses, read by scripts/brand/pull.mjs. files: hashes from the release's own table (v4.4.0 notes). outputs: written by the pull. Change the tag and hashes together, then run node scripts/brand/pull.mjs.",
+  "repo": "Colorado-Startups/brand",
+  "tag": "v4.4.0",
+  "files": {
+    "dist/tokens.css": "06c78451e8a3fbb43666020aec4899870435a7d3f2de8690b7807b62ebaf501c",
+    "dist/crests/space-peak-512.png": "b6bc7267ca47af76efb7f5dfb67ffb01d7a28b84f33540f68a359ec7dfa9623d",
+    "dist/places/springs.jpg": "ee02ac74c6bbfb611a0d0be2ed084d6f91bfd9f1f50e1f8939e084642c1c770b",
+    "dist/clips/space.webm": "14f15e8eef47da9f31356f284e3b13ae768b08797f9e6986e1af5efadb9e8c5b",
+    "dist/clips/space.mp4": "9801857698ae986930ba2da7f8b4c6a530ab6249f57fd649d3de68096f9fb615",
+    "dist/social/space-peak.jpg": "39e3148547f11b25df2afc7bfa753d2b424959ccc077c3c54d0896b8a6d99fee",
+    "dist/logo/favicon.ico": "238da7a1fb8cfa6bb0b860b0a4dc519ba453c6581bf2f882898f14d6516d4dda"
+  },
+  "outputs": {
+    "site/src/styles/tokens.css": "4c5ce9be21b189a22abc5ec67b8b53c298d71d53a6c9e5e5555bc2ced73123e2",
+    "site/public/art/crest-96.webp": "147f583cb50ed5a4edb58ff08f5b29e189e0088e022f095eead9c342127c4707",
+    "site/public/art/crest-192.webp": "a4b21d494d890d0caa290d370fede20fbdf3467483a0a7a65399fd96a3912415",
+    "site/public/art/crest-384.webp": "9077299d3fbceceb7d9785ed420f85f845978d388aa556333d5d6e339a139383",
+    "site/public/art/springs-720.webp": "42fff77c14f848471ec53dbfa3aa6788060117cce1566823b4039af809c1ccb2",
+    "site/public/art/springs-1440.webp": "84cb954c2f1746daac5334426e41f8c5c2692ce92d86780f76b1d77c78d602db",
+    "site/public/art/space.webm": "14f15e8eef47da9f31356f284e3b13ae768b08797f9e6986e1af5efadb9e8c5b",
+    "site/public/art/space.mp4": "9801857698ae986930ba2da7f8b4c6a530ab6249f57fd649d3de68096f9fb615",
+    "site/public/art/space-peak.jpg": "39e3148547f11b25df2afc7bfa753d2b424959ccc077c3c54d0896b8a6d99fee",
+    "site/public/favicon.ico": "238da7a1fb8cfa6bb0b860b0a4dc519ba453c6581bf2f882898f14d6516d4dda"
+  }
+}

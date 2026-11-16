@@ -1,0 +1,8 @@
+@import "./tokens.css";
+@import "./space-peak.css";
+
+body { margin: 0; padding: 0 1rem; background: var(--c-ground); color: var(--c-text); font-family: system-ui, sans-serif; }
+header, main, footer { max-width: 60rem; margin: 0 auto; padding-block: 1rem; }
+header { display: flex; gap: 1rem; justify-content: space-between; }
+a { color: inherit; }
+.button { display: inline-block; padding: 0.75rem 1.25rem; background: var(--c-region-space-peak); color: var(--c-on-region-space-peak); text-decoration: none; }

@@ -1,22 +1,29 @@
 {
- "comment": "Space Peak's Quality, Speed and Consumption config, from Git Crafter templates/quality (v4.1.0). Dropped for now: design, usability and deploy, which return with the spacepeak.co website, and projects (no board). Keys: Git Crafter quality/CONFIG.md.",
+ "comment": "Space Peak's Quality, Speed and Consumption config, from Git Crafter templates/quality (v7.0.2). Projects is off (no board). The Claudius pack adds six Claude tabs and compute-crafter adds Credits; a pack's tabs join only the default list, so each id is listed here. web turns on Pages for spacepeak.co. Keys: Git Crafter quality/CONFIG.md.",
  "tabs": [
   "code",
   "documentation",
   "issues",
   "pull-requests",
+  "discussions",
   "actions",
-  "tests",
   "security",
+  "dependabot",
+  "scanning",
   "insights",
   "settings",
+  "pages",
   "claude",
   "claude-settings",
   "desktop-app",
   "blockers",
   "tokens",
   "instructions",
-  "credits",
-  "tools"
+  "credits"
+ ],
+ "web": true,
+ "packs": [
+  "Colorado-Startups/claudius@7c1453ae46d85bb5ce82397e2b23c3b5e8769ceb",
+  "SoulCraft-Org/compute-crafter@a1c6d5b6d5b05d4d4ffe650cd4374927d210bc9c"
  ]
 }

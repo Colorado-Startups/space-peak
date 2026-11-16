@@ -24,6 +24,8 @@ files rather than inside one:
   C10 Every hook file on disk is actually wired in .claude/settings.json.
   C11 No workflow reimplements a check inline instead of calling a script.
   C13 is_exempt() honours every exempt glob C5 says is live.
+  C14 Every Git Crafter pin is one full SHA with its version comment, and
+      every Quality pack is pinned by a full SHA.
 
 C9 and C10 exist because of the house rule "a comment claiming a call site
 that the settings file does not wire is a defect in its own right. Check
@@ -232,6 +234,26 @@ def main():
             inline.append(rel)
     check("C11 no workflow reimplements a check inline", not inline,
           f"inline check logic in: {inline}")
+
+    # --- pins -------------------------------------------------------------
+    # ci.yml and pages.yml must move together, and a pack's collectors run in
+    # CI, so each is pinned like an action (Git Crafter quality/CONFIG.md).
+    print()
+    print("pins")
+    pins = set()
+    for rel in paths:
+        if rel.startswith(".github/workflows/"):
+            pins |= set(re.findall(
+                r"SoulCraft-Org/git-crafter/\S+@(\S+)( # v\d+\.\d+\.\d+)?",
+                read(rel)))
+    check("C14 one Git Crafter pin, full SHA with version comment",
+          len(pins) == 1 and all(re.fullmatch(r"[0-9a-f]{40}", sha) and tag
+                                 for sha, tag in pins),
+          f"pins: {sorted(pins)}")
+    packs = json.loads(read("quality/config.json")).get("packs", [])
+    loose = [p for p in packs if not re.fullmatch(r"[\w.-]+/[\w.-]+@[0-9a-f]{40}", p)]
+    check("C14 every Quality pack is pinned by a full SHA", not loose,
+          f"not pinned: {loose}")
 
     print()
     failed = [n for n, ok, _ in results if not ok]

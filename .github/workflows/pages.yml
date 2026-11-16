@@ -2,7 +2,7 @@ name: pages
 
 # Git Crafter's pages for this repo (Git Crafter templates/ci/README.md): the Process page and the Quality, Speed and
 # Consumption page, built by Git Crafter's actions/pages from the two starter configs and published to GitHub Pages.
-# Copy this file to .github/workflows/pages.yml. Keep the pin a full commit SHA with its version comment, such as # v4.0.0; Dependabot's
+# Copy this file to .github/workflows/pages.yml. Keep the pin a full commit SHA with its version comment, such as # v7.0.2; Dependabot's
 # github-actions entry bumps it with ci.yml's. A pull request builds the pages and runs the docs.unmapped gate, so its
 # trigger lists the doc globs; only a push to main publishes.
 on:
@@ -48,11 +48,13 @@ jobs:
         with:
           node-version: 26
 
-      - uses: SoulCraft-Org/git-crafter/actions/pages@2967fa33452f5801caef9a85808e05cc89e286b1 # v4.1.0
+      - uses: SoulCraft-Org/git-crafter/actions/pages@8023bd4683416f6d420bd20d137960b09c06b91e # v7.0.2
         with:
           pages: process quality
           config: quality/process/config.json
           quality-config: quality/config.json
+          # Optional read-only token for the metrics that need github-admin; empty leaves them not measured.
+          admin-read-token: ${{ secrets.ADMIN_READ_TOKEN }}
 
       # The Space Peak map (03_deliverables/map) is served beside the two pages, at /map/.
       - name: Add the map

@@ -1,5 +1,5 @@
 {
- "comment": "Space Peak's Process page config and maps file, from Git Crafter templates/process (v4.1.0). Fusion Canyon's seven maps plus guard, which scores Claude hooks (none are wired now). Steps whose metric sits on a dropped Quality tab are dropped. Keys: Git Crafter actions/pages/action.yml; maps: pages/maps/README.md.",
+ "comment": "Space Peak's Process page config and maps file, from Git Crafter templates/process (v7.0.2). Fusion Canyon's seven maps, plus guard and decide from the Claudius pack, found through quality_config. Contribute keeps its deploy step: its metric is on the Pages tab, which web turns on. Triage drops its card step: Projects is off. Keys: Git Crafter actions/pages/action.yml; maps: pages/maps/README.md.",
  "repos": [
   "space-peak"
  ],
@@ -12,12 +12,7 @@
    "use": "delivery"
   },
   {
-   "use": "contribute",
-   "steps": {
-    "deploy": {
-     "drop": true
-    }
-   }
+   "use": "contribute"
   },
   {
    "use": "triage",
@@ -41,8 +36,12 @@
   },
   {
    "use": "guard"
+  },
+  {
+   "use": "decide"
   }
  ],
+ "quality_config": "quality/config.json",
  "data": "quality/process/data/org.json",
  "history": null,
  "out": "quality/dist",

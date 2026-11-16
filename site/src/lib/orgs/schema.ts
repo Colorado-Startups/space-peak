@@ -29,14 +29,15 @@ export const orgSchema = z
     fact: z.strictObject({ text: z.string().trim().min(1), source: kebab }),
     sources: z.array(sourceSchema).min(1),
     location: z.strictObject({
-      lat: z.number().min(-90).max(90),
-      lon: z.number().min(-180).max(180),
+      // Colorado spans about 37 to 41 N and 102.04 to 109.06 W, so a sign slip fails here.
+      lat: z.number().min(36.99).max(41.01),
+      lon: z.number().min(-109.06).max(-102.04),
       precision: z.enum(PRECISIONS),
       method: z.string().trim().min(1),
       source: kebab,
     }),
     cs_ref: z.strictObject({ collection: kebab, id: kebab }).optional(),
-    status: z.enum(STATUSES).optional(),
+    status: z.enum(STATUSES),
   })
   .superRefine((org, ctx) => {
     const subkinds: readonly string[] = SUBKINDS[org.kind];
@@ -55,10 +56,11 @@ export const orgSchema = z
 export type Org = z.infer<typeof orgSchema>;
 
 /** The filename stem, as the content collection and the checker see it. */
-export const fileId = (entry: string) => entry.replace(/^.*\//, "").replace(/\.ya?ml$/, "");
+export const fileId = (entry: string) => entry.replace(/^.*\//, "").replace(/\.yaml$/, "");
 
 /** Throws unless the file's `id` equals its filename stem. */
 export function checkFileId(entry: string, data: Record<string, unknown>): string {
+  if (!entry.endsWith(".yaml")) throw new Error(`${entry}: use the .yaml extension`);
   const stem = fileId(entry);
   if (data.id !== stem) throw new Error(`${entry}: id "${String(data.id)}" must equal the filename "${stem}"`);
   return stem;

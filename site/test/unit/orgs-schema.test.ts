@@ -30,6 +30,10 @@ describe("orgs schema", () => {
     expect(result.error?.issues.map((i) => i.path.join("."))).toContain(path);
   });
 
+  it("rejects a .yml file, so none is skipped in silence", () => {
+    expect(() => checkFileId("orgs/example-command.yml", base)).toThrow(/use the \.yaml extension/);
+  });
+
   it("rejects an id that differs from the filename", () => {
     expect(() => checkFileId("orgs/other-name.yaml", base)).toThrow(/must equal the filename "other-name"/);
   });

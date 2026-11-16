@@ -17,5 +17,7 @@
 - { path: location.precision, patch: { location: { lat: 38.8, lon: -104.8, precision: street, method: GPS., source: example-page } } }
 - { path: location.lat, patch: { location: { lat: 91, lon: -104.8, precision: point, method: GPS., source: example-page } } }
 - { path: cs_ref.id, patch: { cs_ref: { collection: orgs, id: Bad Id } } }
+- { path: location.lon, patch: { location: { lat: 38.8, lon: 104.8, precision: point, method: GPS., source: example-page } } }
 - { path: status, patch: { status: open } }
+- { path: status, patch: { status: null } }
 - { path: "", patch: { website: "https://example.org" } }

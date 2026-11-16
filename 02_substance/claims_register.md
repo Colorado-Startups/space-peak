@@ -112,7 +112,7 @@ Figures in `03_deliverables/infographics/` with no other row, found by the fact 
 | I-02 | "High country about 9,000 ft" at the tunnel's foot | `unverified` | | `03-Mass-driver-cross-section.svg` |
 | I-03 | The Front Range corridor runs about 180 miles along I-25 | `unverified` | | `01-Aerospace-Alley-map.svg` |
 | I-04 | Maxar (satellite imagery) operates in the corridor under that name | `unverified` | | `01-Aerospace-Alley-map.svg`; a search suggests a 2025 rebrand, which needs a primary source |
-| I-05 | The tunnel runs "~15 mi through granite" | `unverified` | | `03-Mass-driver-cross-section.svg`. Conflicts with P-03, about 10 mi at the 200 g target; the label is not yet changed |
+| I-05 | The tunnel runs about 10 mi through granite at the 200 g target | `corrected` | Per P-03: OpenStax, University Physics Volume 1, 3.4, equation 3.14, read 2026-11-16 | `03-Mass-driver-cross-section.svg`. The label said "~15 mi"; changed to match P-03 |
 
 ## Economic and market claims
 

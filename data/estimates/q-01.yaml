@@ -1,0 +1,15 @@
+id: q-01
+question: Will a ground-based kinetic launcher put a payload into Earth orbit by the end of 2040?
+resolves:
+  date: 2040-12-31
+  criteria: Yes if the operator and one independent orbit catalogue report a payload in orbit that left the ground on a mass driver, coilgun, railgun or centrifuge, with at most a small onboard kick motor.
+p: 0.07
+reasoning: >-
+  Orbit needs about 17,500 mph sideways (P-01), and at the 200 g design target that takes a run of about 10 miles (P-03).
+  NewSpace Index, read 2026-11-16, lists the SpinLaunch launcher as in development with no first launch date.
+  The same page says that since August 2025 the company has focused on its Meridian satellite constellation.
+  No funded orbital accelerator was public as of that read, so fourteen years is short for a first build.
+claims: [P-01, P-03]
+estimator: Draft by Claude for Paul's review
+date: 2026-11-16
+approved: false

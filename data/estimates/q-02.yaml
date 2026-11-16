@@ -1,0 +1,15 @@
+id: q-02
+question: Will a ground-based kinetic launcher send a payload above 100 km altitude by the end of 2035?
+resolves:
+  date: 2035-12-31
+  criteria: Yes if the operator publishes tracking data, or a government range reports, an apogee above 100 km for a payload launched by a mass driver, coilgun, railgun or centrifuge without a rocket booster.
+p: 0.12
+reasoning: >-
+  A suborbital shot needs far less speed than orbit (P-01), so it is the natural first public milestone.
+  A search on 2026-11-16 found SpinLaunch's last reported suborbital flight was its tenth, in September 2022.
+  NewSpace Index, read the same day, says the company now leans toward its Meridian constellation.
+  No other kinetic launcher with a public test schedule turned up in that search.
+claims: [P-01]
+estimator: Draft by Claude for Paul's review
+date: 2026-11-16
+approved: false

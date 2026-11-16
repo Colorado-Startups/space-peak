@@ -1,0 +1,15 @@
+id: q-05
+question: Will a launch provider publish a dedicated launch price below 1,000 dollars per kg to low Earth orbit by the end of 2035?
+resolves:
+  date: 2035-12-31
+  criteria: Yes if a provider's own published price for a dedicated launch, divided by its own published reusable payload to low Earth orbit, is below 1,000 nominal US dollars per kg.
+p: 0.3
+reasoning: >-
+  Register row E-03 says reusable rockets already cut dollars per kilogram tenfold, and that row is unverified.
+  Wikipedia's Falcon 9 page, read 2026-11-16, gives 74 million dollars a launch and 17,500 kg to low Earth orbit when reused.
+  That works out to about 4,230 dollars per kg, so the question needs another fourfold cut.
+  Starship could make that cut, but SpaceX has no published Starship price as of a search the same day.
+claims: [E-03]
+estimator: Draft by Claude for Paul's review
+date: 2026-11-16
+approved: false

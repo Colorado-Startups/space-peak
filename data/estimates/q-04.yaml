@@ -1,0 +1,15 @@
+id: q-04
+question: Will the world make more than 500 orbital launch attempts in calendar year 2030?
+resolves:
+  date: 2031-01-31
+  criteria: Yes if the SpaceNews annual count, or Jonathan McDowell's count where SpaceNews gives none, exceeds 500 orbital launch attempts for 2030.
+p: 0.6
+reasoning: >-
+  Register row E-02 puts a busy year at about 250 launches, and that row is unverified and now out of date.
+  AIAA, read 2026-11-16, reports a SpaceNews count of 324 orbital launch attempts in 2025.
+  A search the same day found SpaceNews counted 259 in 2024, so 2025 grew about 25 percent.
+  Ten percent a year from 2025 clears 500 in 2030, but bigger rockets such as Starship could carry more mass in fewer flights.
+claims: [E-02]
+estimator: Draft by Claude for Paul's review
+date: 2026-11-16
+approved: false

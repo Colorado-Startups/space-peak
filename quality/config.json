@@ -1,5 +1,5 @@
 {
- "comment": "Space Peak's Quality, Speed and Consumption config, from Git Crafter templates/quality (v7.0.2). Projects is off (no board). The Claudius pack adds six Claude tabs and compute-crafter adds Credits; a pack's tabs join only the default list, so each id is listed here. web turns on Pages for spacepeak.co. Keys: Git Crafter quality/CONFIG.md.",
+ "comment": "Space Peak's Quality, Speed and Consumption config, from Git Crafter templates/quality (v7.0.2). Projects is off (no board). The Claudius pack adds six Claude tabs and compute-crafter adds Credits; a pack's tabs join only the default list, so each is listed here as [\"id\", \"Name\"], as Claudius's own config does: actions/pages reads this file before it checks a pack out, and a bare pack id is unknown then. web turns on Pages for spacepeak.co. Keys: Git Crafter quality/CONFIG.md.",
  "tabs": [
   "code",
   "documentation",
@@ -13,13 +13,34 @@
   "insights",
   "settings",
   "pages",
-  "claude",
-  "claude-settings",
-  "desktop-app",
-  "blockers",
-  "tokens",
-  "instructions",
-  "credits"
+  [
+   "claude",
+   "Claude"
+  ],
+  [
+   "claude-settings",
+   "Claude settings"
+  ],
+  [
+   "desktop-app",
+   "Claude desktop app"
+  ],
+  [
+   "blockers",
+   "Blockers"
+  ],
+  [
+   "tokens",
+   "Tokens"
+  ],
+  [
+   "instructions",
+   "Instructions"
+  ],
+  [
+   "credits",
+   "Credits"
+  ]
  ],
  "web": true,
  "packs": [

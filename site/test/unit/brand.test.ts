@@ -40,7 +40,7 @@ describe("brand pull", () => {
 
 describe("light only", () => {
   it("ships no dark-theme rules in any stylesheet", () => {
-    for (const p of ["tokens", "space-peak", "index"].map((n) => `site/src/styles/${n}.css`))
+    for (const p of ["tokens", "space-peak", "base", "index"].map((n) => `site/src/styles/${n}.css`))
       expect(read(p), p).not.toMatch(/prefers-color-scheme|data-theme|color-scheme:\s*dark/);
   });
 
@@ -58,8 +58,11 @@ describe("Space Peak colours", () => {
     expect(sp).toContain("--c-text: var(--c-ink);");
     expect(token(sp, "--c-region-space-peak")).toBe("#C67273");
     expect(token(sp, "--c-on-region-space-peak")).toBe("#000A33");
-    const kinds = ["blue", "green", "purple", "yellow"].map((k) => token(sp, `--c-kind-${k}`));
-    expect(kinds).toEqual(["#001970", "#245D38", "#6D3A5D", "#FFD100"]);
+    // Kinds alias the brand's --co-* tokens instead of repeating hex (#58 review).
+    const tokens = read("site/src/styles/tokens.css");
+    const brand = { blue: "co-blue", green: "co-tree-green", purple: "co-purple", yellow: "co-yellow" };
+    for (const [k, co] of Object.entries(brand)) expect(sp).toContain(`--c-kind-${k}: var(--${co});`);
+    expect(Object.values(brand).map((co) => token(tokens, `--${co}`))).toEqual(["#001970", "#245D38", "#6D3A5D", "#FFD100"]);
   });
 
   it("Base.astro imports index.css, and button text is ink on pink at 4.5:1 or better", () => {

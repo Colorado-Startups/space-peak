@@ -3,10 +3,12 @@
 :root {
   --c-ink: #000000;
   --c-text: var(--c-ink);
+  --c-text-dim: #595959; /* neutral grey, 7:1 on white; the brand's is blue (#58 review) */
+  --c-focus: var(--c-region-space-peak); /* pink ring, 3:1 or better on white and surface */
   --c-region-space-peak: #C67273;
   --c-on-region-space-peak: #000A33;
-  --c-kind-blue: #001970;
-  --c-kind-green: #245D38;
-  --c-kind-purple: #6D3A5D;
-  --c-kind-yellow: #FFD100;
+  --c-kind-blue: var(--co-blue);
+  --c-kind-green: var(--co-tree-green);
+  --c-kind-purple: var(--co-purple);
+  --c-kind-yellow: var(--co-yellow);
 }

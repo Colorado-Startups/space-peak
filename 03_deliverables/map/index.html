@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Space Peak map</title>
+<meta name="description" content="Space Peak, a speculative venture thesis: the Colorado Startups region loop around Colorado Springs and Fountain, the summits in the concept brief, and the two permanent exclusions. Every point from USGS GNIS. CC0 data.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#E9ECF0; --surface:#FFFFFF; --surface-2:#F2F4F7; --edge:#D0D6DE;
+  --text:#0E1520; --dim:#4C5868; --faint:#77838F; --accent:#B4531A;
+  --c-region:#C2561B; --c-casing:#2A1A10; --c-site:#1D63A6; --c-excl:#7B1E44;
+  --shadow:0 6px 24px rgba(14,21,32,.14);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#090D13; --surface:#111820; --surface-2:#18212B; --edge:#27323D;
+    --text:#ECF0F5; --dim:#9AA6B3; --faint:#67737F; --accent:#F08A4B;
+    --c-region:#F08A4B; --c-casing:#05070A; --c-site:#6CB4F0; --c-excl:#E58AB0;
+    --shadow:0 6px 24px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#090D13; --surface:#111820; --surface-2:#18212B; --edge:#27323D;
+  --text:#ECF0F5; --dim:#9AA6B3; --faint:#67737F; --accent:#F08A4B;
+  --c-region:#F08A4B; --c-casing:#05070A; --c-site:#6CB4F0; --c-excl:#E58AB0;
+  --shadow:0 6px 24px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--ground);color:var(--text);font:14px/1.45 'Archivo',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--surface);border-bottom:1px solid var(--edge);flex-wrap:wrap}
+header svg{flex:0 0 auto}
+header h1{font-size:1.1rem;font-weight:900;letter-spacing:-.02em;margin:0}
+header .sub{font-family:'DM Mono',ui-monospace,Menlo,monospace;font-size:.7rem;color:var(--faint);letter-spacing:.08em;text-transform:uppercase}
+header nav{margin-left:auto;display:flex;gap:14px;font-family:'DM Mono',ui-monospace,monospace;font-size:.72rem;flex-wrap:wrap}
+.banner{background:color-mix(in srgb,var(--accent) 12%,var(--surface));border-bottom:1px solid var(--edge);padding:7px 16px;font-size:.8rem;color:var(--text)}
+.banner b{color:var(--accent)}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{flex:1;display:flex;min-height:0;position:relative}
+#map{flex:1;min-height:0}
+aside{width:360px;max-width:100%;background:var(--surface);border-left:1px solid var(--edge);overflow:auto;display:flex;flex-direction:column}
+.block{padding:14px 16px;border-bottom:1px solid var(--edge)}
+.eyebrow{font-family:'DM Mono',ui-monospace,monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.legend{display:flex;flex-direction:column;gap:7px;margin:0;padding:0;list-style:none}
+.legend label{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.86rem}
+.legend input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.legend .tag{margin-left:auto;font-family:'DM Mono',ui-monospace,monospace;font-size:.66rem;color:var(--faint)}
+.sw-region{width:18px;height:12px;border:3px solid var(--c-region);background:color-mix(in srgb,var(--c-region) 18%,transparent);box-shadow:0 0 6px var(--c-region);flex:0 0 auto}
+.sw-site{width:12px;height:12px;border-radius:50%;background:var(--c-site);border:1.5px solid var(--surface);box-shadow:0 0 0 1px var(--c-site);flex:0 0 auto}
+.sw-excl{width:14px;height:14px;flex:0 0 auto}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{font:500 .74rem 'DM Mono',ui-monospace,monospace;background:var(--surface-2);color:var(--text);border:1px solid var(--edge);padding:7px 10px;cursor:pointer;border-radius:4px}
+.controls button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+table.facts{width:100%;border-collapse:collapse;font-size:.82rem}
+table.facts th{text-align:left;font-weight:500;color:var(--dim);padding:5px 8px 5px 0;vertical-align:top;white-space:nowrap}
+table.facts td{padding:5px 0;vertical-align:top}
+table.facts td .src{display:block;font-family:'DM Mono',ui-monospace,monospace;font-size:.64rem;color:var(--faint)}
+.lists ul{list-style:none;margin:0;padding:0}
+.lists li button{all:unset;display:flex;gap:10px;align-items:flex-start;width:100%;padding:9px 16px;cursor:pointer;border-bottom:1px solid var(--edge);box-sizing:border-box}
+.lists li button:hover,.lists li button:focus-visible{background:var(--surface-2)}
+.lists .n{font-weight:700;font-size:.86rem;line-height:1.25}
+.lists .t{font-family:'DM Mono',ui-monospace,monospace;font-size:.68rem;color:var(--faint)}
+.lists .sw-site,.lists .sw-excl{margin-top:3px}
+.lists .head{padding:14px 16px 4px;margin:0}
+.lists .why{padding:0 16px 8px;margin:0;font-size:.76rem;color:var(--dim)}
+.excl-block{border-top:3px solid var(--c-excl)}
+.note{font-family:'DM Mono',ui-monospace,monospace;font-size:.68rem;color:var(--faint);line-height:1.6;margin:0}
+.maplibregl-popup-content{background:var(--surface);color:var(--text);border:1px solid var(--edge);border-radius:6px;box-shadow:var(--shadow);padding:12px 14px;max-width:300px;font-family:'Archivo',system-ui,sans-serif}
+.maplibregl-popup-tip{border-top-color:var(--surface)!important;border-bottom-color:var(--surface)!important}
+.maplibregl-popup-close-button{color:var(--dim);font-size:18px;padding:0 6px}
+.pop-cat{font-family:'DM Mono',ui-monospace,monospace;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;margin:0 0 4px}
+.pop-name{font-weight:800;font-size:.98rem;margin:0 0 2px;line-height:1.2}
+.pop-sub{font-family:'DM Mono',ui-monospace,monospace;font-size:.7rem;color:var(--faint);margin:0 0 8px}
+.pop-note{font-size:.84rem;margin:0 0 8px;color:var(--dim)}
+.pop-claims{margin:0 0 8px;padding:0;list-style:none;font-size:.8rem}
+.pop-claims li{margin:0 0 5px}
+.pop-claims .st{font-family:'DM Mono',ui-monospace,monospace;font-size:.62rem;border:1px solid var(--edge);border-radius:3px;padding:0 4px;margin-right:5px;color:var(--accent)}
+.pop-src{font-family:'DM Mono',ui-monospace,monospace;font-size:.7rem}
+.maplibregl-ctrl-attrib{font-size:10px}
+#status{position:absolute;left:12px;bottom:28px;background:var(--surface);border:1px solid var(--edge);padding:8px 10px;font-family:'DM Mono',ui-monospace,monospace;font-size:.72rem;color:var(--dim);box-shadow:var(--shadow)}
+@media (max-width: 760px){
+  main{flex-direction:column}
+  #map{min-height:58vh}
+  aside{width:100%;border-left:0;border-top:1px solid var(--edge);padding-bottom:env(safe-area-inset-bottom,0px)}
+  header nav{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body>
+<header>
+  <svg width="30" height="30" viewBox="0 0 64 64" role="img" aria-label="Space Peak mark">
+    <path d="M4 58 L32 10 L60 58 Z" fill="var(--c-casing)" opacity=".85"></path>
+    <path d="M32 10 L40 24 L32 20 L24 24 Z" fill="var(--surface)"></path>
+    <path d="M32 58 Q44 30 58 6" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"></path>
+  </svg>
+  <div>
+    <h1>Space Peak map</h1>
+    <div class="sub">Southern Colorado &middot; speculative thesis</div>
+  </div>
+  <nav aria-label="Project links">
+    <a href="https://github.com/Colorado-Startups/space-peak">Repo</a>
+    <a href="space_peak_map.geojson">Data (GeoJSON, CC0)</a>
+    <a href="https://github.com/Colorado-Startups/space-peak/blob/main/02_substance/claims_register.md">Claims register</a>
+  </nav>
+</header>
+<p class="banner"><b>Speculative.</b> Space Peak is a speculative venture thesis, not an engineering proposal. Each pin's location is from USGS GNIS. Every claim about a summit is from the concept brief and is unverified unless its register row says otherwise.</p>
+<main>
+  <div id="map" role="region" aria-label="Interactive map. The lists beside it hold the same information."></div>
+  <div id="status" hidden></div>
+  <aside aria-label="Map key, region facts and site lists">
+    <div class="block">
+      <p class="eyebrow">Show</p>
+      <ul class="legend">
+        <li><label><input type="checkbox" id="t-region" checked><span class="sw-region"></span>Colorado Startups region loop<span class="tag">roads</span></label></li>
+        <li><label><input type="checkbox" id="t-site" checked><span class="sw-site"></span>Summits in the brief<span class="tag">speculative</span></label></li>
+        <li><label><input type="checkbox" id="t-excl" checked><canvas class="sw-excl" width="28" height="28" aria-hidden="true"></canvas>Permanent exclusions<span class="tag">settled</span></label></li>
+      </ul>
+    </div>
+    <div class="block">
+      <p class="eyebrow">View</p>
+      <div class="controls">
+        <button type="button" id="btn-terrain" aria-pressed="false">3D terrain</button>
+        <button type="button" id="btn-region">Region loop</button>
+        <button type="button" id="btn-fit">Everything</button>
+      </div>
+    </div>
+    <div class="block">
+      <p class="eyebrow">Region loop facts</p>
+      <table class="facts" id="facts"><tbody></tbody></table>
+      <p class="note" style="margin-top:8px">This is the website's region, not this project's launch complex. It says nothing about where a mass driver would go.</p>
+    </div>
+    <div class="lists">
+      <p class="eyebrow head">Summits in the brief</p>
+      <p class="why">Register order, not a ranking. Each claim is the brief's and is unverified.</p>
+      <ul id="list-site"></ul>
+      <div class="excl-block">
+        <p class="eyebrow head">Permanent exclusions</p>
+        <p class="why">Stated, not argued. Shown so a reader knows where they are.</p>
+        <ul id="list-excl"></ul>
+      </div>
+    </div>
+    <div class="block" style="border-top:1px solid var(--edge);border-bottom:0">
+      <p class="note" id="provenance">Every point is a USGS GNIS summit, recorded with its feature ID in the claims register. The region loop is the coloradostartups.org loop, traced from US Census TIGERweb road lines. No OpenStreetMap data is stored here, so the data stays CC0. Basemap: OpenFreeMap, OpenMapTiles, OpenStreetMap. Terrain: Mapterhorn.</p>
+    </div>
+  </aside>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/5.24.0/maplibre-gl.js" integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" crossorigin="anonymous"></script>
+<script>
+(() => {
+  const STYLES = { light: 'https://tiles.openfreemap.org/styles/positron', dark: 'https://tiles.openfreemap.org/styles/dark' };
+  const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const scheme = () => {
+    const t = document.documentElement.dataset.theme;
+    if (t === 'dark' || t === 'light') return t;
+    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+  const status = document.getElementById('status');
+  const say = msg => { status.textContent = msg; status.hidden = !msg; };
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const httpsLink = (href, text, cls) => {
+    if (!/^https:\/\//.test(href || '')) return null;
+    const a = el('a', cls, text); a.href = href; a.target = '_blank'; a.rel = 'noopener'; return a;
+  };
+
+  let data = null, scheme0 = scheme(), terrainOn = false;
+  const show = { region: true, site: true, exclusion: true };
+  const GROUPS = {
+    region: ['region-fill', 'region-glow', 'region-casing', 'region-line'],
+    site: ['site-halo', 'site-dot', 'site-label'],
+    exclusion: ['excl-icon'],
+  };
+
+  // The exclusion symbol: a ring with a bar. Its own shape and colour, never a site dot.
+  function exclusionImage(size, color, ground) {
+    const c = document.createElement('canvas'); c.width = c.height = size;
+    const g = c.getContext('2d'), r = size / 2, w = size * 0.13;
+    g.fillStyle = ground; g.beginPath(); g.arc(r, r, r - 1, 0, Math.PI * 2); g.fill();
+    g.strokeStyle = color; g.lineWidth = w; g.beginPath(); g.arc(r, r, r - w, 0, Math.PI * 2); g.stroke();
+    g.beginPath(); g.moveTo(r - (r - w) * 0.7, r + (r - w) * 0.7); g.lineTo(r + (r - w) * 0.7, r - (r - w) * 0.7); g.stroke();
+    return c;
+  }
+  function paintSwatch() {
+    const sw = document.querySelector('canvas.sw-excl'); const src = exclusionImage(28, css('--c-excl'), css('--surface'));
+    const g = sw.getContext('2d'); g.clearRect(0, 0, 28, 28); g.drawImage(src, 0, 0);
+  }
+
+  const map = new maplibregl.Map({
+    container: 'map',
+    style: STYLES[scheme0],
+    center: [-105.05, 38.1],
+    zoom: 7.2,
+    maxPitch: 75,
+    attributionControl: { compact: true },
+  });
+  map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'top-left');
+  map.addControl(new maplibregl.ScaleControl({ unit: 'imperial' }), 'bottom-left');
+  map.on('error', e => { if (e && e.error && /tiles|style|Failed to fetch/i.test(String(e.error.message))) say('Some map tiles did not load. The lists beside the map still work.'); });
+
+  const layerFilter = kind => ['==', ['get', 'layer'], kind];
+  function firstSymbolId() {
+    const l = map.getStyle().layers.find(x => x.type === 'symbol');
+    return l && l.id;
+  }
+  function applyVisibility() {
+    Object.entries(GROUPS).forEach(([k, ids]) => ids.forEach(id => map.getLayer(id) && map.setLayoutProperty(id, 'visibility', show[k] ? 'visible' : 'none')));
+  }
+
+  function addOverlay() {
+    if (!data || map.getSource('sp')) return;
+    const before = firstSymbolId();
+    const dem = { type: 'raster-dem', tiles: ['https://tiles.mapterhorn.com/{z}/{x}/{y}.webp'], encoding: 'terrarium', tileSize: 512, maxzoom: 14, attribution: '<a href="https://mapterhorn.com/attribution">&copy; Mapterhorn</a>' };
+    // Two sources from one tile set: MapLibre renders hillshade and 3D terrain better when they do not share one.
+    map.addSource('dem', dem);
+    map.addSource('dem-terrain', dem);
+    map.addLayer({ id: 'hillshade', type: 'hillshade', source: 'dem', paint: {
+      'hillshade-exaggeration': scheme0 === 'dark' ? 0.7 : 0.4,
+      'hillshade-shadow-color': scheme0 === 'dark' ? '#000000' : '#5b6672',
+      'hillshade-highlight-color': scheme0 === 'dark' ? '#4a6278' : '#ffffff',
+      'hillshade-accent-color': scheme0 === 'dark' ? '#000000' : '#5b6672' } }, before);
+    map.addSource('sp', { type: 'geojson', data, attribution: 'Space Peak data: CC0; points USGS GNIS; loop US Census TIGERweb via coloradostartups.org' });
+
+    // The region loop: glow, dark casing, line, light fill.
+    const region = css('--c-region');
+    map.addLayer({ id: 'region-fill', type: 'fill', source: 'sp', filter: layerFilter('region'), paint: { 'fill-color': region, 'fill-opacity': 0.18 } }, before);
+    map.addLayer({ id: 'region-glow', type: 'line', source: 'sp', filter: layerFilter('region'), layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': region, 'line-width': 14, 'line-blur': 6, 'line-opacity': 0.45 } }, before);
+    map.addLayer({ id: 'region-casing', type: 'line', source: 'sp', filter: layerFilter('region'), layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': css('--c-casing'), 'line-width': 5.5, 'line-opacity': 0.6 } }, before);
+    map.addLayer({ id: 'region-line', type: 'line', source: 'sp', filter: layerFilter('region'), layout: { 'line-join': 'round', 'line-cap': 'round' },
+      paint: { 'line-color': region, 'line-width': 3 } }, before);
+
+    // Summits in the brief: a dot, labelled with the site and the word speculative.
+    const site = css('--c-site');
+    map.addLayer({ id: 'site-halo', type: 'circle', source: 'sp', filter: layerFilter('site'),
+      paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 9, 12, 16], 'circle-color': site, 'circle-opacity': 0.18 } });
+    map.addLayer({ id: 'site-dot', type: 'circle', source: 'sp', filter: layerFilter('site'),
+      paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 5, 12, 8], 'circle-color': site, 'circle-stroke-color': css('--surface'), 'circle-stroke-width': 1.6 } });
+    map.addLayer({ id: 'site-label', type: 'symbol', source: 'sp', filter: layerFilter('site'),
+      layout: { 'text-field': ['format', ['get', 'name'], {}, '\n', {}, 'speculative', { 'font-scale': 0.8 }], 'text-font': ['Noto Sans Regular'], 'text-size': 12, 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-max-width': 12 },
+      paint: { 'text-color': site, 'text-halo-color': css('--surface'), 'text-halo-width': 1.5 } });
+
+    // Permanent exclusions: their own symbol and colour, labelled with the name and the reason only.
+    if (!map.hasImage('excl')) map.addImage('excl', exclusionImage(48, css('--c-excl'), css('--surface')).getContext('2d').getImageData(0, 0, 48, 48), { pixelRatio: 2 });
+    map.addLayer({ id: 'excl-icon', type: 'symbol', source: 'sp', filter: layerFilter('exclusion'),
+      layout: { 'icon-image': 'excl', 'icon-allow-overlap': true, 'text-allow-overlap': false,
+        'text-field': ['format', ['get', 'name'], {}, '\n', {}, ['get', 'reason'], { 'font-scale': 0.82 }],
+        'text-font': ['Noto Sans Regular'], 'text-size': 12, 'text-offset': [0, 1.4], 'text-anchor': 'top', 'text-max-width': 14 },
+      paint: { 'text-color': css('--c-excl'), 'text-halo-color': css('--surface'), 'text-halo-width': 1.5 } });
+
+    applyVisibility();
+    if (terrainOn) map.setTerrain({ source: 'dem-terrain', exaggeration: 1.4 });
+  }
+
+  function sitePopup(p) {
+    const box = el('div');
+    box.append(el('p', 'pop-cat', 'Summit in the brief · speculative'), el('p', 'pop-name', p.name),
+      el('p', 'pop-sub', p.summit + ' · register ' + p.register));
+    const ul = el('ul', 'pop-claims');
+    (p.claims || []).forEach(c => { const li = el('li'); li.append(el('span', 'st', c.status), document.createTextNode(c.claim + ' (' + c.id + ')')); ul.append(li); });
+    box.append(el('p', 'pop-note', 'The brief\'s claims, as the register holds them:'), ul);
+    const a = httpsLink(p.source_url, 'Point: USGS GNIS ' + p.gnis_id, 'pop-src'); if (a) box.append(a);
+    return box;
+  }
+  function exclusionPopup(p) {
+    const box = el('div');
+    const cat = el('p', 'pop-cat', 'Permanent exclusion'); cat.style.color = css('--c-excl');
+    box.append(cat, el('p', 'pop-name', p.name), el('p', 'pop-note', p.reason));
+    return box;
+  }
+  function regionPopup(p) {
+    const box = el('div');
+    box.append(el('p', 'pop-cat', 'Colorado Startups region'), el('p', 'pop-name', p.name),
+      el('p', 'pop-note', p.whose + '. ' + p.note), el('p', 'pop-sub', p.roads.join(' · ')));
+    const a = httpsLink(p.source_url, 'Source: coloradostartups.org repository', 'pop-src'); if (a) box.append(a);
+    return box;
+  }
+  let popup = null;
+  function open(f, lngLat) {
+    if (popup) popup.remove();
+    const p = typeof f.properties.claims === 'string' ? { ...f.properties, claims: JSON.parse(f.properties.claims), roads: f.properties.roads } : f.properties;
+    if (typeof p.roads === 'string') p.roads = JSON.parse(p.roads);
+    const content = p.layer === 'site' ? sitePopup(p) : p.layer === 'exclusion' ? exclusionPopup(p) : regionPopup(p);
+    popup = new maplibregl.Popup({ offset: 14, maxWidth: '320px' }).setLngLat(lngLat || f.geometry.coordinates).setDOMContent(content).addTo(map);
+  }
+  const byLayer = kind => data.features.filter(f => f.properties.layer === kind);
+
+  function buildPanel() {
+    const r = byLayer('region')[0].properties;
+    const src = 'coloradostartups.org at 3723243, US Census TIGERweb, 2026-11-15';
+    const rows = [
+      ['Roads', r.roads.join(', '), 'R-01'],
+      ['Corner cities', r.cities.join(' and '), 'R-02'],
+      ['Area', r.area_sq_mi + ' sq mi', 'R-03'],
+      ['Widest span', r.span_mi + ' mi', 'R-04'],
+      ['Size', r.vs_silicon_valley + ' times Silicon Valley\'s US-101, I-280 and CA-84 loop (95 sq mi)', 'R-05'],
+    ];
+    document.querySelector('#facts tbody').replaceChildren(...rows.map(([k, v, id]) => {
+      const tr = el('tr'); const td = el('td', null, v);
+      const s = el('span', 'src'); const a = httpsLink(r.source_url, 'per ' + src); s.append(a || document.createTextNode(src), document.createTextNode(' · register ' + id));
+      td.append(s); tr.append(el('th', null, k), td); return tr;
+    }));
+
+    const item = (f, swClass, sub) => {
+      const li = el('li'); const b = el('button'); b.type = 'button';
+      const sw = swClass === 'sw-excl' ? (() => { const c = document.createElement('canvas'); c.width = c.height = 28; c.className = 'sw-excl'; c.getContext('2d').drawImage(exclusionImage(28, css('--c-excl'), css('--surface')), 0, 0); return c; })() : el('span', swClass);
+      const txt = el('span'); txt.append(el('span', 'n', f.properties.name), el('br'), el('span', 't', sub));
+      b.append(sw, txt);
+      b.addEventListener('click', () => { map.flyTo({ center: f.geometry.coordinates, zoom: Math.max(map.getZoom(), 10.5), speed: 1.4 }); open(f); });
+      li.append(b); return li;
+    };
+    document.getElementById('list-site').replaceChildren(...byLayer('site').map(f =>
+      item(f, 'sw-site', 'Speculative · ' + f.properties.claims.filter(c => c.status === 'unverified').length + ' of ' + f.properties.claims.length + ' claims unverified · GNIS ' + f.properties.gnis_id)));
+    document.getElementById('list-excl').replaceChildren(...byLayer('exclusion').map(f =>
+      item(f, 'sw-excl', f.properties.reason)));
+
+    [['t-region', 'region'], ['t-site', 'site'], ['t-excl', 'exclusion']].forEach(([id, k]) =>
+      document.getElementById(id).addEventListener('change', e => { show[k] = e.target.checked; applyVisibility(); }));
+  }
+
+  function bounds(features) {
+    const b = new maplibregl.LngLatBounds();
+    features.forEach(f => { const g = f.geometry; (g.type === 'Point' ? [g.coordinates] : g.coordinates[0]).forEach(c => b.extend(c)); });
+    return b;
+  }
+  const fitAll = () => map.fitBounds(bounds(data.features), { padding: { top: 40, right: 60, bottom: 80, left: 60 }, duration: 600 });
+  const fitRegion = () => map.fitBounds(bounds(byLayer('region')), { padding: 40, duration: 600 });
+
+  // The data and the basemap style load in either order; whichever lands second adds the overlay.
+  let styleReady = false;
+  map.on('style.load', () => { styleReady = true; addOverlay(); });
+  ['site-dot', 'excl-icon'].forEach(id => {
+    map.on('click', id, e => open(e.features[0]));
+    map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; });
+  });
+  map.on('click', 'region-fill', e => {
+    const hit = map.queryRenderedFeatures(e.point, { layers: ['site-dot', 'excl-icon'].filter(id => map.getLayer(id)) });
+    if (!hit.length) open(e.features[0], e.lngLat);
+  });
+
+  document.getElementById('btn-terrain').addEventListener('click', e => {
+    terrainOn = !terrainOn; e.currentTarget.setAttribute('aria-pressed', String(terrainOn));
+    if (terrainOn) { map.setTerrain({ source: 'dem-terrain', exaggeration: 1.4 }); map.easeTo({ pitch: 60, bearing: -20, duration: 900 }); }
+    else { map.setTerrain(null); map.easeTo({ pitch: 0, bearing: 0, duration: 700 }); }
+  });
+  document.getElementById('btn-fit').addEventListener('click', fitAll);
+  document.getElementById('btn-region').addEventListener('click', fitRegion);
+
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    const s = scheme(); if (s === scheme0) return; scheme0 = s; paintSwatch(); map.setStyle(STYLES[s], { diff: false });
+  });
+
+  paintSwatch();
+  fetch('space_peak_map.geojson')
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(json => { data = json; buildPanel(); if (styleReady) addOverlay(); map.once('idle', fitAll); })
+    .catch(() => say('The map data did not load. Open the GeoJSON file from the header link.'));
+})();
+</script>
+</body>
+</html>

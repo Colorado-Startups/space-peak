@@ -26,8 +26,8 @@ Anyone can contribute: corrections, sources, drafts, questions and tooling. Star
 00_project_system/   MASTER_PLAN.md. Read first.
 01_doctrine/         voice.md. How this project writes, and what the linters enforce.
 02_substance/        The concept brief, and claims_register.md.
-03_deliverables/     The draft, the map, the infographics.
-04_tools/            The rules file and the four checkers.
+03_deliverables/     The draft, the map (map/), the infographics.
+04_tools/            The rules file, the four checkers and the map data builder.
 docs/                Contributor start-here.
 local/               Operational files. Gitignored; the reviewer reads every path in the diff.
 .claude/             The exclusion hook, two skills, one agent, settings.
@@ -96,6 +96,8 @@ Every checker is standard library Python, deterministic, and offline. Each ships
 
 `.github/workflows/pages.yml` builds Git Crafter's Quality, Speed and Consumption page and its Process page from `quality/config.json` and `quality/process/config.json`. They measure this repository's pull requests, CI and Claude sessions. They are not the thought-leadership piece, and publishing them publishes nothing about a mountain.
 
+The same workflow serves the map in `03_deliverables/map/` at `/map/`. The map shows summits, so every claim on it carries its register status and every point its USGS GNIS source. It is a repository deliverable, not the piece.
+
 ## A template for sibling projects
 
 This scaffolding is built to be copied into sibling projects such as Photon Mountain and Fusion Canyon. The parts worth copying are the rules-in-data pattern, the contract test and the one blocking hook. So is the one-definition-many-call-sites shape, which keeps the harness and CI from disagreeing.
@@ -107,4 +109,4 @@ Everything Colorado Startups wrote here is dedicated to the public domain under 
 Two things here belong to others and keep their own terms:
 
 - `CODE_OF_CONDUCT.md` is adapted from the Contributor Covenant 3.0, licensed CC BY-SA 4.0.
-- The basemap tiles in `03_deliverables/infographics/Satellite-Peak-site-map.html` load at view time from OpenTopoMap (CC BY-SA) and CARTO, built on OpenStreetMap data. The map displays their credit.
+- The basemap tiles in `03_deliverables/map/index.html` load at view time from OpenFreeMap (OpenMapTiles, OpenStreetMap contributors), and its terrain from Mapterhorn. The map displays their credit. Its stored data is CC0: USGS GNIS points and US Census road lines.

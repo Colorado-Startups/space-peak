@@ -33,9 +33,11 @@
      ]
     },
     {
-     "doc": "03_deliverables/maps/README.md",
+     "doc": "03_deliverables/map/README.md",
      "area": [
-      "03_deliverables/infographics/"
+      "03_deliverables/map/",
+      "03_deliverables/infographics/",
+      "04_tools/space_peak_map.py"
      ]
     },
     {

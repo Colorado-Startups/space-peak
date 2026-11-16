@@ -112,4 +112,16 @@ This was decided by the cross-session orchestrator on Paul's delegation. Paul ca
 Deliberate gaps, to be filled when there is something real to say rather than filled now for completeness:
 
 - Tone in long-form versus short-form. There is one draft; there is no evidence yet.
-- Visual voice. The Felt map and the SVGs need a convention for marking speculative sites and permanent exclusions differently. That convention belongs here once the map exists.
+- Visual voice for the SVGs. The map has its convention, below; the three SVGs predate it.
+
+## Visual voice on the map
+
+Set 2026-11-15 with the first map, `03_deliverables/map/`. A symbol is an argument, so each layer gets its own.
+
+| Thing | Symbol | Label |
+| --- | --- | --- |
+| A summit in the brief | A dot | Its name and the word "speculative". Its claims carry their register status |
+| A permanent exclusion | A ring with a bar, in its own colour, in its own layer | Its name and its reason. Nothing about elevation or lane |
+| The Colorado Startups region loop | A road-drawn outline with a light fill | Whose definition it is: the website's region, not a launch complex |
+
+The exclusions never share a list, a ranking or a colour with the summits.

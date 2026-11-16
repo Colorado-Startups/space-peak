@@ -1,0 +1,927 @@
+{
+ "type": "FeatureCollection",
+ "generated": {
+  "by": "04_tools/space_peak_map.py",
+  "date": "2026-11-15",
+  "register": "02_substance/claims_register.md",
+  "register_git_blob": "2a081370bfe7ba4122ad629bfd8a0d79bdee11f6",
+  "license": "CC0-1.0"
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "layer": "region",
+    "name": "Colorado Startups region: Space Peak",
+    "whose": "The coloradostartups.org region, not this repository's launch complex",
+    "roads": [
+     "I-25",
+     "Interquest Pkwy",
+     "Powers Blvd",
+     "Mesa Ridge Pkwy",
+     "US-85"
+    ],
+    "cities": [
+     "Colorado Springs",
+     "Fountain"
+    ],
+    "area_sq_mi": 89,
+    "span_mi": 22.7,
+    "vs_silicon_valley": 0.94,
+    "note": "A proposal, not a legal line.",
+    "register": [
+     "R-01",
+     "R-02",
+     "R-03",
+     "R-04",
+     "R-05"
+    ],
+    "source": "Colorado-Startups/coloradostartups.org data/geo/regions.geojson at 37232431f9bab6a2a3cb2e09701642f40b446187",
+    "source_url": "https://github.com/Colorado-Startups/coloradostartups.org/blob/37232431f9bab6a2a3cb2e09701642f40b446187/data/geo/regions.geojson"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -104.70906,
+       38.67286
+      ],
+      [
+       -104.70735,
+       38.67371
+      ],
+      [
+       -104.70658,
+       38.67438
+      ],
+      [
+       -104.70459,
+       38.67867
+      ],
+      [
+       -104.70464,
+       38.68976
+      ],
+      [
+       -104.70512,
+       38.69522
+      ],
+      [
+       -104.70585,
+       38.69734
+      ],
+      [
+       -104.71141,
+       38.70774
+      ],
+      [
+       -104.71183,
+       38.71011
+      ],
+      [
+       -104.7122,
+       38.71111
+      ],
+      [
+       -104.71706,
+       38.7204
+      ],
+      [
+       -104.71864,
+       38.72284
+      ],
+      [
+       -104.71626,
+       38.72287
+      ],
+      [
+       -104.71497,
+       38.72272
+      ],
+      [
+       -104.71312,
+       38.7221
+      ],
+      [
+       -104.71117,
+       38.72084
+      ],
+      [
+       -104.70966,
+       38.72024
+      ],
+      [
+       -104.70831,
+       38.72005
+      ],
+      [
+       -104.70455,
+       38.72007
+      ],
+      [
+       -104.70352,
+       38.71995
+      ],
+      [
+       -104.69249,
+       38.71674
+      ],
+      [
+       -104.69098,
+       38.71654
+      ],
+      [
+       -104.6889,
+       38.7168
+      ],
+      [
+       -104.68744,
+       38.71741
+      ],
+      [
+       -104.68306,
+       38.72026
+      ],
+      [
+       -104.68216,
+       38.72154
+      ],
+      [
+       -104.68204,
+       38.72247
+      ],
+      [
+       -104.68256,
+       38.72456
+      ],
+      [
+       -104.68276,
+       38.72627
+      ],
+      [
+       -104.68275,
+       38.73322
+      ],
+      [
+       -104.68298,
+       38.73659
+      ],
+      [
+       -104.68286,
+       38.76053
+      ],
+      [
+       -104.68321,
+       38.76232
+      ],
+      [
+       -104.68394,
+       38.76356
+      ],
+      [
+       -104.68521,
+       38.76465
+      ],
+      [
+       -104.6864,
+       38.76531
+      ],
+      [
+       -104.68751,
+       38.76572
+      ],
+      [
+       -104.68882,
+       38.76598
+      ],
+      [
+       -104.71418,
+       38.76597
+      ],
+      [
+       -104.7159,
+       38.76624
+      ],
+      [
+       -104.71785,
+       38.76703
+      ],
+      [
+       -104.71903,
+       38.76789
+      ],
+      [
+       -104.71975,
+       38.76864
+      ],
+      [
+       -104.72065,
+       38.77059
+      ],
+      [
+       -104.72082,
+       38.78234
+      ],
+      [
+       -104.72117,
+       38.78331
+      ],
+      [
+       -104.7219,
+       38.7844
+      ],
+      [
+       -104.7229,
+       38.78525
+      ],
+      [
+       -104.7279,
+       38.7878
+      ],
+      [
+       -104.72896,
+       38.78861
+      ],
+      [
+       -104.72966,
+       38.7894
+      ],
+      [
+       -104.73039,
+       38.79122
+      ],
+      [
+       -104.73025,
+       38.81394
+      ],
+      [
+       -104.7301,
+       38.8155
+      ],
+      [
+       -104.72977,
+       38.81647
+      ],
+      [
+       -104.72891,
+       38.81805
+      ],
+      [
+       -104.7215,
+       38.8303
+      ],
+      [
+       -104.72098,
+       38.83172
+      ],
+      [
+       -104.72089,
+       38.84841
+      ],
+      [
+       -104.72031,
+       38.85099
+      ],
+      [
+       -104.72026,
+       38.8526
+      ],
+      [
+       -104.72025,
+       38.86893
+      ],
+      [
+       -104.71963,
+       38.9184
+      ],
+      [
+       -104.71968,
+       38.92947
+      ],
+      [
+       -104.72015,
+       38.93335
+      ],
+      [
+       -104.71982,
+       38.94497
+      ],
+      [
+       -104.71999,
+       38.94665
+      ],
+      [
+       -104.72055,
+       38.94883
+      ],
+      [
+       -104.72128,
+       38.95035
+      ],
+      [
+       -104.72281,
+       38.95253
+      ],
+      [
+       -104.72469,
+       38.95438
+      ],
+      [
+       -104.75922,
+       38.9804
+      ],
+      [
+       -104.76129,
+       38.98168
+      ],
+      [
+       -104.76469,
+       38.98316
+      ],
+      [
+       -104.76652,
+       38.98504
+      ],
+      [
+       -104.7681,
+       38.98701
+      ],
+      [
+       -104.77413,
+       38.99175
+      ],
+      [
+       -104.77787,
+       38.99555
+      ],
+      [
+       -104.77939,
+       38.99754
+      ],
+      [
+       -104.78106,
+       38.99883
+      ],
+      [
+       -104.78199,
+       38.99761
+      ],
+      [
+       -104.78487,
+       38.99185
+      ],
+      [
+       -104.78538,
+       38.9913
+      ],
+      [
+       -104.78713,
+       38.9906
+      ],
+      [
+       -104.8119,
+       38.99101
+      ],
+      [
+       -104.81442,
+       38.99036
+      ],
+      [
+       -104.8145,
+       38.98995
+      ],
+      [
+       -104.81181,
+       38.98292
+      ],
+      [
+       -104.80252,
+       38.96411
+      ],
+      [
+       -104.80139,
+       38.9612
+      ],
+      [
+       -104.80135,
+       38.95913
+      ],
+      [
+       -104.80209,
+       38.95704
+      ],
+      [
+       -104.80348,
+       38.95522
+      ],
+      [
+       -104.80472,
+       38.95422
+      ],
+      [
+       -104.81101,
+       38.95037
+      ],
+      [
+       -104.8125,
+       38.94898
+      ],
+      [
+       -104.81339,
+       38.94754
+      ],
+      [
+       -104.81394,
+       38.94589
+      ],
+      [
+       -104.81404,
+       38.94409
+      ],
+      [
+       -104.81302,
+       38.93809
+      ],
+      [
+       -104.81271,
+       38.93449
+      ],
+      [
+       -104.81434,
+       38.92295
+      ],
+      [
+       -104.8152,
+       38.91879
+      ],
+      [
+       -104.81561,
+       38.91775
+      ],
+      [
+       -104.81661,
+       38.91623
+      ],
+      [
+       -104.8183,
+       38.91467
+      ],
+      [
+       -104.82289,
+       38.91127
+      ],
+      [
+       -104.82471,
+       38.90949
+      ],
+      [
+       -104.82563,
+       38.90808
+      ],
+      [
+       -104.82695,
+       38.90523
+      ],
+      [
+       -104.83123,
+       38.89461
+      ],
+      [
+       -104.83479,
+       38.88754
+      ],
+      [
+       -104.83571,
+       38.885
+      ],
+      [
+       -104.83609,
+       38.88244
+      ],
+      [
+       -104.836,
+       38.88029
+      ],
+      [
+       -104.83365,
+       38.86916
+      ],
+      [
+       -104.83362,
+       38.86472
+      ],
+      [
+       -104.83438,
+       38.86094
+      ],
+      [
+       -104.83437,
+       38.85858
+      ],
+      [
+       -104.83407,
+       38.85725
+      ],
+      [
+       -104.8328,
+       38.85424
+      ],
+      [
+       -104.83227,
+       38.85075
+      ],
+      [
+       -104.83106,
+       38.84658
+      ],
+      [
+       -104.83048,
+       38.84349
+      ],
+      [
+       -104.83019,
+       38.84168
+      ],
+      [
+       -104.8302,
+       38.84029
+      ],
+      [
+       -104.83038,
+       38.83694
+      ],
+      [
+       -104.83083,
+       38.83522
+      ],
+      [
+       -104.83158,
+       38.83415
+      ],
+      [
+       -104.83379,
+       38.83207
+      ],
+      [
+       -104.83422,
+       38.83122
+      ],
+      [
+       -104.83629,
+       38.82303
+      ],
+      [
+       -104.83617,
+       38.82162
+      ],
+      [
+       -104.83576,
+       38.82077
+      ],
+      [
+       -104.83472,
+       38.81963
+      ],
+      [
+       -104.83118,
+       38.8169
+      ],
+      [
+       -104.82953,
+       38.81603
+      ],
+      [
+       -104.82809,
+       38.81551
+      ],
+      [
+       -104.82618,
+       38.81511
+      ],
+      [
+       -104.81827,
+       38.81462
+      ],
+      [
+       -104.81603,
+       38.81409
+      ],
+      [
+       -104.81438,
+       38.81347
+      ],
+      [
+       -104.81287,
+       38.81268
+      ],
+      [
+       -104.81113,
+       38.81152
+      ],
+      [
+       -104.80375,
+       38.80604
+      ],
+      [
+       -104.8022,
+       38.80442
+      ],
+      [
+       -104.80089,
+       38.80259
+      ],
+      [
+       -104.79508,
+       38.7915
+      ],
+      [
+       -104.78384,
+       38.77791
+      ],
+      [
+       -104.78303,
+       38.77656
+      ],
+      [
+       -104.78161,
+       38.77313
+      ],
+      [
+       -104.78058,
+       38.77114
+      ],
+      [
+       -104.77889,
+       38.76842
+      ],
+      [
+       -104.77708,
+       38.76617
+      ],
+      [
+       -104.77536,
+       38.76432
+      ],
+      [
+       -104.77324,
+       38.76239
+      ],
+      [
+       -104.76564,
+       38.75675
+      ],
+      [
+       -104.76356,
+       38.75494
+      ],
+      [
+       -104.73117,
+       38.72294
+      ],
+      [
+       -104.72972,
+       38.72093
+      ],
+      [
+       -104.72894,
+       38.71949
+      ],
+      [
+       -104.72357,
+       38.70664
+      ],
+      [
+       -104.72063,
+       38.69457
+      ],
+      [
+       -104.72014,
+       38.69321
+      ],
+      [
+       -104.71321,
+       38.67832
+      ],
+      [
+       -104.70906,
+       38.67286
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "layer": "site",
+    "name": "Greenhorn / Wet Mtns",
+    "summit": "Greenhorn Mountain",
+    "register": "G-01",
+    "gnis_id": 192544,
+    "source_url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/5/query?where=gaz_name%3D%27Greenhorn+Mountain%27+AND+state_alpha%3D%27CO%27&outFields=%2A&outSR=4326&f=json",
+    "claims": [
+     {
+      "id": "S-01",
+      "claim": "Elevation about 12,300 ft",
+      "status": "unverified"
+     },
+     {
+      "id": "S-02",
+      "claim": "Fires east over Pinon Canyon Army live-fire land",
+      "status": "unverified"
+     },
+     {
+      "id": "S-03",
+      "claim": "Federal land",
+      "status": "unverified"
+     }
+    ]
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -105.0132,
+     37.88145
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "layer": "site",
+    "name": "Culebra Peak",
+    "summit": "Culebra Peak",
+    "register": "G-02",
+    "gnis_id": 193131,
+    "source_url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/5/query?where=gaz_name%3D%27Culebra+Peak%27+AND+state_alpha%3D%27CO%27&outFields=%2A&outSR=4326&f=json",
+    "claims": [
+     {
+      "id": "S-04",
+      "claim": "Elevation 14,047 ft",
+      "status": "unverified"
+     },
+     {
+      "id": "S-05",
+      "claim": "Southernmost 14er, about 37.1 N",
+      "status": "unverified"
+     },
+     {
+      "id": "S-06",
+      "claim": "Privately owned, Cielo Vista Ranch, single landowner",
+      "status": "unverified"
+     }
+    ]
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -105.18578,
+     37.12222
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "layer": "site",
+    "name": "Spanish Peaks",
+    "summit": "West Spanish Peak",
+    "register": "G-03",
+    "gnis_id": 194402,
+    "source_url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/5/query?where=gaz_name%3D%27West+Spanish+Peak%27+AND+state_alpha%3D%27CO%27&outFields=%2A&outSR=4326&f=json",
+    "claims": [
+     {
+      "id": "S-07",
+      "claim": "Elevation about 13,600 ft",
+      "status": "unverified"
+     },
+     {
+      "id": "S-08",
+      "claim": "Open southeast shot over Comanche National Grassland",
+      "status": "unverified"
+     },
+     {
+      "id": "S-09",
+      "claim": "Federal land",
+      "status": "unverified"
+     }
+    ]
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -104.9937,
+     37.37567
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "layer": "site",
+    "name": "Almagre (Baldy)",
+    "summit": "Almagre Mountain",
+    "register": "G-04",
+    "gnis_id": 193402,
+    "source_url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/5/query?where=gaz_name%3D%27Almagre+Mountain%27+AND+state_alpha%3D%27CO%27&outFields=%2A&outSR=4326&f=json",
+    "claims": [
+     {
+      "id": "S-10",
+      "claim": "Elevation 12,367 ft",
+      "status": "unverified"
+     },
+     {
+      "id": "S-11",
+      "claim": "Same granite batholith as Pikes",
+      "status": "unverified"
+     },
+     {
+      "id": "S-12",
+      "claim": "USFS land; city watershed on its flanks",
+      "status": "unverified"
+     },
+     {
+      "id": "S-13",
+      "claim": "Southeast lane runs over Fort Carson ranges",
+      "status": "unverified"
+     }
+    ]
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -104.99346,
+     38.79119
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "layer": "site",
+    "name": "Pikes Peak",
+    "summit": "Pikes Peak",
+    "register": "G-05",
+    "gnis_id": 204770,
+    "source_url": "https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/5/query?where=gaz_name%3D%27Pikes+Peak%27+AND+state_alpha%3D%27CO%27&outFields=%2A&outSR=4326&f=json",
+    "claims": [
+     {
+      "id": "S-14",
+      "claim": "Elevation 14,115 ft",
+      "status": "unverified"
+     },
+     {
+      "id": "S-15",
+      "claim": "About 39 N; fires east over Kansas and metro",
+      "status": "unverified"
+     },
+     {
+      "id": "S-16",
+      "claim": "National Historic Landmark",
+      "status": "unverified"
+     }
+    ]
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -105.04491,
+     38.84059
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "layer": "exclusion",
+    "name": "Blanca Peak",
+    "reason": "Sisnaajini, sacred to the Navajo.",
+    "register": "G-06"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -105.48561,
+     37.57757
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "layer": "exclusion",
+    "name": "Crestones / Great Sand Dunes",
+    "reason": "A National Park and the wilderness beside it.",
+    "register": "G-07"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -105.5854,
+     37.96682
+    ]
+   }
+  }
+ ]
+}

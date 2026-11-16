@@ -9,15 +9,16 @@ This script is the only way its GeoJSON is made:
   R- rows   the facts about the Colorado Startups region loop
 
 The loop's ring is the website's, not ours. Pass the website's
-data/geo/regions.geojson at the commit the R- rows cite:
+data/geo/regions.geojson at WEBSITE_COMMIT, the commit the R- rows cite.
+--region-url prints its raw URL, so CI and people fetch the one pin:
 
-  gh api "repos/Colorado-Startups/coloradostartups.org/contents/data/geo/regions.geojson?ref=COMMIT" \
-     -H "Accept: application/vnd.github.raw" > /tmp/regions.geojson
+  curl -fsSL "$(python3 04_tools/space_peak_map.py --region-url)" -o /tmp/regions.geojson
   python3 04_tools/space_peak_map.py --region-geojson /tmp/regions.geojson
 
 --check rebuilds in memory and exits 1 if the committed file differs or is
 missing. A register row that does not parse, a duplicate ID, or a site
-without both G- and S- rows also exit 1. Exit 3 means it could not read an input: could not verify, not
+without both G- and S- rows also exit 1, as does a first cell that looks
+like an ID but is not one (S-01a, s-01, **S-01**). Exit 3 means it could not read an input: could not verify, not
 a failure. --self-test runs a known-bad sample for each of those.
 """
 
@@ -40,11 +41,15 @@ OUT = os.path.join(ROOT, "03_deliverables", "map", "space_peak_map.geojson")
 WEBSITE_REPO = "Colorado-Startups/coloradostartups.org"
 WEBSITE_COMMIT = "37232431f9bab6a2a3cb2e09701642f40b446187"
 REGION_ID = "space-peak"
+REGION_URL = (f"https://raw.githubusercontent.com/{WEBSITE_REPO}/"
+              f"{WEBSITE_COMMIT}/data/geo/regions.geojson")
 GNIS_QUERY = ("https://carto.nationalmap.gov/arcgis/rest/services/geonames/"
               "MapServer/5/query")
 
 ROW_RE = re.compile(r"^\|\s*([SGR]-\d+)\s*\|(.+)\|\s*$")
 ID_RE = re.compile(r"^\|\s*[SGR]-\d+\b")
+# Near misses: any case, markup around it, a letter after the digits.
+NEAR_ID_RE = re.compile(r"^\|\s*[*_`~]*\s*[SGR]\s*-\s*\d", re.IGNORECASE)
 MIN_CELLS = {"G-": 4, "S-": 2, "R-": 1}
 STATUS_RE = re.compile(r"`(unverified|verified|corrected|unverifiable|open)`")
 COORD_RE = re.compile(r"^(.+?),\s*(\d+\.\d+)\s*N,\s*(\d+\.\d+)\s*W")
@@ -54,7 +59,7 @@ GNIS_RE = re.compile(r"GNIS\s+(\d+)")
 def cells(line):
     m = ROW_RE.match(line.strip())
     if not m:
-        if ID_RE.match(line.strip()):
+        if ID_RE.match(line.strip()) or NEAR_ID_RE.match(line.strip()):
             raise ValueError(f"register row does not parse: {line.strip()[:60]}")
         return None
     rest = [c.strip() for c in m.group(2).split("|")]
@@ -191,12 +196,20 @@ SAMPLE_REG = """\
 def self_test():
     """Each known-bad sample must raise, and the clean sample must build."""
     rules = R.load_rules()
-    bad = {
-        "unparsed row": SAMPLE_REG + "| S-03 | Pikes Peak\n",
-        "duplicate ID": SAMPLE_REG + "| S-01 | Pikes Peak | Again | `unverified` | | |\n",
-        "S- row with no G- row": SAMPLE_REG + "| S-04 | Mt Nowhere | x | `unverified` | | |\n",
-        "G- site with no S- rows": SAMPLE_REG + "| G-04 | Mt Elbert | Mount Elbert, "
+    tail = " | Pikes Peak | x | `unverified` | | |\n"
+    bad = {  # label: (register, the message it must raise)
+        "unparsed row": (SAMPLE_REG + "| S-03 | Pikes Peak\n", "does not parse"),
+        "too few cells": (SAMPLE_REG + "| G-03 | Pikes Peak | x |\n",
+                          "G-03: too few cells"),
+        "ID with a letter": (SAMPLE_REG + "| S-01a" + tail, "does not parse: | S-01a"),
+        "lower-case ID": (SAMPLE_REG + "| s-05" + tail, "does not parse: | s-05"),
+        "bold ID": (SAMPLE_REG + "| **S-06**" + tail, "does not parse: | **S-06**"),
+        "duplicate ID": (SAMPLE_REG + "| S-01" + tail, "S-01: duplicate register ID"),
+        "S- row with no G- row": (SAMPLE_REG + "| S-04 | Mt Nowhere | x | `unverified` | | |\n",
+                                  "site 'Mt Nowhere' has no G- row"),
+        "G- site with no S- rows": (SAMPLE_REG + "| G-04 | Mt Elbert | Mount Elbert, "
             "39.11777 N, 106.44534 W, per GNIS | `verified` | GNIS 1 | |\n",
+            "site 'Mt Elbert' has no S- rows"),
     }
     ok = True
     try:
@@ -205,13 +218,24 @@ def self_test():
     except ValueError as exc:
         print(f"self-test: clean sample raised {exc}: FAIL")
         ok = False
-    for label, reg in bad.items():
+    for label, (reg, want) in bad.items():
         try:
             build(reg, SAMPLE_WEB, "2000-01-01", rules)
             print(f"self-test: {label} NOT raised: FAIL")
             ok = False
-        except ValueError:
-            print(f"self-test: {label} raised: OK")
+        except ValueError as exc:
+            if want in str(exc):
+                print(f"self-test: {label} raised: OK")
+            else:
+                print(f"self-test: {label} raised {exc!r}, want {want!r}: FAIL")
+                ok = False
+    with open(os.path.join(ROOT, ".github", "workflows", "ci.yml"), encoding="utf-8") as fh:
+        ci = fh.read()
+    if WEBSITE_COMMIT in REGION_URL and "--region-url" in ci and WEBSITE_REPO not in ci:
+        print("self-test: CI fetches the region at WEBSITE_COMMIT via --region-url: OK")
+    else:
+        print("self-test: ci.yml types its own website URL, not --region-url: FAIL")
+        ok = False
     missing = os.path.join(ROOT, "no-such-dir", "missing.geojson")
     if check(SAMPLE_REG, SAMPLE_WEB, missing) == R.EXIT_BLOCKED:
         print("self-test: --check on a missing file exits 1: OK")
@@ -230,7 +254,12 @@ def main(argv=None):
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--out", default=OUT, help=argparse.SUPPRESS)
     ap.add_argument("--self-test", action="store_true")
+    ap.add_argument("--region-url", action="store_true",
+                    help="print the raw URL of regions.geojson at WEBSITE_COMMIT")
     a = ap.parse_args(argv)
+    if a.region_url:
+        print(REGION_URL)
+        return 0
     if a.self_test:
         return self_test()
     if not a.region_geojson:

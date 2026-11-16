@@ -22,7 +22,7 @@ This file is how that discipline becomes something a machine can check. `.github
 
 ## Site table claims
 
-Transcribed from the brief's site tour. Every elevation, ownership status, land status, and firing-lane claim below is `unverified` until checked against a public source. Only S-18 has been checked.
+Transcribed from the brief's site tour. Every elevation, ownership status, land status, and firing-lane claim below is `unverified` until checked against a public source. Only S-16 and S-18 have been checked.
 
 | ID | Site | Claim | Status | Source | Notes |
 | --- | --- | --- | --- | --- | --- |
@@ -41,7 +41,7 @@ Transcribed from the brief's site tour. Every elevation, ownership status, land 
 | S-13 | Almagre (Baldy) | Southeast lane runs over Fort Carson ranges | `unverified` | | Lane claim, same class as S-02 and S-08 |
 | S-14 | Pikes Peak | Elevation 14,115 ft | `unverified` | | |
 | S-15 | Pikes Peak | About 39 N; fires east over Kansas and metro | `unverified` | | |
-| S-16 | Pikes Peak | National Historic Landmark | `unverified` | | |
+| S-16 | Pikes Peak | National Historic Landmark | `verified` | NPS, List of NHLs by State, https://www.nps.gov/subjects/nationalhistoriclandmarks/list-of-nhls-by-state.htm, read 2026-11-16 | Listed as "Pike's Peak - 07/04/61, El Paso County, CO" among Colorado's designated NHLs, not the "determined eligible" list |
 | S-17 | Crestones / Sand Dunes | Elevation about 14,000 ft | `unverified` | | |
 | S-18 | Crestones / Sand Dunes | Great Sand Dunes National Park & Preserve; the Crestones in the Sangre de Cristo Wilderness, Rio Grande National Forest, beside it | `verified` | USGS Geolex (Crestone Peak quadrangle); NPS Great Sand Dunes "Nearby attractions" | |
 | S-19 | Blanca Peak | Elevation 14,345 ft | `unverified` | | |
@@ -88,18 +88,31 @@ Every row cites one source: `Colorado-Startups/coloradostartups.org`, `data/geo/
 
 ## Physics and engineering claims
 
-The brief calls the physics sound and the engineering 2040s-hard. These are the figures carrying that claim, and none is cited.
+The brief calls the physics sound and the engineering 2040s-hard. These are the figures carrying that claim. P-01 and P-09 are cited; P-02 and P-03 were corrected on 2026-11-16.
 
 | ID | Claim | Status | Source | Notes |
 | --- | --- | --- | --- | --- |
-| P-01 | Orbit requires about 17,500 mph sideways | `unverified` | | Textbook figure; should be trivial to cite |
-| P-02 | Exiting at 12,000 to 14,000 ft puts about 40 percent of atmospheric mass below the muzzle | `unverified` | | The altitude-as-spec argument rests on this |
-| P-03 | About 200 g over about a 15 mile run reaches about 8 km/s | `unverified` | | Check the arithmetic independently, not just the source |
+| P-01 | Low Earth orbit at space-station height takes about 17,500 mph sideways | `verified` | NASA, What Is Microgravity? (Grades 5-8), https://www.nasa.gov/learning-resources/for-kids-and-students/what-is-microgravity-grades-5-8/, read 2026-11-16 | NASA gives the station's speed as 17,500 mph and says an orbiting craft moves fast enough that its fall matches Earth's curve |
+| P-02 | Exiting at 12,000 to 14,000 ft leaves about 36 to 41 percent of atmospheric mass below the muzzle, per NASA Glenn's model | `corrected` | NASA Glenn, Earth Atmosphere Model, https://www.grc.nasa.gov/www/k-12/airplane/atmos.html, read 2026-11-16 | Was "about 40 percent". Troposphere model: T = 59 - 0.00356 h (F), p = 2116 [(T + 459.7)/518.6]^5.256 (lb/ft2). At 12,000 ft p = 1,348, so 1 - 1,348/2,116 = 36.3% below; at 14,000 ft p = 1,246, so 41.1% below. Mass below scales with the pressure drop |
+| P-03 | About 200 g, a design target, over about a 10 mile run reaches about 8 km/s | `corrected` | OpenStax, University Physics Volume 1, 3.4 Motion with Constant Acceleration, equation 3.14, https://openstax.org/books/university-physics-volume-1/pages/3-4-motion-with-constant-acceleration, read 2026-11-16; arithmetic in Notes | Was "about a 15 mile run". Per constant acceleration from rest, v^2 = 2ad. Per the target, a = 200 x 9.81 = 1,961 m/s2. Per that, v = 8,000 m/s needs d = 8,000^2 / (2 x 1,961) = 16.3 km, about 10.1 mi. Per the same formula, the brief's 15 mi (24.1 km) at 200 g gives sqrt(2 x 1,961 x 24,140) = 9.7 km/s, and 8 km/s over 15 mi needs about 135 g. The SVG in `03_deliverables/infographics/03-Mass-driver-cross-section.svg` is unchanged |
 | P-04 | Humans tap out around 10 g | `unverified` | | Supports the cargo-only-forever claim |
 | P-05 | Guided artillery survives 15,000 g | `unverified` | | Load-bearing: the existence proof for ruggedization |
 | P-06 | Satellites redesigned to survive about 200 g are the real moat | `unverified` | | The brief's own make-or-break item 1 |
 | P-07 | A gigawatt-scale pulse released in seconds | `unverified` | | Sets the power and storage model |
 | P-08 | Realistic cadence once an hour or better | `unverified` | | MASTER_PLAN flagged this as the claim most likely to break |
+| P-09 | NASA has tested gecko-inspired grippers aboard the space station | `verified` | NASA, Science in Space: Robotic Helpers, https://www.nasa.gov/missions/station/iss-research/science-in-space-robotic-helpers/, read 2026-11-16 | An adhesive gripper on the Astrobee robot "functioned as anticipated". Was "flown by NASA" in the brief's nature footnote |
+
+## Infographic claims
+
+Figures in `03_deliverables/infographics/` with no other row, found by the fact gate (#23). Each SVG still needs its label.
+
+| ID | Claim | Status | Source | Notes |
+| --- | --- | --- | --- | --- |
+| I-01 | "Aeroshell ablating, about 40 sec of drag" after the muzzle | `unverified` | | `03-Mass-driver-cross-section.svg` |
+| I-02 | "High country about 9,000 ft" at the tunnel's foot | `unverified` | | `03-Mass-driver-cross-section.svg` |
+| I-03 | The Front Range corridor runs about 180 miles along I-25 | `unverified` | | `01-Aerospace-Alley-map.svg` |
+| I-04 | Maxar (satellite imagery) operates in the corridor under that name | `unverified` | | `01-Aerospace-Alley-map.svg`; a search suggests a 2025 rebrand, which needs a primary source |
+| I-05 | The tunnel runs "~15 mi through granite" | `unverified` | | `03-Mass-driver-cross-section.svg`. Conflicts with P-03, about 10 mi at the 200 g target; the label is not yet changed |
 
 ## Economic and market claims
 
@@ -116,12 +129,12 @@ The brief calls the physics sound and the engineering 2040s-hard. These are the 
 | --- | --- | --- | --- | --- |
 | N-01 | Colorado Springs sits in a valley at 6,035 ft | `unverified` | | |
 | N-02 | Colorado Springs was named in 1871, springs actually in Manitou | `unverified` | | |
-| N-03 | "America the Beautiful" was written on the summit of Pikes Peak | `unverified` | | |
+| N-03 | The opening lines of "America the Beautiful" came to Katharine Lee Bates atop Pikes Peak in 1893 | `corrected` | NPS, Places of Katharine Lee Bates and "America the Beautiful", https://www.nps.gov/articles/000/places-of-katharine-lee-bates-and-america-the-beautiful.htm, read 2026-11-16 | Was "written on the summit". NPS says the lines "first struck" her there; she published the poem in 1895 |
 | N-04 | The project name is **Space Peak**. The brief now argues for it too | `corrected` | Decided 2026-10-08, cross-session orchestrator, on Paul's delegation | Was `open`. Route 2 of issue #2: the naming section was rewritten for Space Peak rather than keeping two names. See `01_doctrine/voice.md`, Terminology |
 
 ## How to add a row
 
-1. Give it an ID in the right series (`S-`, `G-`, `R-`, `P-`, `E-`, `N-`).
+1. Give it an ID in the right series (`S-`, `G-`, `R-`, `P-`, `E-`, `N-`, `I-`).
 2. State the claim in one sentence, no em dashes.
 3. Start it at `unverified` unless you are adding it with a source in hand.
 4. If you verified it, fill the source column with something a reader can follow.

@@ -31,9 +31,9 @@ Every credible non-rocket launch method replaces *"carry your energy"* with *"re
 
 ## Why a mountain, and why cargo-only
 
-- **Speed, not height:** orbit is 17,500 mph *sideways*, not an altitude. The catapult supplies velocity; a small onboard thruster circularizes at apogee.
-- **Altitude is a spec, not scenery:** exiting at 12,000 to 14,000 ft puts ~40% of the atmosphere's mass already below the muzzle, the difference between "survivable with an ablative shell" and "meteor in reverse." Granite peaks let you bore the acceleration tunnel through solid rock.
-- **~200 g over a ~15-mile run** reaches ~8 km/s. Lethal to humans (we tap out ~10 g), fine for hardened satellites (guided artillery survives 15,000 g). **This is a cargo-only technology forever.** People always ride something gentler.
+- **Speed, not height:** low orbit is about 17,500 mph *sideways*, per [NASA](https://www.nasa.gov/learning-resources/for-kids-and-students/what-is-microgravity-grades-5-8/), not an altitude. The catapult supplies velocity; a small onboard thruster circularizes at apogee.
+- **Altitude is a spec, not scenery:** exiting at 12,000 to 14,000 ft leaves about 36 to 41% of the atmosphere's mass below the muzzle, per [NASA Glenn's atmosphere model](https://www.grc.nasa.gov/www/k-12/airplane/atmos.html). That is the difference between "survivable with an ablative shell" and "meteor in reverse." Granite peaks let you bore the acceleration tunnel through solid rock.
+- **A ~200 g design target over a ~10-mile run** reaches ~8 km/s, per the arithmetic in claims register P-03. Humans tap out around 10 g (unverified). Hardened satellites can take far more: guided artillery survives 15,000 g (unverified). **This is a cargo-only technology forever.** People always ride something gentler.
 - **The "fuel" is electricity.** Charge capacitor/flywheel banks between shots, release a gigawatt-scale pulse in seconds. Nothing staged, nothing dropped. One hardened slug per shot, kept whole to orbit (integral electric thruster like Starlink; ablative or retained aeroshell so even the skin sheds only gas).
 
 ## Cadence, the killer feature
@@ -42,9 +42,9 @@ A rocket is a *building* you fuel and destroy once; reload = build a new rocket 
 
 ## What actually makes or breaks a company here
 
-The mountain is the romantic 5%. The business lives or dies on:
+The mountain is the romantic part. The business lives or dies on:
 
-1. **Satellites redesigned to survive ~200 g**. A ruggedized-satellite factory is the real moat.
+1. **Satellites redesigned to survive the ~200 g design target**. A ruggedized-satellite factory is the real moat.
 2. **The vacuum muzzle**, a membrane or plasma window that holds vacuum while passing a Mach-23 slug.
 3. **Reliability record**. "Nines" not yet demonstrated by anyone; this is the key that unlocks overland launch.
 4. **The FAA relationship + a cleared firing lane**, a political achievement as much as an engineering one.
@@ -55,15 +55,15 @@ The mountain is the romantic 5%. The business lives or dies on:
 
 Selection criteria, in priority order: **southern latitude** (more free spin from Earth's rotation), **clean east/southeast firing lane over empty land**, **good granite**, **road/rail access**, **fewest stakeholders**.
 
-*Every elevation, land status, ownership and firing-lane claim in this table is unverified (claims register S-01 to S-20).*
+*Every elevation, land status, ownership and firing-lane claim in this table is unverified (claims register S-01 to S-20), except the Pikes Peak landmark (S-16) and the Crestones land status (S-18).*
 
 | Site | Elev (ft) | Why it's interesting | The veto |
 |---|---|---|---|
 | **Greenhorn / Wet Mtns** | ~12,300 (unverified) | Fires east straight over **Piñon Canyon** Army live-fire land. DoD already keeps the corridor empty & controlled. **Engineering winner.** | Lower altitude; still federal land |
-| **Culebra Peak** | 14,047 (unverified) | **Southernmost 14er** (~37.1°N, best spin); **privately owned** (Cielo Vista Ranch) = one landowner, not the USFS + 3 counties | Private-deal complexity; watershed |
+| **Culebra Peak** | 14,047 (unverified) | **Southernmost 14er** (~37.1°N, best spin); **privately owned** (Cielo Vista Ranch) = one landowner, not the USFS | Private-deal complexity; watershed |
 | **Spanish Peaks** | ~13,600 (unverified) | Standalone cones; **emptiest sky**, open SE shot over Comanche National Grassland; less mountain to bore | Federal land; lower |
 | **Almagre ("Baldy")** | 12,367 (unverified) | Same granite batholith as Pikes, workforce next door, existing towers/road; SE lane over Fort Carson ranges | USFS; city watershed on its flanks |
-| **Pikes Peak** | 14,115 (unverified) | The **brand** + workforce + road & cog rail; top-10 raw launcher real estate on the continent | 39°N, fires east over Kansas/metro; Nat'l Historic Landmark; donut shop |
+| **Pikes Peak** | 14,115 (unverified) | The **brand** + workforce + road & cog rail | 39°N, fires east over Kansas/metro; Nat'l Historic Landmark; donut shop |
 | **Crestones / Sand Dunes** | ~14,000 (unverified) | South, high, empty east lane; grippy Crestone conglomerate | National Park, and the wilderness beside it |
 | **Blanca Peak** | 14,345 (unverified) | High and south, on paper near-perfect | Sisnaajiní, sacred to the Navajo |
 
@@ -78,21 +78,21 @@ Selection criteria, in priority order: **southern latitude** (more free spin fro
 The formula behind Silicon Valley: *the field* + *the type of place*, both words boring, poetry emerging on its own. The minute a name tries to be clever it becomes a condo development (RIP "Cloudstation Peak").
 
 - **Space** = the field, not one product inside it. (Not "Aero", nobody there builds airplanes. Not "Radar", too narrow. And not "Satellite", which an earlier draft of this brief argued for: a satellite is a product, and the corridor does launch, ground systems and space science as well as satellites. The field name covers all of that. The product name covers a quarter of it.)
-- **Peak** = geographically the city sits in a valley at 6,035 ft (unverified), but *culturally* Peak is the identity Colorado Springs actually chose: the "Pikes Peak Region," "Pikes Peak or Bust," "America the Beautiful" written on the summit. "Colorado Springs" was itself borrowed branding in 1871 (the springs are in Manitou). The city has always named itself after the thing it looks *up* at.
+- **Peak** = geographically the city sits in a valley at 6,035 ft (unverified), but *culturally* Peak is the identity Colorado Springs actually chose: the "Pikes Peak Region," "Pikes Peak or Bust," "America the Beautiful," whose opening lines came to Katharine Lee Bates on the summit. "Colorado Springs" was itself borrowed branding in 1871 (unverified; the springs are in Manitou). The city has always named itself after the thing it looks *up* at.
 - And in the mass-driver future, "Peak" stops being a metaphor and becomes the **job description**, peaks as launch sites, the way "valley" meant fabs.
 
 **Naming lineage of this idea:** Silicon Valley → Space Peak. Each a bet on the era's defining field, named after the kind of place that field gets built in.
 
 It also matches its siblings. Photon Mountain and Fusion Canyon name a field plus a landform. "Satellite Peak" would have been the one product name in a family of fields.
 
-*(Nature footnote, because it's the good kind of true: evolution independently prototyped nearly every component of spaceflight and never assembled the rocket, because it never needed to leave; the jet (squid), the catapult (mantis shrimp / firing spores, the mass-driver's ancestor), the cable (spider silk, the tether's), the vacuum grip (gecko feet, already flown by NASA), the survival suit (tardigrade), the deploy mechanism (pinecone). We're the assembly step.)*
+*(Nature footnote, because it's the good kind of true: evolution independently prototyped nearly every component of spaceflight and never assembled the rocket, because it never needed to leave; the jet (squid), the catapult (mantis shrimp / firing spores, the mass-driver's ancestor), the cable (spider silk, the tether's), the vacuum grip (gecko feet; NASA has tested gecko-inspired grippers aboard the space station), the survival suit (tardigrade), the deploy mechanism (pinecone). We're the assembly step.)*
 
 ---
 
 ## Honest risk register
 
 - **Timeline:** physics is sound; engineering is 2040s-hard. This is a long-horizon bet wearing a near-term costume.
-- **The muzzle vacuum seal** and **~200 g satellite survivability** are unsolved at production scale.
+- **The muzzle vacuum seal** and **satellite survivability at the ~200 g design target** are unsolved at production scale.
 - **Overland launch** has never been FAA-approved from an inland US site (unverified, register E-04), earned only by a long clean reliability record. A mass-driver failure is *not* a rocket explosion (no fuel, no staged debris; at most an ablative shell + a dense slug on a predictable arc if the circularization motor fails), closer to aviation's risk profile than artillery's. That's the argument that eventually opens overland launch, but it must be *demonstrated*, not asserted.
 - **Sonic boom corridor** over any populated area is a civic fight (the city-council problem).
 - **Land status** is destiny: National Park = never; sacred peak = never; national forest = brutal; Army range or single private owner = tractable.

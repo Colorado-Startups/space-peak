@@ -1,0 +1,19 @@
+[
+ {
+  "id": "issues.open_bugs",
+  "params": {
+   "area_labels": [
+    "site",
+    "map",
+    "data",
+    "ai",
+    "claims",
+    "quality",
+    "tooling",
+    "security",
+    "accessibility",
+    "documentation"
+   ]
+  }
+ }
+]

@@ -1,0 +1,9 @@
+{
+  "ideal": "Space Peak's checkers stay small standard-library Python, run isolated with -I, each with a self-test, and need no build or install.",
+  "sources": [
+    {"title": "Python 3 docs: Command line and environment", "url": "https://docs.python.org/3/using/cmdline.html", "date": "2026-11-16"}
+  ],
+  "quality": "No dependency, no unused code, and every rule kept in one rules file with its contract test.",
+  "speed": "Every checker finishes in under a second.",
+  "consumption": "No package, no build step, and no runner time past the short job."
+}

@@ -1,0 +1,9 @@
+{
+  "ideal": "Each Space Peak launch step is one issue, opened just in time, typed and labeled, and closed by the pull request that does it.",
+  "sources": [
+    {"title": "GitHub Docs: About issues", "url": "https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues", "date": "2026-11-16"}
+  ],
+  "quality": "Every issue states its step, files, test and size in a table.",
+  "speed": "Each issue closes within a day of opening.",
+  "consumption": "A fix uses no more runner time than one short CI job."
+}

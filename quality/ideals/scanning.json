@@ -1,0 +1,9 @@
+{
+  "ideal": "Secret scanning with push protection and code scanning run free on Space Peak's public repo, and no alert stays open.",
+  "sources": [
+    {"title": "GitHub Docs: Secret scanning", "url": "https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning", "date": "2026-11-16"}
+  ],
+  "quality": "Both scans on, and no open code scanning or secret scanning alert.",
+  "speed": "Each scan finishes within minutes.",
+  "consumption": "Scans bill nothing on a public repo."
+}

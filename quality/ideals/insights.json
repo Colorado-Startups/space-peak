@@ -1,0 +1,9 @@
+{
+  "ideal": "Space Peak's public CC0 repo shows a complete community profile, no branch outliving its pull request, and almost no wasted runner time.",
+  "sources": [
+    {"title": "GitHub Docs: About community profiles for public repositories", "url": "https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/about-community-profiles-for-public-repositories", "date": "2026-11-16"}
+  ],
+  "quality": "The health checklist is complete, and access nobody uses is removed.",
+  "speed": "A finished branch is gone within a day of its pull request closing.",
+  "consumption": "At most a tenth of runner minutes goes to cancelled or failed runs."
+}

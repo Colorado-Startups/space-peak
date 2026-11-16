@@ -1,0 +1,9 @@
+{
+  "ideal": "Readers ask about the Space Peak thesis in Discussions; each question gets a reply and a sourced answer, and fixes become issues.",
+  "sources": [
+    {"title": "GitHub Docs: About discussions", "url": "https://docs.github.com/en/discussions/collaborating-with-your-community-using-discussions/about-discussions", "date": "2026-11-16"}
+  ],
+  "quality": "Every answered question is marked, and every peak claim raised traces to the claims register.",
+  "speed": "A new discussion gets its first reply within a day.",
+  "consumption": "Discussions cost no runner minutes."
+}

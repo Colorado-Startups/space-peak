@@ -1,0 +1,9 @@
+{
+  "ideal": "Space Peak's settings protect main with rules no one bypasses, require CI and sign-off, grant least access, and bill nothing.",
+  "sources": [
+    {"title": "GitHub Docs: About rulesets", "url": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets", "date": "2026-11-16"}
+  ],
+  "quality": "Main changes only by pull request, never by force-push, and every secret is used or removed.",
+  "speed": "No rule waits on a person but the orchestrator's review.",
+  "consumption": "No setting bills past the free plan."
+}

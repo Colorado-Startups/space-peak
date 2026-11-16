@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { allClaims } from "../../src/lib/claims/parse";
@@ -14,6 +14,15 @@ const files = buildFiles(orgs, allClaims(), date);
 const cells = (line: string) => [...line.matchAll(/(?:^|,)("(?:[^"]|"")*"|[^,]*)/g)].map((c) => c[1].replace(/^"|"$/g, "").replaceAll('""', '"'));
 
 describe("open data files", () => {
+  // CI builds before it tests, so every download the catalog offers must exist in the build.
+  const dist = new URL("../../dist/", import.meta.url);
+  it.runIf(existsSync(dist))("every catalog download resolves to a built file", () => {
+    const urls: string[] = JSON.parse(files.get("catalog.json")!).dataset.flatMap((d: { distribution: { contentUrl: string }[] }) => d.distribution.map((x) => x.contentUrl));
+    const missing = urls.map((u) => new URL(u).pathname).filter((path) => !existsSync(new URL(`.${path}`, dist)));
+    expect(urls.length).toBeGreaterThan(0);
+    expect(missing).toEqual([]);
+  });
+
   it.each([
     ["orgs.json", "orgs"], ["orgs.geojson", "orgs-geojson"], ["claims.json", "claims"], ["metrics.json", "metrics"], ["catalog.json", "catalog"],
   ] as const)("%s matches its schema", (path, name) => {

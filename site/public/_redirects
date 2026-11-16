@@ -1,0 +1,2 @@
+# Workers static assets redirects (developers.cloudflare.com/workers/static-assets/redirects/, read 2026-11-16).
+# None yet. One rule per line: [source] [destination] [code?]. Redirects run before _headers.

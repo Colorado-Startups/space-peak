@@ -1,0 +1,13 @@
+# Fictional fixture: required fields only.
+id: example-startup
+name: Example Startup
+summary: A fictional startup.
+kind: company
+subkind: startup
+city: fountain
+area: nearby
+fact: { text: The example startup is fictional., source: registry }
+sources:
+  - { id: registry, url: "https://example.org/registry", publisher: Example Registry, read: 2026-10-15 }
+location: { lat: 38.68, lon: -104.70, precision: city, method: City centre., source: registry }
+status: active

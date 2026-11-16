@@ -1,0 +1,40 @@
+/* Base styles (issue #60). Every colour, size and space is a token from
+   tokens.css or space-peak.css; test/unit/css-scan.test.ts enforces it. */
+*, *::before, *::after { box-sizing: border-box; }
+
+body { margin: 0; padding-inline: var(--s-4); background: var(--c-ground); color: var(--c-text); font-family: var(--font-body); font-size: var(--t-step-0); line-height: 1.5; }
+header, main, footer { max-width: var(--size-wrap); margin-inline: auto; padding-block: var(--s-5); }
+header { display: flex; flex-wrap: wrap; gap: var(--s-4); align-items: center; justify-content: space-between; border-bottom: var(--line-bold) solid var(--c-region-space-peak); }
+header nav { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+footer { border-top: var(--line-hair) solid var(--c-rule); color: var(--c-text-dim); font-size: var(--t-step--1); }
+
+/* Type: fixed brand steps, one step up on wide screens. */
+h1, h2, h3, .brand { font-family: var(--font-display); line-height: 1.1; margin-block: 0 var(--s-4); }
+h1 { font-size: var(--t-step-4); }
+h2 { font-size: var(--t-step-3); }
+h3 { font-size: var(--t-step-2); }
+p, ul, ol { margin-block: 0 var(--s-4); max-width: var(--t-measure); }
+@media (min-width: 48rem) {
+  h1 { font-size: var(--t-step-6); }
+  h2 { font-size: var(--t-step-4); }
+}
+
+/* Links: ink text, pink underline (pink text fails 4.5:1 on white). */
+a { color: var(--c-text); text-decoration-color: var(--c-region-space-peak); text-decoration-thickness: var(--line-edge); text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: var(--line-bold); }
+.brand { font-size: var(--t-step-1); font-weight: 700; text-decoration: none; }
+
+/* Targets: 44 px for every stand-alone control. Links inside a sentence are exempt (WCAG 2.5.8). */
+.brand, header nav a, button, input, select, textarea, summary, .skip-link { display: inline-flex; align-items: center; min-height: var(--size-tap); min-width: var(--size-tap); }
+
+/* Focus: a visible ring on every control. */
+:focus-visible { outline: var(--line-bold) solid var(--c-focus); outline-offset: var(--size-ring-offset); }
+
+/* Skip link: off screen until focused. */
+.skip-link { position: absolute; top: var(--s-2); left: var(--s-4); z-index: 10; padding-inline: var(--s-4); background: var(--c-region-space-peak); color: var(--c-on-region-space-peak); font-weight: 700; transform: translateY(-200%); }
+.skip-link:focus { transform: none; }
+
+/* Reduced motion: stop every animation and transition. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

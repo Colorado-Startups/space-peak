@@ -58,7 +58,56 @@
      "doc": "docs/START-HERE.md",
      "area": [
       "04_tools/",
+      ".github/workflows/",
+      "package.json",
+      "site/src/lib/orgs/",
+      "data/orgs/"
+     ]
+    },
+    {
+     "doc": "README.md",
+     "area": [
+      "site/",
+      "data/",
+      "scripts/",
+      "wrangler.jsonc",
       ".github/workflows/"
+     ]
+    },
+    {
+     "doc": "CONTRIBUTING.md",
+     "area": [
+      ".github/ISSUE_TEMPLATE/",
+      ".github/pull_request_template.md",
+      ".github/dco.yml",
+      "site/src/lib/orgs/schema.ts",
+      "04_tools/space_peak_rules.json"
+     ]
+    },
+    {
+     "doc": "SECURITY.md",
+     "area": [
+      "site/public/_headers",
+      "site/public/.well-known/",
+      ".github/rulesets/",
+      ".github/dependabot.yml",
+      "package-lock.json"
+     ]
+    },
+    {
+     "doc": "AGENTS.md",
+     "area": [
+      ".github/workflows/ci.yml",
+      "package.json",
+      "site/package.json",
+      "04_tools/space_peak_rules.json"
+     ]
+    },
+    {
+     "doc": "site/**",
+     "area": [
+      "{dir}/",
+      "scripts/brand/"
      ]
     },
     {

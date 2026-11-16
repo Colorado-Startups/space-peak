@@ -1,5 +1,16 @@
 # Contributing
 
+```mermaid
+flowchart LR
+  F["Fork and branch"] --> C["git commit -s"]
+  C --> P["Pull request to main"]
+  P --> K{"ci / ci-ok and DCO"}
+  K -- red --> C
+  K -- green --> R["A maintainer reads the whole diff"]
+  R --> M["Squash merge"]
+  M --> W["Workers Builds updates the preview host"]
+```
+
 Space Peak is open to everyone. Corrections, sources, drafts, tooling fixes and good questions all count. You do not need to be an engineer to help.
 
 Mountain facts live in `02_substance/claims_register.md`, each with its status.
@@ -10,6 +21,7 @@ Mountain facts live in `02_substance/claims_register.md`, each with its status.
 | --- | --- |
 | A question or an idea | [Discussions](https://github.com/Colorado-Startups/space-peak/discussions), in Q&A or Ideas |
 | A claim that is wrong, or a source that verifies one | The **Claim correction** issue form |
+| An organisation for spacepeak.co | The **Add your organisation** issue form, or a YAML file in `data/orgs/` |
 | Feedback on a draft | The **Draft feedback** issue form |
 | A checker that misfired | The **Tooling** issue form |
 | A change ready to go | A pull request, below |
@@ -33,6 +45,17 @@ Fix a missed sign-off with `git commit --amend -s`, or `git rebase --signoff mai
 ### Licensing of your contribution
 
 Space Peak is dedicated to the public domain under CC0 1.0, and its code is also offered under 0BSD. See the README's "License" section. Your contribution comes in under the same terms. Do not submit material you cannot release that way, such as someone else's copyrighted text, images or data.
+
+### Sources and read dates
+
+| Rule | Checked by |
+| --- | --- |
+| Every source is an `https` URL with its publisher | `site/src/lib/orgs/schema.ts` |
+| `read` is the ISO date you read it, never a future one | The same schema |
+| A quote is 15 words or fewer | The same schema |
+| Each fact and location names its source by `id` | The same schema |
+| A mountain claim goes in the claims register with its status | `04_tools/space_peak_claims.py` |
+| Prose cites as "(Publisher, read 2026-11-16)" | A reviewer, by hand |
 
 ### Help from an AI agent
 

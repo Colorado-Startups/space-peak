@@ -23,7 +23,7 @@
   <text x="53" y="404" text-anchor="middle" font-size="10" fill="#555">loading dock &#183; vacuum pumps</text>
   <text x="53" y="418" text-anchor="middle" font-size="10" fill="#555">capacitor banks</text>
 
-  <text x="175" y="285" font-size="11" font-weight="600" fill="#1a1a2e" transform="rotate(-39 175 285)">vacuum maglev tunnel &#183; ~10 mi through granite at 200 g</text>
+  <text x="175" y="285" font-size="11" font-weight="600" fill="#1a1a2e" transform="rotate(-39 175 285)">vacuum maglev tunnel &#183; ~10 mi at 200 g target</text>
   <text x="205" y="262" font-size="10" fill="#555" transform="rotate(-39 205 262)">0 &#8594; Mach 23 at ~200 g (satellites only)</text>
 
   <g transform="translate(352,128) rotate(-39)">

@@ -1,0 +1,67 @@
+name: Add your organisation
+description: Put a command, base, university, institution, company or startup on the map.
+title: "[org] "
+labels: ["data"]
+type: Task
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Each organisation on spacepeak.co needs one public source that says
+        what it does and where. A maintainer turns this issue into a file in
+        `data/orgs/` and checks the source before it goes live.
+  - type: input
+    id: name
+    attributes:
+      label: Organisation name
+      placeholder: Example Aerospace
+    validations: { required: true }
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Commands and bases
+        - Universities and institutions
+        - Companies and startups
+    validations: { required: true }
+  - type: dropdown
+    id: city
+    attributes:
+      label: City
+      options:
+        - Colorado Springs
+        - Fountain
+        - Security-Widefield
+        - Manitou Springs
+        - Monument
+        - Woodland Park
+        - Cascade
+        - Pueblo
+        - Other (say which in the fact below)
+    validations: { required: true }
+  - type: input
+    id: website
+    attributes:
+      label: Website
+      placeholder: https://example.com
+    validations: { required: true }
+  - type: input
+    id: source-url
+    attributes:
+      label: Primary source URL
+      description: A public page that states the fact below. The organisation's own site is fine.
+      placeholder: https://example.com/about
+    validations: { required: true }
+  - type: input
+    id: fact
+    attributes:
+      label: One-line fact from that source
+      description: One sentence the source supports, in your own words.
+    validations: { required: true }
+  - type: input
+    id: read-date
+    attributes:
+      label: Date you read the source
+      placeholder: "2026-11-16"
+    validations: { required: true }

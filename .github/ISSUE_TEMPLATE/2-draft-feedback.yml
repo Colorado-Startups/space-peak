@@ -1,7 +1,8 @@
 name: Draft feedback
 description: A note on the thought-leadership draft or the concept brief.
 title: "[draft] "
-labels: ["draft"]
+labels: ["draft", "documentation"]
+type: Task
 body:
   - type: input
     id: location

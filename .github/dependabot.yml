@@ -1,12 +1,15 @@
-# Dependabot keeps the GitHub Actions used by the workflows current and
-# opens a pull request when one has a known vulnerability. Low-risk
+# Dependabot keeps the GitHub Actions and the site's npm packages current
+# and opens a pull request when one has a known vulnerability. Low-risk
 # updates are grouped to keep review light.
 #
 # Dependabot security updates are free and need no extra setup.
 #
-# Only the github-actions ecosystem: 04_tools/ is standard library Python
-# with no requirements.txt, and there is no package.json. Add a pip entry
-# the day 04_tools/ grows a dependency.
+# npm points at the workspace root, which holds the one package-lock.json.
+# An entry for site/ alone would change site/package.json without the
+# lockfile and break `npm ci` (the failure in #53).
+#
+# No pip entry: 04_tools/ is standard library Python with no
+# requirements.txt. Add one the day 04_tools/ grows a dependency.
 #
 # Every PR is merged by hand. See SECURITY.md.
 version: 2
@@ -22,4 +25,19 @@ updates:
       default-days: 7
     groups:
       minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    # A dependency joins the first group it matches, so astro comes first.
+    groups:
+      astro:
+        patterns: ["astro", "@astrojs/*"]
+      dev-minor-and-patch:
+        dependency-type: "development"
         update-types: ["minor", "patch"]

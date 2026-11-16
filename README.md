@@ -8,6 +8,12 @@ A [Colorado Startups](https://coloradostartups.org) project, supported by Colora
 
 Brand: [Colorado Startups brand guide](https://colorado-startups.github.io/brand/)
 
+## The map
+
+[![Map of the Space Peak region: the loop of I-25, Interquest Pkwy, Powers Blvd, Mesa Ridge Pkwy and US-85 around Colorado Springs and Fountain](https://coloradostartups.org/maps/space-peak.svg)](https://colorado-startups.github.io/space-peak/map/)
+
+The image shows the Colorado Startups region loop, which is the website's definition, not this project's launch complex (register R-01 to R-05). Click it for the live map, which adds the summits in the brief and the two permanent exclusions. The image is built and credited by coloradostartups.org, and this repository keeps no copy.
+
 ## Where the project stands
 
 `00_project_system/MASTER_PLAN.md` gated everything behind one decision: park the idea, publish it, or develop it. That decision is made. **Publish**, under the Space Peak name, as a standalone piece rather than under the Photon Mountain umbrella.

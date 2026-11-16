@@ -27,7 +27,7 @@ export function insideRegion(lon: number, lat: number, rings: Ring[]): boolean {
   return inside;
 }
 
-/** Kilometres from a point to the region's edge, 0 inside. A local flat projection is within 0.1% at 60 km. */
+/** Kilometres from a point to the region's edge, 0 inside, on a local flat projection. */
 export function kmToRegion(lon: number, lat: number, rings: Ring[]): number {
   if (insideRegion(lon, lat, rings)) return 0;
   const k = (6371.0088 * Math.PI) / 180;

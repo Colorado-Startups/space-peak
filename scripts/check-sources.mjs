@@ -3,7 +3,10 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { parse } from "yaml";
+import { createRequire } from "node:module";
+
+// yaml is a dependency of the site workspace, not the repo root, so load it from there.
+const { parse } = createRequire(new URL("../site/package.json", import.meta.url))("yaml");
 
 const dir = process.argv[2] ?? fileURLToPath(new URL("../data/orgs/", import.meta.url));
 const bare = (host) => host.toLowerCase().replace(/^www\./, "");

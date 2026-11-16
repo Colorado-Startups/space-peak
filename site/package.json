@@ -8,7 +8,7 @@
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",
     "@modelcontextprotocol/server": "2.4.0",
-    "@observablehq/plot": "0.6.17",
+    "@observablehq/plot": "0.6.19",
     "astro": "7.4.8",
     "maplibre-gl": "6.16.0",
     "yaml": "2.9.1",

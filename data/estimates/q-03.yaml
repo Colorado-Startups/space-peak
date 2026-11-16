@@ -1,0 +1,19 @@
+id: q-03
+question: Will an FAA-licensed orbital launch lift off from a US site at least 150 km from an ocean coast by the end of 2040?
+resolves:
+  date: 2040-12-31
+  criteria: Yes if the FAA licence record and one independent launch log show an orbital launch attempt, rocket or kinetic, from a US site at least 150 km from the nearest ocean coastline.
+p: 0.12
+reasoning: >-
+  Register row E-04 says no inland US site has had FAA approval for overland launch, and that row is still unverified.
+  The FAA Spaceports by State page lists Spaceport America in New Mexico as licensed for horizontal and vertical launch until December 14, 2028.
+  The same page calls the Pacific Spaceport Complex in Alaska one of only four orbital vertical rocket launch sites in the United States.
+claims: [E-04]
+sources:
+  - id: faa-spaceports
+    url: https://www.faa.gov/space/spaceports_by_state
+    publisher: FAA
+    read: 2026-11-16
+estimator: Draft by Claude for Paul's review
+date: 2026-11-16
+approved: false

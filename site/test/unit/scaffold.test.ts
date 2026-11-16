@@ -10,6 +10,8 @@ describe("scaffold", () => {
     expect(liveLinks([])).toEqual([]);
     expect(liveLinks(["../pages/map.astro"])).toEqual([NAV[0]]);
     expect(liveLinks(["../pages/map/index.astro"])).toEqual([NAV[0]]);
+    expect(liveLinks(["../pages/guide/index.astro", "../pages/about.astro"]).map((l) => l.href)).toEqual(["/guide/", "/about/"]);
+    expect(NAV.map((l) => l.href)).toEqual(["/map/", "/guide/", "/launch/", "/ai/", "/about/"]);
   });
 
   it("serves site/dist as static assets with no Worker, workers.dev and previews on", () => {

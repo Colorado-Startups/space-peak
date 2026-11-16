@@ -1,10 +1,19 @@
 ---
 import Base from "../layouts/Base.astro";
 import { liveLinks } from "../lib/nav";
-const map = liveLinks().find((link) => link.label === "Map");
+
+// Each home section is its own file in src/sections/home/, rendered in filename order (10-hero, 20-place, ...),
+// so a step adds a section by adding a file. Until the hero lands, the headline below is the page.
+const modules = import.meta.glob<{ default: any }>("../sections/home/*.astro", { eager: true });
+const sections = Object.keys(modules).sort().map((key) => modules[key].default);
+const map = liveLinks().find((link) => link.href === "/map/");
 ---
 <Base title="Space Peak" description="Colorado's hub for the future of space.">
-  <h1>Space Peak</h1>
-  <p>Colorado's hub for the future of space.</p>
-  {map && <a class="button" href={map.href}>Explore the map</a>}
+  {sections.length > 0 ? sections.map((Section) => <Section />) : (
+    <>
+      <h1>Space Peak</h1>
+      <p>Colorado's hub for the future of space.</p>
+      {map && <a class="button" href={map.href}>Explore the map</a>}
+    </>
+  )}
 </Base>

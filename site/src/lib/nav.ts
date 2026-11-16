@@ -1,7 +1,13 @@
 // Every planned link. A link renders only once its page file exists under src/pages/.
 export type NavLink = { href: string; label: string };
 
-export const NAV: readonly NavLink[] = [{ href: "/map/", label: "Map" }];
+export const NAV: readonly NavLink[] = [
+  { href: "/map/", label: "Map" },
+  { href: "/guide/", label: "Guide" },
+  { href: "/launch/", label: "Launch" },
+  { href: "/ai/", label: "Use it with your AI" },
+  { href: "/about/", label: "About" },
+];
 
 const PAGES = Object.keys(import.meta.glob("../pages/**/*.astro"));
 

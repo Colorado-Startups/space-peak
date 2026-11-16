@@ -1,0 +1,26 @@
+# Workers static assets headers (developers.cloudflare.com/workers/static-assets/headers/, read 2026-11-16).
+# Rules apply in file order and merge; a header set twice is joined with a comma.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://tiles.openfreemap.org https://tiles.mapterhorn.com; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# The production workers.dev host stays out of search results; Preview URLs get noindex from Cloudflare.
+https://spacepeak.coloradostartups.workers.dev/*
+  X-Robots-Tag: noindex
+
+# Open data: any origin may fetch it.
+/data/*
+  Access-Control-Allow-Origin: *
+
+/*.geojson
+  Content-Type: application/geo+json
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+# RFC 9727 API catalog
+/.well-known/api-catalog
+  Content-Type: application/linkset+json

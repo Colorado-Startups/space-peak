@@ -1,7 +1,8 @@
 name: Claim correction
 description: A claim in the register is wrong, out of date, or now verifiable.
 title: "[claim] "
-labels: ["claim", "diligence"]
+labels: ["claims", "diligence"]
+type: Bug
 body:
   - type: markdown
     attributes:

@@ -2,6 +2,7 @@ name: Tooling
 description: A checker, hook, or workflow misbehaved.
 title: "[tooling] "
 labels: ["tooling"]
+type: Bug
 body:
   - type: markdown
     attributes:

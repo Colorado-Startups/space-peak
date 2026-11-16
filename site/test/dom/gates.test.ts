@@ -62,6 +62,9 @@ if (!ready && !inCI) console.warn(`[dom gates] skipped: no build at ${DIST_DIR}.
 describe.skipIf(!ready && !inCI)("gates on every built page", () => {
   it("finds a build", () => expect(ready, `CI is set but ${DIST_DIR} is missing; build before npm test`).toBe(true));
   const pages = ready ? builtPages() : [];
+  // Pages only ever get added, so the home page and the 404 page must always be there.
+  it.runIf(ready)("finds the home and 404 pages", () =>
+    expect(pages.map((p) => p.route)).toEqual(expect.arrayContaining(["/", "/404.html"])));
   const exists = (rel: string) => existsSync(path.join(DIST_DIR, rel)) && statSync(path.join(DIST_DIR, rel)).isFile();
   const size = (rel: string) => statSync(path.join(DIST_DIR, rel)).size;
 

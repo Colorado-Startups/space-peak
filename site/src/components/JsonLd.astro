@@ -1,0 +1,7 @@
+---
+// One JSON-LD block per page: the site graph plus the page's own nodes.
+// A data block is never executed, so the CSP's script-src 'self' does not apply to it.
+import { type Node, serialize, site } from "../lib/jsonld";
+const { nodes = [] } = Astro.props as { nodes?: Node[] };
+---
+<script type="application/ld+json" set:html={serialize([...site(), ...nodes])} />

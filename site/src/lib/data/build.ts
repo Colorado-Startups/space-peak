@@ -74,6 +74,16 @@ const DATASETS: [name: string, paths: string[], description: string][] = [
     "The GeoJSON layer the spacepeak.co map draws, as points with the properties the map shows. It is listed here so the catalog names every open file."],
 ];
 
+/** The schema.org DataCatalog that catalog.json serves and the /data/ page embeds as JSON-LD. */
+export const catalog = (generated: string) => ({
+  "@context": "https://schema.org", "@type": "DataCatalog", name: "Space Peak open data", description: "Open data behind spacepeak.co, free to reuse under CC0.",
+  url: `${SITE}/data/catalog.json`, license: LICENSE, dateModified: generated,
+  dataset: DATASETS.map(([name, paths, description]) => ({
+    "@type": "Dataset", name, description, url: `${SITE}/data/${paths[0]}`, license: LICENSE, isAccessibleForFree: true, dateModified: generated,
+    distribution: paths.map((p) => ({ "@type": "DataDownload", contentUrl: `${SITE}/data/${p}`, encodingFormat: mediaType(p) })),
+  })),
+});
+
 /** Every file under /data/ except map.geojson and index.json: path to body. */
 export function buildFiles(orgsIn: Org[], claims: ClaimRow[], generated: string): Map<string, string> {
   const orgs = [...orgsIn].sort((a, b) => a.id.localeCompare(b.id));
@@ -97,14 +107,7 @@ export function buildFiles(orgsIn: Org[], claims: ClaimRow[], generated: string)
       orgs: { total: orgs.length, by_kind: tally(KINDS, orgs.map((o) => o.kind)), by_city: tally(CITIES, orgs.map((o) => o.city)) },
       claims: { total: claims.length, by_status: tally(CLAIM_STATUSES, claims.map((c) => c.status)) },
     })],
-    ["catalog.json", json({
-      "@context": "https://schema.org", "@type": "DataCatalog", name: "Space Peak open data", description: "Open data behind spacepeak.co, free to reuse under CC0.",
-      url: `${SITE}/data/catalog.json`, license: LICENSE, dateModified: generated,
-      dataset: DATASETS.map(([name, paths, description]) => ({
-        "@type": "Dataset", name, description, url: `${SITE}/data/${paths[0]}`, license: LICENSE, isAccessibleForFree: true, dateModified: generated,
-        distribution: paths.map((p) => ({ "@type": "DataDownload", contentUrl: `${SITE}/data/${p}`, encodingFormat: mediaType(p) })),
-      })),
-    })],
+    ["catalog.json", json(catalog(generated))],
   ]);
   for (const name of Object.keys(SCHEMAS) as SchemaName[]) files.set(`schemas/${name}.json`, json(jsonSchema(name)));
   return files;

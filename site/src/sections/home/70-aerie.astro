@@ -1,0 +1,24 @@
+---
+// The brand's loop and its own caption for Space Peak (Colorado-Startups/brand v4.4.0, data/world.yaml).
+// No autoplay: public/js/aerie-loop.js starts it on first scroll or press, never under reduced motion.
+---
+<section class="aerie" aria-label="The aerie">
+  <figure data-loop>
+    <video muted loop playsinline preload="none" poster="/art/springs-720.webp" width="720" height="360" aria-hidden="true">
+      <source src="/art/space.webm" type="video/webm" />
+      <source src="/art/space.mp4" type="video/mp4" />
+    </video>
+    <figcaption>
+      <span>Pikes Peak's rock spires as tower aeries, with gyrocopters and a gryphon</span>
+      <button type="button" class="button" data-loop-toggle>Play the loop</button>
+    </figcaption>
+  </figure>
+  <script is:inline src="/js/aerie-loop.js" defer></script>
+</section>
+
+<style>
+  .aerie figure { margin: 0 0 var(--s-7); }
+  .aerie video { display: block; inline-size: 100%; block-size: auto; aspect-ratio: 2 / 1; border-radius: var(--r-card); background: var(--c-surface); }
+  .aerie figcaption { display: flex; flex-wrap: wrap; gap: var(--s-4); align-items: center; justify-content: space-between; padding-block: var(--s-4); }
+  .aerie button { border: 0; font-family: inherit; font-size: var(--t-step-0); cursor: pointer; }
+</style>

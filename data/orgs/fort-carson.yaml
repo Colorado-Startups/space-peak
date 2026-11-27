@@ -1,12 +1,12 @@
 id: fort-carson
 name: Fort Carson
-summary: Army post established in 1942 on land south of Colorado Springs.
+summary: Army post on land south of Colorado Springs.
 kind: command_base
 subkind: installation
 city: colorado-springs
 area: nearby
 fact:
-  text: Fort Carson was established in 1942, on land Colorado Springs bought and donated to the War Department.
+  text: Fort Carson was established in 1942.
   source: usag-carson
 sources:
   - id: usag-carson

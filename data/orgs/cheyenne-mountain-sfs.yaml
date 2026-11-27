@@ -1,6 +1,6 @@
 id: cheyenne-mountain-sfs
 name: Cheyenne Mountain Space Force Station
-summary: Hardened command center inside Cheyenne Mountain in Colorado Springs.
+summary: Space Force station inside Cheyenne Mountain that hosts the NORAD and USNORTHCOM alternate command center.
 kind: command_base
 subkind: installation
 city: colorado-springs

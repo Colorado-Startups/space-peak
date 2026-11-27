@@ -6,7 +6,7 @@ subkind: unit
 city: colorado-springs
 area: nearby
 fact:
-  text: Space Base Delta 1 hosts real property at four installations, including Peterson SFB and Cheyenne Mountain SFS.
+  text: Space Base Delta 1 hosts real property at four installations, including Peterson SFB.
   source: sbd1-page
 sources:
   - id: sbd1-page

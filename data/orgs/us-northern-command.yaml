@@ -1,0 +1,27 @@
+id: us-northern-command
+name: U.S. Northern Command
+summary: Unified command for homeland defense and defense support of civil authorities, aligned with NORAD.
+kind: command_base
+subkind: command
+city: colorado-springs
+area: nearby
+fact:
+  text: U.S. Northern Command was established on October 1, 2002.
+  source: northcom-about
+sources:
+  - id: northcom-about
+    url: https://www.northcom.mil/About/
+    publisher: U.S. Northern Command
+    read: 2026-11-27
+    quote: U.S. Northern Command (USNORTHCOM) was established Oct. 1, 2002
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Peterson+Space+Force+Base%27
+    publisher: U.S. Census Bureau TIGERweb
+    read: 2026-11-27
+location:
+  lat: 38.8196534
+  lon: -104.6961291
+  precision: campus
+  method: Interior point of the Peterson Space Force Base polygon in the Census TIGERweb Military Installations layer.
+  source: census-tigerweb
+status: active

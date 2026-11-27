@@ -1,0 +1,27 @@
+id: fort-carson
+name: Fort Carson
+summary: Army post established in 1942 on land south of Colorado Springs.
+kind: command_base
+subkind: installation
+city: colorado-springs
+area: nearby
+fact:
+  text: Fort Carson was established in 1942, on land Colorado Springs bought and donated to the War Department.
+  source: usag-carson
+sources:
+  - id: usag-carson
+    url: https://home.army.mil/carson/units-tenants/us-army-garrison-fort-carson
+    publisher: U.S. Army Garrison Fort Carson
+    read: 2026-11-27
+    quote: Fort Carson was established in 1942, following Japan's attack on Pearl Harbor.
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Fort+Carson%27
+    publisher: U.S. Census Bureau TIGERweb
+    read: 2026-11-27
+location:
+  lat: 38.5608226
+  lon: -104.8280969
+  precision: campus
+  method: Interior point of the Fort Carson polygon in the Census TIGERweb Military Installations layer.
+  source: census-tigerweb
+status: active

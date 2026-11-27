@@ -1,0 +1,27 @@
+id: cheyenne-mountain-sfs
+name: Cheyenne Mountain Space Force Station
+summary: Hardened command center inside Cheyenne Mountain in Colorado Springs.
+kind: command_base
+subkind: installation
+city: colorado-springs
+area: nearby
+fact:
+  text: The complex serves as the NORAD and USNORTHCOM Alternate Command Center.
+  source: cmsfs-page
+sources:
+  - id: cmsfs-page
+    url: https://www.petersonschriever.spaceforce.mil/Cheyenne-Mountain-SFS-Colorado/
+    publisher: Peterson and Schriever Space Force Base
+    read: 2026-11-27
+    quote: the Cheyenne Mountain Complex serves as NORAD and USNORTHCOM's Alternate Command Center
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Cheyenne+Mountain+Space+Force+Station%27
+    publisher: U.S. Census Bureau TIGERweb
+    read: 2026-11-27
+location:
+  lat: 38.7404781
+  lon: -104.8451016
+  precision: campus
+  method: Interior point of the Cheyenne Mountain Space Force Station polygon in the Census TIGERweb Military Installations layer.
+  source: census-tigerweb
+status: active

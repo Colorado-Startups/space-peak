@@ -1,0 +1,27 @@
+id: mission-delta-3
+name: Mission Delta 3, Space Electromagnetic Warfare
+summary: Space Force mission delta that trains and presents space electromagnetic warfare forces.
+kind: command_base
+subkind: unit
+city: colorado-springs
+area: nearby
+fact:
+  text: Mission Delta 3 is headquartered at Peterson SFB.
+  source: md3-factsheet
+sources:
+  - id: md3-factsheet
+    url: https://www.ussf-cfc.spaceforce.mil/About-Us/Fact-Sheets/Display/Article/3878152/mission-delta-3-space-electromagnetic-warfare
+    publisher: U.S. Space Force Combat Forces Command
+    read: 2026-11-27
+    quote: DEL 3 is headquartered at Peterson Space Force Base, Colorado.
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Peterson+Space+Force+Base%27
+    publisher: U.S. Census Bureau TIGERweb
+    read: 2026-11-27
+location:
+  lat: 38.8196534
+  lon: -104.6961291
+  precision: campus
+  method: Interior point of the Peterson Space Force Base polygon in the Census TIGERweb Military Installations layer.
+  source: census-tigerweb
+status: active

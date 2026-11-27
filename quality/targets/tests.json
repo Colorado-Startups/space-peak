@@ -1,0 +1,21 @@
+[
+ {
+  "id": "tests.e2e_routes",
+  "params": {
+   "suites": [
+    {
+     "label": "Unit",
+     "dir": "site/test/",
+     "file": "\\.test\\.[cm]?[jt]sx?$"
+    },
+    {
+     "label": "End to end",
+     "dir": "site/e2e/",
+     "file": "\\.(spec|test)\\.[cm]?[jt]sx?$",
+     "e2e": true
+    }
+   ],
+   "pages_dir": "site/src/pages/"
+  }
+ }
+]

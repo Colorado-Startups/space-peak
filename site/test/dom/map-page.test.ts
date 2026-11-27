@@ -1,6 +1,5 @@
 // Issue #92: the list twin on /map/ names every drawn place once, so its count per kind equals the drawing's.
 import { existsSync, readFileSync } from "node:fs";
-// @ts-expect-error jsdom ships no types, and this step adds no dependency.
 import { JSDOM } from "jsdom";
 import path from "node:path";
 import { describe, expect, it } from "vitest";

@@ -1,7 +1,16 @@
 ---
 // The brand's loop and its own caption for Space Peak (Colorado-Startups/brand v4.4.0, data/world.yaml).
 // No autoplay: public/js/aerie-loop.js starts it on first scroll or press, never under reduced motion.
+// index.astro drops its fallback <h1> once any section exists. Until 10-hero.astro (PR #108) lands,
+// this file carries the page's one <h1>; the hero's arrival removes it, so either merge order keeps one.
+const hero = Object.keys(import.meta.glob("./10-hero.astro")).length > 0;
 ---
+{!hero && (
+  <>
+    <h1>Space Peak</h1>
+    <p>Colorado's hub for the future of space.</p>
+  </>
+)}
 <section class="aerie" aria-label="The aerie">
   <figure data-loop>
     <video muted loop playsinline preload="none" poster="/art/springs-720.webp" width="720" height="360" aria-hidden="true">

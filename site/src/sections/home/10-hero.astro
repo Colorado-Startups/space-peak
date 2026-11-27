@@ -6,8 +6,8 @@ import { liveLinks } from "../../lib/nav";
 import { drawHero } from "../../lib/hero/draw";
 
 const map = liveLinks().find((link) => link.href === "/map/");
-// 640w is the Lighthouse mobile pick (380 px at 1.75x); keep it at 30 KB or less for LCP (PR #108).
-const srcset = "/art/springs-640.webp 640w, /art/springs-720.webp 720w, /art/springs-1440.webp 1440w";
+// 680w is the Lighthouse mobile pick (a 380 px slot at 1.75x needs 665 px); keep it at 30 KB or less for LCP (PR #108).
+const srcset = "/art/springs-680.webp 680w, /art/springs-720.webp 720w, /art/springs-1440.webp 1440w";
 // main is 1180 px wide at most, inside 1 rem of body padding a side.
 const sizes = "(min-width: 76rem) 1180px, calc(100vw - 2rem)";
 ---

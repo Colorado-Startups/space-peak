@@ -23,11 +23,11 @@ export function lightOnly(css) {
 
 // Each locked source: where it goes and how. `widths` resizes to webp with sharp;
 // `webp` overrides the default webp options for one width.
-// springs-640 is the home hero's pick at Lighthouse mobile (412 px at 1.75x), held to 30 KB for LCP (PR #108).
+// springs-680 is the home hero's pick at Lighthouse mobile (380 px slot at 1.75x needs 665 px), held to 30 KB for LCP (PR #108).
 export const PLAN = {
   "dist/tokens.css": { out: "site/src/styles/tokens.css", css: true },
   "dist/crests/space-peak-512.png": { out: `${ART}/crest-{w}.webp`, widths: [96, 192, 384] },
-  "dist/places/springs.jpg": { out: `${ART}/springs-{w}.webp`, widths: [640, 720, 1440], webp: { 640: { quality: 48, effort: 6 } } },
+  "dist/places/springs.jpg": { out: `${ART}/springs-{w}.webp`, widths: [680, 720, 1440], webp: { 680: { quality: 42, effort: 6 } } },
   "dist/clips/space.webm": { out: `${ART}/space.webm` },
   "dist/clips/space.mp4": { out: `${ART}/space.mp4` },
   "dist/social/space-peak.jpg": { out: `${ART}/space-peak.jpg` },

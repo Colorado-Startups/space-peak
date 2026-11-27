@@ -1,18 +1,21 @@
 ---
 import JsonLd from "./JsonLd.astro";
 import type { Node } from "../lib/jsonld";
+import { liveLinks } from "../lib/nav";
 const { title, description, jsonld = [] } = Astro.props as { title: string; description: string; jsonld?: Node[] };
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const card = new URL("/art/space-peak.jpg", Astro.site);
-// The Markdown twin step 41 builds beside each page's index.html.
-const markdown = `${Astro.url.pathname.replace(/\/?$/, "/")}index.md`;
+// Step 41 twins the home page and each live nav page at <path>index.md, once its route exists; others get no link.
+const path = Astro.url.pathname.replace(/\/?$/, "/");
+const twinRoute = Object.keys(import.meta.glob("../pages/**/index.md.ts")).length > 0;
+const markdown = twinRoute && (path === "/" || liveLinks().some((l) => l.href === path)) ? `${path}index.md` : undefined;
 ---
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
-<link rel="alternate" type="text/markdown" href={markdown} />
+{markdown && <link rel="alternate" type="text/markdown" href={markdown} />}
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Space Peak" />
 <meta property="og:title" content={title} />

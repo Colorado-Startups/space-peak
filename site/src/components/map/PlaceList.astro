@@ -1,0 +1,25 @@
+---
+// The drawing's accessible twin: every drawn place once, grouped by kind (src/lib/map/places.ts), each with its city and source.
+import type { MapData } from "../../lib/map/data";
+import { placeGroups } from "../../lib/map/places";
+const { data, cities } = Astro.props as { data: MapData; cities: Map<string, string> };
+---
+<section class="place-list" id="places" aria-labelledby="places-title">
+  <h2 id="places-title">Every place on the map</h2>
+  {placeGroups(data, cities).map(({ kind, title, items }) => (
+    <section aria-labelledby={`group-${kind}`} data-group={kind}>
+      <h3 id={`group-${kind}`}>{title} <span class="place-list__count" data-count={items.length}>({items.length})</span></h3>
+      {items.length === 0 ? <p>None listed yet.</p> : (
+        <ul>
+          {items.map((p) => (
+            <li data-kind={kind} data-name={p.name}>
+              <span class="place-list__name">{p.name}</span>
+              <span class="place-list__where">{p.where}</span>
+              <a href={p.url} aria-label={`Source for ${p.name}`}>Source</a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  ))}
+</section>

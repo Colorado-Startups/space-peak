@@ -1,0 +1,22 @@
+---
+// A figure with its claims-register status beside it. <Figure claim="S-04" /> or <Figure claim="S-04" value="14,047 ft" />.
+import "../styles/figure.css";
+import { figureView } from "./figure";
+
+interface Props {
+  claim: string;
+  value?: string;
+}
+
+const { claim, value } = Astro.props;
+const fig = figureView(claim, value);
+---
+<span class="figure" data-claim={fig.id} data-status={fig.status}>
+  <span class="figure-value">{fig.value}</span>
+  <span class={fig.chip.className} title={`Claim ${fig.id}, ${fig.label}`}>{fig.chip.word}</span>
+  {fig.source && (
+    <span class="figure-source">
+      {fig.source.url ? <a href={fig.source.url} rel="noopener">{fig.source.text}</a> : fig.source.text}
+    </span>
+  )}
+</span>

@@ -1,0 +1,27 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://spacepeak.co/.well-known/api-catalog",
+      "item": [{ "href": "https://spacepeak.co/mcp" }, { "href": "https://spacepeak.co/data/index.json" }],
+      "service-doc": [{ "href": "https://spacepeak.co/llms.txt", "type": "text/plain" }]
+    },
+    {
+      "anchor": "https://spacepeak.co/mcp",
+      "service-doc": [{ "href": "https://spacepeak.co/llms.txt", "type": "text/plain" }]
+    },
+    {
+      "anchor": "https://spacepeak.co/data/index.json",
+      "service-desc": [
+        { "href": "https://spacepeak.co/data/schemas/orgs.json", "type": "application/schema+json" },
+        { "href": "https://spacepeak.co/data/schemas/orgs-csv-row.json", "type": "application/schema+json" },
+        { "href": "https://spacepeak.co/data/schemas/orgs-geojson.json", "type": "application/schema+json" },
+        { "href": "https://spacepeak.co/data/schemas/claims.json", "type": "application/schema+json" },
+        { "href": "https://spacepeak.co/data/schemas/metrics.json", "type": "application/schema+json" },
+        { "href": "https://spacepeak.co/data/schemas/catalog.json", "type": "application/schema+json" },
+        { "href": "https://spacepeak.co/data/schemas/index.json", "type": "application/schema+json" }
+      ],
+      "service-meta": [{ "href": "https://spacepeak.co/data/catalog.json", "type": "application/json" }],
+      "service-doc": [{ "href": "https://spacepeak.co/llms.txt", "type": "text/plain" }]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+id: catalyst-campus
+name: Catalyst Campus
+summary: A non-profit campus in Colorado Springs that links government mission owners with small firms.
+kind: institution
+subkind: nonprofit
+city: colorado-springs
+area: loop
+fact:
+  text: Catalyst Campus connects government mission owners with small businesses and startups.
+  source: catalyst-about
+sources:
+  - id: catalyst-about
+    url: https://catalystcampus.org/aboutus/
+    publisher: Catalyst Campus
+    read: 2026-11-27
+    quote: connect government mission owners with small businesses, startups, and non-traditional industry partners
+  - id: catalyst-home
+    url: https://catalystcampus.org/
+    publisher: Catalyst Campus
+    read: 2026-11-27
+    quote: Catalyst Campus is a 501(c)(3) non-profit
+  - id: census-geocoder
+    url: https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address=555+E+Pikes+Peak+Ave%2C+Colorado+Springs%2C+CO+80903
+    publisher: US Census Bureau
+    read: 2026-11-27
+location:
+  lat: 38.83339
+  lon: -104.81393
+  precision: point
+  method: US Census Geocoder match for 555 E. Pikes Peak Ave., the address on catalystcampus.org/aboutus.
+  source: census-geocoder
+cs_ref:
+  collection: resources
+  id: catalyst-campus-for-technology-and-innovation
+status: active

@@ -74,7 +74,7 @@ const DATASETS: [name: string, paths: string[], description: string][] = [
     "The GeoJSON layer the spacepeak.co map draws, as points with the properties the map shows. It is listed here so the catalog names every open file."],
 ];
 
-/** The schema.org DataCatalog that catalog.json serves and the /data/ page embeds as JSON-LD. */
+/** The schema.org DataCatalog that catalog.json serves; the /ai/ page (step 43) embeds it as JSON-LD. */
 export const catalog = (generated: string) => ({
   "@context": "https://schema.org", "@type": "DataCatalog", name: "Space Peak open data", description: "Open data behind spacepeak.co, free to reuse under CC0.",
   url: `${SITE}/data/catalog.json`, license: LICENSE, dateModified: generated,

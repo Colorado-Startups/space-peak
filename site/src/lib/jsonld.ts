@@ -38,7 +38,7 @@ export const itemList = (name: string, items: { name: string; url: string }[]): 
   itemListElement: items.map((item, i) => ({ "@type": "ListItem", position: i + 1, name: item.name, url: abs(item.url) })),
 });
 
-/** The /data/ page: the same DataCatalog catalog.json serves, with Space Peak as each dataset's creator. */
+/** The same DataCatalog catalog.json serves, with Space Peak as each dataset's creator; the /ai/ page (step 43) embeds it. */
 export const dataCatalog = (generated: string): Node => {
   const { "@context": _, ...cat } = catalog(generated);
   return {

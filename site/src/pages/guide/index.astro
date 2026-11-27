@@ -1,0 +1,12 @@
+---
+import Base from "../../layouts/Base.astro";
+
+// Each guide section is its own file in src/sections/guide/, rendered in filename order (10-orgs, ...),
+// so a later step adds a section by adding a file.
+const modules = import.meta.glob<{ default: any }>("../../sections/guide/*.astro", { eager: true });
+const sections = Object.keys(modules).sort().map((key) => modules[key].default);
+---
+<Base title="Guide: who is here | Space Peak" description="The commands, bases, institutions and companies in the Space Peak region, each with one sourced fact.">
+  <h1>Who is here</h1>
+  {sections.map((Section) => <Section />)}
+</Base>

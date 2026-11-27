@@ -6,8 +6,8 @@ subkind: startup
 city: colorado-springs
 area: nearby
 fact:
-  text: Citra builds hardware, software and infrastructure for space domain awareness.
-  source: citra-home
+  text: Citra lists a Colorado Springs office at 4815 List Drive, Suite 102.
+  source: citra-address
 sources:
   - id: citra-home
     url: https://citra.space/

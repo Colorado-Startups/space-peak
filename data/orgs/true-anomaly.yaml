@@ -6,8 +6,8 @@ subkind: startup
 city: colorado-springs
 area: loop
 fact:
-  text: True Anomaly designs and builds spacecraft, software and payloads for space defense.
-  source: true-anomaly-home
+  text: True Anomaly lists Colorado Springs, CO among its locations.
+  source: true-anomaly-locations
 sources:
   - id: true-anomaly-home
     url: https://www.trueanomaly.space/

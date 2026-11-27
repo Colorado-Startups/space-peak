@@ -6,14 +6,14 @@ subkind: prime
 city: colorado-springs
 area: loop
 fact:
-  text: Lockheed Martin opened Pulsar Guardian, a space training, simulation and development facility, in Colorado Springs in 2019.
+  text: Lockheed Martin built a facility in Colorado Springs.
   source: lockheed-pulsar
 sources:
   - id: lockheed-pulsar
     url: https://news.lockheedmartin.com/news-releases?item=128807
     publisher: Lockheed Martin
     read: 2026-11-27
-    quote: Space Training, Simulation and Development Facility Opens in Colorado Springs
+    quote: "a new, state-of-the art facility built by Lockheed Martin (NYSE: LMT) in Colorado Springs"
   - id: lockheed-colorado
     url: https://www.lockheedmartin.com/en-us/careers/locations/colorado.html
     publisher: Lockheed Martin

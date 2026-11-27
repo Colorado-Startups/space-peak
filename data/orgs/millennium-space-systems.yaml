@@ -6,8 +6,8 @@ subkind: supplier
 city: colorado-springs
 area: nearby
 fact:
-  text: Millennium Space Systems is a wholly owned subsidiary of Boeing.
-  source: millennium-home
+  text: Millennium Space Systems lists a Colorado Springs office at 5555 Tech Center Drive, Suite 400.
+  source: millennium-address
 sources:
   - id: millennium-home
     url: https://www.millennium-space.com/

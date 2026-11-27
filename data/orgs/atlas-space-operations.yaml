@@ -1,13 +1,13 @@
 id: atlas-space-operations
 name: ATLAS Space Operations
-summary: A satellite ground network company headquartered in Traverse City, Michigan, with an office on East Pikes Peak Avenue in Colorado Springs.
+summary: A satellite ground network company with an office on East Pikes Peak Avenue in Colorado Springs.
 kind: company
 subkind: supplier
 city: colorado-springs
 area: loop
 fact:
-  text: ATLAS Space Operations sells ground software as a service on a federated network of ground stations.
-  source: atlas-home
+  text: ATLAS Space Operations lists a Colorado Springs office at 559 E Pikes Peak Ave., Suite 100-7.
+  source: atlas-contact
 sources:
   - id: atlas-home
     url: https://atlasspace.com/

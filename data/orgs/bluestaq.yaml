@@ -6,8 +6,8 @@ subkind: startup
 city: colorado-springs
 area: loop
 fact:
-  text: Bluestaq has its headquarters in Colorado Springs, with offices in London, Canberra and Brisbane.
-  source: bluestaq-contact
+  text: Bluestaq lists its headquarters at 2 South Cascade Ave, Suite 200, in Colorado Springs.
+  source: bluestaq-address
 sources:
   - id: bluestaq-contact
     url: https://bluestaq.com/us/contact.html

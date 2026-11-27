@@ -21,19 +21,45 @@ export interface LinePoint { x: number; y: number }
 export type ChartSpec =
   | { kind: "bar"; title: string; rows: BarRow[]; unit: string }
   | { kind: "line"; title: string; rows: LinePoint[]; x: string; y: string; log?: boolean; tone?: Tone }
-  | { kind: "dots"; title: string; percent: number; tone?: Tone };
+  | { kind: "dots"; title: string; p: number; tone?: Tone };
 
 /** The same data as rows of text: the table twin, so nothing is chart-only. */
 export function tableOf(spec: ChartSpec): { columns: string[]; rows: string[][] } {
   if (spec.kind === "bar") return { columns: ["Item", spec.unit], rows: spec.rows.map((r) => [r.label, fmt(r.value)]) };
   if (spec.kind === "line") return { columns: [spec.x, spec.y], rows: spec.rows.map((r) => [String(r.x), fmt(r.y)]) };
-  return { columns: ["Estimate", "Out of"], rows: [[`${checkPercent(spec.percent)}%`, "100"]] };
+  // String(p), not fmt: toLocaleString stops at 3 decimals, and the table shows the estimate exactly.
+  return { columns: ["Chance (p)", "Dots filled", "Out of"], rows: [[String(spec.p), String(dotsFilled(spec.p)), "100"]] };
 }
 
 const fmt = (v: number) => v.toLocaleString("en-US");
-function checkPercent(p: number): number {
-  if (!Number.isInteger(p) || p < 0 || p > 100) throw new Error(`dots: percent must be a whole number 0 to 100, got ${p}`);
-  return p;
+/** p is a probability from 0 to 1, as data/estimates/*.yaml stores it; the array fills p * 100 dots, rounded. */
+export function dotsFilled(p: number): number {
+  if (typeof p !== "number" || Number.isNaN(p) || p < 0 || p > 1) throw new Error(`dots: p must be a number from 0 to 1, got ${p}`);
+  return Math.round(p * 100);
+}
+
+/** Estimated width in px of one line of text at CHART_PX, from a rough em width per character class. */
+export function labelPx(text: string): number {
+  let em = 0;
+  for (const ch of text) em += /[MWmw@%]/.test(ch) ? 0.9 : /[A-Z0-9]/.test(ch) ? 0.7 : /[\s.,:;'!|()\-fijlrt]/.test(ch) ? 0.32 : 0.56;
+  return Math.ceil(em * CHART_PX);
+}
+/** Tick (6 px) and Plot's 3 px label offset, plus room to breathe. */
+const LABEL_GAP = 16;
+/** The widest a bar label line may run before it wraps, so the bars keep most of the 640 px. */
+export const LABEL_MAX_PX = 240;
+/** Greedy word wrap at LABEL_MAX_PX; a single word wider than that keeps its own line and widens the margin. */
+function wrapLabel(text: string): string[] {
+  const lines: string[] = [];
+  let line = "";
+  for (const word of text.split(/\s+/).filter(Boolean)) {
+    const next = line ? `${line} ${word}` : word;
+    if (line && labelPx(next) > LABEL_MAX_PX) {
+      lines.push(line);
+      line = word;
+    } else line = next;
+  }
+  return line ? [...lines, line] : lines;
 }
 
 // One document for every chart; Plot only creates nodes on it, so output does not depend on call order.
@@ -43,13 +69,17 @@ const base = { document, className: "sp-chart", width: 640 };
 function plotOf(spec: ChartSpec) {
   if (spec.kind === "bar") {
     const rows = spec.rows.map((r) => ({ ...r, fill: TONES[r.tone ?? "lead"] }));
+    // The left margin fits the widest label line at 15 px; longer labels wrap, and each band grows to hold its lines.
+    const lines = new Map(rows.map((r) => [r.label, wrapLabel(r.label)]));
+    const widest = Math.max(0, ...[...lines.values()].flat().map(labelPx));
+    const most = Math.max(1, ...[...lines.values()].map((l) => l.length));
     return Plot.plot({
       ...base,
-      height: 48 + rows.length * 40,
-      marginLeft: 160,
+      height: 48 + rows.length * Math.max(40, most * CHART_PX + 16),
+      marginLeft: Math.max(40, widest + LABEL_GAP),
       color: { type: "identity" },
       x: { label: spec.unit, grid: true, nice: true },
-      y: { label: null, domain: rows.map((r) => r.label) },
+      y: { label: null, domain: rows.map((r) => r.label), tickFormat: (d: string) => (lines.get(d) ?? [d]).join("\n") },
       marks: [
         Plot.barX(rows, { x: "value", y: "label", fill: "fill", rx2: 4, insetTop: 2, insetBottom: 2, title: (r) => `${r.label}: ${fmt(r.value)} ${spec.unit}` }),
         Plot.ruleX([0]),
@@ -71,7 +101,7 @@ function plotOf(spec: ChartSpec) {
     });
   }
   // dots: a 10 by 10 icon array, filled in reading order, one dot per chance in 100.
-  const filled = checkPercent(spec.percent);
+  const filled = dotsFilled(spec.p);
   const tone = TONES[spec.tone ?? "lead"];
   const cells = Array.from({ length: 100 }, (_, i) => ({ x: i % 10, y: Math.floor(i / 10), fill: i < filled ? tone : TONES.muted }));
   return Plot.plot({

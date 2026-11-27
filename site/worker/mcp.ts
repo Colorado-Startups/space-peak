@@ -143,7 +143,7 @@ export function buildServer(data: OpenData): McpServer {
     if (!data.loop) return { ...text({ error: "region unavailable" }), isError: true };
     const { ring, ...loop } = data.loop;
     const point = lat !== undefined && lon !== undefined ? { inside_loop: inside([lon, lat], ring) } : {};
-    const claims = data.claims.filter((c) => c.series === "R").map((c) => claimItem(c, data.generated));
+    const claims = data.claims.filter((c) => c.series === "R").slice(0, MAX).map((c) => claimItem(c, data.generated));
     return text({ ...loop, ...point, claims });
   });
 

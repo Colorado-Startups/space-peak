@@ -1,5 +1,6 @@
-// /mcp over `wrangler dev` (the second webServer in playwright.config.ts): the six tools, the Origin
-// rule, and the MCP conformance suite at the 2026-07-28 requirements. CI only; nothing runs it on this Mac.
+// /mcp over `wrangler dev` (the second webServer in playwright.config.ts): the six tools, the limit cap,
+// malformed bodies, the Origin rule, and the MCP conformance suite at the 2026-07-28 requirements.
+// CI only; nothing runs it on this Mac.
 import { execFile } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { promisify } from "node:util";
@@ -56,6 +57,33 @@ test("a tool answers from the built /data files", async ({ request }) => {
   const body = JSON.parse((await res.json()).result.content[0].text);
   expect(body.claims.total).toBeGreaterThan(0);
 });
+
+// The SDK catches a bad argument's -32602 and answers it as a tool result with isError, on HTTP 200.
+test("list_claims with limit 51 is an input validation error", async ({ request }) => {
+  const res = await request.post(MCP_URL, rpc("tools/call", { name: "list_claims", arguments: { limit: 51 } }));
+  expect(res.status()).toBe(200);
+  const { result } = await res.json();
+  expect(result.isError).toBe(true);
+  expect(result.content[0].text).toMatch(/^Input validation error: Invalid arguments for tool list_claims/);
+});
+
+test("list_claims with limit 50 returns at most 50 claims", async ({ request }) => {
+  const res = await request.post(MCP_URL, rpc("tools/call", { name: "list_claims", arguments: { limit: 50 } }));
+  const { result } = await res.json();
+  expect(result.isError).toBeFalsy();
+  const body = JSON.parse(result.content[0].text);
+  expect(body.claims.length).toBe(Math.min(body.total, 50));
+});
+
+for (const [raw, code] of [["{", -32700], ["[]", -32600]] as const) {
+  test(`the raw body ${raw} gets 400 and a JSON-RPC error`, async ({ request }) => {
+    const res = await request.post(MCP_URL, { headers: rpc("tools/list").headers, data: raw });
+    expect(res.status()).toBe(400);
+    const body = await res.json();
+    expect(body.jsonrpc).toBe("2.0");
+    expect(body.error.code).toBe(code);
+  });
+}
 
 test("a bad Origin gets 403 and the site's own Origin does not", async ({ request }) => {
   expect((await request.post(MCP_URL, rpc("tools/list", {}, { Origin: "https://evil.example" }))).status()).toBe(403);

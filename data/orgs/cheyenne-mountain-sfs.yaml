@@ -1,6 +1,6 @@
 id: cheyenne-mountain-sfs
 name: Cheyenne Mountain Space Force Station
-summary: Space Force station inside Cheyenne Mountain that hosts the NORAD and USNORTHCOM alternate command center.
+summary: Space Force station. The Cheyenne Mountain Complex serves as NORAD and USNORTHCOM's alternate command center.
 kind: command_base
 subkind: installation
 city: colorado-springs

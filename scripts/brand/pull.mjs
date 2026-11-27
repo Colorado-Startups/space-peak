@@ -21,11 +21,13 @@ export function lightOnly(css) {
   return `${css.slice(0, end)}\n}\n`;
 }
 
-// Each locked source: where it goes and how. `widths` resizes to webp with sharp.
+// Each locked source: where it goes and how. `widths` resizes to webp with sharp;
+// `webp` overrides the default webp options for one width.
+// springs-640 is the home hero's pick at Lighthouse mobile (412 px at 1.75x), held to 30 KB for LCP (PR #108).
 export const PLAN = {
   "dist/tokens.css": { out: "site/src/styles/tokens.css", css: true },
   "dist/crests/space-peak-512.png": { out: `${ART}/crest-{w}.webp`, widths: [96, 192, 384] },
-  "dist/places/springs.jpg": { out: `${ART}/springs-{w}.webp`, widths: [720, 1440] },
+  "dist/places/springs.jpg": { out: `${ART}/springs-{w}.webp`, widths: [640, 720, 1440], webp: { 640: { quality: 48, effort: 6 } } },
   "dist/clips/space.webm": { out: `${ART}/space.webm` },
   "dist/clips/space.mp4": { out: `${ART}/space.mp4` },
   "dist/social/space-peak.jpg": { out: `${ART}/space-peak.jpg` },
@@ -52,8 +54,8 @@ async function pull() {
     if (plan.css) write(plan.out, Buffer.from(lightOnly(buf.toString("utf8"))));
     else if (!plan.widths) write(plan.out, buf);
     else for (const w of plan.widths) {
-      const quality = w <= 720 ? 70 : 80; // springs-720 stays under 60 KB (issue #48)
-      write(plan.out.replace("{w}", w), await sharp(buf).resize({ width: w }).keepMetadata().webp({ quality }).toBuffer());
+      const webp = plan.webp?.[w] ?? { quality: w <= 720 ? 70 : 80 }; // springs-720 stays under 60 KB (issue #48)
+      write(plan.out.replace("{w}", w), await sharp(buf).resize({ width: w }).keepMetadata().webp(webp).toBuffer());
     }
     console.log(`brand: ${src} ok (${lock.tag})`);
   }

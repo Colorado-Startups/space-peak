@@ -1,0 +1,31 @@
+id: true-anomaly
+name: True Anomaly
+summary: A space defense company that designs spacecraft, software and payloads, with locations in Centennial and Colorado Springs.
+kind: company
+subkind: startup
+city: colorado-springs
+area: loop
+fact:
+  text: True Anomaly designs and builds spacecraft, software and payloads for space defense.
+  source: true-anomaly-home
+sources:
+  - id: true-anomaly-home
+    url: https://www.trueanomaly.space/
+    publisher: True Anomaly
+    read: 2026-11-27
+    quote: We design and build spacecraft, software, and payloads for space superiority.
+  - id: true-anomaly-locations
+    url: https://www.trueanomaly.space/
+    publisher: True Anomaly
+    read: 2026-11-27
+    quote: Locations Centennial, CO Long Beach, CA Colorado Springs, CO Washington, DC
+location:
+  lat: 38.867255
+  lon: -104.760749
+  precision: city
+  method: US Census 2024 Gazetteer internal point for Colorado Springs city; the page names the city but no street address.
+  source: true-anomaly-locations
+cs_ref:
+  collection: companies
+  id: true-anomaly
+status: active

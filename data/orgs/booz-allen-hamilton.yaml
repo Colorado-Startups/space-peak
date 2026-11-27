@@ -1,0 +1,26 @@
+id: booz-allen-hamilton
+name: Booz Allen Hamilton
+summary: A technology firm for government, military and space clients, with an office on Space Center Drive in Colorado Springs.
+kind: company
+subkind: services
+city: colorado-springs
+area: loop
+fact:
+  text: Booz Allen Hamilton lists a Colorado Springs office at 745 Space Center Drive.
+  source: booz-allen-locations
+sources:
+  - id: booz-allen-locations
+    url: https://www.boozallen.com/menu/office-locations.html
+    publisher: Booz Allen Hamilton
+    read: 2026-11-27
+    quote: Colorado Springs 745 Space Center Drive Colorado Springs, CO 80915
+location:
+  lat: 38.84585
+  lon: -104.72285
+  precision: point
+  method: US Census Geocoder (Public_AR_Current) on the address the company publishes.
+  source: booz-allen-locations
+cs_ref:
+  collection: resources
+  id: booz-allen-hamilton
+status: active

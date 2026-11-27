@@ -1,0 +1,23 @@
+id: parsons
+name: Parsons
+summary: An engineering and technology contractor that lists four offices in Colorado Springs.
+kind: company
+subkind: services
+city: colorado-springs
+area: loop
+fact:
+  text: Parsons lists four Colorado Springs offices, three on Pikes Peak Avenue and Tejon Street and one on Tech Center Drive.
+  source: parsons-locations
+sources:
+  - id: parsons-locations
+    url: https://www.parsons.com/locations/
+    publisher: Parsons
+    read: 2026-11-27
+    quote: 5450 Tech Center Dr, Suite 120 Colorado Springs, Colorado 80919
+location:
+  lat: 38.867255
+  lon: -104.760749
+  precision: city
+  method: US Census 2024 Gazetteer internal point for Colorado Springs city; the page lists four Colorado Springs addresses, so no single point is used.
+  source: parsons-locations
+status: active

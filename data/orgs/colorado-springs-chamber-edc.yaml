@@ -1,0 +1,30 @@
+id: colorado-springs-chamber-edc
+name: Colorado Springs Chamber & EDC
+summary: The chamber of commerce and economic development corporation for Colorado Springs.
+kind: institution
+subkind: nonprofit
+city: colorado-springs
+area: loop
+fact:
+  text: The Chamber & EDC names aerospace and defense among the region's industries.
+  source: chamber-home
+sources:
+  - id: chamber-home
+    url: https://coloradospringschamberedc.com/
+    publisher: Colorado Springs Chamber & EDC
+    read: 2026-11-27
+    quote: home of many industries, from aerospace & defense to sports
+  - id: census-geocoder
+    url: https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address=102+S+Tejon+St%2C+Colorado+Springs%2C+CO+80903
+    publisher: US Census Bureau
+    read: 2026-11-27
+location:
+  lat: 38.83233
+  lon: -104.82366
+  precision: point
+  method: US Census Geocoder match for 102 South Tejon Street, the address on coloradospringschamberedc.com.
+  source: census-geocoder
+cs_ref:
+  collection: resources
+  id: colorado-springs-chamber-and-edc
+status: active

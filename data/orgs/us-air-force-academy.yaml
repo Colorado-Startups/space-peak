@@ -1,0 +1,30 @@
+id: us-air-force-academy
+name: U.S. Air Force Academy
+summary: The academy that develops officers to lead the Air Force and the Space Force.
+kind: institution
+subkind: college
+city: colorado-springs
+area: nearby
+fact:
+  text: Cadets in the Astronautical Engineering major learn the fundamentals of satellites, rockets and other space systems.
+  source: usafa-home
+sources:
+  - id: usafa-home
+    url: https://www.usafa.edu/
+    publisher: U.S. Air Force Academy
+    read: 2026-11-27
+    quote: Cadets learn the fundamentals of satellites, rockets, and other space systems
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Places_CouSub_ConCity_SubMCD/MapServer/5/query?where=GEOID%3D%270800870%27&outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json
+    publisher: US Census Bureau
+    read: 2026-11-27
+location:
+  lat: 38.99419
+  lon: -104.86392
+  precision: campus
+  method: Internal point of the Air Force Academy CDP in Census TIGERweb; usafa.edu gives no street address.
+  source: census-tigerweb
+cs_ref:
+  collection: resources
+  id: the-united-states-air-force-academy
+status: active

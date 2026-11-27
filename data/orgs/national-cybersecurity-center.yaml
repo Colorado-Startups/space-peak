@@ -1,0 +1,27 @@
+id: national-cybersecurity-center
+name: National Cybersecurity Center
+summary: A Colorado Springs centre that works on cyber awareness and resilience.
+kind: institution
+subkind: nonprofit
+city: colorado-springs
+area: loop
+fact:
+  text: The National Cybersecurity Center was founded in 2016 and is chartered by law.
+  source: ncc-about
+sources:
+  - id: ncc-about
+    url: https://www.cyber-center.org/about
+    publisher: National Cybersecurity Center
+    read: 2026-11-27
+    quote: Founded in 2016 and chartered by law
+  - id: census-geocoder
+    url: https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address=3650+N+Nevada+Ave%2C+Colorado+Springs%2C+CO+80907
+    publisher: US Census Bureau
+    read: 2026-11-27
+location:
+  lat: 38.88367
+  lon: -104.81898
+  precision: point
+  method: US Census Geocoder match for 3650 N Nevada Ave, the address on cyber-center.org/about.
+  source: census-geocoder
+status: active

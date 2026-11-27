@@ -1,0 +1,30 @@
+id: uccs
+name: University of Colorado Colorado Springs
+summary: The Colorado Springs campus of the University of Colorado.
+kind: institution
+subkind: university
+city: colorado-springs
+area: loop
+fact:
+  text: The UCCS College of Engineering and Applied Science offers a minor in aerospace engineering.
+  source: uccs-eas
+sources:
+  - id: uccs-eas
+    url: https://eas.uccs.edu/
+    publisher: UCCS College of Engineering and Applied Science
+    read: 2026-11-27
+    quote: including mechanical engineering and a minor in aerospace engineering
+  - id: census-geocoder
+    url: https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address=1420+Austin+Bluffs+Pkwy%2C+Colorado+Springs%2C+CO+80918
+    publisher: US Census Bureau
+    read: 2026-11-27
+location:
+  lat: 38.89124
+  lon: -104.80001
+  precision: campus
+  method: US Census Geocoder match for 1420 Austin Bluffs Pkwy, the address on uccs.edu/contact.
+  source: census-geocoder
+cs_ref:
+  collection: resources
+  id: university-of-colorado-colorado-springs
+status: active

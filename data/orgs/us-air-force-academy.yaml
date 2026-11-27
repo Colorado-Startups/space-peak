@@ -6,7 +6,7 @@ subkind: college
 city: colorado-springs
 area: nearby
 fact:
-  text: Cadets in the Astronautical Engineering major learn the fundamentals of satellites, rockets and other space systems.
+  text: Cadets learn the fundamentals of satellites, rockets, and other space systems.
   source: usafa-home
 sources:
   - id: usafa-home
@@ -21,7 +21,7 @@ sources:
 location:
   lat: 38.99419
   lon: -104.86392
-  precision: campus
+  precision: city
   method: Internal point of the Air Force Academy CDP in Census TIGERweb; usafa.edu gives no street address.
   source: census-tigerweb
 cs_ref:

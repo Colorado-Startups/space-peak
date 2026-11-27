@@ -1,19 +1,19 @@
 id: schriever-sfb
 name: Schriever Space Force Base
-summary: Space Force base about 10 miles east of Colorado Springs, according to Space Base Delta 41.
+summary: Space Force base about 10 miles east of Peterson Space Force Base, according to Space Base Delta 41.
 kind: command_base
 subkind: installation
 city: colorado-springs
 area: nearby
 fact:
-  text: The base sits about 10 miles east of Colorado Springs, according to Space Base Delta 41.
+  text: The base sits about 10 miles east of Peterson Space Force Base, according to Space Base Delta 41.
   source: sbd41-page
 sources:
   - id: sbd41-page
     url: https://www.petersonschriever.spaceforce.mil/SpaceBaseDelta41/
     publisher: Peterson and Schriever Space Force Base
     read: 2026-11-27
-    quote: Schriever Space Force Base is located approximately 10 miles east of Colorado Springs
+    quote: Located approximately 10 miles east of Peterson Space Force Base, Colorado
   - id: census-tigerweb
     url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Schriever+Space+Force+Base%27
     publisher: U.S. Census Bureau TIGERweb

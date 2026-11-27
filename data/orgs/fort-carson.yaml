@@ -11,7 +11,7 @@ fact:
 sources:
   - id: usag-carson
     url: https://home.army.mil/carson/units-tenants/us-army-garrison-fort-carson
-    publisher: Fort Carson, U.S. Army
+    publisher: U.S. Army Garrison, Fort Carson
     read: 2026-11-27
     quote: Fort Carson was established in 1942, following Japan's attack on Pearl Harbor.
   - id: census-tigerweb

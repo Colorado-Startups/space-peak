@@ -1,0 +1,18 @@
+[
+ {
+  "id": "usability.reading_grade",
+  "params": {
+   "site_dir": "site/dist",
+   "key_pages": [
+    "/",
+    "/404.html"
+   ],
+   "widths": [
+    1280,
+    375
+   ],
+   "form_pages": [],
+   "tasks": []
+  }
+ }
+]

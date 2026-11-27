@@ -1,0 +1,36 @@
+[
+ {
+  "id": "design.raw_hex",
+  "params": {
+   "site_dir": "site/dist",
+   "key_pages": [
+    "/",
+    "/404.html"
+   ],
+   "widths": [
+    1280,
+    375
+   ],
+   "src_dirs": [
+    "site/src"
+   ],
+   "raw_scan_exempt": [
+    {
+     "file": "site/src/styles/tokens.css",
+     "why": "the brand's token file, generated from its tokens YAML: every hex and px here is a token"
+    },
+    {
+     "file": "site/src/styles/space-peak.css",
+     "why": "Space Peak's own token layer over tokens.css: every hex here is a token"
+    }
+   ],
+   "tokens": {
+    "file": "quality/design-tokens.json",
+    "colors": "color",
+    "type": "font-size",
+    "type_prefix": "t-step",
+    "comment": "written in CI by quality/tokens-from-css.mjs from site/src/styles/tokens.css and space-peak.css (pages.yml); the collector reads JSON or YAML, not CSS"
+   }
+  }
+ }
+]

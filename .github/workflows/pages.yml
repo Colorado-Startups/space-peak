@@ -14,6 +14,8 @@ on:
       - "quality/**"
       - ".github/workflows/pages.yml"
       - "03_deliverables/map/**"
+      - "site/**"
+      - "package-lock.json"
   workflow_dispatch:
 
 permissions:
@@ -47,6 +49,14 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 26
+
+      # The site's Design and Usability metrics read the built site (params.site_dir: site/dist) and the design
+      # tokens as JSON; code.test_coverage_pct runs the repo's vitest. So install, build and write the tokens first.
+      - name: Build the site for the Quality collect
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          node quality/tokens-from-css.mjs quality/design-tokens.json site/src/styles/tokens.css site/src/styles/space-peak.css
 
       - uses: SoulCraft-Org/git-crafter/actions/pages@8023bd4683416f6d420bd20d137960b09c06b91e # v7.0.2
         with:

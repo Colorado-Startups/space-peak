@@ -1,6 +1,6 @@
 id: space-base-delta-1
 name: Space Base Delta 1
-summary: Space Force garrison unit headquartered at Peterson SFB that provides base operating support.
+summary: Unit that hosts real property at four installations, including Peterson SFB.
 kind: command_base
 subkind: unit
 city: colorado-springs

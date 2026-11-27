@@ -1,0 +1,24 @@
+[
+ {
+  "id": "code.loc_change_pct",
+  "params": {
+   "workers": [
+    "."
+   ],
+   "client_dist": {
+    "dir": "site/dist",
+    "source": "site"
+   },
+   "test_suites": [
+    {
+     "label": "Site (vitest)",
+     "cwd": "site",
+     "args": [],
+     "cover": {
+      "site/src/lib": "src/lib/**"
+     }
+    }
+   ]
+  }
+ }
+]

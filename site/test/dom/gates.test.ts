@@ -14,6 +14,7 @@ const has = (rel: string) => files.has(rel);
 describe("gate logic on fixtures", () => {
   it("basics: passes a clean page, names each missing part (known bad)", () => {
     expect(g.basicsProblems(doc(goodHead, "<h1>A</h1>"))).toEqual([]);
+    expect(g.basicsProblems(doc(goodHead, `<h1>A</h1><svg role="img"><title>Map</title></svg>`))).toEqual([]);
     expect(g.basicsProblems(`<html><head><link rel="canonical" href="https://example.com/"></head><body></body></html>`)).toEqual([
       "no lang on <html>",
       "0 <title>, want one with text",

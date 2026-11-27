@@ -1,0 +1,30 @@
+id: catalyst-accelerator
+name: Catalyst Accelerator
+summary: The accelerator programme of Catalyst Campus, run in cohorts around defense and space challenges.
+kind: institution
+subkind: nonprofit
+city: colorado-springs
+area: loop
+fact:
+  text: The Catalyst Accelerator is a three-month programme that helps nontraditional small businesses break into national security work.
+  source: accelerator-about
+sources:
+  - id: accelerator-about
+    url: https://catalystaccelerator.space/about/
+    publisher: Catalyst Accelerator
+    read: 2026-11-27
+    quote: a three-month, semi-residential program that helps nontraditional small businesses break into the national security ecosystem
+  - id: census-geocoder
+    url: https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address=555+E+Pikes+Peak+Ave%2C+Colorado+Springs%2C+CO+80903
+    publisher: US Census Bureau
+    read: 2026-11-27
+location:
+  lat: 38.83339
+  lon: -104.81393
+  precision: point
+  method: US Census Geocoder match for 555 E. Pikes Peak Ave., the address on catalystaccelerator.space/contact.
+  source: census-geocoder
+cs_ref:
+  collection: resources
+  id: catalyst-space-accelerator
+status: active

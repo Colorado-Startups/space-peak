@@ -1,0 +1,33 @@
+---
+// One chart drawn at build time, with a real table of the same data, so nothing is chart-only.
+import { renderChart, tableOf, type ChartSpec } from "../../lib/charts/plot";
+interface Props { spec: ChartSpec; caption?: string; open?: boolean }
+const { spec, caption, open = false } = Astro.props;
+const svg = renderChart(spec);
+const table = tableOf(spec);
+---
+<figure class="chart" data-kind={spec.kind}>
+  <Fragment set:html={svg} />
+  <figcaption>{caption ?? spec.title}</figcaption>
+  <details open={open}>
+    <summary>Data as a table</summary>
+    <table>
+      <caption>{spec.title}</caption>
+      <thead><tr>{table.columns.map((c) => <th scope="col">{c}</th>)}</tr></thead>
+      <tbody>{table.rows.map(([head, ...rest]) => <tr><th scope="row">{head}</th>{rest.map((v) => <td>{v}</td>)}</tr>)}</tbody>
+    </table>
+  </details>
+</figure>
+
+<style>
+  .chart { margin: 0; display: grid; gap: var(--s-3); color: var(--c-text); font-size: var(--t-step--1); }
+  .chart :global(svg) { display: block; inline-size: 100%; block-size: auto; max-inline-size: 100%; overflow: visible; }
+  .chart[data-kind="dots"] :global(svg) { max-inline-size: calc(var(--s-9) * 3); }
+  figcaption { color: var(--c-text-dim); }
+  summary { cursor: pointer; color: var(--c-link); min-block-size: var(--size-tap); display: flex; align-items: center; }
+  table { border-collapse: collapse; inline-size: 100%; }
+  caption { text-align: start; color: var(--c-text-dim); padding-block-end: var(--s-2); }
+  th, td { text-align: start; padding: var(--s-2) var(--s-3); border-block-end: var(--line-hair) solid var(--c-rule); }
+  td { font-variant-numeric: tabular-nums; text-align: end; }
+  thead th:last-child { text-align: end; }
+</style>

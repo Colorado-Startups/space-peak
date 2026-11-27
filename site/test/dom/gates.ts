@@ -11,7 +11,8 @@ export function basicsProblems(html: string): string[] {
   const doc = parse(html);
   const out: string[] = [];
   if (!doc.documentElement.getAttribute("lang")?.trim()) out.push("no lang on <html>");
-  const titles = doc.querySelectorAll("title");
+  // An SVG <title> names a drawing, not the page, so only titles outside <svg> count.
+  const titles = [...doc.querySelectorAll("title")].filter((t) => !t.closest("svg"));
   if (titles.length !== 1 || !titles[0].textContent?.trim()) out.push(`${titles.length} <title>, want one with text`);
   const h1s = doc.querySelectorAll("h1").length;
   if (h1s !== 1) out.push(`${h1s} <h1>, want one`);

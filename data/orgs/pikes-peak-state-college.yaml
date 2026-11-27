@@ -1,0 +1,27 @@
+id: pikes-peak-state-college
+name: Pikes Peak State College
+summary: A state college with campuses across the Pikes Peak region.
+kind: institution
+subkind: college
+city: colorado-springs
+area: nearby
+fact:
+  text: The college's cybersecurity programme is a nationally recognised Center of Excellence.
+  source: ppsc-home
+sources:
+  - id: ppsc-home
+    url: https://www.pikespeak.edu/
+    publisher: Pikes Peak State College
+    read: 2026-11-27
+    quote: As a nationally recognized Center of Excellence, PPSC’s Cybersecurity program prepares
+  - id: census-geocoder
+    url: https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address=5675+S+Academy+Blvd%2C+Colorado+Springs%2C+CO+80906
+    publisher: US Census Bureau
+    read: 2026-11-27
+location:
+  lat: 38.76538
+  lon: -104.7848
+  precision: campus
+  method: US Census Geocoder match for 5675 South Academy Boulevard, the Centennial Campus on pikespeak.edu/about/locations-maps.php.
+  source: census-geocoder
+status: active

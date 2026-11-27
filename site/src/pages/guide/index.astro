@@ -1,0 +1,17 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { itemList } from "../../lib/jsonld";
+
+// Each guide section is its own file in src/sections/guide/, rendered in filename order (10-orgs, ...),
+// so a later step adds a section by adding a file.
+const modules = import.meta.glob<{ default: any }>("../../sections/guide/*.astro", { eager: true });
+const sections = Object.keys(modules).sort().map((key) => modules[key].default);
+// The guide as a schema.org ItemList, each entry pointing at its row in the table (closed orgs have no row).
+const orgs = (await getCollection("orgs")).filter((o) => o.data.status !== "closed").sort((a, b) => a.data.name.localeCompare(b.data.name));
+const list = itemList("Who is here in the Space Peak region", orgs.map((o) => ({ name: o.data.name, url: `/guide/#org-${o.id}` })));
+---
+<Base title="Guide: who is here | Space Peak" description="The commands, bases, institutions and companies in the Space Peak region, each with one sourced fact." jsonld={[list]}>
+  <h1>Who is here</h1>
+  {sections.map((Section) => <Section />)}
+</Base>

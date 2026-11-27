@@ -1,0 +1,32 @@
+id: space-isac
+name: Space ISAC
+summary: The Space Information Sharing and Analysis Center, headquartered in Colorado Springs.
+kind: institution
+subkind: nonprofit
+city: colorado-springs
+area: loop
+fact:
+  text: Space ISAC describes itself as the global information sharing and analysis center for the space sector.
+  source: space-isac-home
+sources:
+  - id: space-isac-home
+    url: https://spaceisac.org/
+    publisher: Space ISAC
+    read: 2026-11-27
+    quote: the global information sharing and analysis center for the space sector
+  - id: ncc-home
+    url: https://www.cyber-center.org/
+    publisher: National Cybersecurity Center
+    read: 2026-11-27
+    quote: Non-Profit Organization Space ISAC
+  - id: census-geocoder
+    url: https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address=3650+N+Nevada+Ave%2C+Colorado+Springs%2C+CO+80907
+    publisher: US Census Bureau
+    read: 2026-11-27
+location:
+  lat: 38.88367
+  lon: -104.81898
+  precision: point
+  method: US Census Geocoder match for 3650 N Nevada Ave, the headquarters on spaceisac.org/contact.
+  source: census-geocoder
+status: active

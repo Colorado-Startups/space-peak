@@ -1,0 +1,24 @@
+/* The /map/ page. Tokens only (issue #60). Targets are at least --size-tap. */
+.map-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-block: var(--s-4) var(--s-5); }
+.space-map { margin: 0 0 var(--s-5); }
+/* The viewBox is 800 units wide, so 50rem keeps its 15 and 18 unit labels near full size; a narrower frame scrolls, not the page. */
+.space-map__frame { overflow-x: auto; border: var(--line-hair) solid var(--c-rule); background: var(--c-surface); }
+.space-map__frame svg { display: block; width: 100%; min-width: 50rem; height: auto; }
+.space-map figcaption { margin-top: var(--s-2); color: var(--c-text-dim); font-size: var(--t-step--1); }
+.map-legend { margin-block: 0 var(--s-6); }
+.map-legend__title { margin: 0 0 var(--s-2); font-weight: 700; }
+.map-legend ul, .place-list ul { margin: 0; padding: 0; list-style: none; }
+.map-legend ul { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); }
+.map-legend li { display: inline-flex; align-items: center; gap: var(--s-2); }
+.map-legend svg { width: var(--s-5); height: var(--s-5); flex: none; }
+.k-command_base, .k-institution, .k-company { stroke: var(--c-ground); stroke-width: 1.5; }
+.k-command_base { fill: var(--co-web-primary); }
+.k-institution { fill: var(--co-tree-green); }
+.k-company { fill: var(--co-purple); }
+.k-summit { fill: none; stroke: var(--c-text); stroke-width: 2.5; stroke-linejoin: round; }
+.k-loop { fill: var(--c-community); fill-opacity: 0.18; stroke: var(--c-community); stroke-width: 3; }
+.place-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--s-3); border-bottom: var(--line-hair) solid var(--c-rule); }
+.place-list__name { font-weight: 700; }
+.place-list__where { color: var(--c-text-dim); }
+.place-list li a { display: inline-flex; align-items: center; min-height: var(--size-tap); min-width: var(--size-tap); margin-inline-start: auto; }
+.place-list__count { color: var(--c-text-dim); font-weight: 400; }

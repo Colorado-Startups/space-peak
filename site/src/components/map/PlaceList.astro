@@ -1,43 +1,25 @@
 ---
-// The drawing's accessible twin: every drawn place once, grouped by kind, each with its city and source.
+// The drawing's accessible twin: every drawn place once, grouped by kind (src/lib/map/places.ts), each with its city and source.
 import type { MapData } from "../../lib/map/data";
-import type { Kind } from "../../lib/orgs/kinds";
+import { placeGroups } from "../../lib/map/places";
 const { data, cities } = Astro.props as { data: MapData; cities: Map<string, string> };
-const CITY: Record<string, string> = {
-  "colorado-springs": "Colorado Springs", fountain: "Fountain", "security-widefield": "Security-Widefield",
-  "manitou-springs": "Manitou Springs", monument: "Monument", "woodland-park": "Woodland Park", cascade: "Cascade", pueblo: "Pueblo",
-};
-type Item = { name: string; where: string; url: string };
-const GROUPS: { kind: Kind | "summit"; title: string }[] = [
-  { kind: "command_base", title: "Commands and bases" },
-  { kind: "institution", title: "Universities and institutions" },
-  { kind: "company", title: "Companies and startups" },
-  { kind: "summit", title: "Summits" },
-];
-const items = (kind: Kind | "summit"): Item[] =>
-  kind === "summit"
-    ? data.summits.map((s) => ({ name: s.summit, where: "Speculative site", url: s.source_url }))
-    : data.orgs.filter((o) => o.kind === kind).map((o) => ({ name: o.name, where: CITY[cities.get(o.id) ?? ""] ?? "Colorado", url: o.source_url }));
 ---
 <section class="place-list" id="places" aria-labelledby="places-title">
   <h2 id="places-title">Every place on the map</h2>
-  {GROUPS.map(({ kind, title }) => {
-    const list = items(kind);
-    return (
-      <section aria-labelledby={`group-${kind}`} data-group={kind}>
-        <h3 id={`group-${kind}`}>{title} <span class="place-list__count" data-count={list.length}>({list.length})</span></h3>
-        {list.length === 0 ? <p>None listed yet.</p> : (
-          <ul>
-            {list.map((p) => (
-              <li data-kind={kind} data-name={p.name}>
-                <span class="place-list__name">{p.name}</span>
-                <span class="place-list__where">{p.where}</span>
-                <a href={p.url} aria-label={`Source for ${p.name}`}>Source</a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    );
-  })}
+  {placeGroups(data, cities).map(({ kind, title, items }) => (
+    <section aria-labelledby={`group-${kind}`} data-group={kind}>
+      <h3 id={`group-${kind}`}>{title} <span class="place-list__count" data-count={items.length}>({items.length})</span></h3>
+      {items.length === 0 ? <p>None listed yet.</p> : (
+        <ul>
+          {items.map((p) => (
+            <li data-kind={kind} data-name={p.name}>
+              <span class="place-list__name">{p.name}</span>
+              <span class="place-list__where">{p.where}</span>
+              <a href={p.url} aria-label={`Source for ${p.name}`}>Source</a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  ))}
 </section>

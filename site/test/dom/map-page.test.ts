@@ -7,7 +7,8 @@ import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { buildMapData } from "../../src/lib/map/data";
 import { drawMap } from "../../src/lib/map/draw";
-import { orgSchema } from "../../src/lib/orgs/schema";
+import { placeGroups } from "../../src/lib/map/places";
+import { orgSchema, type Org } from "../../src/lib/orgs/schema";
 import { DIST_DIR } from "./pages";
 
 const KINDS = ["command_base", "institution", "company", "summit"] as const;
@@ -41,6 +42,22 @@ describe("drawnCounts on fixtures", () => {
   it("draws with no orgs at all", () => {
     expect(drawnCounts(figures([]))).toEqual({ command_base: 0, institution: 0, company: 0, summit: 4 });
   });
+  it("lists one fixture org per kind in the list twin's groups, as many as it draws", () => {
+    // The orgs collection is empty today, so only this case puts an org through PlaceList's grouping.
+    const company = load("example-startup.yaml");
+    const institution: Org = { ...company, id: "example-lab", name: "Example Lab", kind: "institution", subkind: "lab", location: { ...company.location, lat: 38.9 } };
+    const orgs = [load("example-command.yaml"), institution, company];
+    // Cities by org id, as index.astro passes them.
+    const groups = placeGroups(buildMapData(orgs), new Map(orgs.map((o) => [o.id, o.city])));
+    const listed = Object.fromEntries(groups.map((g) => [g.kind, g.items.length]));
+    expect(listed).toEqual({ command_base: 1, institution: 1, company: 1, summit: 4 });
+    expect(listed).toEqual(drawnCounts(figures(orgs)));
+    expect(groups.slice(0, 3).map((g) => g.items[0])).toEqual([
+      { name: "Example Space Command", where: "Colorado Springs", url: "https://example.org/command" },
+      { name: "Example Lab", where: "Fountain", url: "https://example.org/registry" },
+      { name: "Example Startup", where: "Fountain", url: "https://example.org/registry" },
+    ]);
+  });
 });
 
 const file = path.join(DIST_DIR, "map", "index.html");
@@ -59,6 +76,11 @@ describe.skipIf(!ready && !process.env.CI)("the built /map/ page", () => {
     const ids = [...doc.querySelectorAll("[id]")].map((e) => e.id);
     expect(ids.length).toBe(new Set(ids).size);
     for (const svg of doc.querySelectorAll("figure.space-map svg")) expect([svg.getAttribute("width"), svg.getAttribute("height")]).not.toContain(null);
+  });
+  it("puts each drawing in a focusable, labelled frame that scrolls on a phone", () => {
+    const frames = [...doc.querySelectorAll("figure.space-map > .space-map__frame")];
+    expect(frames).toHaveLength(2);
+    for (const f of frames) expect([f.getAttribute("tabindex"), f.getAttribute("role"), Boolean(f.getAttribute("aria-label"))]).toEqual(["0", "region", true]);
   });
   it("loads no MapLibre", () => expect(doc.documentElement.outerHTML).not.toMatch(/maplibre/i));
 });

@@ -1,18 +1,22 @@
 ---
 // The drawing: the region view and the tour view, inline so they paint with the page and need no script.
-// Each SVG keeps its width and height, so the box holds its aspect ratio and nothing shifts.
+// Each SVG keeps its width and height, so it holds its aspect ratio and nothing shifts.
+// On a phone the frame scrolls sideways, not the page, so the labels stay near their drawn size (map.css).
 import "../../styles/map.css";
 import type { MapData } from "../../lib/map/data";
-import { drawMap, frame, type View } from "../../lib/map/draw";
+import { drawMap, type View } from "../../lib/map/draw";
 const { data } = Astro.props as { data: MapData };
 const CAPTION: Record<View, string> = {
   region: "The region: the Colorado Startups loop around Colorado Springs and Fountain, with Pikes Peak.",
   south: "The tour: the three ranked summits south of the region, and Pikes Peak. Each is speculative.",
 };
+const LABEL: Record<View, string> = {
+  region: "Region drawing, scrolls sideways on a narrow screen",
+  south: "Tour drawing, scrolls sideways on a narrow screen",
+};
 // Two inline SVGs on one page: give each its own title and desc ids.
 const views = (["region", "south"] as const).map((view) => ({
   view,
-  ratio: `${frame(view).width} / ${frame(view).height}`,
   svg: drawMap(data, view).replaceAll("map-title", `${view}-title`).replaceAll("map-desc", `${view}-desc`),
 }));
 const KEY = [
@@ -22,9 +26,9 @@ const KEY = [
   { k: "summit", label: "Summit, speculative", shape: "M10 3l7 13H3z" },
 ];
 ---
-{views.map(({ view, ratio, svg }) => (
+{views.map(({ view, svg }) => (
   <figure class="space-map" data-view={view}>
-    <div class="space-map__frame" style={`aspect-ratio: ${ratio}`} set:html={svg} />
+    <div class="space-map__frame" role="region" aria-label={LABEL[view]} tabindex="0" set:html={svg} />
     <figcaption>{CAPTION[view]}</figcaption>
   </figure>
 ))}

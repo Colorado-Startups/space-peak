@@ -19,6 +19,7 @@ sources:
     url: https://keeptrack.space/deep-dive/spin-launch
     publisher: KeepTrack
     read: 2026-11-16
-estimator: Draft by Claude for Paul's review
+estimator: By Claude, approved by Paul
 date: 2026-11-16
-approved: false
+approved: true
+approved_on: 2026-11-27

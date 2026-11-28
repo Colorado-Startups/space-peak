@@ -131,3 +131,9 @@ A public repository is not publication of the thought-leadership piece. UA 3.2 s
 Paul bought spacepeak.co. Space Peak's venue is a standalone website there, not one written piece, which settles the venue question in UA 3.2. Paul gives the production go-live.
 
 The same day, Paul removed the repository's hard lines: the Blanca Peak and Crestones exclusions, their frozen register rows and the blocking hook, the ban on deploying, and the rule that a draft adds no facts beyond the brief. New facts are welcome with a register row and a source. Phase 3 now builds the website.
+
+### Decision 2026-11-27: the five odds approved
+
+Paul approved the five estimates on the home page, Q-01 to Q-05, in chat on 2026-11-27. His words were "Approve all five".
+
+Each file in `data/estimates/` now says `approved: true` and `approved_on: 2026-11-27`. The site tags each one "estimate", not "draft estimate". No chance, question, reasoning, date or source changed. Each register row stays `open` until its question resolves.

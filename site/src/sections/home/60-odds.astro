@@ -1,7 +1,7 @@
 ---
 // Home section 6, "The odds" (step 36, issue #140): a 100-dot array per estimate in data/estimates/, through the chart
-// kit. Each says "draft estimate" while its register row is open. The full question, reasoning, dates and sources wait
-// behind a press: a details element, so no script. The build stops if a file and its row disagree on the chance.
+// kit. Each says "draft estimate" until Paul approves its file, then "estimate". The full question, reasoning, dates and
+// sources wait behind a press: a details element, so no script. The build stops if a file and its row disagree on the chance.
 import Chart from "../../components/charts/Chart.astro";
 import { getClaim } from "../../lib/claims/parse";
 import { allEstimates, estimateTag, registerId } from "../../lib/estimates/schema";
@@ -21,7 +21,7 @@ const cards = allEstimates().map((e) => {
   if (!label) throw new Error(`60-odds: no short label for ${e.id}`);
   const pct = Number((e.p * 100).toFixed(1));
   if (!row.claim.includes(`at ${pct} percent`)) throw new Error(`60-odds: ${id} says "${row.claim}", but ${e.id}.yaml gives p ${e.p}`);
-  return { e, id, row, label, pct, tag: estimateTag(row.status) };
+  return { e, id, row, label, pct, tag: estimateTag(e) };
 });
 ---
 <section class="odds" aria-labelledby="odds-title">
@@ -31,7 +31,7 @@ const cards = allEstimates().map((e) => {
       <li class="odds-card" data-estimate={e.id} data-register={id} data-status={row.status}>
         <Chart spec={{ kind: "dots", title: e.question, p: e.p }} caption={`${pct}%`} />
         <details>
-          <summary><span class="odds-label">{label}</span><span class="draft-tag">{tag}</span></summary>
+          <summary><span class="odds-label">{label}</span><span class:list={["odds-tag", { draft: !e.approved }]}>{tag}</span></summary>
           <div class="odds-why">
             <p class="odds-question">{e.question}</p>
             <p>{e.reasoning}</p>
@@ -59,8 +59,9 @@ const cards = allEstimates().map((e) => {
   /* A drawn chevron, not text, says it opens, as on the place tiles. */
   .odds-card summary::after { content: ""; position: absolute; inset-block-start: var(--s-3); inset-inline-end: var(--s-2); width: 0.5em; height: 0.5em; border-inline-end: var(--line-bold) solid currentColor; border-block-end: var(--line-bold) solid currentColor; transform: rotate(45deg); }
   .odds-card details[open] summary::after { transform: rotate(-135deg); }
-  /* A draft's tag: a dashed pink border. */
-  .draft-tag { padding: 0.1em 0.55em; border: var(--line-edge) dashed var(--c-region-space-peak); border-radius: var(--r-chisel); font-size: var(--t-step--1); line-height: 1.3; white-space: nowrap; }
+  /* The tag: a pink border, dashed while the estimate is a draft. */
+  .odds-tag { padding: 0.1em 0.55em; border: var(--line-edge) solid var(--c-region-space-peak); border-radius: var(--r-chisel); font-size: var(--t-step--1); line-height: 1.3; white-space: nowrap; }
+  .odds-tag.draft { border-style: dashed; }
   .odds-why { display: grid; gap: var(--s-2); padding-block-start: var(--s-3); font-size: var(--t-step--1); }
   .odds-why p, .odds-sources { margin: 0; }
   .odds-question { font-weight: 700; }

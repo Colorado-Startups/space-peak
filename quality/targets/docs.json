@@ -120,6 +120,68 @@
      ]
     },
     {
+     "doc": "docs/CHECKS.md",
+     "area": [
+      ".github/workflows/ci.yml",
+      ".github/rulesets/protect-main.json",
+      "04_tools/space_peak_rules.json"
+     ]
+    },
+    {
+     "doc": "docs/RUNNING-CHECKS.md",
+     "area": [
+      ".github/workflows/ci.yml",
+      "04_tools/"
+     ]
+    },
+    {
+     "doc": "docs/RULES.md",
+     "area": [
+      "04_tools/space_peak_rules.json",
+      "04_tools/space_peak_contract_test.py",
+      "02_substance/claims_register.md"
+     ]
+    },
+    {
+     "doc": "docs/DATA.md",
+     "area": [
+      "data/",
+      "site/src/content.config.ts",
+      "site/src/lib/claims/parse.ts",
+      "04_tools/space_peak_map.py",
+      "scripts/brand/pull.mjs",
+      "scripts/resources/pull.mjs",
+      "site/src/sections/guide/20-resources.astro"
+     ]
+    },
+    {
+     "doc": "docs/QUALITY.md",
+     "area": [
+      ".github/workflows/pages.yml",
+      "quality/config.json",
+      "quality/process/config.json",
+      "quality/collectors/space-peak.mjs",
+      "quality/targets/space-peak.json",
+      "quality/local-check.mjs",
+      "quality/local-check.test.mjs"
+     ]
+    },
+    {
+     "doc": "docs/PROJECT.md",
+     "area": [
+      "00_project_system/MASTER_PLAN.md"
+     ]
+    },
+    {
+     "doc": "docs/PULL-REQUESTS.md",
+     "area": [
+      ".github/dco.yml",
+      "LICENSE",
+      "LICENSES/",
+      "AGENTS.md"
+     ]
+    },
+    {
      "doc": "README.md",
      "area": [
       "site/",

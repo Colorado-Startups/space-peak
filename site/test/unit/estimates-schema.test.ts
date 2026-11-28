@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { getClaim } from "../../src/lib/claims/parse";
-import { allEstimates, parseEstimate, registerId } from "../../src/lib/estimates/schema";
+import { STATUSES, getClaim } from "../../src/lib/claims/parse";
+import { allEstimates, estimateTag, parseEstimate, registerId } from "../../src/lib/estimates/schema";
 
 const repo = (path: string) => fileURLToPath(new URL(`../../../${path}`, import.meta.url));
 const rules = JSON.parse(readFileSync(repo("04_tools/space_peak_rules.json"), "utf8"));
@@ -23,6 +23,15 @@ describe("draft estimates", () => {
       expect(row.status).toBe("open");
       expect(row.notes).toBe("draft estimate, not yet approved");
       for (const id of e.claims) expect(() => getClaim(id)).not.toThrow();
+    }
+  });
+
+  it('labels an open row "draft estimate", and any other status without "draft"', () => {
+    expect(estimateTag("open")).toBe("draft estimate");
+    for (const status of STATUSES.filter((s) => s !== "open")) {
+      expect(estimateTag(status), status).not.toMatch(/draft/);
+      expect(estimateTag(status), status).toMatch(/estimate/);
+      expect(estimateTag(status), status).not.toBe(status);
     }
   });
 

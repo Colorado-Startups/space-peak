@@ -27,9 +27,12 @@ export type ChartSpec =
 export function tableOf(spec: ChartSpec): { columns: string[]; rows: string[][] } {
   if (spec.kind === "bar") return { columns: ["Item", spec.unit], rows: spec.rows.map((r) => [r.label, fmt(r.value)]) };
   if (spec.kind === "line") return { columns: [spec.x, spec.y], rows: spec.rows.map((r) => [String(r.x), fmt(r.y)]) };
-  // String(p), not fmt: toLocaleString stops at 3 decimals, and the table shows the estimate exactly.
-  return { columns: ["Chance (p)", "Dots filled", "Out of"], rows: [[String(spec.p), String(dotsFilled(spec.p)), "100"]] };
+  // A percent, as a visitor reads a chance; percentOf keeps every decimal p has, where fmt stops at 3.
+  return { columns: ["Chance", "Dots filled", "Dots in all"], rows: [[percentOf(spec.p), String(dotsFilled(spec.p)), "100"]] };
 }
+
+/** p from 0 to 1 as a percent, exact and free of float noise: 0.07 is "7%", 0.0745 is "7.45%". */
+export const percentOf = (p: number) => `${Number((p * 100).toPrecision(12))}%`;
 
 const fmt = (v: number) => v.toLocaleString("en-US");
 /** p is a probability from 0 to 1, as data/estimates/*.yaml stores it; the array fills p * 100 dots, rounded. */
@@ -113,7 +116,8 @@ function plotOf(spec: ChartSpec) {
     color: { type: "identity" },
     x: { domain: [0, 9], inset: 8 },
     y: { domain: [0, 9], inset: 8, reverse: true },
-    marks: [Plot.dot(cells, { x: "x", y: "y", fill: "fill", r: 11 })],
+    // The svg is a named img; its 100 cells are decoration, and a named group with no role fails axe (#149).
+    marks: [Plot.dot(cells, { x: "x", y: "y", fill: "fill", r: 11, ariaHidden: "true" })],
   });
 }
 

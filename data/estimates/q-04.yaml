@@ -5,7 +5,7 @@ resolves:
   criteria: Yes if the SpaceNews annual count, or Jonathan McDowell's count where SpaceNews gives none, exceeds 500 orbital launch attempts for 2030.
 p: 0.4
 reasoning: >-
-  Register row E-02 puts a busy year at about 250 launches, and that row is unverified and now out of date.
+  This project's first draft says a busy year has about 250 launches; we have not checked that figure, and it is now out of date.
   SpaceNews counted 259 orbital launch attempts in 2024, up 17 percent from 221 in 2023.
   KeepTrack counted 245 orbital launch attempts in 2026 through October 16, a pace of about 310 for the year.
   Reaching 500 in 2030 from that pace needs about 13 percent growth a year, while bigger rockets such as Starship could carry more mass in fewer flights.

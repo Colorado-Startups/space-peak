@@ -24,11 +24,11 @@ sites:
     - { name: Spanish Peaks, site: Spanish Peaks, claims: [S-07, S-08, G-03], veto: [S-09] }
   headquarters: { name: Pikes Peak, site: Pikes Peak, claims: [S-14, G-05], veto: [S-15, S-16] }
 
-# The brief's honest risk register, in its order, under the brief's own lead words.
+# The brief's honest risk register, in its order, under the brief's own lead words. Its land status line
+# (E-07) is left off the page (issue #153); the register keeps the row.
 risks:
   - { label: Timeline, claims: [P-12] }
   - { label: Seal and survivability, claims: [P-13] }
   - { label: Overland launch, claims: [P-11, E-04] }
   - { label: Sonic boom, claims: [E-06] }
-  - { label: Land status, claims: [E-07] }
   - { label: Realistic path, claims: [E-08] }

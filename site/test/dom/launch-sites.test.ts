@@ -1,6 +1,6 @@
 // Issue #139: /launch/ tours exactly the brief's ranked three, in its order, plus Pikes Peak as the name and
 // headquarters, each with its register rows and its Hurdles. Issue #153: plain labels, and no exclusions
-// block; Blanca Peak and the Crestones / Great Sand Dunes are not shown. test/unit/figure.test.ts checks each figure.
+// block or land rule; Blanca Peak and the Crestones / Great Sand Dunes are not shown. test/unit/figure.test.ts checks each figure.
 import { existsSync, readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
 import path from "node:path";
@@ -66,6 +66,12 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ tour", () => {
     const main = doc.querySelector("main");
     expect(main?.querySelector(".exclusions, #exclusions")).toBeNull();
     expect(text(main)).not.toMatch(/exclusion|Blanca|Crestone|Sand Dunes|Sisnaajini|the brief|veto/i);
+  });
+
+  it("leaves the brief's land rule (E-07) off the risks, and its words off the page", () => {
+    expect(risks.flatMap((r) => r.claims)).not.toContain("E-07");
+    expect(risks.map((r) => r.label)).not.toContain("Land status");
+    expect(text(doc.querySelector("main"))).not.toMatch(/\b(never|brutal|tractable|sacred|National Park)\b/i);
   });
 
   it("locates the tour on the map's own drawing", () => {

@@ -1,0 +1,27 @@
+id: peterson-sfb
+name: Peterson Space Force Base
+summary: Space Force base in Colorado Springs that began in 1942 as an Army air base.
+kind: command_base
+subkind: installation
+city: colorado-springs
+area: nearby
+fact:
+  text: The base began as Colorado Springs Army Air Base, established on April 28, 1942.
+  source: peterson-history
+sources:
+  - id: peterson-history
+    url: https://www.petersonschriever.spaceforce.mil/About-Us/Fact-Sheets/Display/Article/1124362/peterson-space-force-base-history/
+    publisher: Peterson and Schriever Space Force Base
+    read: 2026-11-27
+    quote: Colorado Springs Army Air Base was established on 28 April 1942
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Peterson+Space+Force+Base%27
+    publisher: U.S. Census Bureau TIGERweb
+    read: 2026-11-27
+location:
+  lat: 38.8196534
+  lon: -104.6961291
+  precision: campus
+  method: Interior point of the Peterson Space Force Base polygon in the Census TIGERweb Military Installations layer.
+  source: census-tigerweb
+status: active

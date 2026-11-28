@@ -1,0 +1,27 @@
+id: norad
+name: North American Aerospace Defense Command
+summary: Command whose commander keeps headquarters at Peterson Space Force Base, Colorado.
+kind: command_base
+subkind: command
+city: colorado-springs
+area: nearby
+fact:
+  text: The NORAD commander keeps headquarters at Peterson SFB.
+  source: norad-about
+sources:
+  - id: norad-about
+    url: https://www.norad.mil/About-NORAD/
+    publisher: North American Aerospace Defense Command
+    read: 2026-11-27
+    quote: The commander maintains his headquarters at Peterson Space Force Base, Colorado.
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Peterson+Space+Force+Base%27
+    publisher: U.S. Census Bureau TIGERweb
+    read: 2026-11-27
+location:
+  lat: 38.8196534
+  lon: -104.6961291
+  precision: campus
+  method: Interior point of the Peterson Space Force Base polygon in the Census TIGERweb Military Installations layer.
+  source: census-tigerweb
+status: active

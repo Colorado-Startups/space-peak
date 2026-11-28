@@ -1,0 +1,26 @@
+---
+// One place on the /launch/ site tour: its name, its register rows, then the rows of the brief's veto column.
+import Figure from "../Figure.astro";
+import type { Place } from "../../lib/launch/data";
+
+interface Props {
+  place: Place;
+}
+
+const { place } = Astro.props;
+---
+<h3>{place.name}</h3>
+<ul class="site-rows">{place.claims.map((id) => <li><Figure claim={id} /></li>)}</ul>
+{place.veto && (
+  <>
+    <p class="site-veto-label">The brief's veto</p>
+    <ul class="site-rows site-veto">{place.veto.map((id) => <li><Figure claim={id} /></li>)}</ul>
+  </>
+)}
+
+<style>
+  h3 { display: flex; align-items: center; margin-block: 0 var(--s-3); }
+  .site-rows { display: grid; gap: var(--s-3); margin: 0; padding: 0; list-style: none; max-width: none; }
+  .site-veto-label { margin: var(--s-4) 0 var(--s-2); color: var(--c-text-dim); font-size: var(--t-step--1); font-weight: 700; }
+  .site-veto { padding-inline-start: var(--s-3); border-inline-start: var(--line-bold) dashed var(--c-text-dim); }
+</style>

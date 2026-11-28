@@ -11,7 +11,7 @@ const link = (label: string, href: string, note: string) => `- [${label}](${href
 /** The /data/ files: the built set (its names do not depend on the data), plus the manifest and the map layer. */
 export const dataFiles = () => ["index.json", ...buildFiles([], [], "").keys(), "map.geojson"].filter((p) => !p.startsWith("schemas/"));
 
-/** The /llms.txt text: the title and summary, then the live pages, their twins and the open data files as links. */
+/** The /llms.txt text: the title and summary, then links to the page twins, the open data, its schemas, the tools, and the repo, brief and licence. */
 export function llmsTxt(links: NavLink[] = liveLinks()): string {
   const schemaNote = (p: string) => {
     const name = SCHEMA_OF[p] ?? p.replace(/\.json$/, "");
@@ -28,7 +28,7 @@ export function llmsTxt(links: NavLink[] = liveLinks()): string {
     ["Optional", [
       link("Source repository", REPO, "the site, the data and the claims register"),
       link("Concept brief", `${REPO}/blob/main/02_substance/Space-Peak-Concept-Brief.md`, "the speculative thesis the site comes from"),
-      link("CC0 1.0 licence", "https://creativecommons.org/publicdomain/zero/1.0/", "every page and file is public domain"),
+      link("CC0 1.0 licence", "https://creativecommons.org/publicdomain/zero/1.0/", "for what Colorado Startups made here; others' work keeps its own terms"),
     ]],
   ];
   return [`# ${HOME.title}`, "", `> ${SUMMARY}`, "", ...sections.flatMap(([title, lines]) => [`## ${title}`, "", ...lines, ""])].join("\n");

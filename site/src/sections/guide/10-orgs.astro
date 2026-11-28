@@ -17,6 +17,8 @@ const orgs = (await getCollection("orgs"))
   .filter((org) => org.status !== "closed")
   .sort((a, b) => a.name.localeCompare(b.name, "en"));
 const count = (kind: Kind) => orgs.filter((org) => org.kind === kind).length;
+// The HTML ships what the filter script shows on a plain /guide/ load: the search field, the count and All as
+// current. So nothing moves when the script runs (lab CLS). Without scripting, CSS hides the search field.
 const rows = orgs.map((org) => ({ org, source: org.sources.find((s) => s.id === org.fact.source)! }));
 ---
 <section class="guide" data-guide aria-labelledby="guide-orgs">
@@ -29,18 +31,18 @@ const rows = orgs.map((org) => ({ org, source: org.sources.find((s) => s.id === 
   ) : (
     <>
       <nav class="guide-chips" aria-label="Filter by kind">
-        <a href="/guide/" data-kind-chip="" data-count={orgs.length}>All <span class="n">{orgs.length}</span></a>
+        <a href="/guide/" data-kind-chip="" data-count={orgs.length} aria-current="true">All <span class="n">{orgs.length}</span></a>
         {KINDS.map((kind) => (
           <a href={`/guide/?kind=${kind}`} data-kind-chip={kind} data-count={count(kind)}>
             <span class="kind-mark" data-kind={kind} aria-hidden="true"></span>{KIND_LABEL[kind].many} <span class="n">{count(kind)}</span>
           </a>
         ))}
       </nav>
-      <form class="guide-search" role="search" data-guide-search hidden>
+      <form class="guide-search" role="search" data-guide-search>
         <label for="guide-q">Search by name, city or fact</label>
         <input id="guide-q" name="q" type="search" autocomplete="off" />
       </form>
-      <p class="guide-status" data-guide-status aria-live="polite"></p>
+      <p class="guide-status" data-guide-status aria-live="polite">Showing {orgs.length} of {orgs.length}</p>
       <p class="guide-none" data-guide-none hidden>No organisation matches. Try another word or kind.</p>
       <div class="guide-scroll">
         <table>
@@ -70,6 +72,7 @@ const rows = orgs.map((org) => ({ org, source: org.sources.find((s) => s.id === 
   .guide-chips .n { color: var(--c-text-dim); }
   .guide-search { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; margin-block-end: var(--s-3); }
   .guide-search input { padding-inline: var(--s-3); border: var(--line-hair) solid var(--c-border); font-size: var(--t-step-0); }
+  @media (scripting: none) { .guide-search { display: none; } }
   .guide-status { color: var(--c-text-dim); font-size: var(--t-step--1); }
   .guide-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; }

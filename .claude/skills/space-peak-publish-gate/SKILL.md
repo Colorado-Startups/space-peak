@@ -77,4 +77,4 @@ Have the `space-peak-fact-reviewer` agent, which did not write the draft, read e
 
 ## Output
 
-A line per check, then the verdict: **Ready** (hand to Paul for the go-live) or **Not ready** (what must change, in priority order).
+A line per check, then the verdict: **Ready** (safe to merge) or **Not ready** (what must change, in priority order).

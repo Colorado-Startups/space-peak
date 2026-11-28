@@ -17,8 +17,8 @@ flowchart LR
   D["data/ and 02_substance/"] --> A["Astro 7 static build<br/>site/ to site/dist"]
   A --> B["Cloudflare Workers Builds<br/>main and each branch"]
   B --> C["Workers static assets<br/>wrangler.jsonc, _headers"]
-  C --> P["Preview host"]
-  C -. "Paul's go-live" .-> S["spacepeak.co"]
+  C -- "each branch" --> P["Preview host"]
+  C -- "main" --> S["spacepeak.co"]
 ```
 
 | Read next | For |

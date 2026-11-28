@@ -8,6 +8,7 @@ import { writeFileSync } from "node:fs";
 import { promisify } from "node:util";
 import { expect, test } from "@playwright/test";
 import { MCP_URL } from "../playwright.config";
+import notApplicable from "./mcp-not-applicable.json" with { type: "json" };
 
 const VERSION = "2026-07-28";
 const META = {
@@ -17,25 +18,10 @@ const META = {
 };
 const TOOLS = ["get_claim", "get_metrics", "get_org", "list_claims", "region_info", "search_orgs"];
 
-// Checks that need the suite's own diagnostic tools (test_*), or prompts, resources, completion or the
-// tasks extension, none of which this read-only server offers. Every failure seen on 2026-11-27 was one
-// of these, warnings included. The suite exits 1 on any other failure, and on an entry here that starts to pass.
-const BASELINE = [
-  "server-stateless:sep-2575-http-server-no-independent-requests-on-stream",
-  "server-stateless:sep-2575-missing-capability-http-400",
-  "server-stateless:sep-2575-server-no-log-without-loglevel",
-  "server-stateless:sep-2575-server-rejects-undeclared-capability",
-  "server-stateless:sep-2575-server-sends-tools-list-changed-on-subscription",
-  ...["prompts", "resources", "resources-templates"].map((m) => `caching:sep-2549-${m}-list-caching-hints`),
-  "completion-complete", "sep-2164-resource-not-found", "http-custom-header-server-validation", "json-schema-2020-12",
-  ...["audio", "embedded-resource", "error", "image", "mixed-content", "simple-text", "with-progress"].map((s) => `tools-call-${s}`),
-  ...["list", "get-simple", "get-with-args", "get-embedded-resource", "get-with-image"].map((s) => `prompts-${s}`),
-  "resources-list", "resources-read-text", "resources-read-binary", "resources-templates-read",
-  ...["basic-elicitation", "basic-list-roots", "basic-sampling", "capability-check", "ignore-extra-params", "missing-input-response", "multi-round", "multiple-input-requests",
-    "non-tool-request", "request-state", "result-type", "tampered-state"].map((s) => `input-required-result-${s}`),
-  ...["lifecycle", "capability-negotiation", "wire-fields", "request-state-removal", "mrtr-input", "request-headers",
-    "dispatch-and-envelope", "required-task-error", "mrtr-composition"].map((s) => `tasks-${s}`),
-];
+// The checks that do not apply to this read-only, tools-only server, each with what it needs and why, from
+// one reviewed list (test/unit/mcp-not-applicable.test.ts holds each to the server). They go to the suite as
+// its expected failures: it exits 1 on any other failure, and on an entry here that starts to pass.
+const BASELINE = notApplicable.checks.map((c) => c.check);
 
 const rpc = (method: string, params: Record<string, unknown> = {}, headers: Record<string, string> = {}) => ({
   headers: {

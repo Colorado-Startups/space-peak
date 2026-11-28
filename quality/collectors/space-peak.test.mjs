@@ -1,8 +1,7 @@
 // Tests for Space Peak's own collector: fixtures that put each metric at goal and below goal, and a
-// missing input. GitHub is a stand-in, so nothing here reads the network.
+// missing input. Nothing here reads the network.
 // Run with: node --test quality/collectors/space-peak.test.mjs
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdirSync, mkdtempSync, readFileSync, utimesSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -11,12 +10,11 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { stringify } from "yaml";
 import { z } from "zod";
-import { collect, conformance, csvObjects, DEFAULTS } from "./space-peak.mjs";
+import { collect, csvObjects, DEFAULTS } from "./space-peak.mjs";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 const REPO = join(HERE, "../..");
 const TODAY = new Date().toISOString().slice(0, 10);
-process.env.GITHUB_REPOSITORY = "o/r";
 // The site's own checker and kinds, so a fixture runs the logic the build runs.
 const REAL = { orgs_check: join(REPO, DEFAULTS.orgs_check), orgs_kinds: join(REPO, DEFAULTS.orgs_kinds) };
 
@@ -29,12 +27,12 @@ function fixture(files) {
   }
   return root;
 }
-const run = (root, gh = null, params = {}) => collect({ root, gh, params: { ...REAL, ...params } });
+const run = (root, params = {}) => collect({ root, params: { ...REAL, ...params } });
 const labels = (entry) => entry.detail.map((d) => d.label).join("; ");
 
-test("the five metrics sit on the Pages tab with sourced goals, and the targets' params are the defaults", () => {
+test("the four metrics sit on the Pages tab with sourced goals, and the targets' params are the defaults", () => {
   const defs = JSON.parse(readFileSync(join(HERE, "../targets/space-peak.json"), "utf8"));
-  const ids = ["site.orgs_sourced_share", "site.figures_with_status_share", "site.orgs_per_kind", "ai.files_valid_share", "ai.mcp_conformance_share"];
+  const ids = ["site.orgs_sourced_share", "site.figures_with_status_share", "site.orgs_per_kind", "ai.files_valid_share"];
   assert.deepEqual(defs.map((d) => [d.id, d.goal]), ids.map((id) => [id, id === "site.orgs_per_kind" ? 10 : 100]));
   for (const d of defs) {
     assert.deepEqual([d.tab, d.kind, d.direction, d.needs], ["pages", "quality", "higher", "none"]);
@@ -43,9 +41,7 @@ test("the five metrics sit on the Pages tab with sourced goals, and the targets'
   }
   assert.deepEqual(defs[0].params, DEFAULTS);
   const ci = readFileSync(join(REPO, ".github/workflows/ci.yml"), "utf8");
-  assert.match(ci, /test:e2e\n\s+node quality\/collectors\/space-peak\.mjs --mcp-line site\/test-results\n/);
-  const spec = readFileSync(join(REPO, "site/e2e/mcp.spec.ts"), "utf8");
-  assert.ok(spec.includes('"conformance-baseline.yml"') && spec.includes('outputPath("results")'), "mcp.spec.ts writes the baseline and results the CLI reads");
+  assert.match(ci, /\n\s+node --test quality\/collectors\/space-peak\.test\.mjs\n/, "ci.yml's short job runs this file");
 });
 
 const SUBKIND = { command_base: "installation", institution: "college", company: "startup" };
@@ -129,54 +125,7 @@ test("files: a body off its schema or bytes off the index are below goal; no ind
   assert.match((await run(fixture({})))["ai.files_valid_share"].could_not_check, /no site\/dist\/data\/index\.json/);
 });
 
-const check = (id, status) => ({ id, name: id, description: id, status, timestamp: "2026-11-27T05:00:00.000Z" });
-// A results folder as mcp.spec.ts leaves it: the baseline it writes, and one checks.json per scenario.
-const results = (byScenario, baseline = []) =>
-  join(fixture({
-    "out/conformance-baseline.yml": `server:\n${baseline.map((b) => `  - ${b}\n`).join("")}`,
-    ...Object.fromEntries(Object.entries(byScenario).map(([s, checks]) => [`out/results/server-${s}-2026-11-27T05-00-00-000Z/checks.json`, checks])),
-  }), "out");
-
-test("mcp: a check its baseline names is never a pass, a warning is run, and SKIPPED and INFO are not run", () => {
-  const dir = results({
-    "tools-list": [check("a", "SUCCESS"), check("b", "SUCCESS"), check("i", "INFO")],
-    "server-stateless": [check("ok", "SUCCESS"), check("sep-x", "FAILURE"), check("w", "WARNING")],
-    "prompts-list": [check("p", "SUCCESS"), check("q", "FAILURE")],
-    "skipped-one": [check("s", "SKIPPED")],
-  }, ["server-stateless:sep-x", "prompts-list"]);
-  assert.deepEqual(conformance(dir), { passed: 3, run: 7, baselined: 3 });
-  assert.equal(conformance(fixture({})), null, "no results is null, never 100");
-});
-
-// A stand-in GitHub: the newest successful run skipped its standard job, the one before ran it with `log`.
-const fakeGh = (log, jobs = [{ id: 7, name: "ci / standard", conclusion: "success" }]) => ({
-  rest: async (route) => {
-    if (route.includes("/workflows/ci.yml/runs?branch=main&status=success")) return { workflow_runs: [{ id: 2, created_at: "2026-11-27T06:00:00Z" }, { id: 1, created_at: "2026-11-26T06:00:00Z" }] };
-    return route.includes("/runs/2/") ? { jobs: [{ id: 6, name: "ci / standard", conclusion: "skipped" }] } : { jobs };
-  },
-  text: async (route) => (route === "repos/o/r/actions/jobs/7/logs" ? log : ""),
-});
-
-test("mcp: the CLI's line, read back from the newest run whose standard job ran, is the share", async () => {
-  const dir = results({ "tools-list": [check("a", "SUCCESS"), check("b", "FAILURE"), check("c", "SUCCESS"), check("d", "SUCCESS")] });
-  const line = execFileSync(process.execPath, [join(HERE, "space-peak.mjs"), "--mcp-line", dir], { encoding: "utf8" }).trim();
-  assert.equal(line, "== mcp conformance: 3 passed of 4 run, 0 baselined");
-  const below = (await run(fixture({}), fakeGh(`2026-11-26T06:01:02.1234567Z ${line}\n`)))["ai.mcp_conformance_share"];
-  assert.equal(below.value, 75);
-  assert.match(below.source, /: run 1 \(2026-11-26\)$/);
-  const good = await run(fixture({}), fakeGh("== mcp conformance: 40 passed of 40 run, 0 baselined"));
-  assert.equal(good["ai.mcp_conformance_share"].value, 100);
-});
-
-test("mcp: no line, no run that ran the job, a refused read or no client is not measured", async () => {
-  const reason = async (gh) => (await run(fixture({}), gh))["ai.mcp_conformance_share"].could_not_check;
-  assert.match(await reason(fakeGh("npm test\nok\n")), /standard log of ci\.yml run 1 has no mcp conformance line/);
-  assert.match(await reason(fakeGh("", [])), /none of the last 10 successful ci\.yml runs on main ran its standard job/);
-  assert.match(await reason({ rest: async () => { throw new Error("HTTP 403: Resource not accessible"); } }), /could not read the ci\.yml runs: HTTP 403/);
-  assert.match(await reason(null), /no GitHub client/);
-});
-
 test("the real repo's orgs read as measured", async () => {
-  const got = await collect({ root: REPO, gh: null });
+  const got = await collect({ root: REPO });
   for (const id of ["site.orgs_sourced_share", "site.orgs_per_kind"]) assert.equal(typeof got[id].value, "number", got[id].could_not_check);
 });

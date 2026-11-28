@@ -1,16 +1,11 @@
-// Space Peak's five own metrics on the Pages tab, read from the repo, its built site and its CI log.
+// Space Peak's own metrics on the Pages tab, read from the repo and its built site.
 // The contract is Git Crafter's quality/collectors/README.md (v7.0.2): targets/space-peak.json pairs
-// with this file by name, repo values come from params, and nothing here throws. A missing file,
-// package or run is could_not_check with its reason, never 0.
-//
-// ci.yml's standard job runs this file as a CLI after the e2e suite:
-//   node quality/collectors/space-peak.mjs --mcp-line site/test-results
-// It prints the one line ai.mcp_conformance_share reads back from that job's log, the way Git
-// Crafter's own guard-speed collector reads a line from its CI log.
+// with this file by name, repo values come from params, and nothing here throws. A missing file
+// or package is could_not_check with its reason, never 0.
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { pathToFileURL } from "node:url";
 
 export const area = "space-peak";
 
@@ -24,9 +19,7 @@ export const DEFAULTS = {
   data_index: "data/index.json",
   data_claims: "data/claims.json",
   sources: ["site/src", "data", "02_substance/claims_register.md"],
-  mcp: { workflow: "ci.yml", job: "standard", branch: "main", runs: 10 },
 };
-const MCP_LINE = /== mcp conformance: (\d+) passed of (\d+) run, (\d+) baselined/g;
 
 const ok = (value, source, detail) => ({ value, ...(detail ? { detail } : {}), source, read_at: new Date().toISOString() });
 const no = (reason, source) => ({ could_not_check: reason, source });
@@ -188,81 +181,10 @@ async function filesShare(root, p) {
   }
 }
 
-/**
- * Conformance checks passed and run under dir, from the checks.json files and the expected-failures
- * baseline that site/e2e/mcp.spec.ts writes there. Every check but a SKIPPED or INFO one counts as run;
- * one its baseline names (`<scenario>` or `<scenario>:<check-id>`) never counts as passed. Null with no results.
- */
-export function conformance(dir) {
-  const all = files(dir);
-  const results = all.filter((f) => basename(f) === "checks.json");
-  if (!results.length) return null;
-  const base = all.find((f) => basename(f) === "conformance-baseline.yml");
-  const listed = new Set(base ? [...readFileSync(base, "utf8").matchAll(/^\s+- (\S+)\s*$/gm)].map((m) => m[1]) : []);
-  const tally = { passed: 0, run: 0, baselined: 0 };
-  for (const f of results) {
-    const scenario = /(?:^|\/)server-(.+)-\d{4}-\d\d-\d\dT[\d-]+Z$/.exec(relative(dir, dirname(f)))?.[1] ?? "";
-    for (const c of JSON.parse(readFileSync(f, "utf8"))) {
-      if (c.status === "SKIPPED" || c.status === "INFO") continue;
-      tally.run += 1;
-      if (listed.has(scenario) || listed.has(`${scenario}:${c.id}`)) tally.baselined += 1;
-      else if (c.status === "SUCCESS") tally.passed += 1;
-    }
-  }
-  return tally;
+/** The four metrics, each measured or could_not_check with its reason. */
+export async function collect({ root = process.cwd(), params = {} } = {}) {
+  const p = { ...DEFAULTS, ...params };
+  const [orgs, figures, data] = await Promise.all([orgMetrics(root, p), figureShare(root, p), filesShare(root, p)]);
+  return { ...orgs, "site.figures_with_status_share": figures, "ai.files_valid_share": data };
 }
 
-async function mcpShare(p, gh) {
-  const { workflow, job, branch, runs } = p.mcp;
-  const source = `latest: the mcp conformance line --mcp-line prints in ${workflow} job ${job}, in the newest of the last ${runs} successful runs on ${branch} whose ${job} job ran; a check on site/e2e/mcp.spec.ts's BASELINE is not a pass`;
-  const repo = process.env.GITHUB_REPOSITORY ?? "";
-  if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) return no("no repo: GITHUB_REPOSITORY is unset", source);
-  if (!gh) return no("no GitHub client: Git Crafter's collect.mjs passes lib", source);
-  try {
-    const list = await gh.rest(`repos/${repo}/actions/workflows/${workflow}/runs?branch=${branch}&status=success&per_page=${runs}`);
-    for (const run of list?.workflow_runs ?? []) {
-      const jobs = (await gh.rest(`repos/${repo}/actions/runs/${run.id}/jobs?per_page=100`))?.jobs ?? [];
-      const ran = jobs.find((j) => (j.name === job || String(j.name).endsWith(` / ${job}`)) && j.conclusion === "success");
-      if (!ran) continue;
-      const line = [...String(await gh.text(`repos/${repo}/actions/jobs/${ran.id}/logs`)).matchAll(MCP_LINE)].at(-1);
-      if (!line) return no(`the ${job} log of ${workflow} run ${run.id} has no mcp conformance line`, source);
-      const [passed, total, baselined] = line.slice(1).map(Number);
-      const read = `${source}: run ${run.id} (${String(run.created_at).slice(0, 10)})`;
-      if (!total) return no(`${workflow} run ${run.id} ran no conformance check`, read);
-      const rows = [["passed", passed], ["run", total], ["baselined", baselined]].map(([label, value]) => ({ label, value, unit: "checks" }));
-      return ok(pct(passed, total), read, rows);
-    }
-    return no(`none of the last ${runs} successful ${workflow} runs on ${branch} ran its ${job} job`, source);
-  } catch (err) {
-    return no(`could not read the ${workflow} runs: ${first(err)}`, source);
-  }
-}
-
-// rest from Git Crafter's ghClient; a job log is plain text, not JSON, so text runs gh api through runCommand.
-function ghOf(lib) {
-  if (!lib?.ghClient || !lib.runCommand) return null;
-  const text = async (route) => {
-    const r = await lib.runCommand("gh", ["api", route]);
-    if (r.code !== 0) throw new Error(r.missing ? "gh is not installed" : r.stderr || `gh api exited ${r.code}`);
-    return r.stdout;
-  };
-  return { rest: lib.ghClient().rest, text };
-}
-
-/** The five metrics, each measured or could_not_check with its reason. */
-export async function collect({ root = process.cwd(), params = {}, lib, gh = ghOf(lib) } = {}) {
-  const p = { ...DEFAULTS, ...params, mcp: { ...DEFAULTS.mcp, ...params.mcp } };
-  const [orgs, figures, data, mcp] = await Promise.all([orgMetrics(root, p), figureShare(root, p), filesShare(root, p), mcpShare(p, gh)]);
-  return { ...orgs, "site.figures_with_status_share": figures, "ai.files_valid_share": data, "ai.mcp_conformance_share": mcp };
-}
-
-// The CLI. No results is a warning in the log, not a failed job: the metric then reads not measured.
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const [flag, dir] = process.argv.slice(2);
-  if (flag !== "--mcp-line" || !dir) {
-    console.error("usage: node quality/collectors/space-peak.mjs --mcp-line DIR");
-    process.exit(2);
-  }
-  const got = conformance(resolve(dir));
-  console.log(got ? `== mcp conformance: ${got.passed} passed of ${got.run} run, ${got.baselined} baselined` : `::warning::no MCP conformance results under ${dir}`);
-}

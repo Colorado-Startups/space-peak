@@ -47,4 +47,3 @@ jobs:
         npm test
         npm run -w @spacepeak/site e2e:install
         npm run -w @spacepeak/site test:e2e
-        node quality/collectors/space-peak.mjs --mcp-line site/test-results

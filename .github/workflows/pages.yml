@@ -67,6 +67,11 @@ jobs:
           # Optional read-only token for the metrics that need github-admin; empty leaves them not measured.
           admin-read-token: ${{ secrets.ADMIN_READ_TOKEN }}
 
+      # The metrics only this Mac can read come from quality/data/local.json, a --local collect committed by
+      # pull request. The built page must show each one it measured as measured (quality/local-check.mjs).
+      - name: Check the local metrics on the page
+        run: node quality/local-check.mjs --page quality/dist/index.html quality/data/local.json
+
       # The site metrics in the job log, so a pull request shows what its Quality build measured.
       - name: List the site metrics
         run: |

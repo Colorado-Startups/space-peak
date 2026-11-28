@@ -14,7 +14,7 @@ flowchart LR
 | Five odds approved | Paul | Done | [#176](https://github.com/Colorado-Startups/space-peak/pull/176), [#180](https://github.com/Colorado-Startups/space-peak/pull/180) |
 | Evidence on the preview | Claude | Done | [Evidence](#evidence) |
 | Publish gate, fact-reviewer pass | Claude | Done | [Fact checks](#fact-checks) |
-| Open data leaves out the Blanca and Crestones rows | Claude | Before step 50 | [#199](https://github.com/Colorado-Startups/space-peak/issues/199) |
+| Open data leaves out the Blanca and Crestones rows | Claude | Done | [#199](https://github.com/Colorado-Startups/space-peak/issues/199), [#204](https://github.com/Colorado-Startups/space-peak/pull/204) |
 | The world's launch count on `/launch/` brought up to date | Claude | Before step 50 | [#198](https://github.com/Colorado-Startups/space-peak/issues/198) |
 | Read the preview | Paul | Waiting | [spacepeak.coloradostartups.workers.dev](https://spacepeak.coloradostartups.workers.dev/) |
 | Say "go live" | Paul | Waiting | Paul's words in chat |

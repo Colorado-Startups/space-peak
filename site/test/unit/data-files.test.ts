@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { allClaims } from "../../src/lib/claims/parse";
+import { servedClaims } from "../../src/lib/claims/served";
 import { buildFiles, indexJson, registerDate, SCHEMAS } from "../../src/lib/data/build";
 import { orgSchema } from "../../src/lib/orgs/schema";
 
@@ -51,6 +52,6 @@ describe("open data files", () => {
   it("builds from an empty orgs collection, as today", () => {
     const empty = buildFiles([], allClaims(), date);
     expect(SCHEMAS.orgs.parse(JSON.parse(empty.get("orgs.json")!)).orgs).toEqual([]);
-    expect(JSON.parse(empty.get("metrics.json")!).claims.total).toBe(allClaims().length);
+    expect(JSON.parse(empty.get("metrics.json")!).claims.total).toBe(servedClaims(allClaims()).length);
   });
 });

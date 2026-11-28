@@ -92,6 +92,7 @@ def strip_noise(line):
 
 
 def sentence_has_attribution(sentence, cues):
+    """True when the sentence links a source or holds an attribution cue."""
     low = sentence.lower()
     if "linked-source" in low:
         return True
@@ -205,6 +206,7 @@ def lint_text(text, rules, max_words=None):
 
 
 def report(path, findings):
+    """Print one file's findings and its FAIL and WARN counts, or that it is clean."""
     if not findings:
         print(f"{path}: clean")
         return

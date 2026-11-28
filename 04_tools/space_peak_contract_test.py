@@ -54,6 +54,7 @@ results = []
 
 
 def check(name, ok, detail=""):
+    """Record and print one contract's result; return whether it held."""
     results.append((name, ok, detail))
     mark = "OK  " if ok else "FAIL"
     print(f"  {mark} {name}" + (f": {detail}" if detail and not ok else ""))
@@ -61,10 +62,12 @@ def check(name, ok, detail=""):
 
 
 def repo_file(rel):
+    """The absolute path of a repo-relative path."""
     return os.path.join(REPO, rel)
 
 
 def read(rel):
+    """A repo file's text."""
     with open(repo_file(rel), encoding="utf-8") as fh:
         return fh.read()
 

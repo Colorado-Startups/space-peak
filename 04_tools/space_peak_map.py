@@ -57,6 +57,7 @@ GNIS_RE = re.compile(r"GNIS\s+(\d+)")
 
 
 def cells(line):
+    """A register row's ID and cells, or None for another line; raise ValueError on a near-miss ID row."""
     m = ROW_RE.match(line.strip())
     if not m:
         if ID_RE.match(line.strip()) or NEAR_ID_RE.match(line.strip()):
@@ -112,12 +113,14 @@ def parse(text):
 
 
 def gnis_url(name):
+    """The USGS GNIS query URL for one Colorado place name."""
     q = {"where": f"gaz_name='{name}' AND state_alpha='CO'",
          "outFields": "*", "outSR": "4326", "f": "json"}
     return GNIS_QUERY + "?" + urllib.parse.urlencode(q)
 
 
 def build(register_text, region_geojson, today, rules=None):
+    """The map GeoJSON: the region loop, then a point per brief site with its claims."""
     sites, claims, region_rows = parse(register_text)
 
     region = next(f for f in region_geojson["features"]
@@ -170,6 +173,7 @@ def build(register_text, region_geojson, today, rules=None):
 
 
 def dump(obj):
+    """The GeoJSON text as committed: one-space indent, UTF-8, a final newline."""
     return json.dumps(obj, indent=1, ensure_ascii=False) + "\n"
 
 
@@ -280,6 +284,7 @@ def self_test():
 
 
 def main(argv=None):
+    """The command line: build or --check the map, run --self-test, or print --region-url."""
     ap = argparse.ArgumentParser(description=(__doc__ or "").split("\n")[0])
     ap.add_argument("--region-geojson",
                     help="the website's data/geo/regions.geojson")

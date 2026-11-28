@@ -2,6 +2,7 @@
 import type { APIRoute } from "astro";
 import { loadMapData, type MapData } from "../../lib/map/data";
 
+/** The map's open data layer: the region loop, the summits and the orgs, as one FeatureCollection. */
 export function mapGeojson({ loop, summits, orgs }: MapData) {
   return {
     type: "FeatureCollection",
@@ -14,5 +15,6 @@ export function mapGeojson({ loop, summits, orgs }: MapData) {
   };
 }
 
+/** GET /data/map.geojson, as application/geo+json. */
 export const GET: APIRoute = async () =>
   new Response(`${JSON.stringify(mapGeojson(await loadMapData()))}\n`, { headers: { "Content-Type": "application/geo+json; charset=utf-8" } });

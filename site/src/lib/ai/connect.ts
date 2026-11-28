@@ -18,6 +18,7 @@ export const CLAUDE_STEPS = [
 
 const json = (value: unknown) => JSON.stringify(value, null, 2);
 
+/** Every snippet for one site origin: the /mcp URL, and each app's command or config that adds it. */
 export function snippets(site: URL | string) {
   const at = (path: string) => new URL(path, site).href;
   const mcp = at("/mcp");

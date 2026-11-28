@@ -31,6 +31,9 @@ a:hover { text-decoration-thickness: var(--line-bold); }
 /* Focus: a visible ring on every control. */
 :focus-visible { outline: var(--line-bold) solid var(--c-focus); outline-offset: var(--size-ring-offset); }
 
+/* Read by screen readers, never shown: the copy script's status line. */
+.visually-hidden { position: absolute; width: var(--line-hair); height: var(--line-hair); margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
 /* Skip link: off screen until focused. */
 .skip-link { position: absolute; top: var(--s-2); left: var(--s-4); z-index: 10; padding-inline: var(--s-4); background: var(--c-region-space-peak); color: var(--c-on-region-space-peak); font-weight: 700; transform: translateY(-200%); }
 .skip-link:focus { transform: none; }

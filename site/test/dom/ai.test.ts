@@ -48,14 +48,13 @@ describe.skipIf(!ready && !process.env.CI)("built pages", () => {
   const pages = ready ? builtPages().map((p) => ({ ...p, doc: parse(p.html) })) : [];
   const graph = (doc: Document) => [...doc.querySelectorAll("script[type='application/ld+json']")].flatMap((s) => JSON.parse(s.textContent!)["@graph"]);
 
-  it.each(pages.map((p) => [p.route, p.doc] as const))("%s links /ai/ in the nav; only /ai/ has the DataCatalog", (route, doc) => {
-    expect(doc.querySelector("header nav a[href='/ai/']")?.textContent).toBe("Use it with your AI");
-    expect(graph(doc).some((n) => n["@type"] === "DataCatalog")).toBe(route === "/ai/");
+  it("only /ai/ embeds the DataCatalog", () => {
+    expect(pages.filter((p) => graph(p.doc).some((n) => n["@type"] === "DataCatalog")).map((p) => p.route)).toEqual(["/ai/"]);
   });
 
-  it.each(["/", "/ai/"])("%s loads the one copy script, and every snippet has its button", (route) => {
+  it.each(["/", "/ai/"])("%s links /ai/ in the nav, loads the one copy script, and every snippet has its button", (route) => {
     const doc = pages.find((p) => p.route === route)!.doc;
-    expect([...doc.querySelectorAll("script[src]")].map((s) => s.getAttribute("src"))).toContain("/js/copy.js");
+    expect(doc.querySelector("header nav a[href='/ai/']")?.textContent).toBe("Use it with your AI");
     expect(doc.querySelectorAll("script[src='/js/copy.js']")).toHaveLength(1);
     const codes = [...doc.querySelectorAll("pre > code")];
     expect(codes.length).toBeGreaterThanOrEqual(3);

@@ -6,9 +6,9 @@
   let status = document.querySelector("[data-copy-status]");
   if (!status) {
     status = document.createElement("p");
+    status.className = "visually-hidden"; // base.css, which every page loads
     status.setAttribute("role", "status");
     status.setAttribute("data-copy-status", "");
-    status.style.cssText = "position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap";
     (document.querySelector("main") ?? document.body).append(status);
   }
   const say = (button, text) => {

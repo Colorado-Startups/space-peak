@@ -4,14 +4,14 @@
 // Only this page embeds the DataCatalog JSON-LD that /data/catalog.json serves.
 import "../../styles/ai.css";
 import Base from "../../layouts/Base.astro";
-import Chat from "../../sections/ai/10-chat.astro";
+import Snippet from "../../components/Snippet.astro";
 import Claude from "../../sections/ai/20-claude.astro";
-import Data from "../../sections/ai/30-data.astro";
 import OpenCode from "../../sections/ai/40-opencode.astro";
-import { DOCS, READ } from "../../lib/ai/connect";
+import { DOCS, READ, snippets } from "../../lib/ai/connect";
 import { registerDate } from "../../lib/data/build";
 import { dataCatalog } from "../../lib/jsonld";
 
+const s = snippets(Astro.site!);
 const FACTS = ["Free", "No key", "Read-only", "CC0"];
 ---
 <Base title="Use it with your AI | Space Peak" description="Paste a link, or connect Claude, Claude Code or OpenCode to the Space Peak MCP server. Free, read-only, no key." jsonld={[dataCatalog(registerDate())]}>
@@ -21,8 +21,16 @@ const FACTS = ["Free", "No key", "Read-only", "CC0"];
   </div>
   <div class="ai-grid">
     <div>
-      <Chat /><Claude /><Data />
-      <p class="ai-docs">From each app's docs, read {READ}: {DOCS.map(([name, href], i) => <>{i > 0 && ", "}<a href={href}>{name}</a></>)}.</p>
+      <section class="ai-row" id="chat" aria-labelledby="chat-title">
+        <h2 id="chat-title">Any chat</h2>
+        <div><Snippet id="ai-llms" text={s.llms} /><Snippet id="ai-site" text={s.site} /></div>
+      </section>
+      <Claude />
+      <section class="ai-row" id="data" aria-labelledby="data-title">
+        <h2 id="data-title">Open data</h2>
+        <div><Snippet id="ai-catalog" text={s.catalog} /></div>
+      </section>
+      <p class="ai-docs">Docs, read {READ}: {DOCS.map(([name, href], i) => <>{i > 0 && ", "}<a href={href}>{name}</a></>)}.</p>
     </div>
     <OpenCode />
   </div>

@@ -15,7 +15,7 @@ flowchart LR
 
 | Control | Where | Blocking? |
 | --- | --- | --- |
-| The checks a change's files need, on every pull request, forks included | `.github/workflows/ci.yml`, which calls Git Crafter's `ci-standard.yml`. One short job runs every Space Peak checker in `04_tools/`, and `ci / ci-ok` is its verdict | **Yes**, required on `main` |
+| The checks a change's files need, on every pull request, forks included | `.github/workflows/ci.yml`, which calls Git Crafter's `ci-standard.yml`. One short job runs every Space Peak checker in `04_tools/`. `ci / ci-ok` is the one verdict of all of `ci.yml`, its standard job included | **Yes**, required on `main` |
 | Secrets | GitHub secret scanning with push protection | **Yes**, at push |
 | Deletion, force-push, and any change outside a pull request | The org ruleset "Protect default branches" | **Yes** |
 

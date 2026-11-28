@@ -38,6 +38,6 @@ site/dist/
 site/.astro/
 site/coverage/
 
-# A local Quality collect's own files (README.md, Quality and Process pages). Only quality/data/local.json is committed.
+# A local Quality collect's own files (docs/QUALITY.md, Metrics from this Mac). Only quality/data/local.json is committed.
 quality/history/
 quality/data/plan-usage.json

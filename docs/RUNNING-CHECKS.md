@@ -13,7 +13,7 @@ flowchart LR
 | Block in `ci.yml` | Runs when | Runs |
 | --- | --- | --- |
 | `short:` | A file it reads changes (its `paths:` list) | The self-tests, the contract test, the Quality collector test and the local run check. Also the claims and voice checkers, over every tracked Markdown file |
-| `standard:` | A change to `site/`, `data/`, `package.json`, the lockfile, `.nvmrc` or `wrangler.jsonc` | `astro check`, the build, vitest, the Playwright specs in Chromium and the MCP conformance suite |
+| `standard:` | A file in its `standard-paths:` list changes: `site/`, `data/`, and each file outside them that the build or a vitest file reads | `astro check`, the build, vitest, the Playwright specs in Chromium and the MCP conformance suite |
 
 ## One checker on the Mac
 

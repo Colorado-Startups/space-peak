@@ -75,15 +75,17 @@ describe("a frame narrower than the drawing", () => {
     const south = frame("south");
     expect(within(firstView(data, "south"), ...data.summits.flatMap((s) => [south.xy(s.at)[0] - 8, south.xy(s.at)[0] + 8]))).toBe(true);
   });
-  it("hides nothing drawn: an org in the empty band narrows the band", () => {
+  it("hides nothing drawn: an org in the empty band narrows the band to it", () => {
     const at = (id: string, lon: number, lat: number): Org => ({ ...company, id, location: { ...company.location, lon, lat } });
-    const data = buildMapData([...orgs, at("far-east", -104.56, 38.8), at("far-west", -105.85, 37.5)]);
     const [region, south] = [frame("region"), frame("south")];
-    const east = data.orgs.find((o) => o.id === "far-east")!;
-    const west = data.orgs.find((o) => o.id === "far-west")!;
-    expect(region.xy(east.at)[0] + 8).toBeLessThanOrEqual(VIEWS.region.width - narrowBand(data, "region"));
-    expect(south.xy(west.at)[0] - 8).toBeGreaterThanOrEqual(narrowBand(data, "south"));
-    expect([narrowBand(data, "region"), narrowBand(data, "south")]).toEqual([0, 0]);
+    // An org at region x 700 and one at tour x 100: 800 - 708 and 92, less the 16-unit margin, leave a band of 76.
+    const near = buildMapData([...orgs, at("near-east", -104.625, 38.8), at("near-west", -105.675, 37.5)]);
+    expect(region.xy(near.orgs.find((o) => o.id === "near-east")!.at)[0]).toBeCloseTo(700, 6);
+    expect(south.xy(near.orgs.find((o) => o.id === "near-west")!.at)[0]).toBeCloseTo(100, 6);
+    for (const v of views) expect(Math.abs(narrowBand(near, v) - 76), v).toBeLessThanOrEqual(1);
+    // An org at the drawing's very edge leaves no empty band, so the band clamps to 0.
+    const edge = buildMapData([...orgs, at("far-east", -104.56, 38.8), at("far-west", -105.85, 37.5)]);
+    expect([narrowBand(edge, "region"), narrowBand(edge, "south")]).toEqual([0, 0]);
   });
   it("tags the credit line, which an east frame moves in from the hidden band", () => {
     for (const v of views) expect(drawMap(buildMapData([]), v).match(/<text [^>]*data-layer="credit"[^>]*>Summits: USGS GNIS/g)).toHaveLength(1);

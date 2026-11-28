@@ -81,6 +81,28 @@ for (const width of [1280, 375]) {
           expect(outside, `the ${view} frame opens with these out of view`).toEqual([]);
         }
       });
+
+      // The hidden band holds nothing drawn: each mark and name, the credit line and Pikes Peak too, is a scroll away.
+      // An element is in reach when its west edge shows at the frame's west end and its east edge at its east end.
+      test("/map/ keeps every mark and name in reach of a scroll, the credit line and Pikes Peak too", async ({ page }) => {
+        await page.goto("/map/");
+        for (const view of ["region", "south"] as const) {
+          const { drawn, unreachable } = await page.locator(`figure[data-view="${view}"] .space-map__frame`).evaluate((frame) => {
+            const els = [...frame.querySelectorAll("svg [data-layer], svg [data-kind], svg text")];
+            const edges = (left: number) => {
+              frame.scrollTo({ left, behavior: "instant" }); // A right-to-left frame scrolls to negative values; each clamps.
+              const box = frame.getBoundingClientRect();
+              return { west: box.left + frame.clientLeft, east: box.left + frame.clientLeft + frame.clientWidth, boxes: els.map((el) => el.getBoundingClientRect()) };
+            };
+            const [atWest, atEast] = [edges(-1e6), edges(1e6)];
+            const out = els.filter((_, i) => atWest.boxes[i]!.left < atWest.west - 0.5 || atEast.boxes[i]!.right > atEast.east + 0.5);
+            return { drawn: els.map((el) => el.getAttribute("data-layer")), unreachable: out.map((el) => el.getAttribute("data-layer") ?? el.textContent) };
+          });
+          expect(drawn, `the ${view} drawing has its credit line`).toContain("credit");
+          if (view === "region") expect(drawn, "the region drawing has Pikes Peak").toContain("summit");
+          expect(unreachable, `the ${view} frame hides these past any scroll`).toEqual([]);
+        }
+      });
     }
   });
 }

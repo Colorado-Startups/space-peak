@@ -1,0 +1,12 @@
+---
+import Base from "../../layouts/Base.astro";
+import "../../sections/about/about.css";
+
+// Each about section is its own file in src/sections/about/, rendered in filename order, as on /guide/.
+const modules = import.meta.glob<{ default: any }>("../../sections/about/*.astro", { eager: true });
+const sections = Object.keys(modules).sort().map((key) => modules[key].default);
+---
+<Base title="About | Space Peak" description="Who supports Space Peak, how a listing gets in, privacy, accessibility and licences.">
+  <h1>About</h1>
+  {sections.map((Section) => <Section />)}
+</Base>

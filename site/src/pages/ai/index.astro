@@ -1,0 +1,38 @@
+---
+// /ai/ (step 43, issue #131): every way to use the site with an AI, on one screen at 1280 px.
+// Snippets come from lib/ai/connect.ts; public/js/copy.js wires every Copy button.
+// Only this page embeds the DataCatalog JSON-LD that /data/catalog.json serves.
+import "../../styles/ai.css";
+import Base from "../../layouts/Base.astro";
+import Snippet from "../../components/Snippet.astro";
+import Claude from "../../sections/ai/20-claude.astro";
+import OpenCode from "../../sections/ai/40-opencode.astro";
+import { DOCS, READ, snippets } from "../../lib/ai/connect";
+import { registerDate } from "../../lib/data/build";
+import { dataCatalog } from "../../lib/jsonld";
+
+const s = snippets(Astro.site!);
+const FACTS = ["Free", "No key", "Read-only", "CC0"];
+---
+<Base title="Use it with your AI | Space Peak" description="Paste a link, or connect Claude, Claude Code or OpenCode to the Space Peak MCP server. Free, read-only, no key." jsonld={[dataCatalog(registerDate())]}>
+  <div class="ai-head">
+    <h1>Use it with your AI</h1>
+    <ul class="ai-facts" aria-label="The server">{FACTS.map((f) => <li>{f}</li>)}</ul>
+  </div>
+  <div class="ai-grid">
+    <div>
+      <section class="ai-row" id="chat" aria-labelledby="chat-title">
+        <h2 id="chat-title">Any chat</h2>
+        <div><Snippet id="ai-llms" text={s.llms} /><Snippet id="ai-site" text={s.site} /></div>
+      </section>
+      <Claude />
+      <section class="ai-row" id="data" aria-labelledby="data-title">
+        <h2 id="data-title">Open data</h2>
+        <div><Snippet id="ai-catalog" text={s.catalog} /></div>
+      </section>
+      <p class="ai-docs">Docs, read {READ}: {DOCS.map(([name, href], i) => <>{i > 0 && ", "}<a href={href}>{name}</a></>)}.</p>
+    </div>
+    <OpenCode />
+  </div>
+  <script is:inline src="/js/copy.js" defer></script>
+</Base>

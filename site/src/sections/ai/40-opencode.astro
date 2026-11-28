@@ -1,0 +1,15 @@
+---
+import Snippet from "../../components/Snippet.astro";
+import { snippets } from "../../lib/ai/connect";
+const s = snippets(Astro.site!);
+---
+<section class="ai-row ai-opencode" id="opencode" aria-labelledby="opencode-title">
+  <h2 id="opencode-title">OpenCode</h2>
+  <div>
+    <Snippet id="ai-opencode" text={s.opencode} />
+    <div class="ai-configs">
+      <Snippet id="ai-opencode-v2" label="opencode.json, OpenCode 2" text={s.opencodeV2} />
+      <Snippet id="ai-opencode-v1" label="opencode.json, OpenCode 1" text={s.opencodeV1} />
+    </div>
+  </div>
+</section>

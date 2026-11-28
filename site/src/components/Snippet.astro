@@ -1,0 +1,23 @@
+---
+// One snippet: selectable code and a Copy button that public/js/copy.js reveals and wires.
+// The page loads that script once. A label (the prop or the "label" slot) puts the button beside it, above the code.
+const { id, text, label } = Astro.props as { id: string; text: string; label?: string };
+const labelled = Boolean(label) || Astro.slots.has("label");
+---
+<div class:list={["snip", { labelled }]}>
+  {labelled && <div class="label"><slot name="label">{label}</slot></div>}
+  <pre><code id={id}>{text}</code></pre>
+  <button type="button" data-copy={id} data-pending aria-describedby={id}>Copy</button>
+</div>
+
+<style>
+  .snip { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--s-2); align-items: start; align-content: start; }
+  .labelled { grid-template-areas: "label copy" "code code"; align-items: center; }
+  .label { grid-area: label; color: var(--c-text-dim); font-size: var(--t-step--1); }
+  .labelled button { grid-area: copy; }
+  .labelled pre { grid-area: code; }
+  pre { display: flex; align-items: center; min-height: var(--size-tap); margin: 0; padding: var(--s-2) var(--s-3); border-radius: var(--r-chisel); background: var(--c-surface); white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--t-step--1); line-height: 1.4; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; min-width: 0; user-select: all; }
+  button { justify-content: center; padding-inline: var(--s-3); border: var(--line-hair) solid var(--c-border); border-radius: var(--r-chisel); background: var(--c-ground); color: var(--c-text); font-family: inherit; font-size: var(--t-step--1); cursor: pointer; }
+  button[data-pending] { visibility: hidden; }
+</style>

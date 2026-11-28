@@ -1,6 +1,7 @@
 ---
 // The home hero (step 22, issue #90): name, one line, one button, then the painting with its flight arc.
 // The painting is the LCP element, so it is preloaded and fetched at high priority. No script.
+// Its CC BY 2.5 credit is the footer's, on every page.
 import "../../styles/hero.css";
 import { liveLinks } from "../../lib/nav";
 import { drawHero } from "../../lib/hero/draw";
@@ -26,6 +27,5 @@ const sizes = "(min-width: 76rem) 1180px, calc(100vw - 2rem)";
       <img src="/art/springs-720.webp" srcset={srcset} sizes={sizes} alt="A painting of Pikes Peak above stone spires built as aeries, with a griffin and gyrocopters in flight." width="1440" height="720" fetchpriority="high" decoding="async" />
       <Fragment set:html={drawHero()} />
     </div>
-    <figcaption class="hero-credit">AI-made painting. Source photo by Huttarl, <a href="https://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a>.</figcaption>
   </figure>
 </section>

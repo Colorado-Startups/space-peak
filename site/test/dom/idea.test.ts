@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 // Home section 5, "The big idea" (step 36, issue #140): every chart and ruler value equals its claims-register row,
-// and every unproven number carries a marker; the ruler is drawn with no script and stays still under reduced motion.
+// and the section says once that its unproven numbers are unconfirmed (issue #153); the ruler is drawn with no
+// script and stays still under reduced motion.
 // The 30-word budget is our own guideline, so it warns and never fails (Paul, 2026-11-28).
 // e2e/ruler.spec.ts checks the motion itself in a real browser.
 import { readFileSync } from "node:fs";
@@ -14,7 +15,7 @@ const COST = ["E-09", "E-10", "E-11", "E-12", "E-13"];
 const RULER = ["P-01", "S-14", "P-14", "P-02"]; // orbit, Pikes Peak, the muzzle, the air below it
 const THESIS = "E-14";
 const BUDGET = 30; // about 30 words, issue #140: a guideline that warns
-// Statuses a reader cannot take as proven. Only these need a marker beside the number.
+// Statuses a reader cannot take as proven.
 const UNPROVEN = ["unverified", "unverifiable", "open"];
 const SCRIPT = readFileSync(path.join(SITE_DIR, "public", "js", "ruler-rise.js"), "utf8");
 const parse = (html: string) => new DOMParser().parseFromString(html, "text/html");
@@ -23,7 +24,7 @@ const numbers = (s: string) => [...s.matchAll(/\d[\d,]*(?:\.\d+)?/g)].map((m) =>
 
 // Prose words: what a visitor reads with every press closed, outside the pictures (the chart, the ruler drawing,
 // the table twin) and outside the figures and their status labels, which carry data, not prose.
-const NOT_PROSE = "script, style, svg, [hidden], [aria-hidden='true'], .chart > details, .figure, .figure-chip, .hatch-tag, details > :not(summary)";
+const NOT_PROSE = "script, style, svg, [hidden], [aria-hidden='true'], .chart > details, .figure, .hatch-tag, [data-unproven-note], details > :not(summary)";
 const words = (node: Node): number => node.nodeType === 3 ? (node.textContent ?? "").split(/\s+/).filter(Boolean).length
   : node.nodeType === 1 && !(node as Element).matches(NOT_PROSE) ? [...node.childNodes].reduce((sum, child) => sum + words(child), 0) : 0;
 
@@ -64,20 +65,23 @@ function ideaProblems(doc: Document): string[] {
   }
   if (!cost?.querySelector(".idea-source a[href^='https://ntrs.nasa.gov/']")) out.push("cost chart links no NASA source");
   if (!text(cost?.querySelector(".idea-source")).includes("2018 list prices, not today's")) out.push("the Falcon bars are not marked as 2018 list prices");
+  // Issue #153: no status chip; the section's one note says a figure with no source link is unconfirmed.
+  const noted = section.querySelectorAll("[data-unproven-note]").length === 1;
   const thesis = section.querySelector(`.idea-lead .figure[data-claim='${THESIS}']`);
   if (!thesis) out.push(`the thesis is not ${THESIS}`);
-  else if (UNPROVEN.includes(getClaim(THESIS).status) && !thesis.querySelector(".figure-chip")) out.push("the thesis is unproven and carries no marker");
+  else if (UNPROVEN.includes(getClaim(THESIS).status) && !noted) out.push("the thesis is unproven and the section does not say so once");
 
   const ruler = section.querySelector("figure.ruler");
   if (ruler?.getAttribute("data-rise") !== "") out.push(`ruler starts at data-rise="${ruler?.getAttribute("data-rise")}", want drawn`);
-  const figs = [...(ruler?.querySelectorAll(".ruler-key summary .figure") ?? [])];
+  const figs = [...(ruler?.querySelectorAll(".ruler-key .figure") ?? [])];
   const shownIds = figs.map((f) => f.getAttribute("data-claim"));
   if (shownIds.join() !== RULER.join()) out.push(`ruler shows ${shownIds.join()}, want ${RULER.join()}`);
   for (const fig of figs) {
     const id = fig.getAttribute("data-claim")!;
     out.push(...figureProblems(id, text(fig.querySelector(".figure-value"))));
-    if (UNPROVEN.includes(getClaim(id).status) && !fig.querySelector(".figure-chip")) out.push(`${id} is unproven and carries no marker`);
+    if (UNPROVEN.includes(getClaim(id).status) && !noted) out.push(`${id} is unproven and the section does not say so once`);
   }
+  if (section.querySelector(".figure-chip")) out.push("a figure shows a status chip");
   const muzzle = ruler?.querySelector("li[data-mark='muzzle']");
   if (text(muzzle?.querySelector(".hatch-tag")) !== "speculative") out.push("the muzzle is not tagged speculative");
   if (!/^url\(#/.test(ruler?.querySelector("svg [data-mark='muzzle']")?.getAttribute("fill") ?? "")) out.push("the muzzle band is not hatched");
@@ -142,7 +146,7 @@ if (!ready && !process.env.CI) console.warn(`[idea] built-page checks skipped: n
 describe.skipIf(!ready && !process.env.CI)("the built home page, section 5", () => {
   const html = ready ? builtPages().find((p) => p.route === "/")?.html ?? "" : "";
   const home = parse(html);
-  it("plots and shows every value from its register row, each unproven one marked", () => expect(ideaProblems(home)).toEqual([]));
+  it("plots and shows every value from its register row, and says once that unproven ones are unconfirmed", () => expect(ideaProblems(home)).toEqual([]));
   it(`keeps to about ${BUDGET} prose words, or warns`, () => {
     const section = home.querySelector("section.idea");
     const n = section ? words(section) : 0;

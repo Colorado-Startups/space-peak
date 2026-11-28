@@ -1,5 +1,5 @@
 ---
-// The brief's make-or-break items, each its register row's own words with that row's status.
+// The brief's make-or-break items, each its register row's own words.
 import Figure from "../../components/Figure.astro";
 import { launch } from "../../lib/launch/data";
 
@@ -7,7 +7,7 @@ const items = launch().make_or_break;
 ---
 <section aria-labelledby="make-or-break">
   <h2 id="make-or-break">Make or break</h2>
-  <p>The brief calls the mountain the romantic part. It says the business lives or dies on these.</p>
+  <p>The mountain is the romantic part. The business lives or dies on these four.</p>
   <ol class="mob">{items.map((id) => <li><Figure claim={id} /></li>)}</ol>
 </section>
 

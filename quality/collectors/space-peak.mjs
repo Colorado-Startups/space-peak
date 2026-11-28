@@ -87,8 +87,13 @@ async function orgMetrics(root, p) {
   }
 }
 
+// How a page shows a figure's status (issue #153): a confirmed row links its source, and a page with an
+// unconfirmed one says so in one [data-unproven-note]. site/src/components/figure.ts holds the same lists.
+const CONFIRMED = ["verified", "corrected"];
+const UNCONFIRMED = ["unverified", "unverifiable"];
+
 async function figureShare(root, p) {
-  const source = `state now: elements with data-claim or class figure on the ${p.site_dir} pages that hold a .figure-chip whose word is the claim's status in ${p.site_dir}/${p.data_claims}`;
+  const source = `state now: elements with data-claim or class figure on the ${p.site_dir} pages; per ${p.site_dir}/${p.data_claims}, a verified or corrected one needs an https source link, an unverified or unverifiable one a page with one [data-unproven-note]`;
   const dist = resolve(root, p.site_dir);
   const pages = files(dist).filter((f) => f.endsWith(".html"));
   const claims = join(dist, p.data_claims);
@@ -102,12 +107,16 @@ async function figureShare(root, p) {
     let total = 0;
     for (const page of pages) {
       const { window } = new JSDOM(readFileSync(page, "utf8"));
+      const notes = window.document.querySelectorAll("[data-unproven-note]").length;
       for (const fig of window.document.querySelectorAll("[data-claim], .figure")) {
         total += 1;
         const id = fig.getAttribute("data-claim");
         const want = status.get(id);
-        const chip = fig.querySelector(".figure-chip")?.textContent.trim();
-        const bad = !want ? "no register row" : !chip ? "no status chip" : chip !== want ? `chip says ${chip}, register says ${want}` : null;
+        const link = fig.querySelector("a.figure-source")?.getAttribute("href") ?? "";
+        const bad = !want ? "no register row"
+          : CONFIRMED.includes(want) && !link.startsWith("https://") ? `${want}, with no source link`
+          : UNCONFIRMED.includes(want) && notes !== 1 ? `${want}, on a page that says so ${notes} times, not once`
+          : null;
         if (bad) misses.push(`${relative(dist, page)} ${id ?? "(no data-claim)"}: ${bad}`);
       }
       window.close();

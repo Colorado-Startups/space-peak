@@ -19,12 +19,13 @@ describe("map data and drawing", () => {
     expect([loop.ring.length > 100, loop.ring.at(0)]).toEqual([true, loop.ring.at(-1)]);
     for (const v of views) expect(drawMap(buildMapData([]), v).match(/data-layer="loop"/g)).toHaveLength(1);
   });
-  it("draws only the four toured summits, each an open triangle labelled speculative", () => {
+  it("draws only the four toured summits, each an open triangle with its name; the page says speculative", () => {
     expect(buildMapData([]).summits.map((s) => s.summit)).toEqual([...TOUR]);
     const svg = drawMap(buildMapData([]), "south");
     const groups = svg.match(/<g data-layer="summit".*?<\/g>/g) ?? [];
     expect(groups).toHaveLength(4);
-    for (const g of groups) expect(g).toMatch(/fill="none".*>speculative</);
+    groups.forEach((g, i) => expect(g).toMatch(new RegExp(`fill="none".*>${TOUR[i]}<`)));
+    for (const v of views) expect(drawMap(buildMapData([]), v)).not.toMatch(/speculative/i);
     for (const other of ["Almagre", "Blanca", "Crestone"]) expect(svg).not.toContain(other);
     expect(drawMap(buildMapData([]), "region")).toContain(">Pikes Peak<");
   });

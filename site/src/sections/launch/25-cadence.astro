@@ -1,6 +1,6 @@
 ---
 // The cadence calculator (step 34): one shot every so many minutes, as launches a year. Arithmetic, not a forecast.
-// The brief's rate (P-08) and the busy-year comparison (E-02) come through <Figure> with their status.
+// The brief's rate (P-08) and the busy-year comparison (E-02) come through <Figure>.
 // With no script the brief's interval and its result are static text; scripts/cadence.client.ts moves them live.
 // data-arithmetic marks the numbers the arithmetic makes, so the page test allows them outside a figure.
 import Figure from "../../components/Figure.astro";
@@ -9,9 +9,8 @@ import { BRIEF_STOP, MINUTES_A_YEAR, STOPS, cadenceView, formatCount } from "../
 const view = cadenceView(BRIEF_STOP);
 const ends = [STOPS[0], STOPS[STOPS.length - 1]].map(formatCount);
 ---
-<section aria-labelledby="cadence" aria-describedby="cadence-note">
+<section aria-labelledby="cadence">
   <h2 id="cadence">Cadence</h2>
-  <p id="cadence-note">Arithmetic on a speculative rate, not a forecast.</p>
   <div class="cadence" data-cadence data-arithmetic>
     <p class="cadence-sum">
       <span class="cadence-term"><b>{formatCount(MINUTES_A_YEAR)}</b> minutes a year</span>
@@ -24,7 +23,7 @@ const ends = [STOPS[0], STOPS[STOPS.length - 1]].map(formatCount);
       <input id="cadence-minutes" type="range" min="0" max={STOPS.length - 1} step="1" value={BRIEF_STOP} aria-valuetext={`${view.minutesText} minutes`} />
       <span class="cadence-ends" aria-hidden="true"><span>{ends[0]}</span><span>{ends[1]}</span></span>
     </p>
-    <p>It starts at the brief's <Figure claim="P-08" value="once an hour or better" /></p>
+    <p>It starts at the rate the thesis gives: <Figure claim="P-08" value="once an hour or better" /></p>
     <div class="cadence-bars">
       <p class="cadence-row">
         <span class="cadence-label">Mass driver, this rate</span>
@@ -56,7 +55,7 @@ const ends = [STOPS[0], STOPS[STOPS.length - 1]].map(formatCount);
   .cadence-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2); color: var(--c-text-dim); font-size: var(--t-step--1); font-weight: 700; }
   .cadence-track { display: block; block-size: var(--s-6); background: var(--c-surface); border-radius: var(--r-chisel); }
   .cadence-bar { display: block; block-size: 100%; inline-size: calc(var(--share) * 1%); border-radius: var(--r-chisel); }
-  /* The mass driver's bar wears the speculative hatch, as on an unverified chip (styles/figure.css). */
+  /* The mass driver's bar wears the speculative hatch, as the page's lead tag does (pages/launch/index.astro). */
   .cadence-bar--rate {
     background: repeating-linear-gradient(-45deg, var(--co-yellow) 0 0.3em, var(--c-ground) 0.3em 0.6em);
     box-shadow: inset 0 0 0 var(--line-edge) var(--c-text);

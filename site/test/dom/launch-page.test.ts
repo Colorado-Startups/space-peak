@@ -1,10 +1,11 @@
-// Issue #124: on the built /launch/ page every figure carries its register status, no number stands
-// outside a figure, the profile says "speculative" in the yellow hatch, and the nav links the page.
+// Issue #124: on the built /launch/ page every value is a register figure, no number stands outside a
+// figure, the profile says "speculative" in the yellow hatch, and the nav links the page. Issue #153: one
+// line under the lead says unconfirmed figures have no source link; test/unit/figure.test.ts checks each figure.
 import { existsSync, readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { getClaim } from "../../src/lib/claims/parse";
+import { UNPROVEN_NOTE } from "../../src/components/figure";
 import { launch } from "../../src/lib/launch/data";
 import { liveLinks } from "../../src/lib/nav";
 import { DIST_DIR } from "./pages";
@@ -23,19 +24,21 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ page", () => {
 
   it("is built", () => expect(ready, `${file} is missing; build before npm test`).toBe(true));
 
-  it("gives every figure its register row's status, as a chip word", () => {
+  it("shows the profile's and the make-or-break rows first, in order, with no status chip", () => {
     const data = launch();
     const cited = [...data.profile.map((e) => e.claim), ...data.make_or_break];
     // Later sections, such as the cadence (test/dom/cadence.test.ts), add their own figures after these.
     expect(figures.map((f) => f.getAttribute("data-claim")).slice(0, cited.length)).toEqual(cited);
-    for (const f of figures) {
-      const row = getClaim(f.getAttribute("data-claim")!);
-      expect(f.getAttribute("data-status")).toBe(row.status);
-      expect(f.querySelector(".figure-chip")?.textContent).toBe(row.status);
-    }
+    expect(main.querySelectorAll(".figure-chip")).toHaveLength(0);
   });
 
-  it("puts every number on the page inside a figure, or in arithmetic labelled not a forecast", () => {
+  it("says once, under the lead, that a figure without a source link is not yet confirmed", () => {
+    const notes = [...main.querySelectorAll("[data-unproven-note]")];
+    expect(notes.map((n) => n.textContent)).toEqual([UNPROVEN_NOTE]);
+    expect(notes[0].previousElementSibling?.classList.contains("launch-lead")).toBe(true);
+  });
+
+  it("puts every number on the page inside a figure, or in the cadence arithmetic", () => {
     const walker = doc.createTreeWalker(main, 4);
     const loose: string[] = [];
     // [data-arithmetic] is the cadence calculator's working; test/dom/cadence.test.ts checks its label and its numbers.

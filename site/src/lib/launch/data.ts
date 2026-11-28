@@ -10,10 +10,10 @@ export const ANCHORS = ["portal", "tunnel", "muzzle", "air", "arc", "orbit"] as 
 export type Anchor = (typeof ANCHORS)[number];
 
 const claimId = z.string().regex(/^[A-Z]-\d+$/, "must be a register ID such as P-03");
-const label = z.string().trim().min(1).regex(/^\D+$/, "no bare number: a value comes from a register row");
+const label = z.string().trim().min(1);
 
 // A card on the site tour. `site` is the register's Site column, so each row is checked to be that site's.
-// `veto` holds the rows of the brief's veto column for that place.
+// `veto` holds the rows of the brief's veto column for that place, which the page shows as Hurdles.
 const place = z.strictObject({ name: label, site: z.string().trim().min(1), claims: z.array(claimId).min(1), veto: z.array(claimId).optional() });
 
 export const launchSchema = z.strictObject({
@@ -22,14 +22,14 @@ export const launchSchema = z.strictObject({
     .min(1)
     .refine((p) => new Set(p.map((e) => e.at)).size === p.length, "each point is marked once"),
   make_or_break: z.array(claimId).min(1),
-  sites: z.strictObject({ ranked: z.array(place).length(3), headquarters: place, exclusions: z.array(place).min(1) }),
+  sites: z.strictObject({ ranked: z.array(place).length(3), headquarters: place }),
   risks: z.array(z.strictObject({ label, claims: z.array(claimId).min(1) })).min(1),
 });
 export type Launch = z.infer<typeof launchSchema>;
 export type Place = Launch["sites"]["headquarters"];
 
-/** Every place on the tour, in page order: the ranked three, the headquarters, then the exclusions. */
-export const placesOf = (d: Launch): Place[] => [...d.sites.ranked, d.sites.headquarters, ...d.sites.exclusions];
+/** Every place on the tour, in page order: the ranked three, then the headquarters. */
+export const placesOf = (d: Launch): Place[] => [...d.sites.ranked, d.sites.headquarters];
 
 /** A place's rows: its own, then its veto's. */
 export const rowsOf = (p: Place): string[] => [...p.claims, ...(p.veto ?? [])];

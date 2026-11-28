@@ -1,11 +1,10 @@
 // @vitest-environment jsdom
 // Home section 2, "The place" (step 25, issue #128): 3 tiles, each number equal to its claims-register row,
-// each with a source behind a press, about 20 words, and the page keeps one <h1>.
+// each with a small "source" link to the loop file (issue #153), about 20 words, and the page keeps one <h1>.
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { sourceOf } from "../../src/components/figure";
 import { getClaim } from "../../src/lib/claims/parse";
 import { DIST_DIR, SITE_DIR, builtPages, distExists } from "./pages";
 
@@ -24,41 +23,37 @@ function loopSource(register: string): string {
 }
 const SOURCE = loopSource(REGISTER);
 
-// Words a visitor sees with every tile closed: a tile's source waits behind its press.
-const CLOSED = "script, style, [hidden], [aria-hidden='true'], .figure-source, details > :not(summary)";
+// Words a visitor sees, each tile's "source" link included.
+const UNSEEN = "script, style, [hidden], [aria-hidden='true']";
 const words = (node: Node): number => node.nodeType === 3 ? (node.textContent ?? "").split(/\s+/).filter(Boolean).length
-  : node.nodeType === 1 && !(node as Element).matches(CLOSED) ? [...node.childNodes].reduce((sum, child) => sum + words(child), 0) : 0;
+  : node.nodeType === 1 && !(node as Element).matches(UNSEEN) ? [...node.childNodes].reduce((sum, child) => sum + words(child), 0) : 0;
 
 /** Problems with section.place; empty is a pass. */
 function placeProblems(doc: Document): string[] {
   const section = doc.querySelector("section.place");
   if (!section) return ["no section.place"];
   const out: string[] = [];
-  const tiles = [...section.querySelectorAll("details")];
-  const ids = tiles.map((t) => t.querySelector("summary .figure")?.getAttribute("data-claim"));
+  const tiles = [...section.querySelectorAll(".place-tiles > li")];
+  const ids = tiles.map((t) => t.querySelector(".figure")?.getAttribute("data-claim"));
   if (ids.join() !== CLAIMS.join()) out.push(`tiles show ${ids.join()}, want ${CLAIMS.join()}`);
   for (const [i, tile] of tiles.entries()) {
-    const fig = tile.querySelector("summary .figure");
+    const fig = tile.querySelector(".figure");
     const id = ids[i];
     if (!fig || !id || !CLAIMS.includes(id)) continue;
     const row = getClaim(id);
     const shown = firstNumber(text(fig.querySelector(".figure-value")));
     if (shown !== firstNumber(row.claim)) out.push(`${id} shows ${shown}, its row says "${row.claim}"`);
-    if (fig.getAttribute("data-status") !== row.status || text(fig.querySelector(".figure-chip")) !== row.status) out.push(`${id} chip is not "${row.status}"`);
-    if (text(fig.querySelector(".figure-source")) !== sourceOf(row.source)?.text) out.push(`${id} source is not its row's`);
-    const body = [...tile.children].filter((c) => c.tagName !== "SUMMARY").flatMap((c) => [c, ...c.querySelectorAll("*")]);
-    if (!body.some((el) => el.matches("a[href]") && el.getAttribute("href") === SOURCE)) out.push(`${id} opens no link to ${SOURCE}`);
-    if (tile.hasAttribute("open")) out.push(`${id} starts open`);
+    const link = fig.querySelector("a.figure-source");
+    if (link?.getAttribute("href") !== SOURCE || text(link) !== "source") out.push(`${id} has no "source" link to ${SOURCE}`);
+    if (tile.querySelector(".figure-chip, details")) out.push(`${id} shows a chip or waits behind a press`);
   }
   if (!section.querySelector("img[src='/maps/region.svg'][width][height]")?.getAttribute("alt")?.trim()) out.push("no region drawing with alt, width and height");
   return out;
 }
 
-const tile = (id: string, value: string) => {
-  const row = getClaim(id);
-  return `<li><details><summary><span class="figure" data-claim="${id}" data-status="${row.status}"><span class="figure-value">${value}</span><span class="figure-chip">${row.status}</span><span class="figure-source">${sourceOf(row.source)?.text}</span></span><span>a label</span></summary><p><a href="${SOURCE}">source</a></p></details></li>`;
-};
-const GOOD = `<section class="place"><h2>The place</h2><img src="/maps/region.svg" alt="The region" width="800" height="761"><ul>${tile("R-03", "89 sq mi")}${tile("R-04", "22.7 mi")}${tile("R-05", "0.94×")}</ul></section>`;
+const tile = (id: string, value: string) =>
+  `<li><span class="figure" data-claim="${id}"><span class="figure-value">${value}</span><a class="figure-source" href="${SOURCE}">source</a></span><span>a label</span></li>`;
+const GOOD = `<section class="place"><h2>The place</h2><img src="/maps/region.svg" alt="The region" width="800" height="761"><ul class="place-tiles">${tile("R-03", "89 sq mi")}${tile("R-04", "22.7 mi")}${tile("R-05", "0.94×")}</ul></section>`;
 
 describe("the place check", () => {
   it("names the register's loop source", () => expect(SOURCE).toMatch(/^https:\/\/github\.com\/Colorado-Startups\/coloradostartups\.org\/blob\/[0-9a-f]{40}\/data\/geo\/regions\.geojson$/));
@@ -66,8 +61,9 @@ describe("the place check", () => {
   it.each([
     ["a number off its row", GOOD.replace("89 sq mi", "90 sq mi"), /R-03 shows 90/],
     ["a fourth tile", GOOD.replace("</ul>", `${tile("R-01", "5")}</ul>`), /want R-03,R-04,R-05/],
-    ["no source link", GOOD.replace(`<a href="${SOURCE}">source</a>`, "source"), /R-03 opens no link/],
-    ["a tile open at load", GOOD.replace("<details>", "<details open>"), /R-03 starts open/],
+    ["no source link", GOOD.replace(`<a class="figure-source" href="${SOURCE}">source</a>`, ""), /R-03 has no "source" link/],
+    ["a file name for the link", GOOD.replace(">source</a>", ">regions.geojson</a>"), /R-03 has no "source" link/],
+    ["a status chip", GOOD.replace("</span><a", `</span><span class="figure-chip">verified</span><a`), /R-03 shows a chip/],
   ])("flags %s (known bad)", (_name, html, problem) => {
     expect(placeProblems(parse(html)).join("\n")).toMatch(problem);
   });
@@ -79,7 +75,7 @@ if (!ready && !process.env.CI) console.warn(`[place] built-page checks skipped: 
 
 describe.skipIf(!ready && !process.env.CI)("the built home page, section 2", () => {
   const home = parse(ready ? builtPages().find((p) => p.route === "/")?.html ?? "" : "");
-  it("has 3 tiles that match the register, each with its source", () => expect(placeProblems(home)).toEqual([]));
+  it("has 3 tiles that match the register, each with its source link", () => expect(placeProblems(home)).toEqual([]));
   it("warns past the word budget, and never fails on it", () => {
     const section = home.querySelector("section.place");
     const n = section ? words(section) : 0;

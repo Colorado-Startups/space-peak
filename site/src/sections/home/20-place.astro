@@ -1,14 +1,11 @@
 ---
 // Home section 2, "The place" (step 25, issue #128): the region drawing that /maps/region.svg serves, beside
-// 3 tiles. Each tile's number is read out of its claims-register row and shown through <Figure>, so its status
-// chip shows; the build stops if a row no longer states its number. Pressing a tile opens its source. No script.
+// 3 tiles. Each tile's number is read out of its claims-register row and shown through <Figure>, with the
+// loop file's "source" link; the build stops if a row no longer states its number. No script.
 import Figure from "../../components/Figure.astro";
 import { getClaim } from "../../lib/claims/parse";
 import { frame } from "../../lib/map/draw";
 
-// The one file every loop row cites, at the commit the register names ("The Colorado Startups region loop").
-// test/dom/place.test.ts fails if this and the register part ways.
-const LOOP_SOURCE = "https://github.com/Colorado-Startups/coloradostartups.org/blob/37232431f9bab6a2a3cb2e09701642f40b446187/data/geo/regions.geojson";
 const TILES = [
   { claim: "R-03", unit: "sq mi", show: (n: string) => `${n} sq mi`, label: "inside the loop" },
   { claim: "R-04", unit: "mi", show: (n: string) => `${n} mi`, label: "widest span" },
@@ -28,15 +25,7 @@ const { width, height } = frame("region");
     <img class="place-map" src="/maps/region.svg" alt="Drawing of the Colorado Startups region loop around Colorado Springs and Fountain, with Pikes Peak and local organisations." width={width} height={height} loading="lazy" decoding="async" />
     <ul class="place-tiles">
       {tiles.map(({ claim, label, value }) => (
-        <li>
-          <details>
-            <summary>
-              <Figure claim={claim} value={value} />
-              <span class="place-label">{label}</span>
-            </summary>
-            <p class="place-source"><a href={LOOP_SOURCE}>coloradostartups.org, regions.geojson</a></p>
-          </details>
-        </li>
+        <li><Figure claim={claim} value={value} /><span class="place-label">{label}</span></li>
       ))}
     </ul>
   </div>
@@ -47,17 +36,10 @@ const { width, height } = frame("region");
   .place-body { display: grid; gap: var(--s-5); align-items: start; }
   .place-map { display: block; width: 100%; max-width: 32rem; height: auto; border: var(--line-hair) solid var(--c-rule); }
   .place-tiles { display: grid; gap: var(--s-3); margin: 0; padding: 0; list-style: none; max-width: none; }
-  .place-tiles details { border: var(--line-hair) solid var(--c-rule); border-inline-start: var(--size-ledge) solid var(--c-region-space-peak); border-radius: var(--r-chisel); }
-  /* The whole tile is the press target. A drawn chevron, not text, says it opens. */
-  .place-tiles summary { position: relative; display: grid; gap: var(--s-1); padding: var(--s-4) var(--s-7) var(--s-4) var(--s-5); cursor: pointer; list-style: none; }
-  .place-tiles summary::-webkit-details-marker { display: none; }
-  .place-tiles summary::after { content: ""; position: absolute; inset-block-start: var(--s-5); inset-inline-end: var(--s-5); width: 0.5em; height: 0.5em; border-inline-end: var(--line-bold) solid currentColor; border-block-end: var(--line-bold) solid currentColor; transform: rotate(45deg); }
-  .place-tiles details[open] summary::after { transform: rotate(-135deg); }
-  .place-tiles .figure-value { font-family: var(--font-display); font-size: var(--t-step-4); line-height: 1; }
-  /* The register's own source for the row waits for the press, with the file it names. */
-  .place-tiles details:not([open]) .figure-source { display: none; }
+  .place-tiles li { display: grid; gap: var(--s-1); padding: var(--s-4) var(--s-5); border: var(--line-hair) solid var(--c-rule); border-inline-start: var(--size-ledge) solid var(--c-region-space-peak); border-radius: var(--r-chisel); }
+  /* <Figure> is its own component, so its value is reached with :global. */
+  .place-tiles :global(.figure-value) { font-family: var(--font-display); font-size: var(--t-step-4); line-height: 1; }
   .place-label { font-weight: 700; }
-  .place-source { margin: 0; padding: 0 var(--s-5) var(--s-4); font-size: var(--t-step--1); }
   @media (min-width: 48rem) {
     .place-body { grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); }
   }

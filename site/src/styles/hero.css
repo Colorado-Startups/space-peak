@@ -12,7 +12,6 @@
 .hero-frame { position: relative; border-bottom: var(--line-bold) solid var(--c-region-space-peak); }
 .hero-frame img { display: block; width: 100%; height: auto; }
 .hero-arc { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.hero-credit { margin-block-start: var(--s-2); color: var(--c-text-dim); font-size: var(--t-step--1); }
 
 .hero-wipe { transform-box: fill-box; transform-origin: 0 50%; animation: hero-wipe 1.1s cubic-bezier(0.3, 0, 0.2, 1) 0.1s both; }
 .hero-star { transform-box: fill-box; transform-origin: 50% 50%; animation: hero-star 0.3s ease-out 1.2s both; }

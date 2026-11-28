@@ -8,16 +8,11 @@ import { BUCKETS, BUCKET_LABEL, COVER_LABEL, amount, host, type Bucket, type Res
 const rows = data.rows as Resource[];
 const count = (bucket: Bucket) => rows.filter((r) => r.bucket === bucket).length;
 const catalog = `https://github.com/${lock.repo}/blob/${lock.commit}/${lock.path}`;
-const left = lock.left_out.length;
 const text = (r: Resource) => [r.program, r.provider, ...r.covers.map((c) => COVER_LABEL[c])].join(" ").toLowerCase();
 ---
 <section class="guide" data-guide="need" aria-labelledby="guide-resources">
   <h2 id="guide-resources">Startup credits</h2>
-  <p class="guide-source">
-    {rows.length} of the {rows.length + left} programs in the <a href={catalog}>startup-credits catalog</a> (CC0), checked <time datetime={data.checked}>{data.checked}</time>.
-    {left > 0 && <> The other {left} failed a link check on <time datetime={lock.links_checked}>{lock.links_checked}</time>. </>}
-    Figures are the catalog's. Read the provider's page before you apply.
-  </p>
+  <p class="guide-source">Free credit programs, from the <a href={catalog}>startup-credits catalog</a>.</p>
   <nav class="guide-chips" aria-label="Filter credits by what they need">
     <a href="/guide/#guide-resources" data-kind-chip="" data-count={rows.length}>All <span class="n">{rows.length}</span></a>
     {BUCKETS.map((b) => (

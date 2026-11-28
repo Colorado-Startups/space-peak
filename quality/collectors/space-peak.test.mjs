@@ -75,21 +75,29 @@ test("orgs: no quote, a stale read, a shared fact URL and nine of a kind are bel
 });
 
 const CLAIMS = { claims: [{ id: "S-04", status: "unverified" }, { id: "S-16", status: "verified" }] };
-const fig = (id, chip) => `<span class="figure" data-claim="${id}"><span class="figure-value">1 ft</span>${chip ? `<span class="figure-chip figure-chip--${chip}">${chip}</span>` : ""}</span>`;
+const fig = (id, href) => `<span class="figure" data-claim="${id}"><span class="figure-value">1 ft</span>${href ? `<a class="figure-source" href="${href}">source</a>` : ""}</span>`;
+const NOTE = `<p data-unproven-note>Figures without a source link are not yet confirmed.</p>`;
 const pages = (byPath) => fixture({ "site/dist/data/claims.json": CLAIMS, ...Object.fromEntries(Object.entries(byPath).map(([p, figs]) => [`site/dist/${p}`, `<!doctype html><p>${figs.join(" ")}</p>`])) });
 
-test("figures: each chip showing its register status is at goal; a wrong, missing or unknown one is below", async () => {
-  const good = await run(pages({ "index.html": [fig("S-04", "unverified")], "map/index.html": [fig("S-16", "verified")] }));
+test("figures: a confirmed one with its source link, an unconfirmed one on a page that says so once, is at goal", async () => {
+  const good = await run(pages({ "index.html": [NOTE, fig("S-04")], "map/index.html": [fig("S-16", "https://example.org/s-16")] }));
   assert.equal(good["site.figures_with_status_share"].value, 100);
-  const got = (await run(pages({ "index.html": [fig("S-04", "unverified"), fig("S-16", "unverified"), fig("S-04"), fig("Z-9", "open")] })))["site.figures_with_status_share"];
-  assert.equal(got.value, 25);
-  assert.match(labels(got), /S-16: chip says unverified, register says verified; index\.html S-04: no status chip; index\.html Z-9: no register row/);
+});
+
+test("figures: no source link, no page note or two, and an unknown row are below goal", async () => {
+  const got = (await run(pages({
+    "index.html": [fig("S-04"), fig("S-16"), fig("Z-9"), fig("S-16", "https://example.org/s-16")],
+    "launch/index.html": [NOTE, NOTE, fig("S-04")],
+  })))["site.figures_with_status_share"];
+  assert.equal(got.value, 20, "1 of 5");
+  assert.match(labels(got), /(^|; )index\.html S-04: unverified, on a page that says so 0 times, not once; index\.html S-16: verified, with no source link; index\.html Z-9: no register row(;|$)/);
+  assert.match(labels(got), /launch\/index\.html S-04: unverified, on a page that says so 2 times, not once/);
 });
 
 test("figures: no figure yet, no build, or a build older than its sources is not measured", async () => {
   assert.match((await run(pages({ "index.html": [] })))["site.figures_with_status_share"].could_not_check, /show no figure yet/);
   assert.match((await run(fixture({})))["site.figures_with_status_share"].could_not_check, /run npm run build/);
-  const root = pages({ "index.html": [fig("S-04", "unverified")] });
+  const root = pages({ "index.html": [NOTE, fig("S-04")] });
   mkdirSync(join(root, "data"));
   writeFileSync(join(root, "data/late.yaml"), "late: true\n");
   const later = new Date(Date.now() + 60_000);

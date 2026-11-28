@@ -2,9 +2,10 @@
 // Home section 5, "The big idea" (step 36, issue #140): what a kg to orbit has cost, then an altitude ruler for the
 // speculative muzzle. Every number is read out of its claims-register row, so the build stops if a row stops saying
 // it. The ruler rises once on first view (public/js/ruler-rise.js); with no script, or under reduced motion, it is drawn.
+// The home page's unconfirmed figures are all here, so its one note saying so (issue #153) closes this section.
 import Chart from "../../components/charts/Chart.astro";
 import Figure from "../../components/Figure.astro";
-import { sourceOf } from "../../components/figure";
+import { UNPROVEN_NOTE, sourceUrl } from "../../components/figure";
 import { getClaim } from "../../lib/claims/parse";
 import type { ChartSpec } from "../../lib/charts/plot";
 
@@ -29,8 +30,8 @@ const cost: ChartSpec = {
   unit: "USD per kg",
   rows: bars.map(({ label, value }) => ({ label, value })),
 };
-const source = sourceOf(getClaim(COST[0]![0]!).source);
-if (!source?.url || bars.some((b) => sourceOf(getClaim(b.claim).source)?.url !== source.url)) throw new Error("50-idea: the cost rows no longer share one source");
+const source = sourceUrl(getClaim(COST[0]![0]!));
+if (!source || bars.some((b) => sourceUrl(getClaim(b.claim)) !== source)) throw new Error("50-idea: the cost rows no longer share one source");
 
 // The ruler, each value in its row's words, "about" kept where the row has it.
 const [, low, high] = said("P-14", /([\d,]+) to ([\d,]+) ft/);
@@ -57,13 +58,13 @@ const TICKS = [0, 5000, 10000, 15000];
     <div class="idea-cost" data-claims={bars.map((b) => b.claim).join(" ")}>
       <Chart spec={cost} caption="2018 dollars per kg to low Earth orbit" />
       <p class="idea-source">
-        <span><a href={source.url}>Jones, NASA Ames, 2018</a>. Falcon prices are 2018 list prices, not today's.</span>
+        <span><a href={source}>Jones, NASA Ames, 2018</a>. Falcon prices are 2018 list prices, not today's.</span>
       </p>
     </div>
     <figure class="ruler" data-rise="">
       <svg viewBox="0 0 360 420" role="img" aria-labelledby="ruler-title ruler-desc" font-size="15">
         <title id="ruler-title">Altitude ruler, the muzzle speculative</title>
-        <desc id="ruler-desc">Side view from sea level. A hatched band marks the muzzle height this project proposes, with Pikes Peak beside it for scale. Above a break in the scale, an arrow points sideways: low orbit is mostly a matter of sideways speed. The key marks which values are unproven.</desc>
+        <desc id="ruler-desc">Side view from sea level. A hatched band marks the muzzle height this project proposes, with Pikes Peak beside it for scale. Above a break in the scale, an arrow points sideways: low orbit is mostly a matter of sideways speed.</desc>
         <defs>
           <pattern id="idea-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <rect width="6" height="12" fill="var(--co-yellow)" />
@@ -95,17 +96,14 @@ const TICKS = [0, 5000, 10000, 15000];
       <ul class="ruler-key">
         {KEY.map((k) => (
           <li data-mark={k.mark}>
-            <details>
-              <summary>
-                <span class="ruler-label">{k.label}{k.speculative && <span class="hatch-tag">speculative</span>}</span>
-                <Figure claim={k.claim} value={k.value} />
-              </summary>
-            </details>
+            <span class="ruler-label">{k.label}{k.speculative && <span class="hatch-tag">speculative</span>}</span>
+            <Figure claim={k.claim} value={k.value} />
           </li>
         ))}
       </ul>
     </figure>
   </div>
+  <p class="idea-note" data-unproven-note>{UNPROVEN_NOTE}</p>
   <script is:inline src="/js/ruler-rise.js" defer></script>
 </section>
 
@@ -117,17 +115,11 @@ const TICKS = [0, 5000, 10000, 15000];
   .ruler { margin: 0; display: grid; gap: var(--s-4); }
   .ruler svg { display: block; inline-size: 100%; max-inline-size: calc(var(--s-9) * 4); block-size: auto; }
   .ruler-key { display: grid; gap: var(--s-2); margin: 0; padding: 0; list-style: none; max-width: none; }
-  .ruler-key details { border-inline-start: var(--size-ledge) solid var(--c-rule); }
-  .ruler-key li[data-mark="muzzle"] details { border-inline-start-color: var(--co-yellow); }
-  .ruler-key summary { position: relative; display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-1) var(--s-3); padding-inline: var(--s-3) var(--s-6); cursor: pointer; list-style: none; }
-  .ruler-key summary::-webkit-details-marker { display: none; }
-  /* A drawn chevron, not text, says it opens, as on the place tiles. */
-  .ruler-key summary::after { content: ""; position: absolute; inset-block-start: var(--s-3); inset-inline-end: var(--s-3); width: 0.5em; height: 0.5em; border-inline-end: var(--line-bold) solid currentColor; border-block-end: var(--line-bold) solid currentColor; transform: rotate(45deg); }
-  .ruler-key details[open] summary::after { transform: rotate(-135deg); }
-  /* The register's source for each value waits for the press. :global, because <Figure>'s span carries its own scope, not this one. */
-  .ruler-key details:not([open]) :global(.figure-source) { display: none; }
+  .ruler-key li { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-1) var(--s-3); padding-inline: var(--s-3); border-inline-start: var(--size-ledge) solid var(--c-rule); }
+  .ruler-key li[data-mark="muzzle"] { border-inline-start-color: var(--co-yellow); }
   .ruler-label { display: inline-flex; align-items: baseline; gap: var(--s-2); font-weight: 700; }
-  /* The speculative hatch, as on an unverified chip (styles/figure.css). */
+  .idea-note { color: var(--c-text-dim); font-size: var(--t-step--1); }
+  /* The speculative hatch, as on the /launch/ lead's tag. */
   .hatch-tag {
     padding: 0.1em 0.55em; border: var(--line-edge) solid var(--c-text); border-radius: var(--r-chisel);
     background: repeating-linear-gradient(-45deg, var(--co-yellow) 0 0.3em, var(--c-ground) 0.3em 0.6em);

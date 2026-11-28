@@ -1,6 +1,6 @@
-# /launch/ (step 33): the page's structure and the claims it cites, never a bare number.
-# Every value on the page is a row of 02_substance/claims_register.md, shown with its status
-# by <Figure>. site/src/lib/launch/data.ts checks this file; an unknown claim fails the build.
+# /launch/ (step 33): the page's structure and the claims it cites.
+# Every value on the page is a row of 02_substance/claims_register.md, shown by <Figure>.
+# site/src/lib/launch/data.ts checks this file; an unknown claim fails the build.
 
 # The profile's key, lettered A, B, C... in this order. `at` names a point on the drawing.
 profile:
@@ -15,18 +15,14 @@ profile:
 make_or_break: [P-06, P-10, P-11, E-05]
 
 # The site tour (step 35): each place's register rows in display order, then the rows of the brief's veto
-# column. `site` is the register's Site column, and data.ts checks every row is that site's. The brief's
-# ranked three, best first, then Pikes Peak as the name and headquarters, not a candidate. Each exclusion
-# gets only the row that says why.
+# column, shown as Hurdles. `site` is the register's Site column, and data.ts checks every row is that
+# site's. The brief's ranked three, best first, then Pikes Peak as the name and headquarters.
 sites:
   ranked:
     - { name: Greenhorn, site: Greenhorn / Wet Mtns, claims: [S-01, S-02, G-01], veto: [S-03] }
     - { name: Culebra Peak, site: Culebra Peak, claims: [S-04, S-05, S-06, G-02], veto: [S-21] }
     - { name: Spanish Peaks, site: Spanish Peaks, claims: [S-07, S-08, G-03], veto: [S-09] }
   headquarters: { name: Pikes Peak, site: Pikes Peak, claims: [S-14, G-05], veto: [S-15, S-16] }
-  exclusions:
-    - { name: Blanca Peak, site: Blanca Peak, claims: [S-20] }
-    - { name: Crestones / Great Sand Dunes, site: Crestones / Sand Dunes, claims: [S-18] }
 
 # The brief's honest risk register, in its order, under the brief's own lead words.
 risks:

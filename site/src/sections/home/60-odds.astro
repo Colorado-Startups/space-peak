@@ -1,6 +1,6 @@
 ---
 // Home section 6, "The odds" (step 36, issue #140): a 100-dot array per estimate in data/estimates/, through the chart
-// kit. Each says "draft estimate" while its register row is open. The full question, reasoning, date and sources wait
+// kit. Each says "draft estimate" while its register row is open. The full question, reasoning, dates and sources wait
 // behind a press: a details element, so no script. The build stops if a file and its row disagree on the chance.
 import Chart from "../../components/charts/Chart.astro";
 import { getClaim } from "../../lib/claims/parse";
@@ -35,9 +35,9 @@ const cards = allEstimates().map((e) => {
           <div class="odds-why">
             <p class="odds-question">{e.question}</p>
             <p>{e.reasoning}</p>
-            <p class="odds-meta">{e.estimator}, <time datetime={e.date}>{e.date}</time>. Resolves <time datetime={e.resolves.date}>{e.resolves.date}</time>. Register row {id}, {row.status}.</p>
+            <p class="odds-meta">{e.estimator}, <time datetime={e.date}>{e.date}</time>. Answer due <time datetime={e.resolves.date}>{e.resolves.date}</time>.</p>
             <ul class="odds-sources">
-              {e.sources.map((s) => <li><a href={s.url}>{s.publisher}</a>, read <time datetime={s.read}>{s.read}</time></li>)}
+              {e.sources.map((s) => <li><a href={s.url}>{s.publisher}</a></li>)}
             </ul>
           </div>
         </details>

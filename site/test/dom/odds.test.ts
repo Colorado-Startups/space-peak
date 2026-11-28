@@ -1,16 +1,17 @@
 // @vitest-environment jsdom
 // Home section 6, "The odds" (step 36, issue #140): one 100-dot array per estimate, each equal to its file and its
 // claims-register row, each saying "draft estimate" while the row is open, its reasoning and date behind a press
-// that needs no script, and about 30 words.
+// that needs no script, and about 30 words as a guideline that warns.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
+import { percentOf } from "../../src/lib/charts/plot";
 import { getClaim } from "../../src/lib/claims/parse";
 import { allEstimates, estimateTag, registerId, type Estimate } from "../../src/lib/estimates/schema";
 import { DIST_DIR, SITE_DIR, builtPages, distExists } from "./pages";
 
-const BUDGET = 30; // about 30 words, issue #140
+const BUDGET = 30; // about 30 words, issue #140: our own guideline, so it warns and never fails (Paul, 2026-11-28)
 const ESTIMATES = allEstimates();
 const parse = (html: string) => new DOMParser().parseFromString(html, "text/html");
 const text = (el: Element | null | undefined) => (el?.textContent ?? "").replace(/\s+/g, " ").trim();
@@ -31,7 +32,7 @@ function cardProblems(card: Element, e: Estimate): string[] {
   if (svg?.getAttribute("aria-label") !== e.question) out.push(`${e.id} dots are not named by its question`);
   const filled = [...(svg?.querySelectorAll("circle") ?? [])].filter((c) => c.getAttribute("fill") !== "var(--c-rule)").length;
   if (filled !== Math.round(e.p * 100)) out.push(`${e.id} fills ${filled} dots, its file gives p ${e.p}`);
-  if (text(card.querySelector(".chart tbody th")) !== String(e.p)) out.push(`${e.id} table twin is not p ${e.p}`);
+  if (text(card.querySelector(".chart tbody th")) !== percentOf(e.p)) out.push(`${e.id} table twin is not ${percentOf(e.p)}`);
   if (text(card.querySelector(".chart figcaption")) !== `${pct(e)}%`) out.push(`${e.id} shows "${text(card.querySelector(".chart figcaption"))}", want ${pct(e)}%`);
   if (card.getAttribute("data-register") !== id || card.getAttribute("data-status") !== row.status) out.push(`${e.id} does not name row ${id} and its status`);
   if (!row.claim.includes(`at ${pct(e)} percent`)) out.push(`${id} says "${row.claim}", the file gives p ${e.p}`);
@@ -65,8 +66,6 @@ function oddsProblems(doc: Document): string[] {
   // Nothing presents a draft as a fact: no register figure, no verified chip, no script to reveal anything.
   if (section.querySelector("[data-claim], .figure, .figure-chip")) out.push("a draft is shown as a register figure");
   if (section.querySelector("script")) out.push("the section loads a script");
-  const n = words(section);
-  if (n > BUDGET) out.push(`${n} words, budget ${BUDGET}`);
   return out;
 }
 
@@ -74,7 +73,7 @@ const card = (e: Estimate) => {
   const filled = Math.round(e.p * 100);
   const dots = Array.from({ length: 100 }, (_, i) => `<circle fill="${i < filled ? "var(--c-region-space-peak)" : "var(--c-rule)"}"></circle>`).join("");
   return `<li class="odds-card" data-estimate="${e.id}" data-register="${registerId(e)}" data-status="open"><figure class="chart"><svg role="img" aria-label="${e.question}">${dots}</svg><figcaption>${pct(e)}%</figcaption>
-    <details><summary>Data as a table</summary><table><tbody><tr><th>${e.p}</th><td>${filled}</td><td>100</td></tr></tbody></table></details></figure>
+    <details><summary>Data as a table</summary><table><tbody><tr><th>${percentOf(e.p)}</th><td>${filled}</td><td>100</td></tr></tbody></table></details></figure>
     <details><summary><span class="odds-label">A label for ${/\b(20\d{2})\b/.exec(e.question)![1]}</span><span class="draft-tag">draft estimate</span></summary><div><p>${e.question}</p><p>${e.reasoning}</p><p>${e.date}</p>
     ${e.sources.map((s) => `<a href="${s.url}">${s.publisher}</a>`).join("")}</div></details></li>`;
 };
@@ -93,7 +92,6 @@ describe("the odds check", () => {
     ["a press open at load", GOOD.replace('<details><summary><span class="odds-label">', '<details open><summary><span class="odds-label">'), /q-01 starts open/],
     ["a card missing", GOOD.replace(card(q1), ""), /want every estimate/],
     ["a script", GOOD.replace("</ul>", "</ul><script src='/x.js'></script>"), /loads a script/],
-    ["too many words", GOOD.replace("The odds", "The odds ".repeat(20)), /words, budget 30/],
   ])("flags %s (known bad)", (_name, html, problem) => {
     expect(oddsProblems(parse(html)).join("\n")).toMatch(problem);
   });
@@ -115,7 +113,13 @@ if (!ready && !process.env.CI) console.warn(`[odds] built-page checks skipped: n
 
 describe.skipIf(!ready && !process.env.CI)("the built home page, section 6", () => {
   const home = parse(ready ? builtPages().find((p) => p.route === "/")?.html ?? "" : "");
-  it("draws every estimate from its file and row, each a draft estimate, within the word budget", () => expect(oddsProblems(home)).toEqual([]));
+  it("draws every estimate from its file and row, each a draft estimate", () => expect(oddsProblems(home)).toEqual([]));
+  it(`keeps to about ${BUDGET} prose words, or warns`, () => {
+    const section = home.querySelector("section.odds");
+    const n = section ? words(section) : 0;
+    if (n > BUDGET) console.warn(`[odds] section 6 has ${n} prose words; the guideline is about ${BUDGET}.`);
+    expect(n).toBeGreaterThan(0);
+  });
   it("keeps one <h1>, after section 2", () => {
     expect(home.querySelectorAll("h1")).toHaveLength(1);
     const [place, odds] = [home.querySelector("section.place"), home.querySelector("section.odds")];

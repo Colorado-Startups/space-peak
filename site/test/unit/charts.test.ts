@@ -72,14 +72,16 @@ describe("dot array", () => {
   });
 
   it("takes p from 0 to 1 and fills Math.round(p * 100) dots", () => {
-    for (const [p, want] of [[0, 0], [1, 100], [0.074, 7], [0.075, 8]] as const) {
+    for (const [p, want, shown] of [[0, 0, "0%"], [1, 100, "100%"], [0.074, 7, "7.4%"], [0.075, 8, "7.5%"]] as const) {
       expect(lead(p), String(p)).toHaveLength(want);
-      expect(tableOf({ kind: "dots", title: "x", p }).rows).toEqual([[String(p), String(want), "100"]]);
+      expect(tableOf({ kind: "dots", title: "x", p }).rows).toEqual([[shown, String(want), "100"]]);
     }
   });
 
-  it("shows the exact p in the table, not a rounded one", () => {
-    expect(tableOf({ kind: "dots", title: "x", p: 0.0745 }).rows[0]![0]).toBe("0.0745");
+  it("shows the exact chance in the table as a percent, not a rounded one", () => {
+    expect(tableOf({ kind: "dots", title: "x", p: 0.0745 }).rows[0]![0]).toBe("7.45%");
+    expect(tableOf({ kind: "dots", title: "x", p: 0.07 }).columns).toEqual(["Chance", "Dots filled", "Dots in all"]);
+    expect(tableOf({ kind: "dots", title: "x", p: 0.07 }).rows[0]![0]).toBe("7%");
   });
 
   it("rejects p outside 0 to 1 or NaN", () => {

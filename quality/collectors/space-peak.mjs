@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // Space Peak's own metrics on the Pages tab, read from the repo, its built site and its CI.
 // The contract is Git Crafter's quality/collectors/README.md (v7.0.2): targets/space-peak.json pairs
 // with this file by name, repo values come from params, and nothing here throws. A missing file,

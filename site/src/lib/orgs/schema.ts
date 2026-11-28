@@ -57,7 +57,7 @@ export const orgSchema = z
 export type Org = z.infer<typeof orgSchema>;
 
 /** The filename stem, as the content collection and the checker see it. */
-export const fileId = (entry: string) => entry.replace(/^.*\//, "").replace(/\.yaml$/, "");
+const fileId = (entry: string) => entry.replace(/^.*\//, "").replace(/\.yaml$/, "");
 
 /** Throws unless the file's `id` equals its filename stem. */
 export function checkFileId(entry: string, data: Record<string, unknown>): string {

@@ -43,7 +43,7 @@ export const SCHEMAS = {
   }),
   index: z.strictObject({ ...META, files: z.array(z.strictObject({ path: str, mediaType: str, schema: z.url(), sha256: str.regex(/^[0-9a-f]{64}$/) })) }),
 };
-export type SchemaName = keyof typeof SCHEMAS;
+type SchemaName = keyof typeof SCHEMAS;
 const schemaUrl = (name: string) => `${SITE}/data/schemas/${name}.json`;
 const jsonSchema = (name: SchemaName) => ({ ...z.toJSONSchema(SCHEMAS[name], { io: "output", unrepresentable: "any" }), $id: schemaUrl(name) });
 

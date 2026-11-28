@@ -5,7 +5,7 @@ import { catalog, LICENSE, SITE } from "./data/build";
 export type Node = Record<string, unknown>;
 const abs = (path: string) => new URL(path, SITE).href;
 export const ORG_ID = `${SITE}/#org`;
-export const WEBSITE_ID = `${SITE}/#website`;
+const WEBSITE_ID = `${SITE}/#website`;
 export const PLACE_ID = `${SITE}/#region`;
 const TAGLINE = "Colorado's hub for the future of space.";
 
@@ -25,7 +25,7 @@ export const site = (): Node[] => [
 ];
 
 /** The region: Colorado Springs and Fountain, in El Paso County, Colorado. */
-export const region = (): Node => ({
+const region = (): Node => ({
   "@type": "Place", "@id": PLACE_ID, name: "Space Peak region",
   description: "The Colorado Startups region for Colorado Springs and Fountain, Colorado.",
   address: { "@type": "PostalAddress", addressRegion: "CO", addressCountry: "US" },

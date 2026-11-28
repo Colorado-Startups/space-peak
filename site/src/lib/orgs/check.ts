@@ -2,9 +2,9 @@ import type { Org } from "./schema";
 
 // Checks across the parsed orgs that one file's schema cannot see: area, duplicates, source age, summary length.
 // Source age and summary length are guidelines (issue #154): each is a warning, and only errors fail CI.
-export const NEARBY_KM = 60;
+const NEARBY_KM = 60;
 export const MAX_AGE_DAYS = 365;
-export const SUMMARY_CHARS = 200;
+const SUMMARY_CHARS = 200;
 
 export type Ring = [number, number][];
 export type Issue = { org: string; path: string; message: string; level: "error" | "warning" };

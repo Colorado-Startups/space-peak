@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // Fetches every source URL in data/orgs/*.yaml. On demand only, never in CI: node scripts/check-sources.mjs [dir]
 // Fails on a non-2xx status, a network error, or a redirect that leaves the source's domain.
 import { readdirSync, readFileSync } from "node:fs";

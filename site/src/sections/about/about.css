@@ -1,0 +1,26 @@
+/* /about/ only: the support lockup, the listing flow, the fact tiles and the credits table. Tokens only (issue #60). */
+main > section { margin-block-end: var(--s-7); }
+
+.lockup { display: flex; flex-wrap: wrap; gap: var(--s-5); align-items: center; }
+.lockup img { inline-size: calc(var(--s-9) * 2); block-size: auto; }
+
+/* The flow: boxes stacked with a chevron down between them, then one row with a chevron right. */
+.flow { display: grid; gap: var(--s-5); max-width: none; padding: 0; list-style: none; }
+.flow li { position: relative; display: grid; gap: var(--s-1); align-content: start; padding: var(--s-4); border: var(--line-edge) solid var(--c-region-space-peak); border-radius: var(--r-card); }
+.flow li:not(:last-child)::after { content: ""; position: absolute; inset-block-start: 100%; inset-inline-start: 50%; inline-size: var(--s-3); block-size: var(--s-3); margin: var(--s-1) 0 0 calc(var(--s-3) / -2); border-inline-end: var(--line-bold) solid var(--c-text); border-block-end: var(--line-bold) solid var(--c-text); transform: rotate(45deg); }
+.flow .n { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--s-6); block-size: var(--s-6); border-radius: 50%; background: var(--c-region-space-peak); color: var(--c-on-region-space-peak); font-weight: 700; }
+.flow .step { font-weight: 700; }
+.flow .detail, .credits { font-size: var(--t-step--1); }
+.flow .detail { color: var(--c-text-dim); }
+@media (min-width: 64rem) {
+  .flow { grid-template-columns: repeat(6, 1fr); }
+  .flow li:not(:last-child)::after { inset-block-start: 50%; inset-inline-start: 100%; margin: calc(var(--s-3) / -2) 0 0 var(--s-1); transform: rotate(-45deg); }
+}
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: var(--s-4); max-width: none; padding: 0; list-style: none; }
+.tiles li { padding: var(--s-4); border-radius: var(--r-card); background: var(--c-surface); }
+.tiles .big { display: block; font-family: var(--font-display); font-size: var(--t-step-4); line-height: 1; }
+
+.scroll { overflow-x: auto; }
+.credits { width: 100%; border-collapse: collapse; }
+.credits th, .credits td { padding: var(--s-2) var(--s-3); border-bottom: var(--line-hair) solid var(--c-rule); text-align: start; vertical-align: top; }

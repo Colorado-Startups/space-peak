@@ -1,0 +1,12 @@
+---
+import { ACCESS } from "./facts";
+---
+<section aria-labelledby="about-access" data-about="access">
+  <h2 id="about-access">Accessibility</h2>
+  <ul class="tiles" role="list">
+    <li data-fact="target"><b class="big">2.2 AA</b> The target: <a href={ACCESS.target.href}>{ACCESS.target.text}</a> at level AA.</li>
+    <li data-fact="axe"><b class="big">axe</b> <a href={ACCESS.axe.href}>{ACCESS.axe.text}</a>, at desktop and phone widths.</li>
+  </ul>
+  <p>Something hard to see, read or use?</p>
+  <p><a class="button" href={ACCESS.report.href}>{ACCESS.report.text}</a></p>
+</section>

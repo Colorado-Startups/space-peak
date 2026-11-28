@@ -1,0 +1,69 @@
+---
+// Home section 6, "The odds" (step 36, issue #140): a 100-dot array per estimate in data/estimates/, through the chart
+// kit. Each says "draft estimate" while its register row is open. The full question, reasoning, date and sources wait
+// behind a press: a details element, so no script. The build stops if a file and its row disagree on the chance.
+import Chart from "../../components/charts/Chart.astro";
+import { getClaim } from "../../lib/claims/parse";
+import { allEstimates, registerId } from "../../lib/estimates/schema";
+
+// A short label per estimate; the whole question is the chart's name and opens with the press.
+const LABELS: Record<string, string> = {
+  "q-01": "Kinetic: orbit by 2040",
+  "q-02": "Kinetic: 100 km by 2035",
+  "q-03": "Inland orbital launch by 2040",
+  "q-04": "500+ launches in 2030",
+  "q-05": "Under $1,000/kg by 2035",
+};
+const cards = allEstimates().map((e) => {
+  const id = registerId(e);
+  const row = getClaim(id);
+  const label = LABELS[e.id];
+  if (!label) throw new Error(`60-odds: no short label for ${e.id}`);
+  const pct = Number((e.p * 100).toFixed(1));
+  if (!row.claim.includes(`at ${pct} percent`)) throw new Error(`60-odds: ${id} says "${row.claim}", but ${e.id}.yaml gives p ${e.p}`);
+  return { e, id, row, label, pct, tag: row.status === "open" ? "draft estimate" : "estimate" };
+});
+---
+<section class="odds" aria-labelledby="odds-title">
+  <h2 id="odds-title">The odds</h2>
+  <ul class="odds-cards">
+    {cards.map(({ e, id, row, label, pct, tag }) => (
+      <li class="odds-card" data-estimate={e.id} data-register={id} data-status={row.status}>
+        <Chart spec={{ kind: "dots", title: e.question, p: e.p }} caption={`${pct}%`} />
+        <details>
+          <summary><span class="odds-label">{label}</span><span class="draft-tag">{tag}</span></summary>
+          <div class="odds-why">
+            <p class="odds-question">{e.question}</p>
+            <p>{e.reasoning}</p>
+            <p class="odds-meta">{e.estimator}, <time datetime={e.date}>{e.date}</time>. Resolves <time datetime={e.resolves.date}>{e.resolves.date}</time>. Register row {id}, {row.status}.</p>
+            <ul class="odds-sources">
+              {e.sources.map((s) => <li><a href={s.url}>{s.publisher}</a>, read <time datetime={s.read}>{s.read}</time></li>)}
+            </ul>
+          </div>
+        </details>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .odds { margin-block: var(--s-8) 0; }
+  .odds-cards { display: grid; gap: var(--s-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); margin: 0; padding: 0; list-style: none; max-width: none; }
+  .odds-card { display: grid; gap: var(--s-3); align-content: start; padding: var(--s-4); border: var(--line-hair) solid var(--c-rule); border-radius: var(--r-card); }
+  /* An open card takes the whole row, so its reasoning reads at a full measure. */
+  .odds-card:has(> details[open]) { grid-column: 1 / -1; }
+  /* The chance is the card's big number; the kit's figcaption carries it. */
+  .odds-card :global(.chart figcaption) { order: -1; color: var(--c-text); font-family: var(--font-display); font-size: var(--t-step-4); line-height: 1; }
+  .odds-card summary { position: relative; display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2); padding-inline-end: var(--s-6); cursor: pointer; list-style: none; font-weight: 700; }
+  .odds-card summary::-webkit-details-marker { display: none; }
+  /* A drawn chevron, not text, says it opens, as on the place tiles. */
+  .odds-card summary::after { content: ""; position: absolute; inset-block-start: var(--s-3); inset-inline-end: var(--s-2); width: 0.5em; height: 0.5em; border-inline-end: var(--line-bold) solid currentColor; border-block-end: var(--line-bold) solid currentColor; transform: rotate(45deg); }
+  .odds-card details[open] summary::after { transform: rotate(-135deg); }
+  /* The open status's look, from styles/figure.css: a dashed pink border. */
+  .draft-tag { padding: 0.1em 0.55em; border: var(--line-edge) dashed var(--c-region-space-peak); border-radius: var(--r-chisel); font-size: var(--t-step--1); line-height: 1.3; white-space: nowrap; }
+  .odds-why { display: grid; gap: var(--s-2); padding-block-start: var(--s-3); font-size: var(--t-step--1); }
+  .odds-why p, .odds-sources { margin: 0; }
+  .odds-question { font-weight: 700; }
+  .odds-meta { color: var(--c-text-dim); }
+  .odds-sources { padding-inline-start: var(--s-5); }
+</style>

@@ -28,4 +28,4 @@ This was decided by the cross-session orchestrator on Paul's delegation. Paul ca
 
 ## Lineage
 
-Space Peak, Photon Mountain, and Fusion Canyon are driven by Colorado Startups and supported by Colorado AI. Space Peak ships under its own name, not the Photon Mountain brand. There was no reason to invent a voice from scratch when a working one exists next door. So this doctrine starts as Photon Mountain's, and will earn its differences, not assert them.
+Space Peak is a region, supported by Colorado Startups and Colorado Compute (Paul, 2026-11-16). Photon Mountain and Fusion Canyon are its siblings. Space Peak ships under its own name, not the Photon Mountain brand. There was no reason to invent a voice from scratch when a working one exists next door. So this doctrine starts as Photon Mountain's, and will earn its differences, not assert them.

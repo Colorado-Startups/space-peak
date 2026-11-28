@@ -5,21 +5,15 @@ description: Run the full Space Peak pre-ship gate on a draft, which is MASTER_P
 
 # space-peak-publish-gate
 
-**Precedence.** `00_project_system/MASTER_PLAN.md` PT 3.3 is canonical for what this gate must cover. Code-OS `rules/writing-and-gates.md` is canonical for how a gate behaves. If this skill disagrees, they win and this file gets corrected in the same session.
+**Precedence.** `00_project_system/MASTER_PLAN.md` PT 3.3 wins on what this gate must cover. Code-OS `rules/writing-and-gates.md` wins on gate behaviour. Where this skill disagrees, it is corrected in the same session.
 
-**This gate waits.** Nothing fires it automatically, by design: it is the deliberate stop before a human decision.
+**This gate waits.** Nothing fires it automatically, by design: it is the deliberate stop before a human decision. It reports and recommends. It does not publish or decide.
 
-Produces a verdict and a report. It does not publish and does not decide.
+Input: the draft or page path. Site pages live under `site/src/`.
 
-## Inputs
+Run and report every check as pass, fail or not applicable, with evidence. **Do not stop at the first failure**; a complete picture is the point.
 
-1. The path of the draft or page to ship. The site's pages live under `site/src/`.
-
-## The gate
-
-Run all of these. Report each as pass, fail, or not applicable, with evidence. **Do not stop at the first failure**; a complete picture is the point.
-
-### 1. Every checker's self-test, first
+## 1. Self-tests first
 
 ```bash
 python3 04_tools/space_peak_lint.py --self-test
@@ -29,63 +23,58 @@ python3 04_tools/space_peak_contract_test.py
 
 All must pass before any result below means anything. A broken checker reports clean.
 
-### 2. Mechanical checks on the draft
+## 2. Mechanical checks
 
 ```bash
 python3 04_tools/space_peak_lint.py <draft>
 python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md <draft>
 ```
 
-Zero blocking findings required. Warnings need a judgment call each, stated.
+Zero blocking findings required. State your call on each warning.
 
-### 3. Every claim has a home
+## 3. Every claim has a home
 
-List every claim in the draft and show where it came from: the concept brief, or a register row with a source. A new claim is fine once it has its row.
+List where each claim came from: the concept brief, or a sourced register row. A new claim is fine once it has its row.
 
-### 4. Register completeness
+## 4. Register completeness
 
-Every claim in the draft has a register row, and no row is bare. Run `space-peak-fact-guardrails` if it has not already run for this draft.
+Every claim has a register row, and no row is bare. Run `space-peak-fact-guardrails` if it has not run for this draft.
 
-### 5. Voice, as meaning
+## 5. Voice, as meaning
 
-Read `01_doctrine/voice.md`, then walk the draft. One idea per sentence, judged by meaning: the 30-word warning is only a proxy. Then read it as a specialist in mass drivers, Colorado land status or FAA regulation would. Report each line that would embarrass us.
+Read `01_doctrine/voice.md`, then walk the draft. One idea per sentence, judged by meaning: the 30-word warning is only a proxy. Then read as a specialist in mass drivers, Colorado land status or FAA regulation. Report each line that would embarrass us.
 
-### 6. The framing survives
+## 6. The framing survives
 
-The draft carries the brief's own framing: a speculative venture thesis, not an engineering proposal. Physics sound, engineering 2040s-hard, both together. Quote the lines doing that work, or report that nothing does.
+The draft carries the brief's framing: a speculative venture thesis, not an engineering proposal. Physics sound, engineering 2040s-hard, both together. Quote the lines doing that work, or report that none do.
 
-### 7. The two things no lint catches
+## 7. What no lint catches
 
-- A hedged source set as an exact number in display type.
-- A status verb drifting under compression.
+A hedged source set as an exact number in display type. A status verb drifting under compression.
 
-### 8. Visuals
+## 8. Visuals
 
-The map and any SVG shipping with the piece carry the same labelling discipline as the prose. If the piece is text-only, say so and say it was deliberate.
+The map and any SVG shipping with the piece carry the prose's labelling discipline. If text-only, say so, and that it was deliberate.
 
-### 9. Naming
+## 9. Naming
 
-**Resolved 2026-10-08.** The name is **Space Peak** everywhere, with no second name and no project-versus-venture split. Register row N-04 is `corrected`, issue #2 took Route 2, and `01_doctrine/voice-terminology.md` carries the decision.
-
-So this is now a consistency check rather than a blocker:
+**Resolved 2026-10-08.** The name is **Space Peak** everywhere: no second name, no project-versus-venture split. Register row N-04 is `corrected`, issue #2 took Route 2, and `01_doctrine/voice-terminology.md` carries the decision. Now a consistency check, not a blocker:
 
 ```bash
 grep -n "Satellite Peak" <draft>
 ```
 
-Zero hits expected, with one legitimate exception: naming the rejected alternative while explaining why Space won. The brief's own naming section does exactly that. `00_project_system/MASTER_PLAN.md` also still carries the old name, because it is a frozen planning record from 2026-07-14 and is left as written.
+| Case | Result |
+|---|---|
+| Zero hits | Expected |
+| Naming the rejected alternative while explaining why Space won | The one legitimate exception; the brief's own naming section does it |
+| `00_project_system/MASTER_PLAN.md` | Still carries the old name: a frozen planning record from 2026-07-14, left as written |
+| Using "Satellite Peak" as the project's name, or arguing for it | Fail. A draft cannot argue for a name the project does not use |
 
-The gate fails if the draft uses "Satellite Peak" as the project's name, or argues for it. A draft cannot argue for a name the project does not use.
+## 10. An independent read
 
-### 10. An independent read
-
-Hand the draft to the `space-peak-fact-reviewer` agent, which did not write it, for a read of every claim. Fold its findings into the report.
+Have the `space-peak-fact-reviewer` agent, which did not write the draft, read every claim. Fold its findings into the report.
 
 ## Output
 
-A line per check, then one of:
-
-- **Ready.** Hand to Paul for the go-live.
-- **Not ready.** What must change, in priority order.
-
-The gate ends at a recommendation.
+A line per check, then the verdict: **Ready** (hand to Paul for the go-live) or **Not ready** (what must change, in priority order).

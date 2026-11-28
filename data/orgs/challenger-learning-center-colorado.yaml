@@ -1,0 +1,33 @@
+id: challenger-learning-center-colorado
+name: Challenger Learning Center of Colorado
+summary: A not-for-profit center in Colorado Springs that runs STEM field trips built around space exploration.
+kind: institution
+subkind: nonprofit
+city: colorado-springs
+area: loop
+fact:
+  text: Challenger Colorado says its field trips use hands-on space exploration and engineering challenges.
+  source: challenger-home
+sources:
+  - id: challenger-home
+    url: https://www.challengercolorado.org/
+    publisher: Challenger Learning Center of Colorado
+    read: 2026-11-28
+    quote: hands-on, exciting space exploration and engineering challenges
+  - id: challenger-nonprofit
+    url: https://www.challengercolorado.org/
+    publisher: Challenger Learning Center of Colorado
+    read: 2026-11-28
+    quote: Challenger Colorado is a not-for-profit organization
+  - id: challenger-contact
+    url: https://www.challengercolorado.org/who-we-are/contact.html
+    publisher: Challenger Learning Center of Colorado
+    read: 2026-11-28
+    quote: 8717 Wolf Valley Drive Colorado Springs, CO 80924
+location:
+  lat: 38.867255
+  lon: -104.760749
+  precision: city
+  method: US Census 2024 Gazetteer internal point for Colorado Springs city; the US Census Geocoder found no match for 8717 Wolf Valley Drive, the address on the contact page.
+  source: challenger-contact
+status: active

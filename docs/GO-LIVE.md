@@ -32,13 +32,13 @@ flowchart LR
 | Lab vitals, worst of `/` and `/404.html` | LCP 0.79 s, CLS 0, TBT 0 ms, per the Quality page at 0147c8f, 2026-11-28 | [Design and Usability tabs](https://colorado-startups.github.io/space-peak/) |
 | Quality page | Master 87 at 0147c8f, per the page, 2026-11-28 | [colorado-startups.github.io/space-peak](https://colorado-startups.github.io/space-peak/) |
 
-Each page loaded in a browser at 375 px and 1280 px: status 200, one h1, no sideways scroll, every image loaded and sized, no Blanca or Crestones text. Its timings are not lab numbers.
+Each page loaded in a browser at 375 px and 1280 px: status 200, one h1, no sideways scroll, every image loaded and sized, no Blanca or Crestones text. The browser's timings are not lab numbers.
 
 | Page | Also checked | Found |
 | --- | --- | --- |
 | `/` | Masthead, painting, odds | The lead line read as fact; it now says it is our thesis |
-| `/map/` | Region drawing | Opened on an empty edge at 375 px ([#194](https://github.com/Colorado-Startups/space-peak/issues/194)); [#209](https://github.com/Colorado-Startups/space-peak/pull/209) fixed it |
-| `/guide/` | Filter, search, both tables | The filter moved the table after first paint; fixed in step 49 |
+| `/map/` | Region drawing | Opened on its empty west edge at 375 px ([#194](https://github.com/Colorado-Startups/space-peak/issues/194)). [#209](https://github.com/Colorado-Startups/space-peak/pull/209) fixed it |
+| `/guide/` | Filter, search, both tables | The filter moved the table after first paint. Step 49 fixed it |
 | `/launch/` | Profile, cadence, sites | Fine: the cadence slider loads below the fold |
 | `/ai/` | Copy buttons, setup steps | Nothing |
 | `/about/` | Listing flow, credits table | Its credits table scrolls in its own box |

@@ -1,7 +1,7 @@
 // The live map's places: the organisations and the brief's four summits from /data/map.geojson, each org's sourced
 // fact from /data/orgs.json. One symbol layer draws them in the key's shapes and colours; a click opens a popup,
 // and each item in the list twin (#places) gets a "Show on map" button, so a keyboard reaches every place.
-// Blanca Peak and the Crestones stay off: map.geojson does not carry them, and the drawing and /launch/ do.
+// Blanca Peak and the Crestones stay off: map.geojson does not carry them, and /launch/ lists them as permanent exclusions.
 import type { Map as LiveMap } from "maplibre-gl";
 import { KINDS, type Kind } from "../../../lib/orgs/kinds";
 

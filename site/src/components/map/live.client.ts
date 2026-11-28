@@ -91,5 +91,6 @@ export async function open(doc: Document): Promise<void> {
     });
     say("Live map open: drag to move, pinch or scroll to zoom.");
   });
+  map.once("load", () => void import("./live/places").then((p) => map && p.addPlaces(map, maplibre, frame), console.error));
   setTimeout(() => map && !loaded && fail(WHY.tiles), WAIT_MS);
 }

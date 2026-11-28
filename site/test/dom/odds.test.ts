@@ -2,11 +2,13 @@
 // Home section 6, "The odds" (step 36, issue #140): one 100-dot array per estimate, each equal to its file and its
 // claims-register row, each saying "draft estimate" while the row is open, its reasoning and date behind a press
 // that needs no script, and about 30 words.
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { getClaim } from "../../src/lib/claims/parse";
-import { allEstimates, registerId, type Estimate } from "../../src/lib/estimates/schema";
-import { DIST_DIR, builtPages, distExists } from "./pages";
+import { allEstimates, estimateTag, registerId, type Estimate } from "../../src/lib/estimates/schema";
+import { DIST_DIR, SITE_DIR, builtPages, distExists } from "./pages";
 
 const BUDGET = 30; // about 30 words, issue #140
 const ESTIMATES = allEstimates();
@@ -35,7 +37,7 @@ function cardProblems(card: Element, e: Estimate): string[] {
   if (!row.claim.includes(`at ${pct(e)} percent`)) out.push(`${id} says "${row.claim}", the file gives p ${e.p}`);
   const press = card.querySelector(":scope > details");
   const tag = text(press?.querySelector("summary .draft-tag"));
-  if (row.status === "open" && tag !== "draft estimate") out.push(`${e.id} row is open, its tag says "${tag}"`);
+  if (tag !== estimateTag(row.status)) out.push(`${e.id} row is ${row.status}, its tag says "${tag}"`);
   // A short label keeps its question's year, so "by 2040" never stands in for another date.
   const label = text(press?.querySelector("summary .odds-label"));
   const year = /\b(20\d{2})\b/.exec(e.question)?.[1];
@@ -94,6 +96,16 @@ describe("the odds check", () => {
     ["too many words", GOOD.replace("The odds", "The odds ".repeat(20)), /words, budget 30/],
   ])("flags %s (known bad)", (_name, html, problem) => {
     expect(oddsProblems(parse(html)).join("\n")).toMatch(problem);
+  });
+});
+
+describe("the odds section's source", () => {
+  // Code lines only: the header comment may name the label it describes.
+  const source = readFileSync(path.join(SITE_DIR, "src", "sections", "home", "60-odds.astro"), "utf8")
+    .split("\n").filter((line) => !line.trim().startsWith("//")).join("\n");
+  it("labels each card through estimateTag, with no label written in", () => {
+    expect(source).toMatch(/tag: estimateTag\(row\.status\)/);
+    expect(source).not.toMatch(/draft estimate/);
   });
 });
 

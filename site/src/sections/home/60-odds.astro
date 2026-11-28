@@ -4,7 +4,7 @@
 // behind a press: a details element, so no script. The build stops if a file and its row disagree on the chance.
 import Chart from "../../components/charts/Chart.astro";
 import { getClaim } from "../../lib/claims/parse";
-import { allEstimates, registerId } from "../../lib/estimates/schema";
+import { allEstimates, estimateTag, registerId } from "../../lib/estimates/schema";
 
 // A short label per estimate; the whole question is the chart's name and opens with the press.
 const LABELS: Record<string, string> = {
@@ -21,7 +21,7 @@ const cards = allEstimates().map((e) => {
   if (!label) throw new Error(`60-odds: no short label for ${e.id}`);
   const pct = Number((e.p * 100).toFixed(1));
   if (!row.claim.includes(`at ${pct} percent`)) throw new Error(`60-odds: ${id} says "${row.claim}", but ${e.id}.yaml gives p ${e.p}`);
-  return { e, id, row, label, pct, tag: row.status === "open" ? "draft estimate" : "estimate" };
+  return { e, id, row, label, pct, tag: estimateTag(row.status) };
 });
 ---
 <section class="odds" aria-labelledby="odds-title">

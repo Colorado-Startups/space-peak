@@ -2,6 +2,7 @@
 // An estimate is an opinion: it never counts as verified and never enters schema.org output.
 import { parse } from "yaml";
 import { z } from "zod";
+import type { ClaimStatus } from "../claims/parse";
 import { sourceSchema } from "../orgs/schema";
 
 const files = import.meta.glob("../../../../data/estimates/*.yaml", { query: "?raw", import: "default", eager: true });
@@ -26,6 +27,9 @@ export type Estimate = z.infer<typeof estimateSchema>;
 
 /** The register row for an estimate, such as "Q-01" for q-01. */
 export const registerId = (e: Pick<Estimate, "id">) => e.id.toUpperCase();
+
+/** The label an estimate wears on the site: "draft estimate" while its row is open, and never a status word for a fact. */
+export const estimateTag = (status: ClaimStatus): string => (status === "open" ? "draft estimate" : "estimate");
 
 /** Parse and check one file; throws unless its `id` equals its filename stem. */
 export function parseEstimate(path: string, text: string): Estimate {

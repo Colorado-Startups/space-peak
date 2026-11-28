@@ -3,8 +3,8 @@
 | | |
 | --- | --- |
 | What | The spacepeak.co website, and the speculative thesis behind it. A concept for a ground-based electromagnetic mass driver bored through a Colorado peak, and the case for why cost-to-orbit is the choke point worth attacking |
-| Preview | [spacepeak.coloradostartups.workers.dev](https://spacepeak.coloradostartups.workers.dev), built from `main` |
-| Go-live on spacepeak.co | Paul gives it |
+| Site | [spacepeak.co](https://spacepeak.co), built from `main` |
+| Live | Since 2026-11-28, on Paul's word |
 | Where it stands | **Publish** is decided, and Phase 3 is active ([docs/PROJECT.md](docs/PROJECT.md), with the map) |
 | Start | [docs/START-HERE.md](docs/START-HERE.md), then [CONTRIBUTING.md](CONTRIBUTING.md) |
 | Contribute | Open to anyone: corrections, sources, drafts, questions and tooling. Questions and ideas go to [Discussions](https://github.com/Colorado-Startups/space-peak/discussions). Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md) |

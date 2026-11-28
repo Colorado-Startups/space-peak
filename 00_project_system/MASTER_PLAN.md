@@ -44,3 +44,7 @@ The same day, Paul removed the repository's hard lines: the Blanca Peak and Cres
 Paul approved the five estimates on the home page, Q-01 to Q-05, in chat on 2026-11-27. His words were "Approve all five".
 
 Each file in `data/estimates/` now says `approved: true` and `approved_on: 2026-11-27`. The site tags each one "estimate", not "draft estimate". No chance, question, reasoning, date or source changed. Each register row stays `open` until its question resolves.
+
+### Decision 2026-11-28: Live on spacepeak.co
+
+Paul said "go live" on 2026-11-28. spacepeak.co serves the site, and www redirects to it. The preview stays out of search ([#211](https://github.com/Colorado-Startups/space-peak/issues/211)).

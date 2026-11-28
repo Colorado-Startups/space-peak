@@ -7,7 +7,8 @@ name: ci
 # 04_tools/space_peak_map.py pins as WEBSITE_COMMIT; --region-url prints that URL, so the pin lives
 # only in the tool. No paths filter, so every pull request runs it.
 # The standard job (npm ci, then astro check, astro build, vitest with v8 coverage, then Chromium and the
-# Playwright axe spec over the built dist/) runs when the site's files change.
+# Playwright axe spec over the built dist/) runs when the site's files change, or its data: the org schema and
+# checks in site/src/lib/orgs/ run only there, and /about/ says CI checks every listing.
 # Dependabot's github-actions entry bumps the pin.
 on:
   pull_request:
@@ -36,6 +37,7 @@ jobs:
         git ls-files -z '*.md' | xargs -0 python3 -I 04_tools/space_peak_lint.py
       standard-paths: |
         site/**
+        data/**
         package.json
         package-lock.json
         .nvmrc

@@ -75,7 +75,7 @@ test("a place's popup opens by keyboard with its fact and source, and Escape han
     { name: org.name, kind: KIND[org.kind]!, says: [o.fact.text], url: o.sources.find((s) => s.id === o.fact.source)!.url },
   ];
   for (const { name, kind, says, url } of cases) {
-    const show = page.getByRole("button", { name: `Show on map: ${name}` });
+    const show = page.getByRole("button", { name: `Show on map: ${name}`, exact: true }); // "Pikes Peak" is also a prefix of a college.
     await show.focus();
     await page.keyboard.press("Enter");
     const popup = page.locator(".maplibregl-popup");

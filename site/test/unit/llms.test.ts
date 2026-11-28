@@ -1,9 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { CLAUDE_STEPS, DOCS, snippets } from "../../src/lib/ai/connect";
 import { SCHEMAS } from "../../src/lib/data/build";
 import { buildMapData } from "../../src/lib/map/data";
 import { liveLinks } from "../../src/lib/nav";
-import { twinPath, twins } from "../../src/lib/twins";
+import { DOCS_READ, twinPath, twins } from "../../src/lib/twins";
 import { dataFiles, GET, llmsTxt } from "../../src/pages/llms.txt";
 
 const SITE = "https://spacepeak.co";
@@ -41,6 +42,30 @@ describe("Markdown twins", () => {
     for (const body of all.values()) expect(body).toMatch(/^# .+\n[\s\S]*## Open data\n[\s\S]*CC0/);
     expect(all.get("/map/index.md")).toContain("## Summits (speculative)");
     expect([...twins(mapData).keys()]).toEqual(["/", ...liveLinks().map((l) => l.href)].map(twinPath));
+  });
+
+  // The /ai/ twin and the /ai/ page share lib/ai/connect.ts, so an AI reading the twin gets every snippet.
+  const ai = twins(mapData).get("/ai/index.md")!;
+  const s = snippets(SITE);
+  const fences = (lang: string) => [...ai.matchAll(new RegExp(`^\`\`\`${lang}\\n([\\s\\S]*?)\\n\`\`\`$`, "gm"))].map((m) => m[1]);
+
+  it("/ai/ twin holds every URL, command, Claude step and doc link the page shows", () => {
+    expect(ai).toMatch(/^# Use it with your AI\n\n> Free\. No key\. Read-only\. CC0\.\n/);
+    expect(ai.match(/^## .+$/gm)).toEqual(["## Any chat", "## Claude", "## Claude Code", "## OpenCode", `## Docs (read ${DOCS_READ})`, "## Open data"]);
+    expect(readFileSync(new URL("../../src/lib/ai/connect.ts", import.meta.url), "utf8")).toContain(`read on ${DOCS_READ}`);
+    for (const u of [s.llms, s.site, s.mcp, s.catalog]) expect(ai).toContain(u);
+    CLAUDE_STEPS.forEach((step, i) => expect(ai).toContain(`\n${i + 1}. ${step}\n`));
+    for (const [name, href] of DOCS) expect(ai).toContain(`- [${name}](${href})`);
+    expect(fences("bash")).toEqual([s.claudeCode, s.opencode]);
+    expect(ai).not.toContain("Read the full page at");
+    expect(ai).not.toMatch(/—|\s–\s/);
+  });
+
+  it("/ai/ twin holds both OpenCode configs, and each fenced json block parses", () => {
+    const blocks = fences("json");
+    expect(blocks).toEqual([s.opencodeV2, s.opencodeV1]);
+    expect(blocks.map((b) => JSON.parse(b))).toEqual([JSON.parse(s.opencodeV2), JSON.parse(s.opencodeV1)]);
+    expect(ai.match(/^```/gm)).toHaveLength(2 * (blocks.length + 2));
   });
 });
 

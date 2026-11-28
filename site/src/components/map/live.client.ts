@@ -4,6 +4,7 @@
 import cssUrl from "maplibre-gl/dist/maplibre-gl.css?url";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { BASE_STYLE, CREDITS, liveStyle, regionOf } from "./live/region";
+import { controls } from "./live/controls";
 
 /** The short line the status shows when the drawing stays the map. */
 export const WHY = {
@@ -74,6 +75,7 @@ export async function open(doc: Document): Promise<void> {
     console.error(err);
     return fail(WHY.webgl);
   }
+  controls(map, region, frame); // Step 29: the pan pad, the terrain toggle and the globe opening.
   // Relief is decoration, so a Mapterhorn miss leaves the map whole. Any other error before the first full draw ends it.
   // A listener silences MapLibre's own console.error, so the error is logged here.
   map.on("error", (e) => {

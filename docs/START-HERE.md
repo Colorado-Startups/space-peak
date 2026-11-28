@@ -9,9 +9,8 @@
 
 ```mermaid
 flowchart LR
-  A["1. What this is"] --> B["2. One habit"] --> C["3. Set up"] --> D["4. See the checks"] --> E["5. Where the work is"]
-  E --> F["6. Add an organisation"]
-  E --> G["A pull request, which CI checks (7)"]
+  A["1. What this is"] --> B["2. One habit"] --> C["3. Set up"] --> D["4. See the checks work"]
+  D --> E["5. Where the work is"] --> F["6. Add an organisation"] --> G["7. Where checks run"] --> H["8. Make your first contribution"]
 ```
 
 ## 1. What this is (5 min)

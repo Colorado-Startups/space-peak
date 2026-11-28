@@ -35,7 +35,7 @@ export function shares(launches: number, world = BUSY_YEAR): { rate: number; wor
 export function cadenceView(stop: number) {
   const minutes = minutesAt(stop);
   const launches = launchesPerYear(minutes);
-  return { minutes, launches, minutesText: formatCount(minutes), launchesText: formatCount(launches), share: shares(launches) };
+  return { minutesText: formatCount(minutes), launchesText: formatCount(launches), share: shares(launches) };
 }
 
 // Writes only on a change, so the polite live region never repeats itself.

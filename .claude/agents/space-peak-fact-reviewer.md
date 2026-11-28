@@ -29,7 +29,7 @@ You are the reader who did not watch it happen.
 
 3. Inventory **every** checkable claim in the target, including ones the script missed. The script is a regex; you are not. The regex is blindest on claims stated in prose rather than figures: "the Army already keeps that corridor clear", "one landowner", "nobody has done this".
 
-4. For each claim: registered or not, its status, and whether the prose labels it consistently with that status.
+4. For each claim: registered or not, its status, and whether the prose labels it consistently with that status. An `open` Q row is a draft estimate, never verified: the prose must call it one.
 
 5. Compare against the concept brief. Any claim not in the brief is new, and needs a register row with a source.
 

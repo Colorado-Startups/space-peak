@@ -26,6 +26,7 @@ Report at most three Nits per review.
 | Claim labels | `04_tools/space_peak_claims.py` |
 | Rule and prose drift, pins, required deny rules | `04_tools/space_peak_contract_test.py` |
 | The map against the website's regions | `04_tools/space_peak_map.py --check` |
+| The Quality collector and the committed local metrics | `node --test quality/collectors/space-peak.test.mjs` and `quality/local-check.test.mjs` |
 | Sign-off lines | DCO |
 
 ## Always check

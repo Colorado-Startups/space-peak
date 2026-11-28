@@ -1,17 +1,20 @@
 ---
 // The cadence calculator (step 34): one shot every so many minutes, as launches a year. Arithmetic, not a forecast.
-// The brief's rate (P-08) and the busy-year comparison (E-02) come through <Figure>.
+// The brief's rate (P-08) and the world's dated launch count (E-02) come through <Figure>.
+// lib/launch/busy-year.ts reads that count from E-02 and hands it to the script as data-cadence-world.
 // With no script the brief's interval and its result are static text; scripts/cadence.client.ts moves them live.
 // data-arithmetic marks the numbers the arithmetic makes, so the page test allows them outside a figure.
 import Figure from "../../components/Figure.astro";
+import { busyYear } from "../../lib/launch/busy-year";
 import { BRIEF_STOP, MINUTES_A_YEAR, STOPS, cadenceView, formatCount } from "../../scripts/cadence.client";
 
-const view = cadenceView(BRIEF_STOP);
+const world = busyYear();
+const view = cadenceView(BRIEF_STOP, world.count);
 const ends = [STOPS[0], STOPS[STOPS.length - 1]].map(formatCount);
 ---
 <section aria-labelledby="cadence">
   <h2 id="cadence">Cadence</h2>
-  <div class="cadence" data-cadence data-arithmetic>
+  <div class="cadence" data-cadence data-cadence-world={world.count} data-arithmetic>
     <p class="cadence-sum">
       <span class="cadence-term"><b>{formatCount(MINUTES_A_YEAR)}</b> minutes a year</span>
       <span class="cadence-op">÷</span>
@@ -30,7 +33,7 @@ const ends = [STOPS[0], STOPS[STOPS.length - 1]].map(formatCount);
         <span class="cadence-track" aria-hidden="true"><span class="cadence-bar cadence-bar--rate" data-cadence-bar="rate" style={`--share: ${view.share.rate}`}></span></span>
       </p>
       <p class="cadence-row">
-        <span class="cadence-label">World, a busy year <Figure claim="E-02" value="about 250" /></span>
+        <span class="cadence-label">World, orbital launches <Figure claim="E-02" value={`${formatCount(world.count)} in ${world.year}`} /></span>
         <span class="cadence-track" aria-hidden="true"><span class="cadence-bar cadence-bar--world" data-cadence-bar="world" style={`--share: ${view.share.world}`}></span></span>
       </p>
     </div>

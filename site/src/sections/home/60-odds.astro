@@ -10,9 +10,9 @@ import { allEstimates, registerId } from "../../lib/estimates/schema";
 const LABELS: Record<string, string> = {
   "q-01": "Kinetic: orbit by 2040",
   "q-02": "Kinetic: 100 km by 2035",
-  "q-03": "Inland orbital launch by 2040",
-  "q-04": "500+ launches in 2030",
-  "q-05": "Under $1,000/kg by 2035",
+  "q-03": "US inland orbital launch by 2040",
+  "q-04": "Over 500 orbital launches in 2030",
+  "q-05": "Published price under $1,000/kg by 2035",
 };
 const cards = allEstimates().map((e) => {
   const id = registerId(e);

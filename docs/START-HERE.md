@@ -54,7 +54,7 @@ python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md
 And one that passes:
 
 ```bash
-printf 'Culebra Peak is listed at approximately 14,047 ft, unverified.\n' > /tmp/try.md
+printf 'Greenhorn Mountain is listed at approximately 12,300 ft, unverified.\n' > /tmp/try.md
 python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md /tmp/try.md
 ```
 

@@ -4,7 +4,7 @@
   "by": "04_tools/space_peak_map.py",
   "date": "2026-11-28",
   "register": "02_substance/claims_register.md",
-  "register_git_blob": "f984fcbadee10f71cb57e197188a6c370757bc5c",
+  "register_git_blob": "49b3e425bf2afe7469e7607bf43ae73073d2770b",
   "license": "CC0-1.0"
  },
  "features": [
@@ -758,8 +758,8 @@
     "claims": [
      {
       "id": "S-04",
-      "claim": "Elevation 14,047 ft",
-      "status": "unverified"
+      "claim": "Elevation 14,053 ft",
+      "status": "corrected"
      },
      {
       "id": "S-05",

@@ -7,7 +7,7 @@ import { CLOUDFLARE_PRIVACY, HEADERS, HOSTS, WORKERS_LOGS } from "./facts";
     <li data-fact="cookies"><b class="big">0</b> cookies. Nothing here sets one.</li>
     <li data-fact="tracking"><b class="big">0</b> tracking scripts. Every script comes from this site.</li>
     <li data-fact="hosts">
-      <b class="big">{HOSTS.length}</b> outside hosts, both for map tiles:
+      <b class="big">{HOSTS.length}</b> outside hosts, both for map tiles:{" "}
       {HOSTS.map((h, i) => <>{i > 0 && " and "}<span data-host={h.host}>{h.name}</span></>)}.
     </li>
   </ul>

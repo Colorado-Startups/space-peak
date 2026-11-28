@@ -81,7 +81,9 @@ describe.skipIf(!ready && !process.env.CI)("the built /about/ page", () => {
   });
 
   it("has the privacy tiles, the accessibility facts and the licence rows", () => {
-    for (const line of ["0 cookies", "0 tracking scripts", `${HOSTS.length} outside hosts`]) expect(text(part("privacy"))).toContain(line);
+    // The whole hosts line, so a space Astro drops before an expression fails here (the preview read "tiles:OpenFreeMap").
+    const tiles = `${HOSTS.length} outside hosts, both for map tiles: ${HOSTS.map((h) => h.name).join(" and ")}.`;
+    for (const line of ["0 cookies", "0 tracking scripts", tiles]) expect(text(part("privacy"))).toContain(line);
     const shown = [...(part("privacy")?.querySelectorAll("[data-host]") ?? [])].map((el) => el.getAttribute("data-host"));
     expect(shown.sort()).toEqual(cspHosts(read("site/public/_headers")));
     expect(text(part("access"))).toContain("WCAG 2.2 at level AA");

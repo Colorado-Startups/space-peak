@@ -19,7 +19,7 @@ From the [Space Peak concept brief](../Space-Peak-Concept-Brief.md), a speculati
 | Reload | Build a new rocket (days to weeks) | Load the next slug + recharge the banks |
 | Its image | Artillery, one shell at a time | The sling is a freight conveyor. Load, charge, fire, repeat |
 
-The limiter is **electricity, not hardware**. With a big enough power feed, realistic cadence is **once an hour or better, thousands of satellites a year from one tube**. That compares with ~250 rocket launches worldwide in a busy year (unverified). Secondary limiters (re-pump tunnel vacuum, cool the rails, inspect) are pit-stop jobs, not day-long ones.
+The limiter is **electricity, not hardware**. With a big enough power feed, realistic cadence is **once an hour or better, thousands of satellites a year from one tube**. That compares with 259 orbital launch attempts worldwide in 2024 (register E-02, corrected). Secondary limiters (re-pump tunnel vacuum, cool the rails, inspect) are pit-stop jobs, not day-long ones.
 
 ```mermaid
 flowchart LR

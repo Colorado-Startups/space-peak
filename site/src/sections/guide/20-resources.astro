@@ -8,22 +8,23 @@ import { BUCKETS, BUCKET_LABEL, COVER_LABEL, amount, host, noteText, type Bucket
 const rows = data.rows as Resource[];
 const count = (bucket: Bucket) => rows.filter((r) => r.bucket === bucket).length;
 const catalog = `https://github.com/${lock.repo}/blob/${lock.commit}/${lock.path}`;
+// As in 10-orgs.astro, the HTML ships what the filter shows on a plain load, so nothing moves when it runs.
 const text = (r: Resource) => [r.program, r.provider, ...r.covers.map((c) => COVER_LABEL[c])].join(" ").toLowerCase();
 ---
 <section class="guide" data-guide="need" aria-labelledby="guide-resources">
   <h2 id="guide-resources">Startup credits</h2>
   <p class="guide-source">Free credit programs, from the <a href={catalog}>startup-credits catalog</a>.</p>
   <nav class="guide-chips" aria-label="Filter credits by what they need">
-    <a href="/guide/#guide-resources" data-kind-chip="" data-count={rows.length}>All <span class="n">{rows.length}</span></a>
+    <a href="/guide/#guide-resources" data-kind-chip="" data-count={rows.length} aria-current="true">All <span class="n">{rows.length}</span></a>
     {BUCKETS.map((b) => (
       <a href={`/guide/?need=${b}#guide-resources`} data-kind-chip={b} data-count={count(b)}>Needs {BUCKET_LABEL[b].toLowerCase()} <span class="n">{count(b)}</span></a>
     ))}
   </nav>
-  <form class="guide-search" role="search" aria-label="Search credits" data-guide-search hidden>
+  <form class="guide-search" role="search" aria-label="Search credits" data-guide-search>
     <label for="credits-q">Search by program, provider or use</label>
     <input id="credits-q" name="q" type="search" autocomplete="off" />
   </form>
-  <p class="guide-status" data-guide-status aria-live="polite"></p>
+  <p class="guide-status" data-guide-status aria-live="polite">Showing {rows.length} of {rows.length}</p>
   <p data-guide-none hidden>No program matches. Try another word or need.</p>
   <div class="guide-scroll">
     <table>
@@ -58,6 +59,7 @@ const text = (r: Resource) => [r.program, r.provider, ...r.covers.map((c) => COV
   .guide-chips .n { color: var(--c-text-dim); }
   .guide-search { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; margin-block-end: var(--s-3); }
   .guide-search input { padding-inline: var(--s-3); border: var(--line-hair) solid var(--c-border); font-size: var(--t-step-0); }
+  @media (scripting: none) { .guide-search { display: none; } }
   .guide-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; }
   th, td { padding: var(--s-2) var(--s-3); border-bottom: var(--line-hair) solid var(--c-rule); text-align: start; vertical-align: top; }

@@ -68,7 +68,27 @@ def cells(line):
     return m.group(1), rest
 
 
+def site_point(rid, c, status):
+    """One G- row as a site point; raise ValueError when it has no coordinate or GNIS ID."""
+    site, claim, _st, source = c[0], c[1], c[2], c[3]
+    m, g = COORD_RE.match(claim), GNIS_RE.search(source)
+    if not (m and g):
+        raise ValueError(f"{rid}: no coordinate or GNIS ID")
+    return {"id": rid, "site": site, "summit": m.group(1).strip(),
+            "lat": float(m.group(2)), "lon": -float(m.group(3)),
+            "gnis": int(g.group(1)), "status": status}
+
+
+def check_sites(sites, claims):
+    """Raise ValueError when an S- row names a site that has no G- row."""
+    names = {s["site"] for s in sites}
+    for site, rows in claims.items():
+        if site not in names:
+            raise ValueError(f"{rows[0]['id']}: site {site!r} has no G- row")
+
+
 def parse(text):
+    """The register's sites, claims by site and region rows; raise ValueError on a bad row."""
     sites, claims, region, seen = [], {}, [], set()
     for line in text.splitlines():
         row = cells(line)
@@ -81,22 +101,13 @@ def parse(text):
         status_m = STATUS_RE.search(line)
         status = status_m.group(1) if status_m else None
         if rid.startswith("G-"):
-            site, claim, _st, source = c[0], c[1], c[2], c[3]
-            m, g = COORD_RE.match(claim), GNIS_RE.search(source)
-            if not (m and g):
-                raise ValueError(f"{rid}: no coordinate or GNIS ID")
-            sites.append({"id": rid, "site": site, "summit": m.group(1).strip(),
-                          "lat": float(m.group(2)), "lon": -float(m.group(3)),
-                          "gnis": int(g.group(1)), "status": status})
+            sites.append(site_point(rid, c, status))
         elif rid.startswith("S-"):
             claims.setdefault(c[0], []).append(
                 {"id": rid, "claim": c[1], "status": status})
         elif rid.startswith("R-"):
             region.append({"id": rid, "claim": c[0], "status": status})
-    names = {s["site"] for s in sites}
-    for site, rows in claims.items():
-        if site not in names:
-            raise ValueError(f"{rows[0]['id']}: site {site!r} has no G- row")
+    check_sites(sites, claims)
     return sites, claims, region
 
 
@@ -193,55 +204,77 @@ SAMPLE_REG = """\
 """
 
 
-def self_test():
-    """Each known-bad sample must raise, and the clean sample must build."""
-    rules = R.load_rules()
-    tail = " | Pikes Peak | x | `unverified` | | |\n"
-    bad = {  # label: (register, the message it must raise)
-        "unparsed row": (SAMPLE_REG + "| S-03 | Pikes Peak\n", "does not parse"),
-        "too few cells": (SAMPLE_REG + "| G-03 | Pikes Peak | x |\n",
-                          "G-03: too few cells"),
-        "ID with a letter": (SAMPLE_REG + "| S-01a" + tail, "does not parse: | S-01a"),
-        "lower-case ID": (SAMPLE_REG + "| s-05" + tail, "does not parse: | s-05"),
-        "bold ID": (SAMPLE_REG + "| **S-06**" + tail, "does not parse: | **S-06**"),
-        "duplicate ID": (SAMPLE_REG + "| S-01" + tail, "S-01: duplicate register ID"),
-        "S- row with no G- row": (SAMPLE_REG + "| S-04 | Mt Nowhere | x | `unverified` | | |\n",
-                                  "site 'Mt Nowhere' has no G- row"),
-        "G- site with no S- rows": (SAMPLE_REG + "| G-04 | Mt Elbert | Mount Elbert, "
-            "39.11777 N, 106.44534 W, per GNIS | `verified` | GNIS 1 | |\n",
-            "site 'Mt Elbert' has no S- rows"),
-    }
-    ok = True
+BAD_TAIL = " | Pikes Peak | x | `unverified` | | |\n"
+BAD_SAMPLES = {  # label: (register, the message it must raise)
+    "unparsed row": (SAMPLE_REG + "| S-03 | Pikes Peak\n", "does not parse"),
+    "too few cells": (SAMPLE_REG + "| G-03 | Pikes Peak | x |\n",
+                      "G-03: too few cells"),
+    "ID with a letter": (SAMPLE_REG + "| S-01a" + BAD_TAIL, "does not parse: | S-01a"),
+    "lower-case ID": (SAMPLE_REG + "| s-05" + BAD_TAIL, "does not parse: | s-05"),
+    "bold ID": (SAMPLE_REG + "| **S-06**" + BAD_TAIL, "does not parse: | **S-06**"),
+    "duplicate ID": (SAMPLE_REG + "| S-01" + BAD_TAIL, "S-01: duplicate register ID"),
+    "S- row with no G- row": (SAMPLE_REG + "| S-04 | Mt Nowhere | x | `unverified` | | |\n",
+                              "site 'Mt Nowhere' has no G- row"),
+    "G- site with no S- rows": (SAMPLE_REG + "| G-04 | Mt Elbert | Mount Elbert, "
+        "39.11777 N, 106.44534 W, per GNIS | `verified` | GNIS 1 | |\n",
+        "site 'Mt Elbert' has no S- rows"),
+}
+
+
+def clean_builds(rules):
+    """The clean sample must build."""
     try:
         build(SAMPLE_REG, SAMPLE_WEB, "2000-01-01", rules)
         print("self-test: clean sample builds: OK")
+        return True
     except ValueError as exc:
         print(f"self-test: clean sample raised {exc}: FAIL")
-        ok = False
-    for label, (reg, want) in bad.items():
-        try:
-            build(reg, SAMPLE_WEB, "2000-01-01", rules)
-            print(f"self-test: {label} NOT raised: FAIL")
-            ok = False
-        except ValueError as exc:
-            if want in str(exc):
-                print(f"self-test: {label} raised: OK")
-            else:
-                print(f"self-test: {label} raised {exc!r}, want {want!r}: FAIL")
-                ok = False
+        return False
+
+
+def bad_sample_raises(rules, label, reg, want):
+    """One known-bad sample must raise a ValueError naming what is wrong."""
+    try:
+        build(reg, SAMPLE_WEB, "2000-01-01", rules)
+        print(f"self-test: {label} NOT raised: FAIL")
+        return False
+    except ValueError as exc:
+        if want in str(exc):
+            print(f"self-test: {label} raised: OK")
+            return True
+        print(f"self-test: {label} raised {exc!r}, want {want!r}: FAIL")
+        return False
+
+
+def ci_fetches_pin():
+    """ci.yml fetches the region through --region-url, never its own website URL."""
     with open(os.path.join(ROOT, ".github", "workflows", "ci.yml"), encoding="utf-8") as fh:
         ci = fh.read()
     if WEBSITE_COMMIT in REGION_URL and "--region-url" in ci and WEBSITE_REPO not in ci:
         print("self-test: CI fetches the region at WEBSITE_COMMIT via --region-url: OK")
-    else:
-        print("self-test: ci.yml types its own website URL, not --region-url: FAIL")
-        ok = False
+        return True
+    print("self-test: ci.yml types its own website URL, not --region-url: FAIL")
+    return False
+
+
+def check_flags_missing():
+    """--check on a missing output file exits 1."""
     missing = os.path.join(ROOT, "no-such-dir", "missing.geojson")
     if check(SAMPLE_REG, SAMPLE_WEB, missing) == R.EXIT_BLOCKED:
         print("self-test: --check on a missing file exits 1: OK")
-    else:
-        print("self-test: --check on a missing file did not exit 1: FAIL")
-        ok = False
+        return True
+    print("self-test: --check on a missing file did not exit 1: FAIL")
+    return False
+
+
+def self_test():
+    """Each known-bad sample must raise, and the clean sample must build."""
+    rules = R.load_rules()
+    results = [clean_builds(rules)]
+    results += [bad_sample_raises(rules, label, reg, want)
+                for label, (reg, want) in BAD_SAMPLES.items()]
+    results += [ci_fetches_pin(), check_flags_missing()]
+    ok = all(results)
     print("self-test:", "PASS" if ok else "FAIL")
     return R.EXIT_OK if ok else R.EXIT_BLOCKED
 

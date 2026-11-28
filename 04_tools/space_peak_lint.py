@@ -226,14 +226,8 @@ SELF_TEST_CLEAN = (
 )
 
 
-def self_test():
-    """Seed a known-bad and a known-clean sample; fail if either misbehaves.
-
-    Required by the house rule "Every gate ships a self-test."
-    """
-    rules = R.load_rules()
-    bad = lint_text(SELF_TEST_BAD, rules)
-    clean = lint_text(SELF_TEST_CLEAN, rules)
+def seeded_flags_ok(bad):
+    """The bad sample raises every seeded check, its dashes block and its figure only warns."""
     hit = {f[2] for f in bad}
     ok = True
 
@@ -260,15 +254,28 @@ def self_test():
         ok = False
     else:
         print("self-test: unattributed-figure warns, does not block: OK")
+    return ok
 
+
+def clean_sample_ok(clean):
+    """The clean sample raises no blocking finding; each finding is printed when it does."""
     if any(f[1] == "FAIL" for f in clean):
         print("self-test: clean sample raised a FAIL: FAIL")
         for f in clean:
             print(f"  clean-sample:{f[0]}: {f[1]} [{f[2]}] {f[3]}")
-        ok = False
-    else:
-        print("self-test: clean sample passes: OK")
+        return False
+    print("self-test: clean sample passes: OK")
+    return True
 
+
+def self_test():
+    """Seed a known-bad and a known-clean sample; fail if either misbehaves.
+
+    Required by the house rule "Every gate ships a self-test."
+    """
+    rules = R.load_rules()
+    ok = seeded_flags_ok(lint_text(SELF_TEST_BAD, rules))
+    ok = clean_sample_ok(lint_text(SELF_TEST_CLEAN, rules)) and ok
     print("self-test:", "PASS" if ok else "FAIL")
     return R.EXIT_OK if ok else R.EXIT_BLOCKED
 

@@ -103,6 +103,33 @@ def split_cells(raw):
     return [c.strip() for c in raw.strip().strip("|").split("|")]
 
 
+def claim_header(cells):
+    """The lower-cased names when a table row is a claims-table header, else None."""
+    names = [c.lower() for c in cells]
+    return names if all(col in names for col in CLAIM_COLUMNS) else None
+
+
+def claim_row(line, header, section, seen):
+    """One claims-table row as a dict; raise InfraError on a bad row."""
+    cells = split_cells(line)
+    if len(cells) != len(header):
+        raise R.InfraError(f"claims row has {len(cells)} cells, header has {len(header)}: {line}")
+    cell = dict(zip(header, cells))
+    id_m = ID_RE.match(cell["id"])
+    if not id_m or cell["id"] in seen:
+        raise R.InfraError(f"bad or duplicate claim id: {cell['id']!r}")
+    seen.add(cell["id"])
+    status = cell["status"].strip("`")
+    if status not in STATUSES:
+        raise R.InfraError(f"{cell['id']}: unknown status {cell['status']!r}")
+    row = {"id": cell["id"], "series": id_m.group(1), "section": section}
+    if "site" in cell:
+        row["site"] = cell["site"]
+    row.update(claim=cell["claim"], status=status,
+               source=cell["source"], notes=cell["notes"])
+    return row
+
+
 def register_rows(text):
     """Return every claim-table row as a dict; raise InfraError on a bad row."""
     rows, seen, section, header = [], set(), "", None
@@ -111,69 +138,55 @@ def register_rows(text):
         heading = HEADING_RE.match(line)
         if heading:
             section, header = heading.group(1), None
-            continue
-        if not line.startswith("|"):
+        elif not line.startswith("|"):
             header = None
-            continue
-        cells = split_cells(line)
-        if header is None:
-            names = [c.lower() for c in cells]
-            if all(col in names for col in CLAIM_COLUMNS):
-                header = names
-            continue
-        if set(line) <= set("|-: "):
-            continue
-        if len(cells) != len(header):
-            raise R.InfraError(f"claims row has {len(cells)} cells, header has {len(header)}: {line}")
-        cell = dict(zip(header, cells))
-        id_m = ID_RE.match(cell["id"])
-        if not id_m or cell["id"] in seen:
-            raise R.InfraError(f"bad or duplicate claim id: {cell['id']!r}")
-        seen.add(cell["id"])
-        status = cell["status"].strip("`")
-        if status not in STATUSES:
-            raise R.InfraError(f"{cell['id']}: unknown status {cell['status']!r}")
-        row = {"id": cell["id"], "series": id_m.group(1), "section": section}
-        if "site" in cell:
-            row["site"] = cell["site"]
-        row.update(claim=cell["claim"], status=status,
-                   source=cell["source"], notes=cell["notes"])
-        rows.append(row)
+        elif header is None:
+            header = claim_header(split_cells(line))
+        elif not set(line) <= set("|-: "):
+            rows.append(claim_row(line, header, section, seen))
     return rows
+
+
+def read_register(path):
+    """The register's text; raise InfraError when it cannot be read."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return fh.read()
+    except OSError as exc:
+        raise R.InfraError(f"cannot read register {path}: {exc}")
+
+
+def row_places(cells, known):
+    """The known places that any cell of one register row names."""
+    found = set()
+    # Scan EVERY cell, not just the name column. A row's claim and notes
+    # text names places too: the Culebra row names Cielo Vista Ranch, the
+    # Spanish Peaks row names Comanche National Grassland. Scanning only
+    # the name column reported those as unregistered on the very document
+    # they came from.
+    for cell in cells:
+        name = cell.strip("* ").lower()
+        if not name or name.startswith(("id", "site", "claim", "---")):
+            continue
+        found.update(place for place in known if place in name)
+    return found
 
 
 def parse_register(path, rules):
     """Return (registered, unverified) sets of known-place keys."""
     known = [p.lower() for p in R.terms(rules, "known_places")]
     registered, unverified = set(), set()
-    try:
-        with open(path, encoding="utf-8") as fh:
-            text = fh.read()
-    except OSError as exc:
-        raise R.InfraError(f"cannot read register {path}: {exc}")
-
-    for raw in text.splitlines():
+    for raw in read_register(path).splitlines():
         if not ROW_RE.match(raw.strip()):
             continue
         cells = split_cells(raw)
         if len(cells) < 3:
             continue
         status_m = STATUS_RE.search(raw)
-        status = status_m.group(1) if status_m else None
-        # Scan EVERY cell, not just the name column. A row's claim and notes
-        # text names places too: the Culebra row names Cielo Vista Ranch, the
-        # Spanish Peaks row names Comanche National Grassland. Scanning only
-        # the name column reported those as unregistered on the very document
-        # they came from.
-        for cell in cells:
-            name = cell.strip("* ").lower()
-            if not name or name.startswith(("id", "site", "claim", "---")):
-                continue
-            for place in known:
-                if place in name:
-                    registered.add(place)
-                    if status == "unverified":
-                        unverified.add(place)
+        places = row_places(cells, known)
+        registered |= places
+        if status_m and status_m.group(1) == "unverified":
+            unverified |= places
     return registered, unverified
 
 
@@ -188,34 +201,17 @@ def has_cue(sentence, cues):
     return any(cue in low for cue in cues)
 
 
-def classify_claim(sentence, rules, registered, unverified):
-    """THE POLICY SURFACE. Return (severity, check, message) or None.
-
-    Register-anchored, plus a catch-all for any unregistered place.
-    """
-    low = sentence.lower()
-    known = [p.lower() for p in R.terms(rules, "known_places")]
-    speculative = R.terms(rules, "speculative_cues")
-
-    # 1. Does this sentence attach a checkable figure to a place?
-    if not PLACE_FIGURE_RE.search(sentence):
-        return None
-
-    mentioned = [p for p in known if p in low]
-
-    # 2a. Catch-all, structural half: a place-shaped name we do not know.
+def unknown_place(sentence, known):
+    """The first place-shaped name in a sentence that no known place covers, or None."""
     for m in PLACE_SHAPE_RE.finditer(sentence):
         name = m.group(1).strip()
         if not any(p in name.lower() for p in known):
-            return (R.severity_of(rules, "unregistered-claim"),
-                    "unregistered-claim",
-                    f'states a figure about "{name}", which this project has '
-                    "no register row for; add a row to claims_register.md "
-                    "before asserting it")
+            return name
+    return None
 
-    if not mentioned:
-        return None
 
+def register_finding(sentence, mentioned, registered, unverified, rules):
+    """Steps 2b and 3 for the known places a sentence mentions; None when it passes."""
     # 2b. Catch-all, known-name half: a listed place with no register row.
     unregistered = [p for p in mentioned if p not in registered]
     if unregistered:
@@ -225,12 +221,40 @@ def classify_claim(sentence, rules, registered, unverified):
 
     # 3. A registered-but-unverified place stated without a label.
     unlabeled = [p for p in mentioned if p in unverified]
-    if unlabeled and not has_cue(sentence, speculative):
+    if unlabeled and not has_cue(sentence, R.terms(rules, "speculative_cues")):
         return (R.severity_of(rules, "unlabeled-claim"), "unlabeled-claim",
                 f'figure about "{unlabeled[0]}" is registered `unverified` but '
                 "this sentence carries no speculative label; confirm the label "
                 "is nearby")
     return None
+
+
+def classify_claim(sentence, rules, registered, unverified):
+    """THE POLICY SURFACE. Return (severity, check, message) or None.
+
+    Register-anchored, plus a catch-all for any unregistered place.
+    """
+    low = sentence.lower()
+    known = [p.lower() for p in R.terms(rules, "known_places")]
+
+    # 1. Does this sentence attach a checkable figure to a place?
+    if not PLACE_FIGURE_RE.search(sentence):
+        return None
+
+    mentioned = [p for p in known if p in low]
+
+    # 2a. Catch-all, structural half: a place-shaped name we do not know.
+    name = unknown_place(sentence, known)
+    if name is not None:
+        return (R.severity_of(rules, "unregistered-claim"),
+                "unregistered-claim",
+                f'states a figure about "{name}", which this project has '
+                "no register row for; add a row to claims_register.md "
+                "before asserting it")
+
+    if not mentioned:
+        return None
+    return register_finding(sentence, mentioned, registered, unverified, rules)
 
 
 def lint_file(path, rules, registered, unverified):
@@ -286,24 +310,27 @@ SELF_TEST_REGISTERED = {"culebra", "greenhorn", "blanca", "crestones", "pikes pe
 SELF_TEST_UNVERIFIED = {"culebra", "greenhorn", "blanca", "crestones", "pikes peak"}
 
 
+def self_test_case(rules, sentence, expected, expected_sev):
+    """One seeded sentence: print its verdict, and return True when it is classified as expected."""
+    result = classify_claim(sentence, rules, SELF_TEST_REGISTERED,
+                            SELF_TEST_UNVERIFIED)
+    got = result[1] if result else None
+    got_sev = result[0] if result else None
+    if got == expected and got_sev == expected_sev:
+        print(f"self-test: OK   [{expected or 'clean'}"
+              f"{'/' + expected_sev if expected_sev else ''}] "
+              f"{sentence[:46]}")
+        return True
+    print(f"self-test: FAIL expected {expected or 'clean'}/"
+          f"{expected_sev}, got {got or 'clean'}/{got_sev}: "
+          f"{sentence[:46]}")
+    return False
+
+
 def self_test():
     """Seed known-bad and known-clean samples; fail if either misbehaves."""
     rules = R.load_rules()
-    ok = True
-    for sentence, expected, expected_sev in SELF_TEST_CASES:
-        result = classify_claim(sentence, rules, SELF_TEST_REGISTERED,
-                                SELF_TEST_UNVERIFIED)
-        got = result[1] if result else None
-        got_sev = result[0] if result else None
-        if got == expected and got_sev == expected_sev:
-            print(f"self-test: OK   [{expected or 'clean'}"
-                  f"{'/' + expected_sev if expected_sev else ''}] "
-                  f"{sentence[:46]}")
-        else:
-            print(f"self-test: FAIL expected {expected or 'clean'}/"
-                  f"{expected_sev}, got {got or 'clean'}/{got_sev}: "
-                  f"{sentence[:46]}")
-            ok = False
+    ok = all([self_test_case(rules, *case) for case in SELF_TEST_CASES])
 
     # The heuristics must only WARN.
     if R.severity_of(rules, "unregistered-claim") != "WARN":
@@ -311,6 +338,20 @@ def self_test():
 
     print("self-test:", "PASS" if ok else "FAIL")
     return R.EXIT_OK if ok else R.EXIT_BLOCKED
+
+
+def lint_files(paths, register, rules):
+    """Lint each file but the register against it, reporting each; True when any finding blocks."""
+    registered, unverified = parse_register(register, rules)
+    any_fail = False
+    for path in paths:
+        if os.path.abspath(path) == os.path.abspath(register):
+            continue
+        findings = lint_file(path, rules, registered, unverified)
+        report(path, findings)
+        if any(f[1] == "FAIL" for f in findings):
+            any_fail = True
+    return any_fail
 
 
 def _main(argv=None):
@@ -326,12 +367,7 @@ def _main(argv=None):
     if args.self_test:
         return self_test()
     if args.json:
-        try:
-            with open(args.register, encoding="utf-8") as fh:
-                text = fh.read()
-        except OSError as exc:
-            raise R.InfraError(f"cannot read register {args.register}: {exc}")
-        print(json.dumps(register_rows(text), indent=2, ensure_ascii=False))
+        print(json.dumps(register_rows(read_register(args.register)), indent=2, ensure_ascii=False))
         return R.EXIT_OK
     if not args.files:
         parser.print_usage()
@@ -341,15 +377,7 @@ def _main(argv=None):
     if not os.path.exists(args.register):
         raise R.InfraError(f"register not found: {args.register}")
 
-    any_fail = False
-    registered, unverified = parse_register(args.register, rules)
-    for path in args.files:
-        if os.path.abspath(path) == os.path.abspath(args.register):
-            continue
-        findings = lint_file(path, rules, registered, unverified)
-        report(path, findings)
-        if any(f[1] == "FAIL" for f in findings):
-            any_fail = True
+    any_fail = lint_files(args.files, args.register, rules)
     return R.EXIT_BLOCKED if any_fail else R.EXIT_OK
 
 

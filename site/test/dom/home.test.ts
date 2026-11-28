@@ -128,9 +128,10 @@ describe.skipIf(!ready && !inCI)("the built home page, sections 3 and 4", () => 
     }
   });
 
-  it("keeps the hero the only eager image, so it stays the LCP", () => {
-    const eager = [...home.querySelectorAll("main img")].filter((img) => img.getAttribute("loading") !== "lazy");
-    for (const img of eager) expect(img.closest("section")?.classList.contains("hero"), img.getAttribute("src") ?? "<img>").toBe(true);
+  it("loads every image in both sections lazily, so the hero painting stays the LCP", () => {
+    const imgs = [kinds, pipeline].flatMap((section) => [...section.querySelectorAll("img")]);
+    expect(imgs.length).toBeGreaterThan(0);
+    for (const img of imgs) expect(img.getAttribute("loading"), img.getAttribute("src") ?? "<img>").toBe("lazy");
     expect(home.querySelector(".hero-art img")?.getAttribute("fetchpriority")).toBe("high");
   });
 

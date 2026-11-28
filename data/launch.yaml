@@ -1,0 +1,15 @@
+# /launch/ (step 33): the page's structure and the claims it cites, never a bare number.
+# Every value on the page is a row of 02_substance/claims_register.md, shown with its status
+# by <Figure>. site/src/lib/launch/data.ts checks this file; an unknown claim fails the build.
+
+# The profile's key, lettered A, B, C... in this order. `at` names a point on the drawing.
+profile:
+  - { at: portal, label: Portal, claim: I-02 }
+  - { at: tunnel, label: Tunnel, claim: I-05 }
+  - { at: muzzle, label: Muzzle, claim: P-03 }
+  - { at: air, label: Air below, claim: P-02 }
+  - { at: arc, label: Flight, claim: I-01 }
+  - { at: orbit, label: Orbit, claim: P-01 }
+
+# The brief's four make-or-break items, in its order.
+make_or_break: [P-06, P-10, P-11, E-05]

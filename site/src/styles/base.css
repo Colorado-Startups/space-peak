@@ -1,6 +1,7 @@
 /* Base styles (issue #60). Every colour, size and space is a token from
    tokens.css or space-peak.css; test/unit/css-scan.test.ts enforces it. */
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; } /* Beats a class's display, such as .button's inline-flex. */
 
 body { margin: 0; padding-inline: var(--s-4); background: var(--c-ground); color: var(--c-text); font-family: var(--font-body); font-size: var(--t-step-0); line-height: 1.5; }
 header, main, footer { max-width: var(--size-wrap); margin-inline: auto; padding-block: var(--s-5); }

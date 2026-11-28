@@ -4,11 +4,17 @@
   // The Colorado Startups account, so Wrangler never picks another account the same login sees.
   "account_id": "437b80fdd39fee1c4daab6da32fa5aeb",
   "compatibility_date": "2026-11-01",
+  // The /mcp server. Only /mcp runs the Worker; every other path is a static asset, free and unlimited.
+  // Worker requests count against the Free plan's 100,000 a day and fail closed past it.
+  "main": "./site/worker/mcp.ts",
   "assets": {
     "directory": "./site/dist",
+    "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/mcp"]
   },
+  "observability": { "enabled": true },
   "workers_dev": true,
   "preview_urls": true,
   "previews": {}

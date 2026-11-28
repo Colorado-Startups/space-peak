@@ -101,6 +101,8 @@ The brief calls the physics sound and the engineering 2040s-hard. These are the 
 | P-07 | A gigawatt-scale pulse released in seconds | `unverified` | | Sets the power and storage model |
 | P-08 | Realistic cadence once an hour or better | `unverified` | | MASTER_PLAN flagged this as the claim most likely to break |
 | P-09 | NASA has tested gecko-inspired grippers aboard the space station | `verified` | NASA, Science in Space: Robotic Helpers, https://www.nasa.gov/missions/station/iss-research/science-in-space-robotic-helpers/, read 2026-11-16 | An adhesive gripper on the Astrobee robot "functioned as anticipated". Was "flown by NASA" in the brief's nature footnote |
+| P-10 | A vacuum muzzle, a membrane or plasma window, must hold the vacuum as the slug leaves at about 8 km/s | `unverified` | | Make-or-break item 2. The speed is P-03's. The brief says "Mach-23". Per NASA Glenn's model (P-02), air at 14,000 ft is about 260 K. Sound there runs about 324 m/s, from sqrt(1.4 x 287 x 260). So 8 km/s is about Mach 25. A search on 2026-11-27, a lead and not a read, found plasma windows only for particle beams. It also found a SpinLaunch membrane that its far slower projectile breaks |
+| P-11 | A mass driver needs a long, clean reliability record before overland launch is approved | `unverified` | | Make-or-break item 3. The words "long clean reliability record" come from the brief's risk register. Per 14 CFR 450.131(a), read 2026-11-27, the FAA counts past flights in a vehicle's failure-probability estimate. The brief adds that no one has shown "nines" yet, which needs a defined bar. A search on 2026-11-27, a lead and not a read, put Falcon 9 Block 5 above 99.8 percent success |
 
 ## Infographic claims
 
@@ -122,6 +124,7 @@ Figures in `03_deliverables/infographics/` with no other row, found by the fact 
 | E-02 | About 250 rocket launches worldwide in a busy year | `unverified` | | Check against a current launch log; the number moves yearly |
 | E-03 | Reusable rockets already cut dollars per kilogram tenfold | `unverified` | | |
 | E-04 | No inland US site has ever had FAA approval for overland launch | `unverified` | | Regulatory claim; verify before it ships |
+| E-05 | The FAA relationship and a cleared firing lane are a political achievement as much as an engineering one | `unverified` | | Make-or-break item 4. The claim keeps the brief's words. 14 CFR 450.1, read 2026-11-27, sets the requirements for a license to launch. A review on 2026-11-27, not yet read here, adds a Part 420 license for a new site and the FAA's term "flight corridor" for a lane. E-04 is the history claim |
 
 ## Naming claims
 

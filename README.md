@@ -24,6 +24,7 @@ flowchart LR
 | Mountain claims | `02_substance/claims_register.md` | `site/src/lib/claims/parse.ts` |
 | Map summits and roads | `03_deliverables/map/` | `04_tools/space_peak_map.py` |
 | Brand art and tokens | `site/public/art/`, `site/src/styles/tokens.css` | `scripts/brand/pull.mjs` |
+| Startup credits | `data/resources.json`, pinned by `data/resources.lock.json` | `site/src/sections/guide/20-resources.astro`, written by `scripts/resources/pull.mjs` |
 
 A concept for a ground-based electromagnetic mass driver bored through a Colorado peak, and the case for why cost-to-orbit is the choke point worth attacking.
 
@@ -60,8 +61,8 @@ Anyone can contribute: corrections, sources, drafts, questions and tooling. Star
 03_deliverables/     The draft, the map (map/), the infographics.
 04_tools/            The rules file, the four checkers and the map data builder.
 site/                The Astro 7 website. wrangler.jsonc deploys site/dist.
-data/                Site data: one YAML file per organisation in data/orgs/.
-scripts/             The brand pull (scripts/brand/pull.mjs).
+data/                Site data: one YAML file per organisation in data/orgs/, and the startup credits.
+scripts/             The brand and startup credits pulls (scripts/brand/, scripts/resources/).
 docs/                Contributor start-here.
 local/               Operational files. Gitignored; the reviewer reads every path in the diff.
 .claude/             Two skills, one agent, settings.

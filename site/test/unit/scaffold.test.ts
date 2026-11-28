@@ -14,11 +14,12 @@ describe("scaffold", () => {
     expect(NAV.map((l) => l.href)).toEqual(["/map/", "/guide/", "/launch/", "/ai/", "/about/"]);
   });
 
-  it("serves site/dist as static assets with no Worker, workers.dev and previews on", () => {
+  it("serves site/dist as static assets, runs the Worker only for /mcp, workers.dev and previews on", () => {
     const config = JSON.parse(read("wrangler.jsonc").replace(/^\s*\/\/.*$/gm, ""));
     expect(config).toMatchObject({ name: "spacepeak", workers_dev: true, preview_urls: true, previews: {} });
-    expect(config.main).toBeUndefined();
-    const assets = { directory: "./site/dist", html_handling: "auto-trailing-slash", not_found_handling: "404-page" };
+    expect(config.main).toBe("./site/worker/mcp.ts");
+    // Asset requests are free; any other path in run_worker_first would spend the Free plan's invocations.
+    const assets = { directory: "./site/dist", binding: "ASSETS", html_handling: "auto-trailing-slash", not_found_handling: "404-page", run_worker_first: ["/mcp"] };
     expect(config.assets).toEqual(assets);
   });
 

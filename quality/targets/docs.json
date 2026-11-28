@@ -182,6 +182,13 @@
      ]
     },
     {
+     "doc": "docs/GO-LIVE.md",
+     "area": [
+      "wrangler.jsonc",
+      "site/src/pages/robots.txt.ts"
+     ]
+    },
+    {
      "doc": "README.md",
      "area": [
       "site/",

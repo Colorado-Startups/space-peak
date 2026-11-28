@@ -17,9 +17,11 @@ const firstNumber = (s: string) => Number(/\d+(?:\.\d+)?/.exec(s)?.[0]);
 
 /** The file the register's loop rows cite, at the commit it names, as a GitHub link. */
 function loopSource(register: string): string {
-  const m = /`Colorado-Startups\/coloradostartups\.org`, `([^`]+)`, feature `space-peak`, at commit `([0-9a-f]{40})`/.exec(register);
+  const m = /`Colorado-Startups\/coloradostartups\.org`, \[([^\]]+)\]\(([^)]+)\), feature `space-peak`, at commit `([0-9a-f]{40})`/.exec(register);
   if (!m) throw new Error("claims register: the loop section no longer names its source file and commit");
-  return `https://github.com/Colorado-Startups/coloradostartups.org/blob/${m[2]}/${m[1]}`;
+  const url = `https://github.com/Colorado-Startups/coloradostartups.org/blob/${m[3]}/${m[1]}`;
+  if (m[2] !== url) throw new Error(`claims register: the loop source links ${m[2]}, not its file at its commit`);
+  return url;
 }
 const SOURCE = loopSource(REGISTER);
 

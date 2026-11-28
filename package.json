@@ -10,5 +10,5 @@
     "check": "npm run -w @spacepeak/site check",
     "test": "npm run -w @spacepeak/site test"
   },
-  "allowScripts": { "fsevents": false, "esbuild@0.28.2": true, "workerd@1.20261023.1": true }
+  "allowScripts": { "fsevents": false, "esbuild@0.28.2": true, "workerd@1.20261116.1": true }
 }

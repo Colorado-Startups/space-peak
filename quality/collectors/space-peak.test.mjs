@@ -78,7 +78,7 @@ test("orgs: no quote, a stale read, a shared fact URL and nine of a kind are bel
   assert.equal(none["site.orgs_per_kind"].value, undefined, "a folder it could not read is never 0");
 });
 
-const CLAIMS = { claims: [{ id: "S-04", status: "unverified" }, { id: "S-16", status: "verified" }] };
+const CLAIMS = { claims: [{ id: "S-04", status: "unverified" }, { id: "S-16", status: "verified" }, { id: "Q-01", status: "open" }] };
 const fig = (id, href) => `<span class="figure" data-claim="${id}"><span class="figure-value">1 ft</span>${href ? `<a class="figure-source" href="${href}">source</a>` : ""}</span>`;
 const NOTE = `<p data-unproven-note>Figures without a source link are not yet confirmed.</p>`;
 const pages = (byPath) => fixture({ "site/dist/data/claims.json": CLAIMS, ...Object.fromEntries(Object.entries(byPath).map(([p, figs]) => [`site/dist/${p}`, `<!doctype html><p>${figs.join(" ")}</p>`])) });
@@ -96,6 +96,12 @@ test("figures: no source link, no page note or two, and an unknown row are below
   assert.equal(got.value, 20, "1 of 5");
   assert.match(labels(got), /(^|; )index\.html S-04: unverified, on a page that says so 0 times, not once; index\.html S-16: verified, with no source link; index\.html Z-9: no register row(;|$)/);
   assert.match(labels(got), /launch\/index\.html S-04: unverified, on a page that says so 2 times, not once/);
+});
+
+test("figures: an unconfirmed one with a source link, and an open one, are below goal", async () => {
+  const got = (await run(pages({ "index.html": [NOTE, fig("S-04", "https://example.org/s-04"), fig("Q-01"), fig("S-16", "https://example.org/s-16")] })))["site.figures_with_status_share"];
+  assert.equal(got.value, 33.3, "1 of 3");
+  assert.match(labels(got), /index\.html S-04: unverified, with a source link; index\.html Q-01: open, neither confirmed nor unconfirmed/);
 });
 
 test("figures: no figure yet, no build, or a build older than its sources is not measured", async () => {

@@ -64,6 +64,12 @@ describe("sourceUrl", () => {
   });
 
   it("counts unverified and unverifiable as not yet confirmed", () => expect([...UNPROVEN]).toEqual(["unverified", "unverifiable"]));
+
+  it("gives an unproven row no link, even with a URL in its Source cell, so a link always reads as confirmed", () => {
+    const cited = "NASA, Earth Atmosphere Model, https://www.grc.nasa.gov/a.html, read 2026-11-16";
+    for (const status of UNPROVEN) expect(sourceUrl(row(status, cited)), status).toBeUndefined();
+    expect(sourceUrl(row("corrected", cited))).toBe("https://www.grc.nasa.gov/a.html");
+  });
 });
 
 describe("the figure check", () => {
@@ -80,7 +86,7 @@ describe("the figure check", () => {
     ["a claim ID title", GOOD.replace('data-claim="S-04"', 'data-claim="S-04" title="Claim S-04"'), /S-04 shows a chip or a title/],
     ["a read date", GOOD.replace(">v<", ">v, read 2026-11-16<"), /S-04 shows its claim ID or a read date/],
     ["a sourced figure with no link", page(note, fig("S-04"), fig("P-01")), /P-01 does not link "source"/],
-    ["a source link the row has not", page(note, fig("S-04", source("P-01"))), /S-04 links a source its row has not/],
+    ["a source link on an unconfirmed figure", page(note, fig("S-04", source("P-01"))), /S-04 links a source its row has not/],
     ["no note beside an unconfirmed figure", page(fig("S-04")), /0 unproven notes, want 1/],
     ["the note twice", page(note, note, fig("S-04")), /2 unproven notes, want 1/],
     ["a note with no unconfirmed figure", page(note, fig("P-01", source("P-01"))), /1 unproven notes, want 0/],

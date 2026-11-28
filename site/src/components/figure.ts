@@ -25,10 +25,11 @@ const SECTION_URL: Record<string, (id: string) => string | undefined> = {
   R: () => loop.source_url,
 };
 
-/** A row's source link: the first URL in its Source cell, else the row it cites ("Per P-03"), else its section's. */
+/** A row's source link: the first URL in its Source cell, else the row it cites ("Per P-03"), else its section's.
+ *  An unproven row has none, so a linked figure always reads as confirmed. */
 export function sourceUrl(row: ClaimRow, lookup: (id: string) => ClaimRow = getClaim): string | undefined {
   const source = row.source.replace(/`/g, "").trim();
-  if (!source) return undefined;
+  if (!source || UNPROVEN.includes(row.status)) return undefined;
   const cited = CITES_RE.exec(source)?.[1];
   return URL_RE.exec(source)?.[0] ?? (cited ? sourceUrl(lookup(cited), lookup) : SECTION_URL[row.series]?.(row.id));
 }

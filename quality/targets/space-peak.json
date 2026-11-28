@@ -39,7 +39,7 @@
   "near": 90,
   "direction": "higher",
   "goal_source": "Space Peak's own goal, from launch plan step 46 (Colorado-Startups/space-peak#125), which Paul approved on 2026-11-16. The claims register lists every checkable claim with a status (02_substance/claims_register.md). Paul set how a page shows it on 2026-11-28 (Colorado-Startups/space-peak#153): no status chip, a source link on a confirmed figure, and one line on a page with an unconfirmed one. Near is 90%, one figure in ten.",
-  "source": "state now: elements with data-claim or class figure on the site/dist pages; per site/dist/data/claims.json, a verified or corrected one needs an https source link, an unverified or unverifiable one a page with one [data-unproven-note]; not measured while the built pages show no figure",
+  "source": "state now: elements with data-claim or class figure on the site/dist pages; per site/dist/data/claims.json, a verified or corrected one needs an https source link, an unverified or unverifiable one no link and a page with one [data-unproven-note], and any other status is a miss; not measured while the built pages show no figure",
   "needs": "none",
   "chart": "table",
   "defined": "2026-11-27"

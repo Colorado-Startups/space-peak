@@ -107,7 +107,7 @@ A checker that cannot run exits 3. In CI that fails the job, since a runner alwa
 
 ## Running the checks yourself
 
-Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs the self-tests, the contract test, the Quality collector test, and the claims and voice checkers over every tracked Markdown file (the `short:` block). When `site/` changes it also runs `astro check`, the build, vitest and the Playwright specs in Chromium (the `standard:` block).
+Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs the self-tests, the contract test, the Quality collector test, the local run check, and the claims and voice checkers over every tracked Markdown file (the `short:` block). When `site/` changes it also runs `astro check`, the build, vitest and the Playwright specs in Chromium (the `standard:` block).
 
 One checker on the Mac is fine while you change it:
 
@@ -120,6 +120,8 @@ Every checker is standard library Python, deterministic, and offline. Each ships
 ## Quality and Process pages
 
 `.github/workflows/pages.yml` builds Git Crafter's Quality, Speed and Consumption page and its Process page from `quality/config.json` and `quality/process/config.json`. They measure this repository's pull requests, CI and Claude sessions. Four metrics on the Pages tab are Space Peak's own: sourced orgs, figure status chips, orgs per kind and valid open data files. `quality/collectors/space-peak.mjs` reads them against the goals in `quality/targets/space-peak.json`. They are not the thought-leadership piece, and publishing them publishes nothing about a mountain.
+
+Some metrics need this Mac's own data: deploys through Wrangler, the Claude tabs from Claude Code transcripts, and credits. CI cannot read them, so a session runs Git Crafter's local collect and commits `quality/data/local.json` by pull request (Git Crafter `quality/README.md`). The run uses a Git Crafter checkout at the pin, with the two packs in `CODE_OS_PACKS`. It runs `collect.mjs --local --only NAME` once per collector, because a full run would also run vitest and a browser, which stay in CI. Before the commit, `node quality/local-check.mjs --scrub` rewrites the local paths collectors leave. `quality/local-check.test.mjs` then fails on transcript text, home paths, emails, account names or keys. The run's `quality/history/` file and the `quality/data/plan-usage.json` it reads stay on the machine. `pages.yml` checks that the built page shows each measured local metric.
 
 The same workflow serves the map in `03_deliverables/map/` at `/map/`. The map shows summits, so every claim on it carries its register status and every point its USGS GNIS source. It is a repository deliverable, not the piece.
 

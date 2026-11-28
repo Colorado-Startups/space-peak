@@ -5,7 +5,9 @@ import { getClaim } from "../../src/lib/claims/parse";
 import { launch, markOf, parseLaunch } from "../../src/lib/launch/data";
 
 const file = readFileSync(new URL("../../../data/launch.yaml", import.meta.url), "utf8");
-const make = (claim: string, label = "Portal") => `profile:\n  - { at: portal, label: ${label}, claim: ${claim} }\nmake_or_break: [P-06]\n`;
+// The real file's tour and risks follow, so a test of one key does not trip on the others.
+const rest = file.slice(file.search(/^sites:/m));
+const make = (claim: string, label = "Portal") => `profile:\n  - { at: portal, label: ${label}, claim: ${claim} }\nmake_or_break: [P-06]\n${rest}`;
 
 describe("data/launch.yaml", () => {
   it("parses, and every claim it cites is a register row", () => {

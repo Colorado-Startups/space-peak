@@ -22,19 +22,19 @@ This file is how that discipline becomes something a machine can check. `.github
 
 ## Site table claims
 
-Transcribed from the brief's site tour. Every elevation, ownership status, land status, and firing-lane claim below is `unverified` until checked against a public source. Only S-16 and S-18 have been checked.
+Transcribed from the brief's site tour. Every elevation, ownership status, land status, and firing-lane claim below is `unverified` until checked against a public source. S-05, S-16, S-18 and S-20 have been checked.
 
 | ID | Site | Claim | Status | Source | Notes |
 | --- | --- | --- | --- | --- | --- |
 | S-01 | Greenhorn / Wet Mtns | Elevation about 12,300 ft | `unverified` | | |
-| S-02 | Greenhorn / Wet Mtns | Fires east over Pinon Canyon Army live-fire land | `unverified` | | Corridor control is the whole engineering argument for this site |
-| S-03 | Greenhorn / Wet Mtns | Federal land | `unverified` | | |
+| S-02 | Greenhorn / Wet Mtns | Fires east over Pinon Canyon Army live-fire land | `unverified` | | Corridor control is the whole engineering argument for this site. A search on 2026-11-27, a lead and not a read, found live fire at the Pinon Canyon Maneuver Site limited to .50 caliber and below in late 2025. Army plans from 2025 and 2026 would add larger weapons |
+| S-03 | Greenhorn / Wet Mtns | Federal land | `unverified` | | A lead, not a read. A search on 2026-11-27 found the Greenhorn Mountain Wilderness in San Isabel National Forest. Whether the summit lies inside it is unchecked. E-07 rates national forest brutal |
 | S-04 | Culebra Peak | Elevation 14,047 ft | `unverified` | | |
-| S-05 | Culebra Peak | Southernmost 14er, about 37.1 N | `unverified` | | Latitude drives the spin argument |
-| S-06 | Culebra Peak | Privately owned, Cielo Vista Ranch, single landowner | `unverified` | | Ownership may have changed; check current records |
+| S-05 | Culebra Peak | Colorado's southernmost 14er, about 37.1 N | `corrected` | Wikipedia, List of Colorado fourteeners, https://en.wikipedia.org/wiki/List_of_Colorado_fourteeners, read 2026-11-27 | Corrected. Was "Southernmost 14er". Mount Whitney in California lies further south. GNIS 269051 puts it at 36.57858 N, queried 2026-11-27 as in Site coordinates. NPS gives its summit as 14,505 ft (https://www.nps.gov/seki/planyourvisit/whitney.htm, read 2026-11-27). The list puts Culebra at 37.1224 N and the next, Little Bear Peak, at 37.5666 N. Latitude drives the spin argument |
+| S-06 | Culebra Peak | Privately owned, Cielo Vista Ranch, single landowner | `unverified` | | Ownership may have changed; check current records. A search on 2026-11-27, a lead and not a read, found William Harrison as owner since a 2017 sale. The Colorado Sun still named him on 2026-02-20. Land-grant heirs hold access rights there under Lobato v. Taylor. Land-grant heirs won grazing rights there in May 2026, per the Colorado Sun of 2026-05-14 (a lead) |
 | S-07 | Spanish Peaks | Elevation about 13,600 ft | `unverified` | | |
 | S-08 | Spanish Peaks | Open southeast shot over Comanche National Grassland | `unverified` | | |
-| S-09 | Spanish Peaks | Federal land | `unverified` | | |
+| S-09 | Spanish Peaks | Federal land | `unverified` | | A lead, not a read. A search on 2026-11-27 put the peaks in the Spanish Peaks Wilderness, San Isabel National Forest, run by the USDA Forest Service. E-07 rates national forest brutal |
 | S-10 | Almagre (Baldy) | Elevation 12,367 ft | `unverified` | | |
 | S-11 | Almagre (Baldy) | Same granite batholith as Pikes | `unverified` | | |
 | S-12 | Almagre (Baldy) | USFS land; city watershed on its flanks | `unverified` | | |
@@ -45,7 +45,8 @@ Transcribed from the brief's site tour. Every elevation, ownership status, land 
 | S-17 | Crestones / Sand Dunes | Elevation about 14,000 ft | `unverified` | | |
 | S-18 | Crestones / Sand Dunes | Great Sand Dunes National Park & Preserve; the Crestones in the Sangre de Cristo Wilderness, Rio Grande National Forest, beside it | `verified` | USGS Geolex (Crestone Peak quadrangle); NPS Great Sand Dunes "Nearby attractions" | |
 | S-19 | Blanca Peak | Elevation 14,345 ft | `unverified` | | |
-| S-20 | Blanca Peak | Sisnaajini, sacred to the Navajo | `unverified` | | |
+| S-20 | Blanca Peak | Sisnaajini, sacred to the Navajo | `verified` | Great Sand Dunes NPP photo caption, 2016-12-08, https://commons.wikimedia.org/wiki/File:Blanca_Peak_(Sisnaajini)_(32221679993).jpg, read 2026-11-27 | Verified 2026-11-27. The park's caption calls it one of four sacred mountains to the Navajo. It gives the name as Sisnaajini, Dawn or White Shell Mountain. Credited NPS/Patrick Myers, from the park's Flickr account greatsanddunesnpp. The brief spells it Sisnaajiní |
+| S-21 | Culebra Peak | Private-deal complexity; watershed | `unverified` | | The brief's veto for Culebra |
 
 ## Site coordinates
 
@@ -103,6 +104,8 @@ The brief calls the physics sound and the engineering 2040s-hard. These are the 
 | P-09 | NASA has tested gecko-inspired grippers aboard the space station | `verified` | NASA, Science in Space: Robotic Helpers, https://www.nasa.gov/missions/station/iss-research/science-in-space-robotic-helpers/, read 2026-11-16 | An adhesive gripper on the Astrobee robot "functioned as anticipated". Was "flown by NASA" in the brief's nature footnote |
 | P-10 | A vacuum muzzle, a membrane or plasma window, must hold the vacuum as the slug leaves at about 8 km/s | `unverified` | | Make-or-break item 2. The speed is P-03's. The brief says "Mach-23". Per NASA Glenn's model (P-02), air at 14,000 ft is about 260 K. Sound there runs about 324 m/s, from sqrt(1.4 x 287 x 260). So 8 km/s is about Mach 25. A search on 2026-11-27, a lead and not a read, found plasma windows only for particle beams. It also found a SpinLaunch membrane that its far slower projectile breaks |
 | P-11 | A mass driver needs a long, clean reliability record before overland launch is approved | `unverified` | | Make-or-break item 3. The words "long clean reliability record" come from the brief's risk register. Per 14 CFR 450.131(a), read 2026-11-27, the FAA counts past flights in a vehicle's failure-probability estimate. The brief adds that no one has shown "nines" yet, which needs a defined bar. A search on 2026-11-27, a lead and not a read, put Falcon 9 Block 5 above 99.8 percent success |
+| P-12 | The physics is sound and the engineering is 2040s-hard | `unverified` | | The brief's risk register, its timeline line. A judgment, not a measurement; Q-01 is the dated estimate |
+| P-13 | The muzzle vacuum seal and satellite survival at about 200 g, the design target, are unsolved at production scale | `unverified` | | The brief's risk register. P-10 and P-06 are the make-or-break items it rests on |
 
 ## Infographic claims
 
@@ -123,8 +126,11 @@ Figures in `03_deliverables/infographics/` with no other row, found by the fact 
 | E-01 | GPS loss costs about one billion dollars per day per country | `unverified` | | Widely repeated; find the primary source or drop it |
 | E-02 | About 250 rocket launches worldwide in a busy year | `unverified` | | Check against a current launch log; the number moves yearly |
 | E-03 | Reusable rockets already cut dollars per kilogram tenfold | `unverified` | | |
-| E-04 | No inland US site has ever had FAA approval for overland launch | `unverified` | | Regulatory claim; verify before it ships |
+| E-04 | FAA's 2008 Record of Decision backed licensing Spaceport America, an inland New Mexico site, for suborbital launch | `corrected` | 73 FR 79539, https://www.federalregister.gov/documents/2008/12/29/E8-30845, read 2026-11-27 | Corrected. Was "No inland US site has ever had FAA approval for overland launch". The notice gives the FAA's environmental approval to support a Launch Site Operator License for Spaceport America, in Sierra County. Its Final EIS notice, 73 FR 68492 (E8-27149, read 2026-11-27), covers horizontal and vertical suborbital launch. A site license is not a launch license; each launch needs its own under 14 CFR 450 (E-05). Leads, not reads: an FAA-licensed launch from White Sands, New Mexico, in 1989, and an inland site license at Mojave in 2004. Orbital launch from an inland site is unchecked; Q-03 is the estimate for it |
 | E-05 | The FAA relationship and a cleared firing lane are a political achievement as much as an engineering one | `unverified` | | Make-or-break item 4. The claim keeps the brief's words. 14 CFR 450.1, read 2026-11-27, sets the requirements for a license to launch. A review on 2026-11-27, not yet read here, adds a Part 420 license for a new site and the FAA's term "flight corridor" for a lane. E-04 is the history claim |
+| E-06 | A sonic boom corridor over any populated area is a civic fight | `unverified` | | The brief's risk register calls it the city-council problem |
+| E-07 | Land status is destiny: National Park, never; sacred peak, never; national forest, brutal; Army range or single private owner, tractable | `unverified` | | The brief's risk register. S-18 and S-20 are why the brief says never to its Crestones / Sand Dunes and Blanca Peak rows |
+| E-08 | Prove the technology on a coastal mountain with ocean downrange, safely for a decade; then an inland site gets its second interview | `unverified` | | Risk register. It names two example mountains; the claim leaves them out until each has its own row |
 
 ## Naming claims
 

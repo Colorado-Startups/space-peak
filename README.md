@@ -89,7 +89,7 @@ Where the checks run:
 
 | Control | Where | Blocking? |
 | --- | --- | --- |
-| Everything, on every pull request, forks included | `.github/workflows/ci.yml` | **Yes**, required on `main` |
+| The checks a change's files need, on every pull request, forks included | `.github/workflows/ci.yml` | **Yes**, required on `main` |
 | Secrets | GitHub secret scanning with push protection | **Yes**, at push |
 
 CI covers every path a change can take: a laptop, the web UI, a fork or a cloud agent. There are no git hooks to turn on.
@@ -108,7 +108,7 @@ A checker that cannot run exits 3. In CI that fails the job, since a runner alwa
 
 ## Running the checks yourself
 
-Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs the self-tests, the contract test, the Quality collector test, the local run check, and the claims and voice checkers over every tracked Markdown file (the `short:` block). When `site/` changes it also runs `astro check`, the build, vitest and the Playwright specs in Chromium (the `standard:` block).
+Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs the self-tests, the contract test, the Quality collector test, the local run check, and the claims and voice checkers over every tracked Markdown file (the `short:` block), when a file they read changes (its `paths:` list). A change to `site/`, `data/`, `package.json`, the lockfile, `.nvmrc` or `wrangler.jsonc` also runs the `standard:` block. That block runs `astro check`, the build, vitest, the Playwright specs in Chromium and the MCP conformance suite.
 
 One checker on the Mac is fine while you change it:
 

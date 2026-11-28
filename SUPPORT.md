@@ -7,6 +7,7 @@ Space Peak is a speculative venture thesis, not a product, so there is nothing t
 - **A claim is wrong or now verifiable?** Use the **Claim correction** issue form. Bring the source.
 - **An organisation belongs on the map?** Use the **Add your organisation** issue form, with a public source.
 - **A page is hard to see, hear, read or use?** Use the **Accessibility problem** issue form.
+- **A page or an MCP tool is broken?** Use the **Site or MCP problem** issue template.
 - **A checker misbehaved?** Use the **Tooling** issue form. False positives matter as much as false negatives: a guard that fires wrongly gets ignored, and an ignored guard looks like coverage while providing none.
 - **A security concern?** See `SECURITY.md`. Do not open a public issue.
 - **A conduct concern?** See `CODE_OF_CONDUCT.md`.

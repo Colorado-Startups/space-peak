@@ -119,25 +119,73 @@ def row_carries_label(raw_line, cues):
     return any(cue in low for cue in cues)
 
 
+def term_patterns(terms, word_bounded):
+    """Each term with a case-blind pattern; a space in a term matches any run of spaces."""
+    edge = r"\b" if word_bounded else ""
+    return [(term, re.compile(edge + re.escape(term).replace(r"\ ", r"\s+") + edge,
+                              re.IGNORECASE))
+            for term in terms]
+
+
+def dash_findings(line_no, raw, rules):
+    """The em dash and spaced en dash findings on one raw line."""
+    findings = []
+    if EM_DASH in raw:
+        findings.append((line_no, R.severity_of(rules, "em-dash"), "em-dash",
+                         "em dash found; use a comma, semicolon, period, "
+                         "or parentheses"))
+    if f" {EN_DASH} " in raw:
+        findings.append((line_no, R.severity_of(rules, "spaced-en-dash"),
+                         "spaced-en-dash",
+                         "spaced en dash reads as an em dash; restructure"))
+    return findings
+
+
+def term_findings(line_no, line, hedge_res, tell_res, rules):
+    """The hedge and AI tell findings on one line, hedges first."""
+    severity = R.severity_of(rules, "hedge-word")
+    found = [(line_no, severity, "hedge-word",
+              f'hedge "{hedge}"; say it plainly or cut it')
+             for hedge, hedge_re in hedge_res if hedge_re.search(line)]
+    found += [(line_no, severity, "hedge-word",
+               f'AI tell "{tell}"; see ai_tells in '
+               "04_tools/space_peak_rules.json")
+              for tell, tell_re in tell_res if tell_re.search(line)]
+    return found
+
+
+def sentence_findings(line_no, line, labeled_row, attribution, max_words, rules):
+    """The sentence-length and unattributed-figure findings, sentence by sentence."""
+    findings = []
+    for sentence in SENTENCE_SPLIT_RE.split(line):
+        words = sentence.split()
+        if len(words) > max_words:
+            findings.append((line_no, R.severity_of(rules, "sentence-length"),
+                             "sentence-length",
+                             f"sentence has {len(words)} words (limit "
+                             f"{max_words}); split it, one idea per sentence"))
+        m = FIGURE_RE.search(sentence)
+        if m and not labeled_row and not sentence_has_attribution(sentence,
+                                                                 attribution):
+            findings.append((line_no,
+                             R.severity_of(rules, "unattributed-figure"),
+                             "unattributed-figure",
+                             f'figure "{m.group(0).strip()}" has no '
+                             "attribution cue, no goal label, and no "
+                             "speculative label; attribute it, label it, or "
+                             "register it in claims_register.md"))
+    return findings
+
+
 def lint_text(text, rules, max_words=None):
     """Return findings as (line_no, severity, check, message).
 
     Severity comes from the data file for every check, never from here.
     """
-    hedges = R.terms(rules, "hedge_words")
-    tells = R.terms(rules, "ai_tells")
     attribution = R.terms(rules, "attribution_cues")
     max_words = max_words or rules["limits"]["max_sentence_words"]
-
-    hedge_res = [
-        (h, re.compile(r"\b" + re.escape(h).replace(r"\ ", r"\s+") + r"\b",
-                       re.IGNORECASE))
-        for h in hedges
-    ]
-    tell_res = [
-        (t, re.compile(re.escape(t).replace(r"\ ", r"\s+"), re.IGNORECASE))
-        for t in tells
-    ]
+    hedge_res = term_patterns(R.terms(rules, "hedge_words"), word_bounded=True)
+    tell_res = term_patterns(R.terms(rules, "ai_tells"), word_bounded=False)
 
     findings = []
     in_fence = False
@@ -148,49 +196,11 @@ def lint_text(text, rules, max_words=None):
             continue
         if in_fence:
             continue
-
-        if EM_DASH in raw:
-            findings.append((line_no, R.severity_of(rules, "em-dash"), "em-dash",
-                             "em dash found; use a comma, semicolon, period, "
-                             "or parentheses"))
-        if f" {EN_DASH} " in raw:
-            findings.append((line_no, R.severity_of(rules, "spaced-en-dash"),
-                             "spaced-en-dash",
-                             "spaced en dash reads as an em dash; restructure"))
-
         line = strip_noise(raw)
-        labeled_row = row_carries_label(raw, attribution)
-
-        for hedge, hedge_re in hedge_res:
-            if hedge_re.search(line):
-                findings.append((line_no, R.severity_of(rules, "hedge-word"),
-                                 "hedge-word",
-                                 f'hedge "{hedge}"; say it plainly or cut it'))
-
-        for tell, tell_re in tell_res:
-            if tell_re.search(line):
-                findings.append((line_no, R.severity_of(rules, "hedge-word"),
-                                 "hedge-word",
-                                 f'AI tell "{tell}"; see ai_tells in '
-                                 "04_tools/space_peak_rules.json"))
-
-        for sentence in SENTENCE_SPLIT_RE.split(line):
-            words = sentence.split()
-            if len(words) > max_words:
-                findings.append((line_no, R.severity_of(rules, "sentence-length"),
-                                 "sentence-length",
-                                 f"sentence has {len(words)} words (limit "
-                                 f"{max_words}); split it, one idea per sentence"))
-            m = FIGURE_RE.search(sentence)
-            if m and not labeled_row and not sentence_has_attribution(sentence,
-                                                                     attribution):
-                findings.append((line_no,
-                                 R.severity_of(rules, "unattributed-figure"),
-                                 "unattributed-figure",
-                                 f'figure "{m.group(0).strip()}" has no '
-                                 "attribution cue, no goal label, and no "
-                                 "speculative label; attribute it, label it, or "
-                                 "register it in claims_register.md"))
+        findings += dash_findings(line_no, raw, rules)
+        findings += term_findings(line_no, line, hedge_res, tell_res, rules)
+        findings += sentence_findings(line_no, line, row_carries_label(raw, attribution),
+                                      attribution, max_words, rules)
     return findings
 
 

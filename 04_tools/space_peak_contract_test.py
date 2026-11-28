@@ -37,6 +37,7 @@ Usage:  python3 04_tools/space_peak_contract_test.py
 Exit:   0 all contracts hold, 1 a contract is broken, 3 could not check.
 """
 
+import fnmatch
 import json
 import os
 import re
@@ -112,13 +113,20 @@ def emitted_checks():
     return names
 
 
-def main():
-    rules = R.load_rules()
-    paths = tracked_paths()
-    print("Space Peak contract test")
-    print()
+def glob_matches(path, glob):
+    """True when an exempt glob covers a path, as C5 and C13 read it."""
+    return (fnmatch.fnmatch(path, glob) or path == glob
+            or (glob.endswith("/*") and path.startswith(glob[:-1])))
 
-    # --- severity completeness -------------------------------------------
+
+def exempt_samples(entries, paths):
+    """Each exempt glob with the first real path it matches, or None."""
+    return [(e["glob"], next((p for p in paths if glob_matches(p, e["glob"])), None))
+            for e in entries]
+
+
+def severity_contracts(rules):
+    """C1 to C3: every emitted check is classified once, and none is orphaned."""
     print("severity")
     blocking = set(rules["severity"]["blocking"])
     warning = set(rules["severity"]["warning"])
@@ -134,29 +142,9 @@ def main():
     check("C3 no classified check is orphaned", not orphans,
           f"classified but never emitted: {sorted(orphans)}")
 
-    # --- exempt list ------------------------------------------------------
-    print()
-    print("exempt list")
-    entries = rules["exempt_paths"]["entries"]
-    check("C4 every exempt entry has a reason",
-          all(e.get("reason") for e in entries),
-          f"missing: {[e['glob'] for e in entries if not e.get('reason')]}")
 
-    import fnmatch
-    stale = []
-    for e in entries:
-        glob = e["glob"]
-        hit = any(fnmatch.fnmatch(p, glob) or p == glob
-                  or (glob.endswith("/*") and p.startswith(glob[:-1]))
-                  for p in paths)
-        if not hit:
-            stale.append(glob)
-    check("C5 every exempt glob still matches a real path", not stale,
-          f"stale, would silently widen: {stale}")
-
-    # No call site may carry its own exempt list. An earlier version of this
-    # repo duplicated is_exempt() into two shell scripts, which is the drift
-    # the house rule names.
+def local_exempt_copies(paths):
+    """The workflows and hooks that carry their own copy of is_exempt()."""
     dupes = []
     for rel in paths:
         if not (rel.startswith(".github/workflows/")
@@ -168,6 +156,27 @@ def main():
             continue
         if "is_exempt()" in body and "space_peak_rules" not in body:
             dupes.append(rel)
+    return dupes
+
+
+def exempt_contracts(rules, paths):
+    """C4, C5, C6 and C13: the exempt list has reasons, live globs and one copy."""
+    print()
+    print("exempt list")
+    entries = rules["exempt_paths"]["entries"]
+    check("C4 every exempt entry has a reason",
+          all(e.get("reason") for e in entries),
+          f"missing: {[e['glob'] for e in entries if not e.get('reason')]}")
+
+    samples = exempt_samples(entries, paths)
+    stale = [glob for glob, sample in samples if sample is None]
+    check("C5 every exempt glob still matches a real path", not stale,
+          f"stale, would silently widen: {stale}")
+
+    # No call site may carry its own exempt list. An earlier version of this
+    # repo duplicated is_exempt() into two shell scripts, which is the drift
+    # the house rule names.
+    dupes = local_exempt_copies(paths)
     check("C6 no call site carries its own exempt list", not dupes,
           f"local copies found in: {dupes}")
 
@@ -180,69 +189,73 @@ def main():
     # reporting the list healthy. An exempt list that silently matches
     # nothing is the exact rot the house rule warns about, so the contract
     # is tested through the real function.
-    dead = []
-    for e in entries:
-        glob = e["glob"]
-        sample = next((p for p in paths
-                       if fnmatch.fnmatch(p, glob) or p == glob
-                       or (glob.endswith("/*") and p.startswith(glob[:-1]))),
-                      None)
-        if sample and not R.is_exempt(rules, sample):
-            dead.append(f"{glob} (is_exempt said False for {sample})")
+    dead = [f"{glob} (is_exempt said False for {sample})"
+            for glob, sample in samples
+            if sample and not R.is_exempt(rules, sample)]
     check("C13 is_exempt() honours every exempt glob", not dead,
           f"globs the real function ignores: {dead}")
 
-    # --- hook wiring ------------------------------------------------------
+
+def hooks_on_disk(paths):
+    """The names of the hook scripts in .claude/hooks/."""
+    return {os.path.basename(p) for p in paths
+            if p.startswith(".claude/hooks/") and p.endswith(".sh")}
+
+
+def deny_contract(rules, settings):
+    """C15: the settings file denies every rule the rules file requires."""
+    deny = set(settings.get("permissions", {}).get("deny", []))
+    required = R.terms(rules, "claude_settings", "required_deny")
+    lost = [r for r in required if r not in deny]
+    check("C15 settings deny every required rule", bool(required) and not lost,
+          f"missing deny rules: {lost}" if required else "required_deny is empty")
+
+
+def hook_contracts(rules, paths):
+    """C9, C10 and C15, read from the settings file, not header comments."""
     print()
     print("hook wiring (settings file, not header comments)")
     settings_rel = ".claude/settings.json"
-    if os.path.exists(repo_file(settings_rel)):
-        settings = json.loads(read(settings_rel))
-        wired = set(re.findall(r'\.claude/hooks/([A-Za-z0-9._-]+\.sh)',
-                               json.dumps(settings)))
-        on_disk = {os.path.basename(p) for p in paths
-                   if p.startswith(".claude/hooks/") and p.endswith(".sh")}
-
-        absent = [h for h in wired if not os.path.exists(
-            repo_file(f".claude/hooks/{h}"))]
-        check("C9 every wired hook exists", not absent, f"wired but absent: {absent}")
-
-        not_exec = [h for h in wired
-                    if os.path.exists(repo_file(f".claude/hooks/{h}"))
-                    and not os.access(repo_file(f".claude/hooks/{h}"), os.X_OK)]
-        check("C9b every wired hook is executable", not not_exec,
-              f"not executable: {not_exec}")
-
-        unwired = sorted(on_disk - wired)
-        check("C10 every hook on disk is wired in settings", not unwired,
-              f"present but never fires: {unwired}")
-        deny = set(settings.get("permissions", {}).get("deny", []))
-        required = R.terms(rules, "claude_settings", "required_deny")
-        lost = [r for r in required if r not in deny]
-        check("C15 settings deny every required rule", bool(required) and not lost,
-              f"missing deny rules: {lost}" if required else "required_deny is empty")
-    else:
+    if not os.path.exists(repo_file(settings_rel)):
         check("C9 every wired hook exists", False, f"{settings_rel} is absent")
         check("C10 every hook on disk is wired in settings", False,
               f"{settings_rel} is absent")
+        return
+    settings = json.loads(read(settings_rel))
+    wired = set(re.findall(r'\.claude/hooks/([A-Za-z0-9._-]+\.sh)',
+                           json.dumps(settings)))
 
-    # --- CI must not reimplement checks -----------------------------------
+    absent = [h for h in wired if not os.path.exists(
+        repo_file(f".claude/hooks/{h}"))]
+    check("C9 every wired hook exists", not absent, f"wired but absent: {absent}")
+
+    not_exec = [h for h in wired
+                if os.path.exists(repo_file(f".claude/hooks/{h}"))
+                and not os.access(repo_file(f".claude/hooks/{h}"), os.X_OK)]
+    check("C9b every wired hook is executable", not not_exec,
+          f"not executable: {not_exec}")
+
+    unwired = sorted(hooks_on_disk(paths) - wired)
+    check("C10 every hook on disk is wired in settings", not unwired,
+          f"present but never fires: {unwired}")
+    deny_contract(rules, settings)
+
+
+def ci_contracts(paths):
+    """C11: no workflow reimplements a check inline instead of calling a script."""
     print()
     print("CI shape")
-    inline = []
-    for rel in paths:
-        if not rel.startswith(".github/workflows/"):
-            continue
-        body = read(rel)
-        # A workflow may call a script or run a checker. It may not grep for
-        # a banned term itself, which is how a gate drifts between a laptop,
-        # a web edit, and a cloud agent.
-        if re.search(r"grep[^\n]*(—|em.dash|local/)", body):
-            inline.append(rel)
+    # A workflow may call a script or run a checker. It may not grep for
+    # a banned term itself, which is how a gate drifts between a laptop,
+    # a web edit, and a cloud agent.
+    inline = [rel for rel in paths if rel.startswith(".github/workflows/")
+              and re.search(r"grep[^\n]*(—|em.dash|local/)", read(rel))]
     check("C11 no workflow reimplements a check inline", not inline,
           f"inline check logic in: {inline}")
 
-    # --- pins -------------------------------------------------------------
+
+def pin_contracts(paths):
+    """C14: one Git Crafter pin by full SHA, and every Quality pack by full SHA."""
     # ci.yml and pages.yml must move together, and a pack's collectors run in
     # CI, so each is pinned like an action (Git Crafter quality/CONFIG.md).
     print()
@@ -262,6 +275,9 @@ def main():
     check("C14 every Quality pack is pinned by a full SHA", not loose,
           f"not pinned: {loose}")
 
+
+def report():
+    """Prints the verdict and returns the exit code."""
     print()
     failed = [n for n, ok, _ in results if not ok]
     if failed:
@@ -271,6 +287,20 @@ def main():
         return R.EXIT_BLOCKED
     print(f"contract test: PASS ({len(results)} contracts)")
     return R.EXIT_OK
+
+
+def main():
+    """Runs every contract and returns the exit code."""
+    rules = R.load_rules()
+    paths = tracked_paths()
+    print("Space Peak contract test")
+    print()
+    severity_contracts(rules)
+    exempt_contracts(rules, paths)
+    hook_contracts(rules, paths)
+    ci_contracts(paths)
+    pin_contracts(paths)
+    return report()
 
 
 if __name__ == "__main__":

@@ -69,18 +69,8 @@ function card(doc: Document, p: Place): HTMLElement {
   return el;
 }
 
-/** After the live map's first draw: the places layer, its popups and the list's buttons. A failure leaves the map as it was. */
-export async function addPlaces(map: LiveMap, lib: typeof import("maplibre-gl"), frame: HTMLElement): Promise<void> {
-  const doc = frame.ownerDocument;
-  const get = (url: string) => fetch(url).then((r) => (r.ok ? r.json() : Promise.reject(new Error(`${url}: HTTP ${r.status}`))));
-  let places: Place[];
-  try {
-    const [fc, data] = await Promise.all([get("/data/map.geojson"), get("/data/orgs.json")]);
-    places = placesOf(fc, data.orgs);
-  } catch (err) {
-    console.error("live map places:", err);
-    return void (frame.dataset.places = "failed");
-  }
+/** The places layer, the summit names where the base style has glyphs, and the popup stylesheet. */
+function drawPlaces(map: LiveMap, doc: Document, places: Place[]): void {
   const css = getComputedStyle(doc.documentElement);
   const [ink, ground] = [(k: PlaceKind) => css.getPropertyValue(INK[k]).trim(), css.getPropertyValue("--c-ground").trim()];
   for (const k of ORDER) map.addImage(`sp-${k}`, ...icon(doc, k, ink(k), ground));
@@ -95,7 +85,10 @@ export async function addPlaces(map: LiveMap, lib: typeof import("maplibre-gl"),
     paint: { "text-color": ink("summit"), "text-halo-color": ground, "text-halo-width": 2 },
   });
   doc.head.append(Object.assign(doc.createElement("style"), { textContent: CSS }));
+}
 
+/** The popups: a click on the layer, or a "Show on map" button in the list twin, opens one. */
+function wirePopups(map: LiveMap, lib: typeof import("maplibre-gl"), doc: Document, places: Place[]): void {
   let popup: InstanceType<typeof lib.Popup> | undefined;
   // Focus goes to the first name. Escape or the close button hands it back to the button that opened the popup.
   const show = (list: Place[], opener?: HTMLElement) => {
@@ -124,6 +117,22 @@ export async function addPlaces(map: LiveMap, lib: typeof import("maplibre-gl"),
     b.addEventListener("click", () => (map.jumpTo({ center: p.at }), show([p], b)));
     li.append(b);
   }
+}
+
+/** After the live map's first draw: the places layer, its popups and the list's buttons. A failure leaves the map as it was. */
+export async function addPlaces(map: LiveMap, lib: typeof import("maplibre-gl"), frame: HTMLElement): Promise<void> {
+  const doc = frame.ownerDocument;
+  const get = (url: string) => fetch(url).then((r) => (r.ok ? r.json() : Promise.reject(new Error(`${url}: HTTP ${r.status}`))));
+  let places: Place[];
+  try {
+    const [fc, data] = await Promise.all([get("/data/map.geojson"), get("/data/orgs.json")]);
+    places = placesOf(fc, data.orgs);
+  } catch (err) {
+    console.error("live map places:", err);
+    return void (frame.dataset.places = "failed");
+  }
+  drawPlaces(map, doc, places);
+  wirePopups(map, lib, doc, places);
   // For a reader and for e2e/map-places.spec.ts: how many distinct places of each kind drew, once the map is still.
   map.on("idle", () => {
     const drawn = new Set(map.queryRenderedFeatures({ layers: ["sp-places"] }).map((f) => f.id));

@@ -100,6 +100,7 @@ describe("the odds check", () => {
     ["an estimate shown as a verified figure", GOOD.replace("</summary>", '<span class="figure-chip">verified</span></summary>'), /shown as a register figure/],
     ["a label without its year", GOOD.replace(`A label for ${q1Year}`, "A label"), /q-01 label "A label" drops its year/],
     ["reasoning missing", GOOD.replace(`<p>${q1.reasoning}</p>`, ""), /q-01 press does not show its reasoning/],
+    ["an approval without its date", GOOD.replace(/ Approved by Paul, [\d-]+\./, ""), /q-01 press does not show Paul's approval date/],
     ["a press open at load", GOOD.replace('<details><summary><span class="odds-label">', '<details open><summary><span class="odds-label">'), /q-01 starts open/],
     ["a card missing", GOOD.replace(card(q1), ""), /want every estimate/],
     ["a script", GOOD.replace("</ul>", "</ul><script src='/x.js'></script>"), /loads a script/],

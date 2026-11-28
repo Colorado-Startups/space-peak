@@ -15,7 +15,8 @@ flowchart LR
 | Evidence on the preview | Claude | Done | [Evidence](#evidence) |
 | Publish gate, fact-reviewer pass | Claude | Done | [Fact checks](#fact-checks) |
 | Open data leaves out the Blanca and Crestones rows | Claude | Done | [#199](https://github.com/Colorado-Startups/space-peak/issues/199), [#204](https://github.com/Colorado-Startups/space-peak/pull/204) |
-| The world's launch count on `/launch/` brought up to date | Claude | Before step 50 | [#198](https://github.com/Colorado-Startups/space-peak/issues/198) |
+| The world's launch count on `/launch/` brought up to date | Claude | Done | [#198](https://github.com/Colorado-Startups/space-peak/issues/198), [#203](https://github.com/Colorado-Startups/space-peak/pull/203) |
+| `/map/`'s drawings open on what they show at 375 px | Claude | Done | [#194](https://github.com/Colorado-Startups/space-peak/issues/194), [#209](https://github.com/Colorado-Startups/space-peak/pull/209) |
 | Read the preview | Paul | Waiting | [spacepeak.coloradostartups.workers.dev](https://spacepeak.coloradostartups.workers.dev/) |
 | Say "go live" | Paul | Waiting | Paul's words in chat |
 | Claude review token, a sign-in | Paul | Open, not needed to go live | Without it, `security.claude_review_share` reads 0% on 2026-11-28, a miss, per the [Quality page](https://colorado-startups.github.io/space-peak/) |
@@ -36,7 +37,7 @@ Each page loaded in a browser at 375 px and 1280 px. On each: status 200, one h1
 | Page | Also checked | Found |
 | --- | --- | --- |
 | `/` | Masthead, painting, odds | The lead line read as fact; it now says it is our thesis |
-| `/map/` | Region drawing | At 375 px it opens on its empty west edge: [#194](https://github.com/Colorado-Startups/space-peak/issues/194) |
+| `/map/` | Region drawing | At 375 px it opened on its empty west edge: [#194](https://github.com/Colorado-Startups/space-peak/issues/194). [#209](https://github.com/Colorado-Startups/space-peak/pull/209) opens it on the loop |
 | `/guide/` | Filter, search, both tables | The filter script moved the table after first paint. Fixed in this step |
 | `/launch/` | Profile, cadence, sites | Fine: the cadence slider loads below the fold |
 | `/ai/` | Copy buttons, setup steps | Nothing |

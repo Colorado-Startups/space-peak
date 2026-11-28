@@ -1,6 +1,6 @@
 // Every page in the built dist/, found by walking it, so a new page is covered with no edit here.
 // Each opens at 1280 and 375 px and runs axe with the WCAG 2.0 A and AA, 2.1 AA and 2.2 AA tags.
-// At 375 px the page also must not scroll sideways.
+// At 375 px the page also must not scroll sideways, and /map/'s drawings open on what they show (issue #194).
 // These feed the Quality page's tests.axe_routes and tests.e2e_routes.
 // Shaped like coloradostartups.org's site/e2e/routes-axe.spec.ts.
 import AxeBuilder from "@axe-core/playwright";
@@ -60,6 +60,47 @@ for (const width of [1280, 375]) {
         if (width === 375) {
           const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
           expect(overflow, `${route} scrolls sideways by ${overflow} px`).toBeLessThanOrEqual(0);
+        }
+      });
+    }
+
+    // Issue #194: each drawing's frame scrolls sideways on a phone, and opens on what it shows, not an empty edge.
+    if (width === 375) {
+      test("/map/ opens the region on its loop and orgs, and the tour on its summits", async ({ page }) => {
+        await page.goto("/map/");
+        const LEADS = [["region", '[data-layer="loop"], [data-kind]'], ["south", '[data-layer="summit"]']] as const;
+        for (const [view, shown] of LEADS) {
+          const { drawn, outside } = await page.locator(`figure[data-view="${view}"] .space-map__frame`).evaluate((frame, selector) => {
+            const box = frame.getBoundingClientRect();
+            const [left, right] = [box.left + frame.clientLeft, box.left + frame.clientLeft + frame.clientWidth];
+            const all = [...frame.querySelectorAll(selector)];
+            const out = all.filter((el) => el.getBoundingClientRect().left < left - 0.5 || el.getBoundingClientRect().right > right + 0.5);
+            return { drawn: all.length, outside: out.map((el) => el.textContent || el.getAttribute("data-layer")) };
+          }, shown);
+          expect(drawn, `the ${view} drawing draws ${shown}`).toBeGreaterThan(0);
+          expect(outside, `the ${view} frame opens with these out of view`).toEqual([]);
+        }
+      });
+
+      // The hidden band holds nothing drawn: each mark and name, the credit line and Pikes Peak too, is a scroll away.
+      // An element is in reach when its west edge shows at the frame's west end and its east edge at its east end.
+      test("/map/ keeps every mark and name in reach of a scroll, the credit line and Pikes Peak too", async ({ page }) => {
+        await page.goto("/map/");
+        for (const view of ["region", "south"] as const) {
+          const { drawn, unreachable } = await page.locator(`figure[data-view="${view}"] .space-map__frame`).evaluate((frame) => {
+            const els = [...frame.querySelectorAll("svg [data-layer], svg [data-kind], svg text")];
+            const edges = (left: number) => {
+              frame.scrollTo({ left, behavior: "instant" }); // A right-to-left frame scrolls to negative values; each clamps.
+              const box = frame.getBoundingClientRect();
+              return { west: box.left + frame.clientLeft, east: box.left + frame.clientLeft + frame.clientWidth, boxes: els.map((el) => el.getBoundingClientRect()) };
+            };
+            const [atWest, atEast] = [edges(-1e6), edges(1e6)];
+            const out = els.filter((_, i) => atWest.boxes[i]!.left < atWest.west - 0.5 || atEast.boxes[i]!.right > atEast.east + 0.5);
+            return { drawn: els.map((el) => el.getAttribute("data-layer")), unreachable: out.map((el) => el.getAttribute("data-layer") ?? el.textContent) };
+          });
+          expect(drawn, `the ${view} drawing has its credit line`).toContain("credit");
+          if (view === "region") expect(drawn, "the region drawing has Pikes Peak").toContain("summit");
+          expect(unreachable, `the ${view} frame hides these past any scroll`).toEqual([]);
         }
       });
     }

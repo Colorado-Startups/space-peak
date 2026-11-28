@@ -12,6 +12,18 @@
     {
      "glob": ".github/pull_request_template.md",
      "why": "a form GitHub copies into each pull request, not a doc read in the repo"
+    },
+    {
+     "glob": ".github/ISSUE_TEMPLATE/*.md",
+     "why": "a template GitHub copies into each new issue, not a doc read in the repo, as the pull request template is"
+    },
+    {
+     "glob": "CODE_OF_CONDUCT.md",
+     "why": "the Contributor Covenant 3.0 text, adopted word for word under its own CC BY-SA 4.0 licence; this project does not write or shorten it"
+    },
+    {
+     "glob": "00_project_system/MASTER_PLAN.md",
+     "why": "a planning record frozen as written on 2026-07-14, which 04_tools/space_peak_rules.json exempt_paths already exempts from the voice lint; its area is empty, a record"
     }
    ],
    "areas": [

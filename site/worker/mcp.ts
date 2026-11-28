@@ -73,16 +73,11 @@ const INSTRUCTIONS = [
   "Most claims are unverified. Never present an unverified claim as fact.",
 ].join(" ");
 
-export function buildServer(data: OpenData): McpServer {
-  // The six tools are fixed when the site builds, and each request gets a new server, so the list never
-  // changes and no change notice could reach a client. The SDK declares listChanged: true unless told.
-  const server = new McpServer({ name: "spacepeak", title: "Space Peak", version: "1.0.0" }, {
-    instructions: INSTRUCTIONS,
-    capabilities: { tools: { listChanged: false } },
-  });
-  const limit = z.int().min(1).max(MAX).optional().describe(`At most this many items, 1 to ${MAX}; 10 when left out`);
-  const id = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(100);
+const limit = z.int().min(1).max(MAX).optional().describe(`At most this many items, 1 to ${MAX}; 10 when left out`);
+const id = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(100);
 
+/** The organisation tools: search_orgs and get_org. */
+function orgTools(server: McpServer, data: OpenData): void {
   server.registerTool("search_orgs", {
     title: "Search Space Peak organisations",
     description: `Command bases, institutions and companies in the Colorado Springs region, filtered by words, kind and city. ${LABELS}`,
@@ -108,7 +103,10 @@ export function buildServer(data: OpenData): McpServer {
     const o = data.orgs.find((x) => x.id === want);
     return o ? text({ ...o, read: latestRead(o) }) : missing("organisation", "search_orgs");
   });
+}
 
+/** The claims register tools: list_claims and get_claim. */
+function claimTools(server: McpServer, data: OpenData): void {
   server.registerTool("list_claims", {
     title: "Space Peak claims register",
     description: `Claims the thesis makes about a peak or the region, from 02_substance/claims_register.md, filtered by series letter and status. read is the date the register last changed. ${LABELS}`,
@@ -131,7 +129,10 @@ export function buildServer(data: OpenData): McpServer {
     const c = data.claims.find((x) => x.id === want);
     return c ? text(claimItem(c, data.generated)) : missing("claim", "list_claims");
   });
+}
 
+/** The counts and the region: get_metrics and region_info. */
+function summaryTools(server: McpServer, data: OpenData): void {
   server.registerTool("get_metrics", {
     title: "Space Peak metrics",
     description: "Counts from the open data: organisations by kind and city, and claims by status. A count of verified claims is not a claim itself.",
@@ -151,7 +152,19 @@ export function buildServer(data: OpenData): McpServer {
     const claims = data.claims.filter((c) => c.series === "R").slice(0, MAX).map((c) => claimItem(c, data.generated));
     return text({ ...loop, ...point, claims });
   });
+}
 
+/** A new MCP server with the six read-only tools over one copy of the open data. */
+export function buildServer(data: OpenData): McpServer {
+  // The six tools are fixed when the site builds, and each request gets a new server, so the list never
+  // changes and no change notice could reach a client. The SDK declares listChanged: true unless told.
+  const server = new McpServer({ name: "spacepeak", title: "Space Peak", version: "1.0.0" }, {
+    instructions: INSTRUCTIONS,
+    capabilities: { tools: { listChanged: false } },
+  });
+  orgTools(server, data);
+  claimTools(server, data);
+  summaryTools(server, data);
   return server;
 }
 

@@ -104,6 +104,7 @@ def severity_of(rules, check):
 
 
 def exempt_globs(rules):
+    """The glob of every exempt_paths entry, in file order."""
     return [e["glob"] for e in rules["exempt_paths"]["entries"]]
 
 

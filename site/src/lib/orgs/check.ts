@@ -1,10 +1,10 @@
-import type { Org } from "./schema";
-
 // Checks across the parsed orgs that one file's schema cannot see: area, duplicates, source age, summary length.
 // Source age and summary length are guidelines (issue #154): each is a warning, and only errors fail CI.
-export const NEARBY_KM = 60;
+import type { Org } from "./schema";
+
+const NEARBY_KM = 60;
 export const MAX_AGE_DAYS = 365;
-export const SUMMARY_CHARS = 200;
+const SUMMARY_CHARS = 200;
 
 export type Ring = [number, number][];
 export type Issue = { org: string; path: string; message: string; level: "error" | "warning" };
@@ -54,37 +54,43 @@ const urlKey = (url: string) => {
   return `${u.host.toLowerCase()}${u.pathname.replace(/\/+$/, "")}${u.search}`;
 };
 
+type Add = (path: string, message: string, level?: Issue["level"]) => void;
+
+/** One org's area against its point: inside the region for loop, near it for nearby. */
+function placeIssues(org: Org, rings: Ring[], add: Add): void {
+  const { lat, lon } = org.location;
+  if (org.area === "loop" && !insideRegion(lon, lat, rings)) add("location", "area loop, but the point is outside the region");
+  if (org.area !== "nearby") return;
+  const km = kmToRegion(lon, lat, rings);
+  if (km === 0) add("area", "area nearby, but the point is inside the region: use loop");
+  else if (km > NEARBY_KM) add("location", `area nearby, but the point is ${km.toFixed(1)} km out (limit ${NEARBY_KM})`);
+}
+
+/** The source one org's fact or location cites: known, read within a year, and for the fact, a URL no other org's fact uses. */
+function sourceIssues(org: Org, path: "fact" | "location", today: string, factUrls: Map<string, string>, add: Add): void {
+  const source = org.sources.find((s) => s.id === org[path].source);
+  if (!source) return add(`${path}.source`, `unknown source ${org[path].source}`);
+  const age = days(source.read, today);
+  if (age > MAX_AGE_DAYS) add(`${path}.source`, `${source.id} was read ${Math.floor(age)} days ago (guideline ${MAX_AGE_DAYS}); read it again`, "warning");
+  if (path !== "fact") return;
+  const url = urlKey(source.url);
+  if (factUrls.has(url)) add("fact.source", `same fact source URL as ${factUrls.get(url)}`);
+  else factUrls.set(url, org.id);
+}
+
 /** Every problem across the orgs, each an error or a warning; a list with no errors passes. `today` is an ISO date. */
 export function checkOrgs(orgs: Org[], rings: Ring[], today = new Date().toISOString().slice(0, 10)): Issue[] {
   const issues: Issue[] = [];
   const names = new Map<string, string>();
   const factUrls = new Map<string, string>();
   for (const org of orgs) {
-    const add = (path: string, message: string, level: Issue["level"] = "error") => issues.push({ org: org.id, path, message, level });
-    const { lat, lon } = org.location;
-    if (org.area === "loop" && !insideRegion(lon, lat, rings)) add("location", "area loop, but the point is outside the region");
-    if (org.area === "nearby") {
-      const km = kmToRegion(lon, lat, rings);
-      if (km === 0) add("area", "area nearby, but the point is inside the region: use loop");
-      else if (km > NEARBY_KM) add("location", `area nearby, but the point is ${km.toFixed(1)} km out (limit ${NEARBY_KM})`);
-    }
+    const add: Add = (path, message, level = "error") => void issues.push({ org: org.id, path, message, level });
+    placeIssues(org, rings, add);
     if (org.summary.length > SUMMARY_CHARS) add("summary", `summary is ${org.summary.length} characters (guideline ${SUMMARY_CHARS})`, "warning");
     const name = nameKey(org.name);
     if (names.has(name)) add("name", `same name as ${names.get(name)}`);
     else names.set(name, org.id);
-    for (const path of ["fact", "location"] as const) {
-      const source = org.sources.find((s) => s.id === org[path].source);
-      if (!source) {
-        add(`${path}.source`, `unknown source ${org[path].source}`);
-        continue;
-      }
-      const age = days(source.read, today);
-      if (age > MAX_AGE_DAYS) add(`${path}.source`, `${source.id} was read ${Math.floor(age)} days ago (guideline ${MAX_AGE_DAYS}); read it again`, "warning");
-      if (path !== "fact") continue;
-      const url = urlKey(source.url);
-      if (factUrls.has(url)) add("fact.source", `same fact source URL as ${factUrls.get(url)}`);
-      else factUrls.set(url, org.id);
-    }
+    for (const path of ["fact", "location"] as const) sourceIssues(org, path, today, factUrls, add);
   }
   return issues;
 }

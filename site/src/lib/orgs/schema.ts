@@ -1,3 +1,5 @@
+// The schema each data/orgs/*.yaml file must match, and the check that a file's id is its file name.
+
 import { z } from "zod";
 import { AREAS, CITIES, KINDS, PRECISIONS, STATUSES, SUBKINDS } from "./kinds";
 
@@ -57,7 +59,7 @@ export const orgSchema = z
 export type Org = z.infer<typeof orgSchema>;
 
 /** The filename stem, as the content collection and the checker see it. */
-export const fileId = (entry: string) => entry.replace(/^.*\//, "").replace(/\.yaml$/, "");
+const fileId = (entry: string) => entry.replace(/^.*\//, "").replace(/\.yaml$/, "");
 
 /** Throws unless the file's `id` equals its filename stem. */
 export function checkFileId(entry: string, data: Record<string, unknown>): string {

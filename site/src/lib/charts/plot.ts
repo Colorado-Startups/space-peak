@@ -6,7 +6,7 @@ import { JSDOM } from "jsdom";
 /** --t-step--1 (0.9375rem) in px: the one type size inside a chart. */
 export const CHART_PX = 15;
 /** Lead is granite pink; the four kind colours; yellow marks a speculative figure; muted is the rest. */
-export const TONES = {
+const TONES = {
   lead: "var(--c-region-space-peak)",
   blue: "var(--c-kind-blue)",
   green: "var(--c-kind-green)",
@@ -14,10 +14,10 @@ export const TONES = {
   yellow: "var(--c-kind-yellow)",
   muted: "var(--c-rule)",
 } as const;
-export type Tone = keyof typeof TONES;
+type Tone = keyof typeof TONES;
 
-export interface BarRow { label: string; value: number; tone?: Tone }
-export interface LinePoint { x: number; y: number }
+interface BarRow { label: string; value: number; tone?: Tone }
+interface LinePoint { x: number; y: number }
 export type ChartSpec =
   | { kind: "bar"; title: string; rows: BarRow[]; unit: string }
   | { kind: "line"; title: string; rows: LinePoint[]; x: string; y: string; log?: boolean; tone?: Tone }
@@ -36,7 +36,7 @@ export const percentOf = (p: number) => `${Number((p * 100).toPrecision(12))}%`;
 
 const fmt = (v: number) => v.toLocaleString("en-US");
 /** p is a probability from 0 to 1, as data/estimates/*.yaml stores it; the array fills p * 100 dots, rounded. */
-export function dotsFilled(p: number): number {
+function dotsFilled(p: number): number {
   if (typeof p !== "number" || Number.isNaN(p) || p < 0 || p > 1) throw new Error(`dots: p must be a number from 0 to 1, got ${p}`);
   return Math.round(p * 100);
 }

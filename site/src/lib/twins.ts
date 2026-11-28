@@ -11,6 +11,7 @@ export const SUMMARY =
 
 /** /map/ is twinned at /map/index.md, the home page at /index.md. */
 export const twinPath = (href: string) => `${href}index.md`;
+/** The absolute spacepeak.co URL of a site path. */
 export const url = (path: string) => `${SITE}${path}`;
 const item = (label: string, path: string, note?: string) => `- [${label}](${url(path)})${note ? `: ${note}` : ""}`;
 const section = (title: string, lines: string[]) => (lines.length ? [`## ${title}`, "", ...lines, ""] : []);

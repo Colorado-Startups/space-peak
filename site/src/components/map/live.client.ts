@@ -32,6 +32,25 @@ function sheet(doc: Document, href: string): Promise<void> {
   });
 }
 
+type Maplibre = typeof import("maplibre-gl");
+/** The map once made, and whether its first full draw is done. fail() clears map, so a late event finds none. */
+type Live = { map?: import("maplibre-gl").Map; loaded: boolean };
+
+/** MapLibre, the live style and the region, or null when any of them failed to load. */
+async function prepare(doc: Document) {
+  try {
+    const [maplibre, , base, fc] = await Promise.all([
+      import("maplibre-gl"), sheet(doc, cssUrl), json(BASE_STYLE), json("/data/map.geojson"),
+    ]);
+    const region = regionOf(fc);
+    const ink = getComputedStyle(doc.documentElement).getPropertyValue("--c-community").trim();
+    return { maplibre, region, style: liveStyle(base, region, ink) };
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}
+
 /** One press: open the live map in [data-live-map], or say in [data-live-status] why the drawing stays. */
 export async function open(doc: Document): Promise<void> {
   const frame = doc.querySelector<HTMLElement>("[data-live-map]");
@@ -41,33 +60,22 @@ export async function open(doc: Document): Promise<void> {
   if (!doc.createElement("canvas").getContext("webgl2")) return say(WHY.webgl);
   frame.dataset.state = "loading";
   say("Loading the live map.");
-  let map: import("maplibre-gl").Map | undefined;
-  let loaded = false;
+  const live: Live = { loaded: false };
   const fail = (why: string) => {
-    const gone = map;
-    map = undefined;
+    const gone = live.map;
+    live.map = undefined;
     gone?.remove();
     frame.hidden = true;
     delete frame.dataset.state;
     say(why);
   };
-  let ready;
-  try {
-    const [maplibre, , base, fc] = await Promise.all([
-      import("maplibre-gl"), sheet(doc, cssUrl), json(BASE_STYLE), json("/data/map.geojson"),
-    ]);
-    const region = regionOf(fc);
-    const ink = getComputedStyle(doc.documentElement).getPropertyValue("--c-community").trim();
-    ready = { maplibre, region, style: liveStyle(base, region, ink) };
-  } catch (err) {
-    console.error(err);
-    return fail(WHY.tiles);
-  }
+  const ready = await prepare(doc);
+  if (!ready) return fail(WHY.tiles);
   const { maplibre, region, style } = ready;
   maplibre.setWorkerUrl(workerUrl);
   frame.hidden = false;
   try {
-    map = new maplibre.Map({
+    live.map = new maplibre.Map({
       container: frame, style, bounds: region.bounds, fitBoundsOptions: { padding: 24 },
       attributionControl: { compact: false, customAttribution: CREDITS },
     });
@@ -75,24 +83,30 @@ export async function open(doc: Document): Promise<void> {
     console.error(err);
     return fail(WHY.webgl);
   }
-  controls(map, region, frame); // Step 29: the pan pad, the terrain toggle and the globe opening.
+  controls(live.map, region, frame); // Step 29: the pan pad, the terrain toggle and the globe opening.
+  follow(live, live.map, { maplibre, frame, say, fail });
+}
+
+/** Until the first full draw: an error ends the map, the load opens it and brings the places, and a slow draw fails. */
+function follow(live: Live, map: import("maplibre-gl").Map, { maplibre, frame, say, fail }:
+  { maplibre: Maplibre; frame: HTMLElement; say: (text: string) => void; fail: (why: string) => void }): void {
   // Relief is decoration, so a Mapterhorn miss leaves the map whole. Any other error before the first full draw ends it.
   // A listener silences MapLibre's own console.error, so the error is logged here.
   map.on("error", (e) => {
     const sourceId = (e as { sourceId?: string }).sourceId;
     console.error(`live map${sourceId ? ` (${sourceId})` : ""}:`, e.error);
-    if (!loaded && map && sourceId !== "sp-terrain") fail(WHY.tiles);
+    if (!live.loaded && live.map && sourceId !== "sp-terrain") fail(WHY.tiles);
   });
   map.once("load", () => {
-    loaded = true;
+    live.loaded = true;
     frame.dataset.state = "open";
     // The live state, for a reader and for e2e/map.spec.ts: our layers in order, then how many region features drew.
-    frame.dataset.layers = map?.getLayersOrder().filter((id) => id.startsWith("sp-")).join(" ") ?? "";
-    map?.once("idle", () => {
-      frame.dataset.regionFeatures = String(map?.queryRenderedFeatures({ layers: ["sp-region-fill", "sp-region-line"] }).length ?? 0);
+    frame.dataset.layers = live.map?.getLayersOrder().filter((id) => id.startsWith("sp-")).join(" ") ?? "";
+    live.map?.once("idle", () => {
+      frame.dataset.regionFeatures = String(live.map?.queryRenderedFeatures({ layers: ["sp-region-fill", "sp-region-line"] }).length ?? 0);
     });
     say("Live map open: drag to move, pinch or scroll to zoom.");
   });
-  map.once("load", () => void import("./live/places").then((p) => map && p.addPlaces(map, maplibre, frame), console.error));
-  setTimeout(() => map && !loaded && fail(WHY.tiles), WAIT_MS);
+  map.once("load", () => void import("./live/places").then((p) => live.map && p.addPlaces(live.map, maplibre, frame), console.error));
+  setTimeout(() => live.map && !live.loaded && fail(WHY.tiles), WAIT_MS);
 }

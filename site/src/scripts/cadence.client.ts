@@ -22,6 +22,7 @@ export function launchesPerYear(minutes: number): number {
 /** The stop a slider value names, clamped to the ends. */
 export const minutesAt = (stop: number): number => STOPS[Math.min(STOPS.length - 1, Math.max(0, Math.round(stop) || 0))];
 
+/** A whole number with thousands commas, as en-US writes it. */
 export const formatCount = (n: number): string => new Intl.NumberFormat("en-US").format(n);
 
 /** Each bar's width in percent of the larger of the two. */
@@ -43,6 +44,7 @@ function put(el: Element | null, text: string): void {
   if (el && el.textContent !== text) el.textContent = text;
 }
 
+/** Wires each [data-cadence] slider: it shows the slider, then sets the minutes, the launch count and the bars as it moves. */
 export function init(doc: Document): void {
   for (const root of doc.querySelectorAll<HTMLElement>("[data-cadence]")) {
     const input = root.querySelector<HTMLInputElement>("input[type='range']");

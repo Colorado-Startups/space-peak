@@ -1,8 +1,8 @@
 ---
+// Guide section 1, who is here: every organisation that is not closed, from data/orgs/ through the orgs collection.
 import { getCollection } from "astro:content";
 import { KINDS, type Kind } from "../../lib/orgs/kinds";
 
-// Who is here: every organisation that is not closed, from data/orgs/ through the orgs collection.
 const KIND_LABEL: Record<Kind, { many: string; one: string }> = {
   command_base: { many: "Commands and bases", one: "Command or base" },
   institution: { many: "Institutions", one: "Institution" },

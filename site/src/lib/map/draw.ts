@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import type { Kind } from "../orgs/kinds";
 import type { MapData } from "./data";
 /** --t-step--1 and --t-step-0 (0.9375rem and 1.125rem) in px. */
-export const [SMALL_PX, NAME_PX] = [15, 18];
+const [SMALL_PX, NAME_PX] = [15, 18];
 // Equirectangular at 38 N, the tour's middle latitude: one projection, each view a fixed box on it.
 const COS = Math.cos((38 * Math.PI) / 180);
 export const VIEWS = {
@@ -24,6 +24,7 @@ const KIND_TOKEN: Record<Kind, string> = { command_base: "co-web-primary", insti
 const n = (v: number) => String(Math.round(v * 10) / 10);
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+/** One view's frame: its size in px, a [lon, lat] to [x, y] projection, and a test for a point inside it. */
 export function frame(view: View) {
   const v = VIEWS[view];
   const k = v.width / ((v.east - v.west) * COS);

@@ -18,6 +18,7 @@ export function pageExists(href: string, pages: readonly string[] = PAGES): bool
   return files.some((f) => pages.includes(f));
 }
 
+/** The nav links whose page exists, in NAV order. */
 export function liveLinks(pages: readonly string[] = PAGES): NavLink[] {
   return NAV.filter((link) => pageExists(link.href, pages));
 }

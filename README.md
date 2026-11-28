@@ -36,16 +36,16 @@ flowchart LR
 | `01_doctrine/` | voice.md and its parts. How this project writes, and what the linters enforce |
 | `02_substance/` | The concept brief, and claims_register.md |
 | `03_deliverables/` | The draft, the map (map/), the infographics |
-| `04_tools/` | The rules file, the four checkers and the map data builder |
-| `site/` | The Astro 7 website. wrangler.jsonc deploys site/dist |
-| `data/` | Site data: one YAML file per organisation in data/orgs/, and the startup credits |
+| `04_tools/` | The rules file, four checkers, the map builder |
+| `site/` | The Astro 7 website, `site/src/`; the /mcp Worker, `site/worker/` |
+| `data/` | Site data: one YAML file per organisation (data/orgs/), and the startup credits |
 | `scripts/` | The brand and startup credits pulls (scripts/brand/, scripts/resources/) |
 | `docs/` | Contributor start-here, and the topic docs |
 | `LICENSES/` | The CC0 and 0BSD license texts |
 | `local/` | Operational files. Gitignored; the reviewer reads every path in the diff |
 | `.claude/` | Two skills, one agent, settings |
-| `.github/` | CI, templates, CODEOWNERS, ruleset definitions |
-| `quality/` | Git Crafter Quality and Process page configs |
+| `.github/` | CI, templates, CODEOWNERS, rulesets |
+| `quality/` | Git Crafter Quality and Process page configs, and our collector, `quality/collectors/` |
 
 ## License
 

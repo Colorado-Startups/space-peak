@@ -1,3 +1,4 @@
+/* The stylesheet Base.astro imports: the tokens, Space Peak's brand layer and the base rules, then the shared button. */
 @import "./tokens.css";
 @import "./space-peak.css";
 @import "./base.css";

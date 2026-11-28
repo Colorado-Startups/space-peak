@@ -15,6 +15,7 @@ export function rowMatches(row: { kind: string; text: string }, kind: string, qu
   return (!kind || row.kind === kind) && (!q || row.text.includes(q));
 }
 
+/** Wires the filter in every [data-guide] section of the page. */
 export function init(doc: Document): void {
   const win = doc.defaultView;
   if (!win) return;
@@ -32,12 +33,17 @@ function initSection(root: HTMLElement, win: Window): void {
   const status = root.querySelector<HTMLElement>("[data-guide-status]");
   let kind = readKind(win.location.search, kinds, param);
 
-  const apply = () => {
+  // Hides each row the chosen kind and the query leave out, and returns how many still show.
+  const showRows = () => {
     let shown = 0;
     for (const row of rows) {
       row.hidden = !rowMatches({ kind: row.dataset.kind ?? "", text: row.dataset.text ?? "" }, kind, input?.value ?? "");
       if (!row.hidden) shown++;
     }
+    return shown;
+  };
+  const apply = () => {
+    const shown = showRows();
     for (const chip of chips) {
       if ((chip.dataset.kindChip ?? "") === kind) chip.setAttribute("aria-current", "true");
       else chip.removeAttribute("aria-current");

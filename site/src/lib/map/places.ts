@@ -7,7 +7,7 @@ const CITY: Record<string, string> = {
   "colorado-springs": "Colorado Springs", fountain: "Fountain", "security-widefield": "Security-Widefield",
   "manitou-springs": "Manitou Springs", monument: "Monument", "woodland-park": "Woodland Park", cascade: "Cascade", pueblo: "Pueblo",
 };
-export type Place = { name: string; where: string; url: string };
+type Place = { name: string; where: string; url: string };
 export type PlaceGroup = { kind: Kind | "summit"; title: string; items: Place[] };
 const GROUPS: { kind: Kind | "summit"; title: string }[] = [
   { kind: "command_base", title: "Commands and bases" },

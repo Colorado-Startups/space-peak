@@ -12,17 +12,17 @@ sources:
   - id: challenger-home
     url: https://www.challengercolorado.org/
     publisher: Challenger Learning Center of Colorado
-    read: 2026-11-28
+    read: 2026-11-27
     quote: hands-on, exciting space exploration and engineering challenges
   - id: challenger-nonprofit
     url: https://www.challengercolorado.org/
     publisher: Challenger Learning Center of Colorado
-    read: 2026-11-28
+    read: 2026-11-27
     quote: Challenger Colorado is a not-for-profit organization
   - id: challenger-contact
     url: https://www.challengercolorado.org/who-we-are/contact.html
     publisher: Challenger Learning Center of Colorado
-    read: 2026-11-28
+    read: 2026-11-27
     quote: 8717 Wolf Valley Drive Colorado Springs, CO 80924
 location:
   lat: 38.867255

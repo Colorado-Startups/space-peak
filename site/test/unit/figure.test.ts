@@ -77,18 +77,18 @@ describe("the figure check", () => {
   const source = (id: string) => `<a class="figure-source" href="${sourceUrl(getClaim(id))}">source</a>`;
   const note = `<p data-unproven-note>${UNPROVEN_NOTE}</p>`;
   const page = (...parts: string[]) => `<!doctype html><main>${parts.join("")}</main>`;
-  const GOOD = page(note, fig("S-04"), fig("P-01", source("P-01")));
+  const GOOD = page(note, fig("S-01"), fig("P-01", source("P-01")));
 
   it("passes a page with its note, an unconfirmed figure and a sourced one", () => expect(figureProblems(GOOD)).toEqual([]));
   it("passes a page of confirmed figures with no note", () => expect(figureProblems(page(fig("P-01", source("P-01"))))).toEqual([]));
   it.each([
-    ["a status chip", GOOD.replace(">v<", `>v</span><span class="figure-chip">unverified<`), /S-04 shows a chip/],
-    ["a claim ID title", GOOD.replace('data-claim="S-04"', 'data-claim="S-04" title="Claim S-04"'), /S-04 shows a chip or a title/],
-    ["a read date", GOOD.replace(">v<", ">v, read 2026-11-16<"), /S-04 shows its claim ID or a read date/],
-    ["a sourced figure with no link", page(note, fig("S-04"), fig("P-01")), /P-01 does not link "source"/],
-    ["a source link on an unconfirmed figure", page(note, fig("S-04", source("P-01"))), /S-04 links a source its row has not/],
-    ["no note beside an unconfirmed figure", page(fig("S-04")), /0 unproven notes, want 1/],
-    ["the note twice", page(note, note, fig("S-04")), /2 unproven notes, want 1/],
+    ["a status chip", GOOD.replace(">v<", `>v</span><span class="figure-chip">unverified<`), /S-01 shows a chip/],
+    ["a claim ID title", GOOD.replace('data-claim="S-01"', 'data-claim="S-01" title="Claim S-01"'), /S-01 shows a chip or a title/],
+    ["a read date", GOOD.replace(">v<", ">v, read 2026-11-16<"), /S-01 shows its claim ID or a read date/],
+    ["a sourced figure with no link", page(note, fig("S-01"), fig("P-01")), /P-01 does not link "source"/],
+    ["a source link on an unconfirmed figure", page(note, fig("S-01", source("P-01"))), /S-01 links a source its row has not/],
+    ["no note beside an unconfirmed figure", page(fig("S-01")), /0 unproven notes, want 1/],
+    ["the note twice", page(note, note, fig("S-01")), /2 unproven notes, want 1/],
     ["a note with no unconfirmed figure", page(note, fig("P-01", source("P-01"))), /1 unproven notes, want 0/],
   ])("flags %s (known bad)", (_name, html, problem) => {
     expect(figureProblems(html).join("\n")).toMatch(problem);

@@ -33,8 +33,8 @@ describe("claims register parser", () => {
   });
 
   it("types a row with its series, section and site", () => {
-    const s04 = { id: "S-04", series: "S", section: "Site table claims", site: "Culebra Peak", claim: "Elevation 14,047 ft" };
-    expect(getClaim("S-04")).toEqual({ ...s04, status: "unverified", source: "", notes: "" });
+    const s01 = { id: "S-01", series: "S", section: "Site table claims", site: "Greenhorn / Wet Mtns", claim: "Elevation about 12,300 ft" };
+    expect(getClaim("S-01")).toEqual({ ...s01, status: "unverified", source: "", notes: "" });
     expect(getClaim("P-01")).not.toHaveProperty("site");
   });
 

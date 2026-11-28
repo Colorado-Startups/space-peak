@@ -23,7 +23,7 @@
     },
     {
      "glob": "02_substance/claims_register.md",
-     "why": "a data table read by lookup, not a doc read end to end: the one source that site/src/lib/claims/parse.ts (which builds the /data/claims.json the MCP server reads), 04_tools/space_peak_claims.py and the map generator's register pin parse, so it stays one file, on the footing of the data/ files"
+     "why": "Space Peak's own call under this list: the register is a reference table read by lookup, not a doc read end to end, and the single source four tools depend on. site/src/lib/claims/parse.ts and 04_tools/space_peak_claims.py parse it, the map generator pins its git blob, and the MCP server serves the /data/claims.json that parse.ts builds from it"
     }
    ],
    "areas": [

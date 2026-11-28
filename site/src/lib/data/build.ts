@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import { type ClaimRow, STATUSES as CLAIM_STATUSES } from "../claims/parse";
+import { servedClaims } from "../claims/served";
 import { CITIES, KINDS, PRECISIONS, STATUSES } from "../orgs/kinds";
 import { type Org, orgSchema } from "../orgs/schema";
 
@@ -68,7 +69,7 @@ const DATASETS: [name: string, paths: string[], description: string][] = [
   ["Space Peak organisations", ["orgs.json", "orgs.csv", "orgs.geojson"],
     "Command bases, institutions and companies in the Colorado Springs region that Space Peak features. Each has a kind, a city, a located point with its precision, one sourced fact and its sources."],
   ["Space Peak claims register", ["claims.json"],
-    "Every factual claim the Space Peak thesis makes about a peak or the region, with its review status, source and notes. It is read from 02_substance/claims_register.md, which wins over this copy."],
+    "The factual claims the Space Peak thesis makes about a peak or the region, each with its review status, source and notes. They are read from 02_substance/claims_register.md, which wins over this copy."],
   ["Space Peak metrics", ["metrics.json"],
     "Counts derived from the other datasets: organisations by kind and by city, and claims by review status. Every kind, city and status appears, with zero where none exist yet."],
   ["Space Peak map layer", ["map.geojson"],
@@ -85,9 +86,10 @@ export const catalog = (generated: string) => ({
   })),
 });
 
-/** Every file under /data/ except map.geojson and index.json: path to body. */
-export function buildFiles(orgsIn: Org[], claims: ClaimRow[], generated: string): Map<string, string> {
+/** Every file under /data/ except map.geojson and index.json: path to body. The claims are the rows servedClaims keeps. */
+export function buildFiles(orgsIn: Org[], register: ClaimRow[], generated: string): Map<string, string> {
   const orgs = [...orgsIn].sort((a, b) => a.id.localeCompare(b.id));
+  const claims = servedClaims(register);
   const meta = { generated, license: LICENSE };
   const csv = orgs.map((o) => {
     const row = { ...o, lat: String(o.location.lat), lon: String(o.location.lon), precision: o.location.precision, fact: o.fact.text, source: sourceUrl(o, o.fact.source) };

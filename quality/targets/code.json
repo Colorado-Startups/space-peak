@@ -2,6 +2,58 @@
  {
   "id": "code.loc_change_pct",
   "params": {
+   "areas": [
+    "site/src",
+    "site/worker",
+    "04_tools",
+    "quality/collectors",
+    "scripts"
+   ],
+   "naming": [
+    {
+     "rule": "kebab-case pages",
+     "path": "(^|/)pages/",
+     "cases": [
+      "kebab",
+      "route"
+     ]
+    },
+    {
+     "rule": "numbered kebab-case sections",
+     "path": "(^|/)sections/",
+     "cases": [
+      "kebab"
+     ]
+    },
+    {
+     "rule": "PascalCase components",
+     "path": "\\.astro$",
+     "cases": [
+      "pascal"
+     ]
+    },
+    {
+     "rule": "snake_case tools",
+     "path": "\\.(py|sh)$",
+     "cases": [
+      "snake"
+     ]
+    },
+    {
+     "rule": "snake_case numbered top folders",
+     "path": "^\\d{2}_[a-z0-9_]+/$",
+     "cases": [
+      "snake"
+     ]
+    },
+    {
+     "rule": "kebab-case modules",
+     "path": "",
+     "cases": [
+      "kebab"
+     ]
+    }
+   ],
    "workers": [
     "."
    ],

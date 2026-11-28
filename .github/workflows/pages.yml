@@ -72,12 +72,12 @@ jobs:
       - name: Check the local metrics on the page
         run: node quality/local-check.mjs --page quality/dist/index.html quality/data/local.json
 
-      # The site metrics in the job log, so a pull request shows what its Quality build measured.
+      # The site and code metrics in the job log, so a pull request shows what its Quality build measured.
       - name: List the site metrics
         run: |
           node -e '
             const run = JSON.parse(require("fs").readFileSync("quality/data/latest.json", "utf8"));
-            const walk = (o) => Object.entries(o ?? {}).forEach(([k, v]) => /^(design|usability|tests\.axe|security\.headers|site\.|ai\.)/.test(k)
+            const walk = (o) => Object.entries(o ?? {}).forEach(([k, v]) => /^(design|usability|tests\.axe|security\.headers|site\.|ai\.|code\.)/.test(k)
               ? console.log(k, v?.could_not_check ? `not measured: ${v.could_not_check}` : v?.value)
               : v && typeof v === "object" && walk(v));
             walk(run);'

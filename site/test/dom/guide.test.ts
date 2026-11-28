@@ -89,7 +89,7 @@ describe.skipIf(!ready && !inCI)("the built /guide/ page", () => {
       const chip = guide.querySelector(`[data-kind-chip="${kind}"]`);
       expect(chip?.getAttribute("data-count"), kind).toBe(String(orgs.filter((o) => o.kind === kind).length));
     }
-    expect(guide.querySelectorAll("tbody tr[data-kind]").length).toBe(orgs.length);
+    expect(guide.querySelectorAll("[aria-labelledby='guide-orgs'] tbody tr[data-kind]").length).toBe(orgs.length);
   });
 
   it("labels every field", () => expect(unlabeled(guide)).toEqual([]));

@@ -7,8 +7,22 @@
 .sp-controls button[aria-pressed="true"] { background: var(--c-region-space-peak); color: var(--c-on-region-space-peak); }
 .space-map { margin: 0 0 var(--s-5); }
 /* The viewBox is 800 units wide, so 50rem keeps its 15 and 18 unit labels near full size; a narrower frame scrolls, not the page. */
-.space-map__frame { overflow-x: auto; border: var(--line-hair) solid var(--c-rule); background: var(--c-surface); }
+.space-map__frame { overflow-x: auto; container-type: inline-size; border: var(--line-hair) solid var(--c-rule); background: var(--c-surface); }
 .space-map__frame svg { display: block; width: 100%; min-width: 50rem; height: auto; }
+/* Issue #194: a frame narrower than the drawing opens on its data-open side, with the empty band there hidden.
+   --band is that band in user units (draw.ts narrowBand); at 50rem for 800 units, a unit is 1/16 rem on the page.
+   A negative margin on the frame's start side pushes the band past its start edge, where no scroll reaches; a wider
+   frame hides only what it must. An east frame runs right to left so it starts at its east edge, and moves the credit
+   line in; inside the SVG a length is in user units, so 1/16 rem is one unit at the default 16 px root.
+   The margins are physical: the drawing keeps left to right, so a logical one would take its direction. */
+.space-map__frame { --hide: min(0rem, max(var(--band, 0) * -0.0625rem, 100% - 50rem)); }
+.space-map__frame svg { direction: ltr; }
+.space-map__frame[data-open="west"] svg { margin-left: var(--hide); }
+.space-map__frame[data-open="east"] { direction: rtl; }
+.space-map__frame[data-open="east"] svg { margin-right: var(--hide); }
+@container (width < 50rem) {
+  .space-map__frame[data-open="east"] [data-layer="credit"] { transform: translateX(calc(var(--band, 0) * -0.0625rem)); }
+}
 .space-map figcaption { margin-top: var(--s-2); color: var(--c-text-dim); font-size: var(--t-step--1); }
 .map-legend { margin-block: 0 var(--s-6); }
 .map-legend__title { margin: 0 0 var(--s-2); font-weight: 700; }

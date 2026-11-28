@@ -1,6 +1,6 @@
 // Every page in the built dist/, found by walking it, so a new page is covered with no edit here.
 // Each opens at 1280 and 375 px and runs axe with the WCAG 2.0 A and AA, 2.1 AA and 2.2 AA tags.
-// At 375 px the page also must not scroll sideways.
+// At 375 px the page also must not scroll sideways, and /map/'s drawings open on what they show (issue #194).
 // These feed the Quality page's tests.axe_routes and tests.e2e_routes.
 // Shaped like coloradostartups.org's site/e2e/routes-axe.spec.ts.
 import AxeBuilder from "@axe-core/playwright";
@@ -60,6 +60,25 @@ for (const width of [1280, 375]) {
         if (width === 375) {
           const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
           expect(overflow, `${route} scrolls sideways by ${overflow} px`).toBeLessThanOrEqual(0);
+        }
+      });
+    }
+
+    // Issue #194: each drawing's frame scrolls sideways on a phone, and opens on what it shows, not an empty edge.
+    if (width === 375) {
+      test("/map/ opens the region on its loop and orgs, and the tour on its summits", async ({ page }) => {
+        await page.goto("/map/");
+        const LEADS = [["region", '[data-layer="loop"], [data-kind]'], ["south", '[data-layer="summit"]']] as const;
+        for (const [view, shown] of LEADS) {
+          const { drawn, outside } = await page.locator(`figure[data-view="${view}"] .space-map__frame`).evaluate((frame, selector) => {
+            const box = frame.getBoundingClientRect();
+            const [left, right] = [box.left + frame.clientLeft, box.left + frame.clientLeft + frame.clientWidth];
+            const all = [...frame.querySelectorAll(selector)];
+            const out = all.filter((el) => el.getBoundingClientRect().left < left - 0.5 || el.getBoundingClientRect().right > right + 0.5);
+            return { drawn: all.length, outside: out.map((el) => el.textContent || el.getAttribute("data-layer")) };
+          }, shown);
+          expect(drawn, `the ${view} drawing draws ${shown}`).toBeGreaterThan(0);
+          expect(outside, `the ${view} frame opens with these out of view`).toEqual([]);
         }
       });
     }

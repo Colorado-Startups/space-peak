@@ -7,9 +7,11 @@ import type { MapData } from "./data";
 const [SMALL_PX, NAME_PX] = [15, 18];
 // Equirectangular at 38 N, the tour's middle latitude: one projection, each view a fixed box on it.
 const COS = Math.cos((38 * Math.PI) / 180);
+// `open` is the side a frame narrower than the drawing opens on (issue #194): the region on its loop, east of
+// Pikes Peak; the tour on its summits, west of the region.
 export const VIEWS = {
-  region: { west: -105.15, east: -104.55, south: 38.6, north: 39.05, width: 800 },
-  south: { west: -105.9, east: -104.1, south: 36.95, north: 39.15, width: 800 },
+  region: { west: -105.15, east: -104.55, south: 38.6, north: 39.05, width: 800, open: "east" },
+  south: { west: -105.9, east: -104.1, south: 36.95, north: 39.15, width: 800, open: "west" },
 } as const;
 export type View = keyof typeof VIEWS;
 // Read from disk: Vitest blanks a CSS import, even ?raw. Astro and Vitest both run in site/.
@@ -23,6 +25,9 @@ function color(name: string): string {
 const KIND_TOKEN: Record<Kind, string> = { command_base: "co-web-primary", institution: "co-tree-green", company: "co-purple" };
 const n = (v: number) => String(Math.round(v * 10) / 10);
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const LOOP_LABEL = "Colorado Startups region";
+/** A summit's name ends this far west of its triangle; the triangle and every org mark reach 8 units from their point. */
+const [NAME_GAP, MARK_REACH] = [14, 8];
 
 /** One view's frame: its size in px, a [lon, lat] to [x, y] projection, and a test for a point inside it. */
 export function frame(view: View) {
@@ -56,17 +61,44 @@ export function drawMap(data: MapData, view: View): string {
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-labelledby="map-title map-desc">`,
     `<title id="map-title">${esc(title)}</title><desc id="map-desc">${esc(desc)}</desc><rect width="${w}" height="${h}" fill="${color("c-surface")}"/>`,
     `<path d="M${pts.map(([x, y]) => `${n(x)} ${n(y)}`).join("L")}Z" fill="${teal}" fill-opacity="0.18" stroke="${teal}" stroke-width="3" stroke-linejoin="round" data-layer="loop"/>`,
-    text((Math.min(...xs) + Math.max(...xs)) / 2, Math.max(...pts.map((p) => p[1])) + 24, SMALL_PX, "Colorado Startups region", `text-anchor="middle" fill="${ink}"`),
+    text((Math.min(...xs) + Math.max(...xs)) / 2, Math.max(...pts.map((p) => p[1])) + 24, SMALL_PX, LOOP_LABEL, `text-anchor="middle" fill="${ink}"`),
   ];
   for (const s of summits) {
     const [x, y] = xy(s.at);
     out.push(
       `<g data-layer="summit" data-register="${s.register}"><path d="M${n(x)} ${n(y - 9)}L${n(x + 8)} ${n(y + 5)}L${n(x - 8)} ${n(y + 5)}Z" fill="none" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>`,
-      text(x - 14, y + 6, NAME_PX, s.summit, `text-anchor="end" fill="${ink}"`),
+      text(x - NAME_GAP, y + 6, NAME_PX, s.summit, `text-anchor="end" fill="${ink}"`),
       `</g>`,
     );
   }
   for (const o of orgs) out.push(mark(o.kind, ...xy(o.at), o.name));
-  out.push(text(w - 8, h - 8, SMALL_PX, "Summits: USGS GNIS. Loop: US Census Bureau. CC0, spacepeak.co", `text-anchor="end" fill="${dim}"`), `</svg>`);
+  out.push(text(w - 8, h - 8, SMALL_PX, "Summits: USGS GNIS. Loop: US Census Bureau. CC0, spacepeak.co", `text-anchor="end" fill="${dim}" data-layer="credit"`), `</svg>`);
   return out.join("");
+}
+
+/** A name's width in user units, set high (0.6 em a character) so a hidden band never reaches a drawn name. */
+const nameWidth = (body: string, px: number) => body.length * px * 0.6;
+
+/** The x range the view's loop, summits, orgs and their names take: everything drawn but the credit line. */
+function inkRange(data: MapData, view: View): [number, number] {
+  const { xy, inside } = frame(view);
+  const loop = data.loop.ring.map((p) => xy(p)[0]);
+  const [mid, half] = [(Math.min(...loop) + Math.max(...loop)) / 2, nameWidth(LOOP_LABEL, SMALL_PX) / 2];
+  const xs = [...loop, mid - half, mid + half];
+  for (const s of data.summits.filter((s) => inside(s.at))) {
+    const [x] = xy(s.at);
+    xs.push(x - NAME_GAP - nameWidth(s.summit, NAME_PX), x + MARK_REACH);
+  }
+  for (const o of data.orgs.filter((o) => inside(o.at))) xs.push(xy(o.at)[0] - MARK_REACH, xy(o.at)[0] + MARK_REACH);
+  return [Math.min(...xs), Math.max(...xs)];
+}
+
+/**
+ * The user units a frame narrower than the drawing hides on the view's open side (issue #194): the empty band
+ * from that edge to the nearest drawn thing, less a 16-unit margin. The frame then opens on the loop or the summits.
+ */
+export function narrowBand(data: MapData, view: View): number {
+  const [x0, x1] = inkRange(data, view);
+  const { width, open } = VIEWS[view];
+  return Math.max(0, Math.floor((open === "east" ? width - x1 : x0) - 16));
 }

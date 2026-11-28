@@ -2,9 +2,10 @@
 // The drawing: the region view and the tour view, inline so they paint with the page and need no script.
 // Each SVG keeps its width and height, so it holds its aspect ratio and nothing shifts.
 // On a phone the frame scrolls sideways, not the page, so the labels stay near their drawn size (map.css).
+// It opens on the view's open side with the empty band there hidden (narrowBand, issue #194), so no script sets it.
 import "../../styles/map.css";
 import type { MapData } from "../../lib/map/data";
-import { drawMap, type View } from "../../lib/map/draw";
+import { drawMap, narrowBand, VIEWS, type View } from "../../lib/map/draw";
 const { data } = Astro.props as { data: MapData };
 const CAPTION: Record<View, string> = {
   region: "The region: the Colorado Startups loop around Colorado Springs and Fountain, with Pikes Peak.",
@@ -17,6 +18,8 @@ const LABEL: Record<View, string> = {
 // Two inline SVGs on one page: give each its own title and desc ids.
 const views = (["region", "south"] as const).map((view) => ({
   view,
+  open: VIEWS[view].open,
+  band: narrowBand(data, view),
   svg: drawMap(data, view).replaceAll("map-title", `${view}-title`).replaceAll("map-desc", `${view}-desc`),
 }));
 const KEY = [
@@ -26,9 +29,9 @@ const KEY = [
   { k: "summit", label: "Summit", shape: "M10 3l7 13H3z" },
 ];
 ---
-{views.map(({ view, svg }) => (
+{views.map(({ view, open, band, svg }) => (
   <figure class="space-map" data-view={view}>
-    <div class="space-map__frame" role="region" aria-label={LABEL[view]} tabindex="0" set:html={svg} />
+    <div class="space-map__frame" role="region" aria-label={LABEL[view]} tabindex="0" data-open={open} style={`--band: ${band}`} set:html={svg} />
     <figcaption>{CAPTION[view]}</figcaption>
   </figure>
 ))}

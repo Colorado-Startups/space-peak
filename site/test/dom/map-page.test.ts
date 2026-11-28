@@ -82,6 +82,8 @@ describe.skipIf(!ready && !process.env.CI)("the built /map/ page", () => {
     const frames = [...doc.querySelectorAll("figure.space-map > .space-map__frame")];
     expect(frames).toHaveLength(2);
     for (const f of frames) expect([f.getAttribute("tabindex"), f.getAttribute("role"), Boolean(f.getAttribute("aria-label"))]).toEqual(["0", "region", true]);
+    // Issue #194: each frame names its open side and the band it hides there on a phone.
+    expect(frames.map((f) => [f.getAttribute("data-open"), /^--band: \d+$/.test(f.getAttribute("style") ?? "")])).toEqual([["east", true], ["west", true]]);
   });
   it("loads no MapLibre", () => expect(doc.documentElement.outerHTML).not.toMatch(/maplibre/i));
   it("says speculative once, and names Pikes Peak the name and headquarters (issue #153)", () => {

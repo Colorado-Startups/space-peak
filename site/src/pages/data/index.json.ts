@@ -1,2 +1,2 @@
-import { serveIndex } from "./_files";
+import { serveIndex } from "../../lib/data/serve";
 export const GET = serveIndex;

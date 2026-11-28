@@ -1,2 +1,2 @@
-import { serve } from "./_files";
+import { serve } from "../../lib/data/serve";
 export const GET = serve("catalog.json");

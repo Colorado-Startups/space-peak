@@ -1,5 +1,5 @@
 ---
-// Home section 4, "Build, fly, defend" (step 32, issue #123): research to defence, five steps, each with the local
+// Home section 4, "Build, fly, defend" (step 32, issue #123): learn to defence, five steps, each with the local
 // orgs whose own words in data/orgs (name, summary or fact) name that work. `says` quotes those words; the build
 // stops if they are not there, so a step never claims an org the data does not support. An empty step says so.
 // Then one public-domain NASA photo, its record beside it in src/assets/photos/. No script.
@@ -9,7 +9,7 @@ import photo from "../../assets/photos/iss007-e-17121.webp";
 import record from "../../assets/photos/iss007-e-17121.json";
 
 const STEPS: { id: string; label: string; orgs: { id: string; says: string }[] }[] = [
-  { id: "research", label: "Research", orgs: [{ id: "uccs", says: "aerospace engineering" }, { id: "us-air-force-academy", says: "satellites, rockets" }] },
+  { id: "learn", label: "Learn", orgs: [{ id: "uccs", says: "aerospace engineering" }, { id: "us-air-force-academy", says: "satellites, rockets" }] },
   { id: "build", label: "Build", orgs: [{ id: "true-anomaly", says: "designs and builds spacecraft" }, { id: "citra", says: "hardware, software and infrastructure" }] },
   { id: "launch", label: "Launch", orgs: [] },
   { id: "fly", label: "Fly", orgs: [{ id: "atlas-space-operations", says: "satellite ground network" }] },

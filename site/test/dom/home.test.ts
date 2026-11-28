@@ -15,7 +15,7 @@ import { DIST_DIR, SITE_DIR, builtPages, distExists } from "./pages";
 const PHOTOS_DIR = path.join(SITE_DIR, "src", "assets", "photos");
 const ORGS_DIR = path.join(SITE_DIR, "..", "data", "orgs");
 const BUDGET = { kinds: 15, pipeline: 30 }; // about 15 and about 30 words, issue #123
-const STEPS = ["research", "build", "launch", "fly", "defend"];
+const STEPS = ["learn", "build", "launch", "fly", "defend"];
 const dom = (html: string) => new DOMParser().parseFromString(html, "text/html");
 
 type Photo = { file: string; sha256: string; id: string; caption: string; alt: string; source_url: string; credit: string; no_endorsement: string; terms_url: string };

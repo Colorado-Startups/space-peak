@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 // Home section 5, "The big idea" (step 36, issue #140): every chart and ruler value equals its claims-register row,
 // with that row's status; the ruler is drawn with no script and stays still under reduced motion; about 30 words.
+// e2e/ruler.spec.ts checks the motion itself in a real browser.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -12,8 +13,6 @@ const COST = ["E-09", "E-10", "E-11", "E-12", "E-13"];
 const RULER = ["P-01", "S-14", "P-14", "P-02"]; // orbit, Pikes Peak, the muzzle, the air below it
 const THESIS = "E-14";
 const BUDGET = 30; // about 30 words, issue #140
-const MOTION_LIMIT_S = 1.5;
-const SECTION = readFileSync(path.join(SITE_DIR, "src", "sections", "home", "50-idea.astro"), "utf8");
 const SCRIPT = readFileSync(path.join(SITE_DIR, "public", "js", "ruler-rise.js"), "utf8");
 const parse = (html: string) => new DOMParser().parseFromString(html, "text/html");
 const text = (el: Element | null | undefined) => (el?.textContent ?? "").replace(/\s+/g, " ").trim();
@@ -85,40 +84,6 @@ function ideaProblems(doc: Document): string[] {
   return out;
 }
 
-const figure = (id: string, value: string) => `<span class="figure" data-claim="${id}" data-status="${getClaim(id).status}"><span class="figure-value">${value}</span><span class="figure-chip">${getClaim(id).status}</span></span>`;
-const key = (mark: string, label: string, fig: string) => `<li data-mark="${mark}"><details><summary><span>${label}</span>${fig}</summary></details></li>`;
-const bar = (id: string) => {
-  const years = /first launched in (\d{4})|first flown from (\d{4}) to (\d{4})/.exec(getClaim(id).claim)!.slice(1).filter(Boolean);
-  return `<tr><th>x, first flew ${years.join(" to ")}</th><td>${/\$([\d,]+) per kg/.exec(getClaim(id).claim)![1]}</td></tr>`;
-};
-const GOOD = `<section class="idea"><h2>The big idea</h2><p class="idea-lead">${figure(THESIS, "Cost to orbit is the choke point.")}</p>
-  <div class="idea-cost" data-claims="${COST.join(" ")}"><figure class="chart"><svg role="img"><g aria-label="bar">${COST.map(() => "<path/>").join("")}</g></svg>
-  <details><summary>Data as a table</summary><table><tbody>${COST.map(bar).join("")}</tbody></table></details></figure>
-  <p class="idea-source"><span><a href="https://ntrs.nasa.gov/x">Jones, NASA Ames, 2018</a>. Falcon prices are 2018 list prices, not today's.</span> <span class="figure-chip">verified</span></p></div>
-  <figure class="ruler" data-rise=""><svg><rect data-mark="muzzle" fill="url(#h)"/></svg><ul class="ruler-key">
-  ${key("orbit", "Orbit", figure("P-01", "about 17,500 mph sideways"))}${key("pikes", "Pikes Peak", figure("S-14", "14,115 ft"))}
-  ${key("muzzle", 'Muzzle <span class="hatch-tag">speculative</span>', figure("P-14", "12,000–14,000 ft"))}${key("air", "Air below", figure("P-02", "about 36–41%"))}
-  </ul></figure></section>`;
-
-describe("the big idea check", () => {
-  it("passes a known-good section", () => expect(ideaProblems(parse(GOOD))).toEqual([]));
-  it.each([
-    ["a bar off its row", GOOD.replace("<td>61,720</td>", "<td>54,500</td>"), /E-11 plots 54500/],
-    ["a bar with no first flight", GOOD.replace("x, first flew 2010", "Falcon 9"), /E-12 label "Falcon 9" does not give its first flight/],
-    ["the Falcon basis missing", GOOD.replace(" Falcon prices are 2018 list prices, not today's.", ""), /not marked as 2018 list prices/],
-    ["the thesis without its status", GOOD.replace(`<span class="figure-chip">unverified</span></span></p>`, "</span></p>"), /thesis does not show E-14/],
-    ["a bar with no row", GOOD.replace(`data-claims="${COST.join(" ")}"`, `data-claims="${COST.slice(1).join(" ")}"`), /cost chart cites/],
-    ["no status chip", GOOD.replace('<span class="figure-chip">verified</span></p>', "</p>"), /E-09 is verified, and no chip/],
-    ["a ruler number off its row", GOOD.replace("14,115 ft", "14,110 ft"), /S-14 shows 14,110/],
-    ["a hedge dropped", GOOD.replace("about 17,500", "17,500"), /P-01 drops the "about"/],
-    ["the muzzle unlabelled", GOOD.replace('<span class="hatch-tag">speculative</span>', ""), /not tagged speculative/],
-    ["a ruler hidden at rest", GOOD.replace('data-rise=""', 'data-rise="wait"'), /want drawn/],
-    ["too many words", GOOD.replace("The big idea", "The big idea ".repeat(9)), /words, budget 30/],
-  ])("flags %s (known bad)", (_name, html, problem) => {
-    expect(ideaProblems(parse(html)).join("\n")).toMatch(problem);
-  });
-});
-
 /** public/js/ruler-rise.js on its own document, handed a stubbed matchMedia and IntersectionObserver. */
 function runRuler({ reduce = false, observer = true } = {}) {
   const doc = document.implementation.createHTMLDocument("ruler");
@@ -166,29 +131,6 @@ describe("the ruler's script", () => {
     r.answer(false, 0);
     r.reduce();
     expect([r.state(), r.io.disconnected]).toEqual(["", true]);
-  });
-});
-
-describe("the ruler's motion", () => {
-  const css = /<style>([\s\S]*?)<\/style>/.exec(SECTION)?.[1] ?? "";
-  const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1]!.trim(), body: m[2]! }));
-  it("hides or moves only in the wait and go states", () => {
-    const moving = rules.filter((r) => /\.ruler-(rise|labels)/.test(r.selector) && /scaleY\(0\)|opacity:\s*0|animation:/.test(r.body));
-    expect(moving.length).toBeGreaterThanOrEqual(4);
-    for (const r of moving) expect(r.selector).toMatch(/\[data-rise="(wait|go)"\]/);
-  });
-  it(`finishes within ${MOTION_LIMIT_S} s, transform and opacity only`, () => {
-    const anims = [...css.matchAll(/animation:\s*([^;]+);/g)].map((m) => [...m[1]!.matchAll(/(\d*\.?\d+)s\b/g)].map((t) => Number(t[1])));
-    expect(anims).toHaveLength(2);
-    for (const [duration = Infinity, delay = 0] of anims) expect(duration + delay).toBeLessThanOrEqual(MOTION_LIMIT_S);
-    const frames = [...css.matchAll(/@keyframes[^{]+\{((?:[^{}]*\{[^{}]*\})*)\s*\}/g)].map((m) => m[1]!);
-    expect(frames).toHaveLength(2);
-    for (const f of frames) for (const [, prop] of f.matchAll(/([\w-]+)\s*:/g)) expect(["transform", "opacity"]).toContain(prop);
-  });
-  it("resets both groups under reduced motion", () => {
-    const still = css.split("\n").find((line) => line.includes("prefers-reduced-motion")) ?? "";
-    expect(still).toMatch(/\.ruler-rise\s*\{\s*transform:\s*none/);
-    expect(still).toMatch(/\.ruler-labels\s*\{\s*opacity:\s*1/);
   });
 });
 

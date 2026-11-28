@@ -82,7 +82,7 @@ function plotOf(spec: ChartSpec) {
       y: { label: null, domain: rows.map((r) => r.label), tickFormat: (d: string) => (lines.get(d) ?? [d]).join("\n") },
       marks: [
         Plot.barX(rows, { x: "value", y: "label", fill: "fill", rx2: 4, insetTop: 2, insetBottom: 2, title: (r) => `${r.label}: ${fmt(r.value)} ${spec.unit}` }),
-        Plot.ruleX([0]),
+        Plot.ruleX([0], { ariaHidden: "true" }), // the zero line is decoration; a named group without a role fails axe (#148)
       ],
     });
   }

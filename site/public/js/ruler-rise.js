@@ -19,7 +19,7 @@
     }
     if (entry.intersectionRatio < 0.3) return;
     observer.disconnect();
-    ruler.dataset.rise = still.matches ? "" : "go";
+    ruler.dataset.rise = "go";
   }, { threshold: [0, 0.3] });
 
   observer.observe(target);

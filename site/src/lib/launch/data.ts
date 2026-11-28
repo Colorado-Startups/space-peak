@@ -6,7 +6,7 @@ import launchText from "../../../../data/launch.yaml?raw";
 import { getClaim, type ClaimRow } from "../claims/parse";
 
 /** The points on the profile drawing a key entry can mark. */
-export const ANCHORS = ["portal", "tunnel", "muzzle", "air", "arc", "orbit"] as const;
+const ANCHORS = ["portal", "tunnel", "muzzle", "air", "arc", "orbit"] as const;
 export type Anchor = (typeof ANCHORS)[number];
 
 const claimId = z.string().regex(/^[A-Z]-\d+$/, "must be a register ID such as P-03");
@@ -16,7 +16,7 @@ const label = z.string().trim().min(1);
 // `veto` holds the rows of the brief's veto column for that place, which the page shows as Hurdles.
 const place = z.strictObject({ name: label, site: z.string().trim().min(1), claims: z.array(claimId).min(1), veto: z.array(claimId).optional() });
 
-export const launchSchema = z.strictObject({
+const launchSchema = z.strictObject({
   profile: z
     .array(z.strictObject({ at: z.enum(ANCHORS), label, claim: claimId }))
     .min(1)
@@ -35,7 +35,7 @@ export const placesOf = (d: Launch): Place[] => [...d.sites.ranked, d.sites.head
 export const rowsOf = (p: Place): string[] => [...p.claims, ...(p.veto ?? [])];
 
 /** Every claim the page shows, in page order. */
-export const launchClaims = (d: Launch): string[] => [
+const launchClaims = (d: Launch): string[] => [
   ...d.profile.map((e) => e.claim),
   ...d.make_or_break,
   ...placesOf(d).flatMap(rowsOf),

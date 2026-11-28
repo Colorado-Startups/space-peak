@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import type { Kind } from "../orgs/kinds";
 import type { MapData } from "./data";
 /** --t-step--1 and --t-step-0 (0.9375rem and 1.125rem) in px. */
-export const [SMALL_PX, NAME_PX] = [15, 18];
+const [SMALL_PX, NAME_PX] = [15, 18];
 // Equirectangular at 38 N, the tour's middle latitude: one projection, each view a fixed box on it.
 const COS = Math.cos((38 * Math.PI) / 180);
 export const VIEWS = {

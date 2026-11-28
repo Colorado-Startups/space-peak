@@ -22,7 +22,7 @@ const fields = {
 };
 
 // A draft has no approval date; an approved estimate needs one. Each pairs with its own estimator line.
-export const estimateSchema = z.discriminatedUnion("approved", [
+const estimateSchema = z.discriminatedUnion("approved", [
   z.strictObject({ ...fields, estimator: z.literal(DRAFT_BY), approved: z.literal(false) }),
   z.strictObject({ ...fields, estimator: z.literal(APPROVED_BY), approved: z.literal(true), approved_on: z.iso.date() }),
 ]);

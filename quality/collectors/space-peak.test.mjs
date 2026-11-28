@@ -1,3 +1,4 @@
+#!/usr/bin/env -S node --test
 // Tests for Space Peak's own collector: fixtures that put each metric at goal and below goal, and a
 // missing input. Nothing here reads the network: a stand-in GitHub answers the MCP metric's reads.
 // Run with: node --test quality/collectors/space-peak.test.mjs

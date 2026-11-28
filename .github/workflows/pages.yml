@@ -28,9 +28,7 @@ concurrency:
 
 jobs:
   build:
-    # One core is enough: the build takes about 74 s on two (2026-11-28) and launches no browser, so its
-    # lab numbers come from CI, not this runner. ubuntu-slim's list price is a third of the 2-core rate.
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     # The collectors read this repo's pull requests, runs, checks and issues; a read refused is not measured.
     permissions:

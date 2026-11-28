@@ -1,10 +1,12 @@
 ---
+import Support from "../../components/Support.astro";
 // The repo's issue form, and the Space Peak region page on coloradostartups.org (HTTP 200 on 2026-11-27).
 const ADD = "https://github.com/Colorado-Startups/space-peak/issues/new?template=4-add-organisation.yml";
 const CHAPTER = "https://coloradostartups.org/regions/space-peak/";
 ---
 <section class="join" aria-labelledby="join-title">
   <h2 id="join-title">Get listed</h2>
+  <Support />
   <div class="actions">
     <a class="button" href={ADD}>Add your organisation</a>
     <a class="button" href={CHAPTER}>Join the chapter</a>

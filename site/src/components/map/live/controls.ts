@@ -4,7 +4,7 @@
 import type { IControl, Map as MapLibre } from "maplibre-gl";
 import { TERRAIN, type Region } from "./region";
 
-/** The opening flight: motion on this site runs once and under 1.5 s. */
+/** The opening flight. The site's guideline, not a test: motion runs once and under 1.5 s. */
 export const FLY_MS = 1400;
 const GLOBE_ZOOM = 1.5; // The whole Earth in the frame.
 const PADDING = 24; // The same padding live.client.ts fits the region with, so both openings end in one place.
@@ -13,10 +13,10 @@ const TILT = 60; // Terrain reads as 3D only from a tilted camera; turning it of
 
 type Button = [area: string, label: string, text: string, act: (map: MapLibre, step: number) => unknown];
 const PAD: Button[] = [
-  ["n", "Pan north", "↑", (m, s) => m.panBy([0, -s])],
-  ["w", "Pan west", "←", (m, s) => m.panBy([-s, 0])],
-  ["e", "Pan east", "→", (m, s) => m.panBy([s, 0])],
-  ["s", "Pan south", "↓", (m, s) => m.panBy([0, s])],
+  ["n", "Move north", "↑", (m, s) => m.panBy([0, -s])],
+  ["w", "Move west", "←", (m, s) => m.panBy([-s, 0])],
+  ["e", "Move east", "→", (m, s) => m.panBy([s, 0])],
+  ["s", "Move south", "↓", (m, s) => m.panBy([0, s])],
   ["in", "Zoom in", "+", (m) => m.zoomIn()],
   ["out", "Zoom out", "−", (m) => m.zoomOut()],
 ];

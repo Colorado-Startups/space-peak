@@ -9,11 +9,11 @@ import { gzipSync } from "node:zlib";
 const DIST = join(import.meta.dirname, "..", "dist");
 const BUDGET_KIB = 307; // code.client_js_kb's goal (Git Crafter code-os #120).
 const MAP_CODE = /maplibre|live\.client|tiles\.openfreemap\.org|tiles\.mapterhorn\.com|\/data\/map\.geojson/;
-const CREDIT = '<a href="https://openfreemap.org">OpenFreeMap</a> <a href="https://www.openmaptiles.org/">© OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
-// Vector tiles come from the test server, which answers 404, and MapLibre reads a 404 as no data.
+// Vector tiles come from the test server, which answers 404, and MapLibre reads a 404 as no data. The stub carries
+// no attribution, so every credit the test finds comes from the site's own code.
 const STYLE = (origin: string) => ({
   version: 8,
-  sources: { openmaptiles: { type: "vector", tiles: [`${origin}/no-tiles/{z}/{x}/{y}.pbf`], maxzoom: 14, attribution: CREDIT } },
+  sources: { openmaptiles: { type: "vector", tiles: [`${origin}/no-tiles/{z}/{x}/{y}.pbf`], maxzoom: 14 } },
   layers: [{ id: "background", type: "background" }, { id: "water", type: "fill", source: "openmaptiles", "source-layer": "water" }],
 });
 // SwiftShader gives headless Chromium a software WebGL2 on a CI runner with no GPU.
@@ -68,11 +68,8 @@ test("nothing map-related downloads before the press", async ({ page }) => {
 
 test("the press loads MapLibre and draws the region over the tiles, with every credit", async ({ page }) => {
   test.setTimeout(90_000); // A software renderer on a shared runner.
-  const notes: string[] = [];
-  page.on("pageerror", (e) => notes.push(`pageerror: ${e.message}`));
-  page.on("console", (m) => void (["error", "warning"].includes(m.type()) && notes.push(`${m.type()}: ${m.text()}`)));
-  page.on("requestfailed", (r) => notes.push(`failed: ${r.url()} ${r.failure()?.errorText}`));
-  page.on("worker", (w) => notes.push(`worker: ${w.url()}`));
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
   const hosts: string[] = [];
   page.context().on("request", (r) => void (/^https:\/\/tiles\./.test(r.url()) && hosts.push(r.url())));
   await fakeHosts(page);
@@ -82,16 +79,14 @@ test("the press loads MapLibre and draws the region over the tiles, with every c
   await chunk;
   const frame = page.locator('[data-live-map][data-state="open"]');
   const status = page.locator("[data-live-status]");
-  // On a miss, say why: the status line, then what the console and the network saw.
-  await frame.waitFor({ state: "visible", timeout: 60_000 }).catch(async () => {
-    throw new Error(`No first full draw. Status: "${await status.textContent()}"\n${notes.join("\n")}`);
-  });
+  await expect(frame, "the map reached its first full draw").toBeVisible({ timeout: 60_000 });
   await expect(frame.locator("canvas.maplibregl-canvas")).toBeVisible();
   await expect(frame, "the region and relief layers are on the live map").toHaveAttribute("data-layers", "sp-relief sp-region-fill sp-region-line");
+  await expect(frame, "the region drew once the map was idle").toHaveAttribute("data-region-features", /^[1-9]\d*$/, { timeout: 30_000 });
   const credits = frame.locator(".maplibregl-ctrl-attrib");
   for (const name of ["OpenStreetMap contributors", "OpenMapTiles", "OpenFreeMap", "Mapterhorn", "Region: coloradostartups.org"]) await expect(credits).toContainText(name);
   await expect(status).toContainText("Live map open");
-  expect(notes.filter((n) => n.startsWith("pageerror"))).toEqual([]);
+  expect(errors).toEqual([]);
   expect(hosts, "the tile hosts were reached over the network").toEqual([]);
 });
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { liveStyle, regionOf, TERRAIN } from "../../src/components/map/live/region";
+import { CREDITS, liveStyle, regionOf, TERRAIN } from "../../src/components/map/live/region";
 import { buildMapData } from "../../src/lib/map/data";
 import { mapGeojson } from "../../src/pages/data/map.geojson";
 
@@ -35,5 +35,9 @@ describe("live map style", () => {
     expect(TERRAIN).toMatchObject({ type: "raster-dem", encoding: "terrarium", tileSize: 512, attribution: expect.stringContaining("Mapterhorn") });
     expect(style.sources["sp-region"]).toMatchObject({ type: "geojson", attribution: regionOf(fc).credit });
     expect(JSON.stringify(base)).toBe(before);
+  });
+
+  it("carries every base-map credit itself, whatever a host's TileJSON says", () => {
+    for (const name of ["OpenFreeMap", "OpenMapTiles", "OpenStreetMap contributors", "MapLibre"]) expect(CREDITS.join(" ")).toContain(name);
   });
 });

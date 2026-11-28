@@ -18,7 +18,11 @@ async function json(url: string): Promise<any> {
   return res.json();
 }
 
+/** MapLibre's stylesheet, once: a retry press reuses a link that loaded and replaces one that failed. */
 function sheet(doc: Document, href: string): Promise<void> {
+  const earlier = doc.head.querySelector<HTMLLinkElement>(`link[rel="stylesheet"][href="${href}"]`);
+  if (earlier?.sheet) return Promise.resolve();
+  earlier?.remove();
   return new Promise((done, failed) => {
     const link = Object.assign(doc.createElement("link"), { rel: "stylesheet", href });
     link.addEventListener("load", () => done());
@@ -80,7 +84,11 @@ export async function open(doc: Document): Promise<void> {
   map.once("load", () => {
     loaded = true;
     frame.dataset.state = "open";
+    // The live state, for a reader and for e2e/map.spec.ts: our layers in order, then how many region features drew.
     frame.dataset.layers = map?.getLayersOrder().filter((id) => id.startsWith("sp-")).join(" ") ?? "";
+    map?.once("idle", () => {
+      frame.dataset.regionFeatures = String(map?.queryRenderedFeatures({ layers: ["sp-region-fill", "sp-region-line"] }).length ?? 0);
+    });
     say("Live map open: drag to move, pinch or scroll to zoom.");
   });
   setTimeout(() => map && !loaded && fail(WHY.tiles), WAIT_MS);

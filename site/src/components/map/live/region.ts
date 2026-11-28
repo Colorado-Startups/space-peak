@@ -13,8 +13,16 @@ export const TERRAIN: Style["sources"][string] = {
   type: "raster-dem", tiles: ["https://tiles.mapterhorn.com/{z}/{x}/{y}.webp"], encoding: "terrarium", tileSize: 512, maxzoom: 12,
   attribution: "<a href='https://mapterhorn.com/attribution'>© Mapterhorn</a>",
 };
-/** OpenStreetMap's own wording (openstreetmap.org/copyright), and the library. The sources add OpenMapTiles and Mapterhorn. */
-export const CREDITS = ['<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>', '<a href="https://maplibre.org/">MapLibre</a>'];
+/**
+ * Every base-map credit, carried here so the map shows it whatever a host serves. OpenFreeMap's line matches its
+ * TileJSON's attribution exactly (tiles.openfreemap.org/backup_planet, read 2026-11-27), so MapLibre shows it once.
+ * OpenStreetMap's own wording is from openstreetmap.org/copyright. TERRAIN and the region source add their own.
+ */
+export const CREDITS = [
+  '<a href="https://openfreemap.org" target="_blank">OpenFreeMap</a> <a href="https://www.openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
+  '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>',
+  '<a href="https://maplibre.org/">MapLibre</a>',
+];
 
 /** The one region polygon in map.geojson, its bounding box and its credit line. */
 export function regionOf(fc: { features: Feature[] }): Region {

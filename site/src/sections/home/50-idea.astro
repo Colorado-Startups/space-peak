@@ -16,32 +16,32 @@ function said(id: string, re: RegExp): RegExpExecArray {
 }
 const num = (s: string) => Number(s.replace(/,/g, ""));
 
-// The four systems NASA's report costs itself (Table A2), and its 1970 to 2000 average, in first-flight order.
-const COST = [["E-06", "Saturn V"], ["E-07", "Average"], ["E-08", "Space shuttle"], ["E-09", "Falcon 9"], ["E-10", "Falcon Heavy"]];
+// The four systems a NASA Ames paper costs itself (Jones 2018, Table A2), and its 1970 to 2000 average, in first-flight order.
+const COST = [["E-09", "Saturn V"], ["E-10", "Average"], ["E-11", "Space shuttle"], ["E-12", "Falcon 9"], ["E-13", "Falcon Heavy"]];
 const bars = COST.map(([claim, name]) => {
   const [, dollars] = said(claim, /\$([\d,]+) per kg/);
-  const [, from, to, year] = said(claim, /(\d{4}) to (\d{4})|in (\d{4})/);
-  return { claim, label: `${name}, ${year ?? `${from} to ${to}`}`, value: num(dollars) };
+  const [, count, from, to, year] = said(claim, /The (\d+) systems first flown from (\d{4}) to (\d{4})|first launched in (\d{4})/);
+  return { claim, label: year ? `${name}, first flew ${year}` : `${name} of ${count} systems, first flown ${from} to ${to}`, value: num(dollars) };
 });
 const cost: ChartSpec = {
   kind: "bar",
-  title: "Launch cost per kg to low Earth orbit, in 2018 dollars, per NASA",
+  title: "Cost per launch over the most each system can lift, per kg to low Earth orbit, in 2018 dollars, per a NASA Ames paper (Jones, 2018)",
   unit: "USD per kg",
   rows: bars.map(({ label, value }) => ({ label, value })),
 };
 const statuses = [...new Set(bars.map((b) => getClaim(b.claim).status))];
-const source = sourceOf(getClaim("E-06").source);
+const source = sourceOf(getClaim(COST[0]![0]!).source);
 if (!source?.url || bars.some((b) => sourceOf(getClaim(b.claim).source)?.url !== source.url)) throw new Error("50-idea: the cost rows no longer share one source");
 
 // The ruler, each value in its row's words, "about" kept where the row has it.
-const [, low, high] = said("P-02", /([\d,]+) to ([\d,]+) ft/);
+const [, low, high] = said("P-14", /([\d,]+) to ([\d,]+) ft/);
 const [, airAbout, airLow, airHigh] = said("P-02", /(about )?(\d+) to (\d+) percent/);
 const [, pikes] = said("S-14", /([\d,]+) ft/);
 const [, orbitAbout, orbit] = said("P-01", /(about )?([\d,]+) mph sideways/);
 const KEY = [
   { mark: "orbit", label: "Orbit", claim: "P-01", value: `${orbitAbout ?? ""}${orbit} mph sideways` },
   { mark: "pikes", label: "Pikes Peak", claim: "S-14", value: `${pikes} ft` },
-  { mark: "muzzle", label: "Muzzle", claim: "P-02", value: `${low}–${high} ft`, speculative: true },
+  { mark: "muzzle", label: "Muzzle", claim: "P-14", value: `${low}–${high} ft`, speculative: true },
   { mark: "air", label: "Air below", claim: "P-02", value: `${airAbout ?? ""}${airLow}–${airHigh}%` },
 ];
 
@@ -53,19 +53,19 @@ const TICKS = [0, 5000, 10000, 15000];
 ---
 <section class="idea" aria-labelledby="idea-title">
   <h2 id="idea-title">The big idea</h2>
-  <p class="idea-lead">Cost to orbit is the choke point.</p>
+  <p class="idea-lead"><Figure claim="E-14" value="Cost to orbit is the choke point." /></p>
   <div class="idea-body">
     <div class="idea-cost" data-claims={bars.map((b) => b.claim).join(" ")}>
       <Chart spec={cost} caption="2018 dollars per kg to low Earth orbit" />
       <p class="idea-source">
-        <span><a href={source.url}>NASA</a>, costed in 2018</span>
+        <span><a href={source.url}>Jones, NASA Ames, 2018</a>. Falcon prices are 2018 list prices, not today's.</span>
         {statuses.map((s) => <span class={chipFor(s).className}>{chipFor(s).word}</span>)}
       </p>
     </div>
     <figure class="ruler" data-rise="">
       <svg viewBox="0 0 360 420" role="img" aria-labelledby="ruler-title ruler-desc" font-size="15">
         <title id="ruler-title">Altitude ruler, the muzzle speculative</title>
-        <desc id="ruler-desc">Side view from sea level. A hatched band marks the muzzle height the brief proposes, just under Pikes Peak's summit. Above a break in the scale, an arrow points sideways: orbit is a speed, not a height. The key gives each value with its register status.</desc>
+        <desc id="ruler-desc">Side view from sea level. A hatched band marks the muzzle height the brief proposes, with Pikes Peak beside it for scale. Above a break in the scale, an arrow points sideways: low orbit is mostly a matter of sideways speed. The key gives each value with its register status.</desc>
         <defs>
           <pattern id="idea-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <rect width="6" height="12" fill="var(--co-yellow)" />
@@ -90,7 +90,7 @@ const TICKS = [0, 5000, 10000, 15000];
         </g>
         <g class="ruler-labels" fill="var(--c-text)" paint-order="stroke" stroke="var(--c-ground)" stroke-width="5" stroke-linejoin="round">
           <text x={AXIS + 12} y="22">orbit, sideways</text>
-          <text x={PEAK_X + 12} y={y(num(pikes)) - 8}>Pikes Peak</text>
+          <text x={PEAK_X + 12} y={y(num(pikes)) - 8}>Pikes Peak, for scale</text>
           <text x={AXIS + 16} y={(y(num(high)) + y(num(low))) / 2} dominant-baseline="middle" font-style="italic" font-weight="700">muzzle, speculative</text>
         </g>
       </svg>

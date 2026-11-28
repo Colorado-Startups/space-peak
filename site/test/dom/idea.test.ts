@@ -8,8 +8,9 @@ import { describe, expect, it } from "vitest";
 import { getClaim } from "../../src/lib/claims/parse";
 import { DIST_DIR, SITE_DIR, builtPages, distExists } from "./pages";
 
-const COST = ["E-06", "E-07", "E-08", "E-09", "E-10"];
-const RULER = ["P-01", "S-14", "P-02", "P-02"]; // orbit, Pikes Peak, the muzzle, the air below it
+const COST = ["E-09", "E-10", "E-11", "E-12", "E-13"];
+const RULER = ["P-01", "S-14", "P-14", "P-02"]; // orbit, Pikes Peak, the muzzle, the air below it
+const THESIS = "E-14";
 const BUDGET = 30; // about 30 words, issue #140
 const MOTION_LIMIT_S = 1.5;
 const SECTION = readFileSync(path.join(SITE_DIR, "src", "sections", "home", "50-idea.astro"), "utf8");
@@ -53,9 +54,16 @@ function ideaProblems(doc: Document): string[] {
     const row = getClaim(id);
     const shown = numbers(text(tr.querySelector("td")))[0];
     if (!new RegExp(`\\$${shown?.toLocaleString("en-US")} per kg`).test(row.claim)) out.push(`${id} plots ${shown}, its row says "${row.claim}"`);
+    // The label carries the first-flight year (or years) the row states, so no bar reads as a cost of another year.
+    const years = /first launched in (\d{4})|first flown from (\d{4}) to (\d{4})/.exec(row.claim)?.slice(1).filter(Boolean) ?? [];
+    const label = text(tr.querySelector("th"));
+    if (!years.length || !years.every((y) => label.includes(`first fl`) && label.includes(y))) out.push(`${id} label "${label}" does not give its first flight`);
     if (!chips.includes(row.status)) out.push(`${id} is ${row.status}, and no chip says so`);
   }
   if (!cost?.querySelector(".idea-source a[href^='https://ntrs.nasa.gov/']")) out.push("cost chart links no NASA source");
+  if (!text(cost?.querySelector(".idea-source")).includes("2018 list prices, not today's")) out.push("the Falcon bars are not marked as 2018 list prices");
+  const thesis = section.querySelector(`.idea-lead .figure[data-claim='${THESIS}']`);
+  if (text(thesis?.querySelector(".figure-chip")) !== getClaim(THESIS).status) out.push(`the thesis does not show ${THESIS}'s status`);
 
   const ruler = section.querySelector("figure.ruler");
   if (ruler?.getAttribute("data-rise") !== "") out.push(`ruler starts at data-rise="${ruler?.getAttribute("data-rise")}", want drawn`);
@@ -79,22 +87,28 @@ function ideaProblems(doc: Document): string[] {
 
 const figure = (id: string, value: string) => `<span class="figure" data-claim="${id}" data-status="${getClaim(id).status}"><span class="figure-value">${value}</span><span class="figure-chip">${getClaim(id).status}</span></span>`;
 const key = (mark: string, label: string, fig: string) => `<li data-mark="${mark}"><details><summary><span>${label}</span>${fig}</summary></details></li>`;
-const bar = (id: string) => `<tr><th>x</th><td>${/\$([\d,]+) per kg/.exec(getClaim(id).claim)![1]}</td></tr>`;
-const GOOD = `<section class="idea"><h2>The big idea</h2><p>Cost to orbit is the choke point.</p>
+const bar = (id: string) => {
+  const years = /first launched in (\d{4})|first flown from (\d{4}) to (\d{4})/.exec(getClaim(id).claim)!.slice(1).filter(Boolean);
+  return `<tr><th>x, first flew ${years.join(" to ")}</th><td>${/\$([\d,]+) per kg/.exec(getClaim(id).claim)![1]}</td></tr>`;
+};
+const GOOD = `<section class="idea"><h2>The big idea</h2><p class="idea-lead">${figure(THESIS, "Cost to orbit is the choke point.")}</p>
   <div class="idea-cost" data-claims="${COST.join(" ")}"><figure class="chart"><svg role="img"><g aria-label="bar">${COST.map(() => "<path/>").join("")}</g></svg>
   <details><summary>Data as a table</summary><table><tbody>${COST.map(bar).join("")}</tbody></table></details></figure>
-  <p class="idea-source"><a href="https://ntrs.nasa.gov/x">NASA</a> <span class="figure-chip">verified</span></p></div>
+  <p class="idea-source"><span><a href="https://ntrs.nasa.gov/x">Jones, NASA Ames, 2018</a>. Falcon prices are 2018 list prices, not today's.</span> <span class="figure-chip">verified</span></p></div>
   <figure class="ruler" data-rise=""><svg><rect data-mark="muzzle" fill="url(#h)"/></svg><ul class="ruler-key">
   ${key("orbit", "Orbit", figure("P-01", "about 17,500 mph sideways"))}${key("pikes", "Pikes Peak", figure("S-14", "14,115 ft"))}
-  ${key("muzzle", 'Muzzle <span class="hatch-tag">speculative</span>', figure("P-02", "12,000–14,000 ft"))}${key("air", "Air below", figure("P-02", "about 36–41%"))}
+  ${key("muzzle", 'Muzzle <span class="hatch-tag">speculative</span>', figure("P-14", "12,000–14,000 ft"))}${key("air", "Air below", figure("P-02", "about 36–41%"))}
   </ul></figure></section>`;
 
 describe("the big idea check", () => {
   it("passes a known-good section", () => expect(ideaProblems(parse(GOOD))).toEqual([]));
   it.each([
-    ["a bar off its row", GOOD.replace("<td>61,720</td>", "<td>54,500</td>"), /E-08 plots 54500/],
+    ["a bar off its row", GOOD.replace("<td>61,720</td>", "<td>54,500</td>"), /E-11 plots 54500/],
+    ["a bar with no first flight", GOOD.replace("x, first flew 2010", "Falcon 9"), /E-12 label "Falcon 9" does not give its first flight/],
+    ["the Falcon basis missing", GOOD.replace(" Falcon prices are 2018 list prices, not today's.", ""), /not marked as 2018 list prices/],
+    ["the thesis without its status", GOOD.replace(`<span class="figure-chip">unverified</span></span></p>`, "</span></p>"), /thesis does not show E-14/],
     ["a bar with no row", GOOD.replace(`data-claims="${COST.join(" ")}"`, `data-claims="${COST.slice(1).join(" ")}"`), /cost chart cites/],
-    ["no status chip", GOOD.replace('<span class="figure-chip">verified</span>', ""), /E-06 is verified, and no chip/],
+    ["no status chip", GOOD.replace('<span class="figure-chip">verified</span></p>', "</p>"), /E-09 is verified, and no chip/],
     ["a ruler number off its row", GOOD.replace("14,115 ft", "14,110 ft"), /S-14 shows 14,110/],
     ["a hedge dropped", GOOD.replace("about 17,500", "17,500"), /P-01 drops the "about"/],
     ["the muzzle unlabelled", GOOD.replace('<span class="hatch-tag">speculative</span>', ""), /not tagged speculative/],

@@ -56,7 +56,7 @@ Anyone can contribute: corrections, sources, drafts, questions and tooling. Star
 
 ```
 00_project_system/   MASTER_PLAN.md. Read first.
-01_doctrine/         voice.md. How this project writes, and what the linters enforce.
+01_doctrine/         voice.md and its parts. How this project writes, and what the linters enforce.
 02_substance/        The concept brief, and claims_register.md.
 03_deliverables/     The draft, the map (map/), the infographics.
 04_tools/            The rules file, the four checkers and the map data builder.
@@ -124,7 +124,7 @@ Every checker is standard library Python, deterministic, and offline. Each ships
 
 Some metrics need this Mac's own data: deploys through Wrangler, the Claude tabs from Claude Code transcripts, and credits. CI cannot read them, so a session runs Git Crafter's local collect and commits `quality/data/local.json` by pull request ([Git Crafter's Quality README](https://github.com/SoulCraft-Org/git-crafter/blob/8023bd4683416f6d420bd20d137960b09c06b91e/quality/README.md)). The run uses a Git Crafter checkout at the pin, with the two packs in `CODE_OS_PACKS`. It runs `collect.mjs --local --only NAME` once per collector, because a full run would also run vitest and a browser, which stay in CI. Before the commit, `node quality/local-check.mjs --scrub` rewrites the local paths collectors leave. `quality/local-check.test.mjs` then fails on transcript text, home paths, emails, account names or keys. The run's `quality/history/` file and the `quality/data/plan-usage.json` it reads stay on the machine. `pages.yml` checks that the built page shows each measured local metric.
 
-The same workflow serves the map in `03_deliverables/map/` at `/map/`. The page says "speculative" once, and every summit point keeps its USGS GNIS source. Across the site, a sourced figure shows a small "source" link, and a page with an unconfirmed figure says so in one line (`01_doctrine/voice.md`, Figures on the site). It is a repository deliverable, not the piece.
+The same workflow serves the map in `03_deliverables/map/` at `/map/`. The page says "speculative" once, and every summit point keeps its USGS GNIS source. Across the site, a sourced figure shows a small "source" link, and a page with an unconfirmed figure says so in one line (`01_doctrine/voice-map-and-site.md`, Figures on the site). It is a repository deliverable, not the piece.
 
 ## A template for sibling projects
 

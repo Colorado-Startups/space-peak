@@ -146,7 +146,7 @@ Figures in `03_deliverables/infographics/` with no other row, found by the fact 
 | N-01 | Colorado Springs sits in a valley at 6,035 ft | `unverified` | | |
 | N-02 | Colorado Springs was named in 1871, springs actually in Manitou | `unverified` | | |
 | N-03 | The opening lines of "America the Beautiful" came to Katharine Lee Bates atop Pikes Peak in 1893 | `corrected` | NPS, Places of Katharine Lee Bates and "America the Beautiful", https://www.nps.gov/articles/000/places-of-katharine-lee-bates-and-america-the-beautiful.htm, read 2026-11-16 | Was "written on the summit". NPS says the lines "first struck" her there; she published the poem in 1895 |
-| N-04 | The project name is **Space Peak**. The brief now argues for it too | `corrected` | Decided 2026-10-08, cross-session orchestrator, on Paul's delegation | Was `open`. Route 2 of issue #2: the naming section was rewritten for Space Peak rather than keeping two names. See `01_doctrine/voice.md`, Terminology |
+| N-04 | The project name is **Space Peak**. The brief now argues for it too | `corrected` | Decided 2026-10-08, cross-session orchestrator, on Paul's delegation | Was `open`. Route 2 of issue #2: the naming section was rewritten for Space Peak rather than keeping two names. See `01_doctrine/voice-terminology.md` |
 
 ## Draft estimates
 

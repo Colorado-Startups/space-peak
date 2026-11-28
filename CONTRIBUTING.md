@@ -11,7 +11,7 @@ flowchart LR
   M --> W["Workers Builds updates the preview host"]
 ```
 
-Space Peak is open to everyone. Corrections, sources, drafts, tooling fixes and good questions all count. You do not need to be an engineer to help.
+Space Peak is open to everyone. Corrections, sources, organisations, tooling fixes and good questions all count. You do not need to be an engineer to help.
 
 Mountain facts live in `02_substance/claims_register.md`, each with its status.
 
@@ -22,7 +22,6 @@ Mountain facts live in `02_substance/claims_register.md`, each with its status.
 | A question or an idea | [Discussions](https://github.com/Colorado-Startups/space-peak/discussions), in Q&A or Ideas |
 | A claim that is wrong, or a source that verifies one | The **Claim correction** issue form |
 | An organisation for spacepeak.co | The **Add your organisation** issue form, or a YAML file in `data/orgs/` |
-| Feedback on a draft | The **Draft feedback** issue form |
 | A page that is hard to see, hear, read or use | The **Accessibility problem** issue form |
 | A page or an MCP tool that is broken | The **Site or MCP problem** issue template |
 | A checker that misfired | The **Tooling** issue form |

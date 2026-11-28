@@ -27,14 +27,15 @@ describe("brand pull", () => {
   });
 
   it("every committed output matches its sha256 in the lock", () => {
-    expect(Object.keys(lock.outputs).length).toBe(10);
+    expect(Object.keys(lock.outputs).length).toBe(11);
     for (const [p, want] of Object.entries(lock.outputs)) expect(sha256(p), p).toBe(want);
   });
 
-  it("copies keep the release's hash, and springs-720 is 60 KB or less", () => {
+  it("copies keep the release's hash, springs-720 is 60 KB or less and springs-680 30 KB or less", () => {
     for (const [src, plan] of Object.entries(PLAN as Record<string, { out: string; widths?: number[]; css?: boolean }>))
       if (!plan.widths && !plan.css) expect(lock.outputs[plan.out], src).toBe(lock.files[src]);
     expect(statSync(path("site/public/art/springs-720.webp")).size).toBeLessThanOrEqual(60 * 1024);
+    expect(statSync(path("site/public/art/springs-680.webp")).size).toBeLessThanOrEqual(30 * 1024);
   });
 });
 

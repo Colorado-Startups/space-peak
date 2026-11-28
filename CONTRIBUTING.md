@@ -24,6 +24,7 @@ Mountain facts live in `02_substance/claims_register.md`, each with its status.
 | An organisation for spacepeak.co | The **Add your organisation** issue form, or a YAML file in `data/orgs/` |
 | Feedback on a draft | The **Draft feedback** issue form |
 | A page that is hard to see, hear, read or use | The **Accessibility problem** issue form |
+| A page or an MCP tool that is broken | The **Site or MCP problem** issue template |
 | A checker that misfired | The **Tooling** issue form |
 | A change ready to go | A pull request, below |
 | A security concern | `SECURITY.md`. Never a public issue |

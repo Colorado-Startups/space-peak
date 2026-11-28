@@ -71,7 +71,7 @@ Phase 1's decision is made: publish, standalone, under the Space Peak name. Phas
 | Check | Where |
 | --- | --- |
 | One checker, one test file, the dev server | Your machine, briefly |
-| Claims, voice, self-tests, contract test, the Quality collector tests | CI, every pull request |
+| Claims, voice, self-tests, contract test, the Quality collector tests | CI, when a file they read changes (`paths:` in `ci.yml`) |
 | `astro check`, build, vitest, Playwright and axe, the MCP conformance suite | CI, when `site/`, `data/`, `package.json`, the lockfile, `.nvmrc` or `wrangler.jsonc` changes |
 
 ## 8. Make your first contribution

@@ -1,0 +1,79 @@
+---
+// Home section 4, "Build, fly, defend" (step 32, issue #123): research to defence, five steps, each with the local
+// orgs whose own words in data/orgs (name, summary or fact) name that work. `says` quotes those words; the build
+// stops if they are not there, so a step never claims an org the data does not support. An empty step says so.
+// Then one public-domain NASA photo, its record beside it in src/assets/photos/. No script.
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import photo from "../../assets/photos/iss007-e-17121.webp";
+import record from "../../assets/photos/iss007-e-17121.json";
+
+const STEPS: { id: string; label: string; orgs: { id: string; says: string }[] }[] = [
+  { id: "research", label: "Research", orgs: [{ id: "uccs", says: "aerospace engineering" }, { id: "us-air-force-academy", says: "satellites, rockets" }] },
+  { id: "build", label: "Build", orgs: [{ id: "true-anomaly", says: "designs and builds spacecraft" }, { id: "citra", says: "hardware, software and infrastructure" }] },
+  { id: "launch", label: "Launch", orgs: [] },
+  { id: "fly", label: "Fly", orgs: [{ id: "atlas-space-operations", says: "satellite ground network" }] },
+  { id: "defend", label: "Defend", orgs: [{ id: "norad", says: "aerospace defense" }, { id: "mission-delta-3", says: "electromagnetic warfare" }] },
+];
+const byId = new Map((await getCollection("orgs")).map((entry) => [entry.data.id, entry.data]));
+const steps = STEPS.map((step) => ({
+  ...step,
+  orgs: step.orgs.map(({ id, says }) => {
+    const org = byId.get(id);
+    if (!org || org.status === "closed") throw new Error(`40-pipeline: ${step.id} names "${id}", which data/orgs has not, or has closed`);
+    if (![org.name, org.summary, org.fact.text].join(" ").toLowerCase().includes(says.toLowerCase()))
+      throw new Error(`40-pipeline: ${step.id} says "${says}" of ${id}, but its name, summary and fact do not`);
+    return { id, says, name: org.name, kind: org.kind };
+  }),
+}));
+---
+<section class="pipeline" aria-labelledby="pipeline-title">
+  <h2 id="pipeline-title">Build, fly, defend</h2>
+  <p>Local organisations on each step.</p>
+  <ol class="pipeline-steps">
+    {steps.map((step, i) => (
+      <li data-step={step.id}>
+        <h3><span class="pipeline-i" aria-hidden="true">{i + 1}</span>{step.label}</h3>
+        {step.orgs.length ? (
+          <ul data-names>
+            {step.orgs.map((org) => (
+              <li><a href={`/guide/#org-${org.id}`} data-org={org.id} data-says={org.says}><span class="pipeline-mark" data-kind={org.kind} aria-hidden="true"></span>{org.name}</a></li>
+            ))}
+          </ul>
+        ) : (
+          <p class="pipeline-none" data-step-none>None in the guide yet.</p>
+        )}
+      </li>
+    ))}
+  </ol>
+  <figure class="pipeline-photo" data-photo={record.id}>
+    <Image src={photo} widths={[480, 800, 1200]} sizes="(min-width: 48rem) 36rem, calc(100vw - 2rem)" alt={record.alt} loading="lazy" decoding="async" quality={72} />
+    <figcaption>
+      {record.caption}
+      <span class="pipeline-credit" data-credit>{record.credit}, <a href={record.source_url}>{record.id}</a>. Cropped. {record.no_endorsement}</span>
+    </figcaption>
+  </figure>
+</section>
+
+<style>
+  .pipeline { margin-block: var(--s-8) 0; }
+  .pipeline-steps { display: grid; gap: var(--s-4); margin: 0 0 var(--s-6); padding: 0; list-style: none; max-width: none; }
+  .pipeline-steps > li { padding-inline-start: var(--s-4); border-inline-start: var(--line-bold) solid var(--c-region-space-peak); }
+  .pipeline-steps h3 { display: flex; align-items: center; gap: var(--s-3); margin-block-end: var(--s-2); }
+  .pipeline-i { display: inline-flex; align-items: center; justify-content: center; flex: none; width: var(--size-tap); height: var(--size-tap); border-radius: 50%; background: var(--c-region-space-peak); color: var(--c-on-region-space-peak); font-size: var(--t-step-1); }
+  .pipeline-steps ul { margin: 0; padding: 0; list-style: none; }
+  .pipeline-steps ul a { display: inline-flex; align-items: center; gap: var(--s-2); min-height: var(--size-tap); }
+  .pipeline-none { margin: 0; color: var(--c-text-dim); font-style: italic; }
+  /* Kind looks, as on the guide and the map: blue square, green diamond, purple circle. */
+  .pipeline-mark { display: inline-block; flex: none; width: calc(var(--size-check) * 0.75); height: calc(var(--size-check) * 0.75); }
+  .pipeline-mark[data-kind="command_base"] { background: var(--c-kind-blue); }
+  .pipeline-mark[data-kind="institution"] { background: var(--c-kind-green); transform: rotate(45deg) scale(0.85); }
+  .pipeline-mark[data-kind="company"] { background: var(--c-kind-purple); border-radius: 50%; }
+  .pipeline-photo { margin: 0; max-width: 36rem; }
+  .pipeline-photo img { display: block; width: 100%; height: auto; border-bottom: var(--line-bold) solid var(--c-region-space-peak); }
+  .pipeline-photo figcaption { margin-block-start: var(--s-2); font-size: var(--t-step--1); }
+  .pipeline-credit { display: block; color: var(--c-text-dim); }
+  @media (min-width: 64rem) {
+    .pipeline-steps { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+</style>

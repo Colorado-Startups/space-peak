@@ -1,0 +1,23 @@
+id: parsons
+name: Parsons
+summary: A company that lists an office on Tech Center Drive in Colorado Springs.
+kind: company
+subkind: services
+city: colorado-springs
+area: nearby
+fact:
+  text: Parsons lists a Colorado Springs office at 5450 Tech Center Drive.
+  source: parsons-locations
+sources:
+  - id: parsons-locations
+    url: https://www.parsons.com/locations/
+    publisher: Parsons
+    read: 2026-11-27
+    quote: 5450 Tech Center Dr, Suite 120 Colorado Springs, Colorado 80919
+location:
+  lat: 38.91407
+  lon: -104.82741
+  precision: point
+  method: US Census Geocoder (Public_AR_Census2020) on the address the company publishes; Public_AR_Current returned no match.
+  source: parsons-locations
+status: active

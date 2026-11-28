@@ -1,0 +1,23 @@
+id: kratos
+name: Kratos Defense
+summary: A company whose Unmanned Systems business lists a site on Academy Ridge View in Colorado Springs.
+kind: company
+subkind: prime
+city: colorado-springs
+area: nearby
+fact:
+  text: Kratos lists an Unmanned Systems site at Academy Ridge View in Colorado Springs.
+  source: kratos-locations
+sources:
+  - id: kratos-locations
+    url: https://www.kratosdefense.com/contact/locations-kratos
+    publisher: Kratos Defense
+    read: 2026-11-27
+    quote: Unmanned Systems Colorado 12515 Academy Ridge View Colorado Springs, CO 80921
+location:
+  lat: 39.01254
+  lon: -104.8203
+  precision: point
+  method: US Census Geocoder (Public_AR_Current) on the address the company publishes.
+  source: kratos-locations
+status: active

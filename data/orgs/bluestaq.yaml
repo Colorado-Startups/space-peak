@@ -1,0 +1,31 @@
+id: bluestaq
+name: Bluestaq
+summary: A company headquartered in Colorado Springs, with offices in London, Canberra and Brisbane.
+kind: company
+subkind: startup
+city: colorado-springs
+area: loop
+fact:
+  text: Bluestaq lists its headquarters at 2 South Cascade Ave, Suite 200, in Colorado Springs.
+  source: bluestaq-address
+sources:
+  - id: bluestaq-contact
+    url: https://bluestaq.com/us/contact.html
+    publisher: Bluestaq
+    read: 2026-11-27
+    quote: Offices in Colorado Springs, London, Canberra and Brisbane.
+  - id: bluestaq-address
+    url: https://bluestaq.com/us/contact.html
+    publisher: Bluestaq
+    read: 2026-11-27
+    quote: HEADQUARTERS Bluestaq, LLC 2 South Cascade Ave, Suite 200 Colorado Springs, CO 80903
+location:
+  lat: 38.83381
+  lon: -104.82529
+  precision: point
+  method: US Census Geocoder (Public_AR_Current) on the address the company publishes.
+  source: bluestaq-address
+cs_ref:
+  collection: companies
+  id: bluestaq
+status: active

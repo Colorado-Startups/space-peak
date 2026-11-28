@@ -1,0 +1,31 @@
+id: citra
+name: Citra
+summary: A Colorado Springs company offering hardware, software and infrastructure for space superiority.
+kind: company
+subkind: startup
+city: colorado-springs
+area: nearby
+fact:
+  text: Citra lists a Colorado Springs office at 4815 List Drive, Suite 102.
+  source: citra-address
+sources:
+  - id: citra-home
+    url: https://citra.space/
+    publisher: Citra
+    read: 2026-11-27
+    quote: Hardware, software, and infrastructure for space superiority.
+  - id: citra-address
+    url: https://citra.space/
+    publisher: Citra
+    read: 2026-11-27
+    quote: 4815 List Drive, Suite 102 Colorado Springs, CO 80919
+location:
+  lat: 38.9022
+  lon: -104.85254
+  precision: point
+  method: US Census Geocoder (Public_AR_Current) on the address the company publishes.
+  source: citra-address
+cs_ref:
+  collection: companies
+  id: citra
+status: active

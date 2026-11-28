@@ -55,7 +55,7 @@ The site's npm packages are pinned to exact versions in `site/package.json` and 
 
 `04_tools/` is standard library Python with no third-party dependencies, deliberately: the checks must run identically on a laptop and in CI, with nothing to install and nothing to go stale.
 
-GitHub Actions are **SHA-pinned**, not tagged, so a moved tag cannot change what runs. The pin to Git Crafter's `ci-standard.yml` is checked by that workflow's own conformance step. Dependabot proposes updates weekly and every one is merged by hand.
+GitHub Actions are **SHA-pinned**, not tagged, so a moved tag cannot change what runs. The pin to Git Crafter's `ci-standard.yml` is checked by that workflow's own conformance step. `.github/workflows/actions.lock` records each action `pages.yml` runs, and the actions those call, at its commit; `gh actions-lock --verify` checks it, and a pin change updates it in the same pull request. Dependabot proposes updates weekly, each at least 14 days old, and every one is merged by hand.
 
 ## Secrets
 

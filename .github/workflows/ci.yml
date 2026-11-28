@@ -6,7 +6,10 @@ name: ci
 # contract test, the map --check and the check of quality/data/local.json (quality/local-check.test.mjs).
 # The map check reads the website's regions.geojson at the commit
 # 04_tools/space_peak_map.py pins as WEBSITE_COMMIT; --region-url prints that URL, so the pin lives
-# only in the tool. No paths filter, so every pull request runs it.
+# only in the tool. It runs when a file it reads changes (paths below): every Markdown file, the tools, the
+# Quality files, the register and map, the data, the org rules, the MCP spec and the lockfile. A change to
+# .github/workflows/ always runs it (ci-standard.yml). Anything else, such as a page component, runs only the
+# standard job.
 # The standard job (npm ci, then astro check, astro build, vitest with v8 coverage, then Chromium and the
 # Playwright axe spec over the built dist/) runs when the site's files change, or its data: the org schema and
 # checks in site/src/lib/orgs/ run only there, and /about/ says CI checks every listing.
@@ -29,6 +32,19 @@ jobs:
   ci:
     uses: SoulCraft-Org/git-crafter/.github/workflows/ci-standard.yml@8023bd4683416f6d420bd20d137960b09c06b91e # v7.0.2
     with:
+      paths: |
+        **/*.md
+        04_tools/**
+        quality/**
+        .claude/**
+        .github/**
+        02_substance/**
+        03_deliverables/**
+        data/**
+        site/src/lib/orgs/**
+        site/e2e/mcp.spec.ts
+        package.json
+        package-lock.json
       short: |
         python3 -I 04_tools/space_peak_claims.py --self-test
         python3 -I 04_tools/space_peak_lint.py --self-test

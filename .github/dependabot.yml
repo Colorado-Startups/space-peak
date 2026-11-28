@@ -19,10 +19,11 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
-    # Wait a week before proposing a new release, so a compromised or broken
+    # Wait two weeks before proposing a new release, so a compromised or broken
     # version has time to be caught upstream. Security updates skip this.
+    # 14 days is Git Crafter's goal for security.dependabot_cooldown.
     cooldown:
-      default-days: 7
+      default-days: 14
     groups:
       minor-and-patch:
         update-types: ["minor", "patch"]
@@ -33,7 +34,7 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 5
     cooldown:
-      default-days: 7
+      default-days: 14
     # A dependency joins the first group it matches, so astro comes first.
     groups:
       astro:

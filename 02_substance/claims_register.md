@@ -154,11 +154,11 @@ Probabilities for the site's odds section, one YAML file each in `data/estimates
 
 | ID | Claim | Status | Source | Notes |
 | --- | --- | --- | --- | --- |
-| Q-01 | A kinetic launcher puts a payload in orbit by 2040, at 7 percent | `open` | `data/estimates/q-01.yaml` | draft estimate, awaiting approval |
-| Q-02 | A kinetic launcher sends a payload above 100 km by 2035, at 12 percent | `open` | `data/estimates/q-02.yaml` | draft estimate, awaiting approval |
-| Q-03 | An orbital launch lifts off from an inland US site by 2040, at 12 percent | `open` | `data/estimates/q-03.yaml` | draft estimate, awaiting approval |
-| Q-04 | The world makes over 500 orbital launch attempts in 2030, at 40 percent | `open` | `data/estimates/q-04.yaml` | draft estimate, awaiting approval |
-| Q-05 | A published launch price falls below 1,000 dollars per kg by 2035, at 30 percent | `open` | `data/estimates/q-05.yaml` | draft estimate, awaiting approval |
+| Q-01 | A kinetic launcher puts a payload in orbit by 2040, at 7 percent | `open` | `data/estimates/q-01.yaml` | draft estimate of 2026-11-16, awaiting approval |
+| Q-02 | A kinetic launcher sends a payload above 100 km by 2035, at 12 percent | `open` | `data/estimates/q-02.yaml` | draft estimate of 2026-11-16, awaiting approval |
+| Q-03 | An orbital launch lifts off from an inland US site by 2040, at 12 percent | `open` | `data/estimates/q-03.yaml` | draft estimate of 2026-11-16, awaiting approval |
+| Q-04 | The world makes over 500 orbital launch attempts in 2030, at 40 percent | `open` | `data/estimates/q-04.yaml` | draft estimate of 2026-11-16, awaiting approval |
+| Q-05 | A published launch price falls below 1,000 dollars per kg by 2035, at 30 percent | `open` | `data/estimates/q-05.yaml` | draft estimate of 2026-11-16, awaiting approval |
 
 ## How to add a row
 

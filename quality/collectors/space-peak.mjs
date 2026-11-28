@@ -230,9 +230,10 @@ function collapse(checks) {
 
 /**
  * The MCP conformance tally under dir, or null with no results. It reads the checks.json files and the
- * expected-failures baseline that site/e2e/mcp.spec.ts writes there. A check its baseline names, as
- * `<scenario>` or `<scenario>:<check-id>`, is run and baselined, never passed. Any other check is
- * passed on SUCCESS and failed on FAILURE or WARNING, as the suite judges it.
+ * expected-failures baseline that site/e2e/mcp.spec.ts writes there from site/e2e/mcp-not-applicable.json.
+ * A check that list names, as `<scenario>` or `<scenario>:<check-id>`, is run and not applicable: it is
+ * neither passed nor failed. Any other check is passed on SUCCESS and failed on FAILURE or WARNING, as the
+ * suite judges it.
  */
 export function conformance(dir) {
   const all = files(dir);
@@ -240,7 +241,7 @@ export function conformance(dir) {
   if (!results.length) return null;
   const base = all.find((f) => basename(f) === "conformance-baseline.yml");
   const listed = new Set(base ? [...readFileSync(base, "utf8").matchAll(/^\s+- (\S+)\s*$/gm)].map((m) => m[1]) : []);
-  const tally = { run: 0, passed: 0, baselined: 0, failed: 0, baselined_ids: new Set(), failed_ids: [] };
+  const tally = { run: 0, passed: 0, not_applicable: 0, failed: 0, not_applicable_ids: new Set(), failed_ids: [] };
   for (const f of results) {
     const at = relative(dir, dirname(f));
     const scenario = SCENARIO.exec(at)?.[1] ?? at;
@@ -248,8 +249,8 @@ export function conformance(dir) {
       const entry = [scenario, `${scenario}:${c.id}`].find((e) => listed.has(e));
       tally.run += 1;
       if (entry) {
-        tally.baselined += 1;
-        tally.baselined_ids.add(entry);
+        tally.not_applicable += 1;
+        tally.not_applicable_ids.add(entry);
       } else if (c.status === "SUCCESS") tally.passed += 1;
       else {
         tally.failed += 1;
@@ -257,27 +258,29 @@ export function conformance(dir) {
       }
     }
   }
-  return { ...tally, baselined_ids: [...tally.baselined_ids].sort(), failed_ids: tally.failed_ids.sort() };
+  return { ...tally, not_applicable_ids: [...tally.not_applicable_ids].sort(), failed_ids: tally.failed_ids.sort() };
 }
 
 /** The ::notice workflow command for a tally: its message is the tally as JSON, escaped as GitHub reads it. */
 export function mcpNotice(tally) {
   const full = JSON.stringify(tally);
-  const body = full.length <= NOTICE_CHARS ? full : JSON.stringify({ ...tally, baselined_ids: [], failed_ids: [], ids_cut: true });
+  const body = full.length <= NOTICE_CHARS ? full : JSON.stringify({ ...tally, not_applicable_ids: [], failed_ids: [], ids_cut: true });
   return `::notice title=${MCP_TITLE}::${body.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A")}`;
 }
 
 const count = (n) => Number.isInteger(n) && n >= 0;
 
-// The tally in an annotation's message, or why it is not one.
+// The tally in an annotation's message, or why it is not one. A tally left before step 48 (#159) has
+// baselined in place of not_applicable, and its baselined checks still count against the share.
 function readTally(message) {
   let t;
   try {
-    t = JSON.parse(message);
+    t = { not_applicable: 0, baselined: 0, ...JSON.parse(message) };
   } catch {
     return { why: "its message is not JSON" };
   }
-  const whole = t && ["run", "passed", "baselined", "failed"].every((k) => count(t[k])) && t.passed + t.baselined + t.failed === t.run;
+  const keys = ["passed", "not_applicable", "baselined", "failed"];
+  const whole = count(t.run) && keys.every((k) => count(t[k])) && keys.reduce((n, k) => n + t[k], 0) === t.run;
   return whole ? { t } : { why: "its counts are missing or do not add up to run" };
 }
 
@@ -285,7 +288,7 @@ const checkRunId = (job) => /\/check-runs\/(\d+)$/.exec(String(job.check_run_url
 
 async function mcpShare(p, gh, repo) {
   const { workflow, job, branch, runs } = p.mcp;
-  const source = `latest: the ${MCP_TITLE} annotation that node quality/collectors/space-peak.mjs --mcp-notice leaves on ${workflow} job ${job}, in the newest of the last ${runs} successful ${branch} runs whose ${job} job ran. A check on site/e2e/mcp.spec.ts's BASELINE is run, never passed`;
+  const source = `latest: the ${MCP_TITLE} annotation that node quality/collectors/space-peak.mjs --mcp-notice leaves on ${workflow} job ${job}, in the newest of the last ${runs} successful ${branch} runs whose ${job} job ran. A check site/e2e/mcp-not-applicable.json names is run and left out of the share`;
   if (!repo) return no("no repo: params.repo, GITHUB_REPOSITORY and the origin remote name none", source);
   if (!gh) return no("no GitHub client: Git Crafter's collect.mjs passes lib", source);
   try {
@@ -304,15 +307,17 @@ async function mcpShare(p, gh, repo) {
       }
       const { t, why } = readTally(note.message);
       if (!t) return no(`the ${MCP_TITLE} annotation on ${workflow} run ${run.id}: ${why}`, read);
-      if (!t.run) return no(`${workflow} run ${run.id} ran no conformance check`, read);
+      const applies = t.run - t.not_applicable;
+      if (!applies) return no(`${workflow} run ${run.id} ran no conformance check that applies to /mcp`, read);
       const ids = (key, kind) => (Array.isArray(t[key]) ? t[key] : []).map((id) => ({ label: `${kind}: ${id}`, value: 1, unit: "" }));
       const rows = [
-        ...["passed", "baselined", "failed"].map((label) => ({ label, value: t[label], unit: "checks" })),
+        ...["passed", "failed", "not_applicable", ...(t.baselined ? ["baselined"] : [])].map((key) => ({ label: key.replace("_", " "), value: t[key], unit: "checks" })),
         ...ids("failed_ids", "failed"),
         ...ids("baselined_ids", "on the baseline"),
+        ...ids("not_applicable_ids", "not applicable"),
         ...(t.ids_cut ? [{ label: "check ids left out to fit the annotation", value: 1, unit: "" }] : []),
       ];
-      return ok(pct(t.passed, t.run), read, rows);
+      return ok(pct(t.passed, applies), read, rows);
     }
     return no(`none of the last ${runs} successful ${workflow} runs on ${branch} ran its ${job} job`, source);
   } catch (err) {

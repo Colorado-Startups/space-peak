@@ -29,6 +29,23 @@ function routes(): string[] {
 
 const ROUTES = routes();
 
+// The pages the site has today, named so a reader and the Quality page's route metrics can see them.
+// The walk above still covers a page added later; this catches a walk that misses one.
+const PAGES = ["/", "/404.html", "/about/", "/ai/", "/guide/", "/launch/", "/map/"];
+
+test("the walk finds every page the site has", () => {
+  expect(ROUTES).toEqual(expect.arrayContaining(PAGES));
+});
+
+// A path no page serves gets the 404 page, with a 404 status, and that page passes axe too.
+test("an unknown path gets the not-found page, which passes axe", async ({ page }) => {
+  const response = await page.goto("/no-such-page/");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Not found");
+  const results = await new AxeBuilder({ page: page as unknown as AxePage }).withTags(TAGS).analyze();
+  expect(results.violations.map((v) => v.id)).toEqual([]);
+});
+
 for (const width of [1280, 375]) {
   test.describe(`at ${width} px`, () => {
     test.use({ viewport: { width, height: 900 } });

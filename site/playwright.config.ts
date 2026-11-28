@@ -12,8 +12,9 @@ import { defineConfig, devices } from "@playwright/test";
 const PORT = 3321;
 const HOST = "127.0.0.1";
 const BASE_URL = `http://${HOST}:${PORT}`;
-// The /mcp Worker runs under `wrangler dev` over the same dist/, from the repo root where wrangler.jsonc is.
-// 3322 for the Worker, 3323 for its inspector: both in this account's block, not vendor defaults.
+// The /mcp Worker runs under `wrangler dev` over the same dist/, through the package's mcp script, which reads
+// ../wrangler.jsonc. 3322 for the Worker, 3323 for its inspector (set in that script): both in this account's
+// block, not vendor defaults.
 const MCP_PORT = 3322;
 export const MCP_URL = `http://${HOST}:${MCP_PORT}/mcp`;
 
@@ -33,8 +34,7 @@ export default defineConfig({
       timeout: 30_000,
     },
     {
-      command: `npx wrangler dev --port ${MCP_PORT} --ip ${HOST} --inspector-port 3323 --show-interactive-dev-session=false`,
-      cwd: "..",
+      command: "npm run mcp",
       env: { WRANGLER_SEND_METRICS: "false" },
       url: `http://${HOST}:${MCP_PORT}/`,
       reuseExistingServer: false,

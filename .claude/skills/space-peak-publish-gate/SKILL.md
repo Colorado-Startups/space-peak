@@ -54,7 +54,7 @@ A hedged source set as an exact number in display type. A status verb drifting u
 
 ## 8. Visuals
 
-The map and any SVG shipping with the piece carry the prose's labelling discipline. If text-only, say so, and that it was deliberate.
+The map and any SVG shipping with the piece follow the register's [labelling rule](../../../02_substance/claims_register.md#labelling-an-unconfirmed-figure). If text-only, say so, and that it was deliberate.
 
 ## 9. Naming
 

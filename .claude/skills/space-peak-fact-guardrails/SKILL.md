@@ -29,7 +29,7 @@ Self-test must pass first. Report every finding.
 
 | Output | Means |
 |---|---|
-| `unregistered-claim`, `unlabeled-claim` | **Warn**. Regex detection of place-shaped nouns is a heuristic; the label often sits in a neighbouring sentence the script cannot see. You judge |
+| `unregistered-claim`, `unlabeled-claim` | **Warn**. Regex detection of place-shaped nouns is a heuristic. The [labelling rule](../../../02_substance/claims_register.md#labelling-an-unconfirmed-figure) wants the label in the claim's own sentence. You judge |
 | Exit 3 | The check could not run. Not a pass: say so |
 
 ## 2. Sort every checkable claim

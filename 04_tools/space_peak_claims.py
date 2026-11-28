@@ -29,8 +29,9 @@ Checks and their severity, which comes from the data file:
 
   unlabeled-claim       WARN  A registered `unverified` place appears with a
                               figure in a sentence carrying no speculative
-                              label. The label often sits in a neighbouring
-                              sentence this script cannot see.
+                              label. The claims register's labelling rule
+                              wants the label in that same sentence, so one
+                              in a neighbouring sentence is still a finding.
 
 POLICY SURFACE: classify_claim(). It implements "register-anchored plus a
 catch-all for any unregistered place." Alternatives considered were strict

@@ -38,9 +38,9 @@ describe("figureView", () => {
     expect(() => figureView("Z-999")).toThrow(/no row Z-999/);
   });
 
-  it("reads S-04 from the register, and lets a page reword the value", () => {
-    expect(figureView("S-04")).toEqual({ id: "S-04", value: "Elevation 14,047 ft", href: undefined });
-    expect(figureView("S-04", "14,047 ft").value).toBe("14,047 ft");
+  it("reads S-04 from the register, links its first source, and lets a page reword the value", () => {
+    expect(figureView("S-04")).toEqual({ id: "S-04", value: "Elevation 14,053 ft", href: "https://epqs.nationalmap.gov/v1/json?x=-105.18581&y=37.12236&wkid=4326&units=Feet&includeDate=true" });
+    expect(figureView("S-04", "14,053 ft").value).toBe("14,053 ft");
   });
 });
 

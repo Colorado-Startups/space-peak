@@ -4,7 +4,7 @@
   "by": "04_tools/space_peak_map.py",
   "date": "2026-11-28",
   "register": "02_substance/claims_register.md",
-  "register_git_blob": "72bb9f582e4d6cde831475269b366a4a83d8bb7b",
+  "register_git_blob": "fc2806efcba97ab4bda14f42139ad10ddb5f935d",
   "license": "CC0-1.0"
  },
  "features": [
@@ -769,7 +769,7 @@
      {
       "id": "S-06",
       "claim": "Privately owned, Cielo Vista Ranch, single landowner",
-      "status": "unverified"
+      "status": "verified"
      },
      {
       "id": "S-21",

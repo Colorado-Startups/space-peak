@@ -52,7 +52,6 @@ Search the web **in this session**. Recall does not count; these move. Record th
 |---|---|
 | E-01 | GPS loss costing about one billion dollars per day per country |
 | P-05 | Guided artillery surviving 15,000 g. Load-bearing: the existence proof for ruggedization |
-| S-06 | Cielo Vista Ranch still being a single owner of Culebra |
 
 ## 4. Update the register
 

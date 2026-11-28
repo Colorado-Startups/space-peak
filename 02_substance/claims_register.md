@@ -148,17 +148,17 @@ Figures in `03_deliverables/infographics/` with no other row, found by the fact 
 | N-03 | The opening lines of "America the Beautiful" came to Katharine Lee Bates atop Pikes Peak in 1893 | `corrected` | NPS, Places of Katharine Lee Bates and "America the Beautiful", https://www.nps.gov/articles/000/places-of-katharine-lee-bates-and-america-the-beautiful.htm, read 2026-11-16 | Was "written on the summit". NPS says the lines "first struck" her there; she published the poem in 1895 |
 | N-04 | The project name is **Space Peak**. The brief now argues for it too | `corrected` | Decided 2026-10-08, cross-session orchestrator, on Paul's delegation | Was `open`. Route 2 of issue #2: the naming section was rewritten for Space Peak rather than keeping two names. See `01_doctrine/voice-terminology.md` |
 
-## Draft estimates
+## Estimates
 
-Probabilities for the site's odds section, one YAML file each in `data/estimates/`. An estimate is an opinion, not a fact. It never counts as verified and never enters schema.org output. Each row stays `open` until Paul approves it at go-live.
+Probabilities for the site's odds section, one YAML file each in `data/estimates/`. An estimate is an opinion, not a fact. It never counts as verified and never enters schema.org output. Each row stays `open` until its question resolves. Paul approved all five on 2026-11-27.
 
 | ID | Claim | Status | Source | Notes |
 | --- | --- | --- | --- | --- |
-| Q-01 | A kinetic launcher puts a payload in orbit by 2040, at 7 percent | `open` | `data/estimates/q-01.yaml` | draft estimate of 2026-11-16, awaiting approval |
-| Q-02 | A kinetic launcher sends a payload above 100 km by 2035, at 12 percent | `open` | `data/estimates/q-02.yaml` | draft estimate of 2026-11-16, awaiting approval |
-| Q-03 | An orbital launch lifts off from an inland US site by 2040, at 12 percent | `open` | `data/estimates/q-03.yaml` | draft estimate of 2026-11-16, awaiting approval |
-| Q-04 | The world makes over 500 orbital launch attempts in 2030, at 40 percent | `open` | `data/estimates/q-04.yaml` | draft estimate of 2026-11-16, awaiting approval |
-| Q-05 | A published launch price falls below 1,000 dollars per kg by 2035, at 30 percent | `open` | `data/estimates/q-05.yaml` | draft estimate of 2026-11-16, awaiting approval |
+| Q-01 | A kinetic launcher puts a payload in orbit by 2040, at 7 percent | `open` | `data/estimates/q-01.yaml` | estimate of 2026-11-16, approved by Paul 2026-11-27 |
+| Q-02 | A kinetic launcher sends a payload above 100 km by 2035, at 12 percent | `open` | `data/estimates/q-02.yaml` | estimate of 2026-11-16, approved by Paul 2026-11-27 |
+| Q-03 | An orbital launch lifts off from an inland US site by 2040, at 12 percent | `open` | `data/estimates/q-03.yaml` | estimate of 2026-11-16, approved by Paul 2026-11-27 |
+| Q-04 | The world makes over 500 orbital launch attempts in 2030, at 40 percent | `open` | `data/estimates/q-04.yaml` | estimate of 2026-11-16, approved by Paul 2026-11-27 |
+| Q-05 | A published launch price falls below 1,000 dollars per kg by 2035, at 30 percent | `open` | `data/estimates/q-05.yaml` | estimate of 2026-11-16, approved by Paul 2026-11-27 |
 
 ## How to add a row
 

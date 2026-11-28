@@ -15,6 +15,7 @@ sources:
     url: https://en.wikipedia.org/wiki/Falcon_9
     publisher: Wikipedia
     read: 2026-11-16
-estimator: Draft by Claude for Paul's review
+estimator: By Claude, approved by Paul
 date: 2026-11-16
-approved: false
+approved: true
+approved_on: 2026-11-27

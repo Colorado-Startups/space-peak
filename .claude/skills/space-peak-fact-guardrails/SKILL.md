@@ -38,7 +38,7 @@ The script is a regex; you are not. Look hardest at prose, not figures, where it
 
 | Group | Test | Do |
 |---|---|---|
-| Registered | It has a row | Note its status. An `open` Q row is a draft estimate, an opinion never verified: the prose must call it one |
+| Registered | It has a row | Note its status. An `open` Q row is an estimate, an opinion never verified: the prose must call it one. It is a draft estimate until its file says `approved: true` |
 | Unregistered | No row | Add a row, or remove the claim |
 | Current-status | True only as of now: who owns what, which land status applies, how many launches last year | Step 3 |
 

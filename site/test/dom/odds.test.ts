@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // Home section 6, "The odds" (step 36, issue #140): one 100-dot array per estimate, each equal to its file and its
-// claims-register row, each saying "draft estimate" while the row is open, its reasoning and date behind a press
-// that needs no script, and about 30 words as a guideline that warns.
+// claims-register row, each saying "draft estimate" until Paul approves its file and "estimate" after, its reasoning
+// and date behind a press that needs no script, and about 30 words as a guideline that warns.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -19,7 +19,7 @@ const pct = (e: Estimate) => Number((e.p * 100).toFixed(1));
 
 // Prose words: what a visitor reads with every press closed, outside the dot arrays, the chance each draws and their
 // table twins, and outside the status labels, which carry status, not prose.
-const NOT_PROSE = "script, style, svg, [hidden], [aria-hidden='true'], .chart > figcaption, .chart > details, .draft-tag, details > :not(summary)";
+const NOT_PROSE = "script, style, svg, [hidden], [aria-hidden='true'], .chart > figcaption, .chart > details, .odds-tag, details > :not(summary)";
 const words = (node: Node): number => node.nodeType === 3 ? (node.textContent ?? "").split(/\s+/).filter(Boolean).length
   : node.nodeType === 1 && !(node as Element).matches(NOT_PROSE) ? [...node.childNodes].reduce((sum, child) => sum + words(child), 0) : 0;
 
@@ -37,8 +37,15 @@ function cardProblems(card: Element, e: Estimate): string[] {
   if (card.getAttribute("data-register") !== id || card.getAttribute("data-status") !== row.status) out.push(`${e.id} does not name row ${id} and its status`);
   if (!row.claim.includes(`at ${pct(e)} percent`)) out.push(`${id} says "${row.claim}", the file gives p ${e.p}`);
   const press = card.querySelector(":scope > details");
-  const tag = text(press?.querySelector("summary .draft-tag"));
-  if (tag !== estimateTag(row.status)) out.push(`${e.id} row is ${row.status}, its tag says "${tag}"`);
+  const tagEl = press?.querySelector("summary .odds-tag");
+  const tag = text(tagEl);
+  const state = e.approved ? "approved" : "a draft";
+  if (tag !== estimateTag(e)) out.push(`${e.id} is ${state}, its tag says "${tag}"`);
+  // The dashed border marks a draft, so it goes with the word.
+  const dashed = Boolean(tagEl?.classList.contains("draft"));
+  if (dashed === e.approved) out.push(`${e.id} tag ${dashed ? "is" : "is not"} dashed, but it is ${state}`);
+  // Its reasoning may quote the brief's "first draft"; only the label is barred.
+  if (e.approved && /draft estimate/i.test(text(card))) out.push(`${e.id} is approved, but its card says "draft estimate"`);
   // A short label keeps its question's year, so "by 2040" never stands in for another date.
   const label = text(press?.querySelector("summary .odds-label"));
   const year = /\b(20\d{2})\b/.exec(e.question)?.[1];
@@ -63,18 +70,19 @@ function oddsProblems(doc: Document): string[] {
     const e = ESTIMATES.find((x) => x.id === card.getAttribute("data-estimate"));
     if (e) out.push(...cardProblems(card, e));
   }
-  // Nothing presents a draft as a fact: no register figure, no verified chip, no script to reveal anything.
-  if (section.querySelector("[data-claim], .figure, .figure-chip")) out.push("a draft is shown as a register figure");
+  // Nothing presents an estimate as a fact: no register figure, no verified chip, no script to reveal anything.
+  if (section.querySelector("[data-claim], .figure, .figure-chip")) out.push("an estimate is shown as a register figure");
   if (section.querySelector("script")) out.push("the section loads a script");
   return out;
 }
 
+const tagHtml = (approved: boolean, dashed = !approved) => `<span class="odds-tag${dashed ? " draft" : ""}">${estimateTag({ approved })}</span>`;
 const card = (e: Estimate) => {
   const filled = Math.round(e.p * 100);
   const dots = Array.from({ length: 100 }, (_, i) => `<circle fill="${i < filled ? "var(--c-region-space-peak)" : "var(--c-rule)"}"></circle>`).join("");
   return `<li class="odds-card" data-estimate="${e.id}" data-register="${registerId(e)}" data-status="open"><figure class="chart"><svg role="img" aria-label="${e.question}">${dots}</svg><figcaption>${pct(e)}%</figcaption>
     <details><summary>Data as a table</summary><table><tbody><tr><th>${percentOf(e.p)}</th><td>${filled}</td><td>100</td></tr></tbody></table></details></figure>
-    <details><summary><span class="odds-label">A label for ${/\b(20\d{2})\b/.exec(e.question)![1]}</span><span class="draft-tag">draft estimate</span></summary><div><p>${e.question}</p><p>${e.reasoning}</p><p>${e.date}</p>
+    <details><summary><span class="odds-label">A label for ${/\b(20\d{2})\b/.exec(e.question)![1]}</span>${tagHtml(e.approved)}</summary><div><p>${e.question}</p><p>${e.reasoning}</p><p>${e.date}</p>
     ${e.sources.map((s) => `<a href="${s.url}">${s.publisher}</a>`).join("")}</div></details></li>`;
 };
 const GOOD = `<section class="odds"><h2>The odds</h2><ul>${ESTIMATES.map(card).join("")}</ul></section>`;
@@ -85,8 +93,9 @@ describe("the odds check", () => {
   const q1Year = /\b(20\d{2})\b/.exec(q1.question)![1];
   it.each([
     ["a chance off its file", GOOD.replace(`<figcaption>${pct(q1)}%`, "<figcaption>8%"), /q-01 shows "8%"/],
-    ["a draft without its tag", GOOD.replace('<span class="draft-tag">draft estimate</span>', '<span class="draft-tag">estimate</span>'), /q-01 row is open, its tag says "estimate"/],
-    ["a draft shown as a verified figure", GOOD.replace("</summary>", '<span class="figure-chip">verified</span></summary>'), /shown as a register figure/],
+    ["a tag off its approval", GOOD.replace(tagHtml(q1.approved), tagHtml(!q1.approved, !q1.approved)), /q-01 is (approved|a draft), its tag says "(draft )?estimate"/],
+    ["a border off its approval", GOOD.replace(tagHtml(q1.approved), tagHtml(q1.approved, q1.approved)), /q-01 tag is (not )?dashed/],
+    ["an estimate shown as a verified figure", GOOD.replace("</summary>", '<span class="figure-chip">verified</span></summary>'), /shown as a register figure/],
     ["a label without its year", GOOD.replace(`A label for ${q1Year}`, "A label"), /q-01 label "A label" drops its year/],
     ["reasoning missing", GOOD.replace(`<p>${q1.reasoning}</p>`, ""), /q-01 press does not show its reasoning/],
     ["a press open at load", GOOD.replace('<details><summary><span class="odds-label">', '<details open><summary><span class="odds-label">'), /q-01 starts open/],
@@ -101,8 +110,8 @@ describe("the odds section's source", () => {
   // Code lines only: the header comment may name the label it describes.
   const source = readFileSync(path.join(SITE_DIR, "src", "sections", "home", "60-odds.astro"), "utf8")
     .split("\n").filter((line) => !line.trim().startsWith("//")).join("\n");
-  it("labels each card through estimateTag, with no label written in", () => {
-    expect(source).toMatch(/tag: estimateTag\(row\.status\)/);
+  it("labels each card through estimateTag from its file, with no label written in", () => {
+    expect(source).toMatch(/tag: estimateTag\(e\)/);
     expect(source).not.toMatch(/draft estimate/);
   });
 });
@@ -113,7 +122,11 @@ if (!ready && !process.env.CI) console.warn(`[odds] built-page checks skipped: n
 
 describe.skipIf(!ready && !process.env.CI)("the built home page, section 6", () => {
   const home = parse(ready ? builtPages().find((p) => p.route === "/")?.html ?? "" : "");
-  it("draws every estimate from its file and row, each a draft estimate", () => expect(oddsProblems(home)).toEqual([]));
+  it("draws every estimate from its file and row, each tagged by its approval", () => expect(oddsProblems(home)).toEqual([]));
+  it('says "draft estimate" once per unapproved estimate, so not at all while every one is approved', () => {
+    const drafts = ESTIMATES.filter((e) => !e.approved).length;
+    expect(text(home.body).match(/draft estimate/gi) ?? []).toHaveLength(drafts);
+  });
   it(`keeps to about ${BUDGET} prose words, or warns`, () => {
     const section = home.querySelector("section.odds");
     const n = section ? words(section) : 0;

@@ -174,7 +174,7 @@
   },
 
   "claim_series": {
-    "_README": "Every ID series in 02_substance/claims_register.md. Q holds draft estimates: opinions, never verified, never in schema.org output.",
+    "_README": "Every ID series in 02_substance/claims_register.md. Q holds estimates: opinions, never verified, never in schema.org output. Each is a draft until Paul approves its file.",
     "terms": ["S", "G", "R", "P", "I", "E", "N", "Q"]
   },
 

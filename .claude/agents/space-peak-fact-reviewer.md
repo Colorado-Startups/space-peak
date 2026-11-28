@@ -28,7 +28,7 @@ python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md
 | 1 | Run the self-tests, then the checker, and report output verbatim. Exit 3 means the check could not run: stop and report that. A clean result from a broken checker is the worst available outcome |
 | 2 | Read `02_substance/claims_register.md` in full |
 | 3 | Inventory **every** checkable claim in the target, including ones the script missed. The script is a regex; you are not. It is blindest on prose, not figures: "the Army already keeps that corridor clear", "one landowner", "nobody has done this" |
-| 4 | For each claim: registered or not, its status, and whether the prose labels it to match. An `open` Q row is a draft estimate, never verified: the prose must call it one |
+| 4 | For each claim: registered or not, its status, and whether the prose labels it to match. An `open` Q row is an estimate, never verified: the prose must call it one. It is a draft estimate until its file says `approved: true` |
 | 5 | Compare with the concept brief: a claim not in it is new, and needs a register row with a source |
 | 6 | For current-status claims (ownership, land status, launch counts, regulatory status), search the web. Do not answer from recall; these move |
 

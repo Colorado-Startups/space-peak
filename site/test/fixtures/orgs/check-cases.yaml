@@ -1,4 +1,4 @@
-# Each case patches valid/example-command.yaml per org, checked on 2026-11-16: the last org gets `fails`, or none do.
+# Each case patches valid/example-command.yaml per org, checked on 2026-11-16: the last org gets the `fails` error or only the `warns` warning, or none do.
 - { name: loop point inside, passes: true, orgs: [{}] }
 - { name: nearby point 14 km out, passes: true, orgs: [{ area: nearby, location: { lat: 38.8031, lon: -104.5264, precision: campus, method: Map., source: example-page } }] }
 - { name: nearby point 47 km out, passes: true, orgs: [{ area: nearby, city: pueblo, location: { lat: 38.2544, lon: -104.6091, precision: city, method: Map., source: example-page } }] }
@@ -9,5 +9,5 @@
 - { name: duplicate fact URL, fails: fact.source, orgs: [{}, { id: other, name: Other, sources: [{ id: example-page, url: "https://EXAMPLE.org/command/#top", publisher: P, read: 2026-11-01 }] }] }
 - { name: unknown fact source, fails: fact.source, orgs: [{ fact: { text: A fact., source: missing } }] }
 - { name: unknown location source, fails: location.source, orgs: [{ location: { lat: 38.8339, lon: -104.8214, precision: campus, method: Map., source: missing } }] }
-- { name: fact source 366 days old, fails: fact.source, orgs: [{ sources: [{ id: example-page, url: "https://example.org/command", publisher: P, read: 2025-11-15 }] }] }
-- { name: location source 366 days old, fails: location.source, orgs: [{ sources: [{ id: example-page, url: "https://example.org/command", publisher: P, read: 2026-11-01 }, { id: old-map, url: "https://example.org/map", publisher: P, read: 2025-11-15 }], location: { lat: 38.8339, lon: -104.8214, precision: campus, method: Map., source: old-map } }] }
+- { name: fact source 366 days old, warns: fact.source, orgs: [{ sources: [{ id: example-page, url: "https://example.org/command", publisher: P, read: 2025-11-15 }] }] }
+- { name: location source 366 days old, warns: location.source, orgs: [{ sources: [{ id: example-page, url: "https://example.org/command", publisher: P, read: 2026-11-01 }, { id: old-map, url: "https://example.org/map", publisher: P, read: 2025-11-15 }], location: { lat: 38.8339, lon: -104.8214, precision: campus, method: Map., source: old-map } }] }

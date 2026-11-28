@@ -1,11 +1,12 @@
 import type { Org } from "./schema";
 
 // Checks across the parsed orgs that one file's schema cannot see: area, duplicates, source age.
+// Source age is a guideline (issue #154): an old read is a warning, and only errors fail CI.
 export const NEARBY_KM = 60;
 export const MAX_AGE_DAYS = 365;
 
 export type Ring = [number, number][];
-export type Issue = { org: string; path: string; message: string };
+export type Issue = { org: string; path: string; message: string; level: "error" | "warning" };
 type Geo = { features: { properties?: { layer?: string }; geometry: { type: string; coordinates: unknown } }[] };
 
 /** The rings ([lon, lat]) of the one `layer: region` polygon in the map GeoJSON. */
@@ -52,13 +53,13 @@ const urlKey = (url: string) => {
   return `${u.host.toLowerCase()}${u.pathname.replace(/\/+$/, "")}${u.search}`;
 };
 
-/** Every problem across the orgs; an empty list passes. `today` is an ISO date. */
+/** Every problem across the orgs, each an error or a warning; a list with no errors passes. `today` is an ISO date. */
 export function checkOrgs(orgs: Org[], rings: Ring[], today = new Date().toISOString().slice(0, 10)): Issue[] {
   const issues: Issue[] = [];
   const names = new Map<string, string>();
   const factUrls = new Map<string, string>();
   for (const org of orgs) {
-    const add = (path: string, message: string) => issues.push({ org: org.id, path, message });
+    const add = (path: string, message: string, level: Issue["level"] = "error") => issues.push({ org: org.id, path, message, level });
     const { lat, lon } = org.location;
     if (org.area === "loop" && !insideRegion(lon, lat, rings)) add("location", "area loop, but the point is outside the region");
     if (org.area === "nearby") {
@@ -76,7 +77,7 @@ export function checkOrgs(orgs: Org[], rings: Ring[], today = new Date().toISOSt
         continue;
       }
       const age = days(source.read, today);
-      if (age > MAX_AGE_DAYS) add(`${path}.source`, `${source.id} was read ${Math.floor(age)} days ago (limit ${MAX_AGE_DAYS})`);
+      if (age > MAX_AGE_DAYS) add(`${path}.source`, `${source.id} was read ${Math.floor(age)} days ago (guideline ${MAX_AGE_DAYS}); read it again`, "warning");
       if (path !== "fact") continue;
       const url = urlKey(source.url);
       if (factUrls.has(url)) add("fact.source", `same fact source URL as ${factUrls.get(url)}`);

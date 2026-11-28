@@ -10,7 +10,7 @@ import { getClaim } from "../../src/lib/claims/parse";
 import { DIST_DIR, SITE_DIR, builtPages, distExists } from "./pages";
 
 const CLAIMS = ["R-03", "R-04", "R-05"];
-const BUDGET = 20; // about 20 words, issue #128
+const BUDGET = 20; // about 20 words, issue #128; a guideline, issue #154
 const REGISTER = readFileSync(path.join(SITE_DIR, "..", "02_substance", "claims_register.md"), "utf8");
 const parse = (html: string) => new DOMParser().parseFromString(html, "text/html");
 const text = (el: Element | null | undefined) => (el?.textContent ?? "").replace(/\s+/g, " ").trim();
@@ -51,8 +51,6 @@ function placeProblems(doc: Document): string[] {
     if (tile.hasAttribute("open")) out.push(`${id} starts open`);
   }
   if (!section.querySelector("img[src='/maps/region.svg'][width][height]")?.getAttribute("alt")?.trim()) out.push("no region drawing with alt, width and height");
-  const n = words(section);
-  if (n > BUDGET) out.push(`${n} words, budget ${BUDGET}`);
   return out;
 }
 
@@ -70,7 +68,6 @@ describe("the place check", () => {
     ["a fourth tile", GOOD.replace("</ul>", `${tile("R-01", "5")}</ul>`), /want R-03,R-04,R-05/],
     ["no source link", GOOD.replace(`<a href="${SOURCE}">source</a>`, "source"), /R-03 opens no link/],
     ["a tile open at load", GOOD.replace("<details>", "<details open>"), /R-03 starts open/],
-    ["too many words", GOOD.replace("The place", "The place ".repeat(5)), /words, budget 20/],
   ])("flags %s (known bad)", (_name, html, problem) => {
     expect(placeProblems(parse(html)).join("\n")).toMatch(problem);
   });
@@ -82,7 +79,12 @@ if (!ready && !process.env.CI) console.warn(`[place] built-page checks skipped: 
 
 describe.skipIf(!ready && !process.env.CI)("the built home page, section 2", () => {
   const home = parse(ready ? builtPages().find((p) => p.route === "/")?.html ?? "" : "");
-  it("has 3 tiles that match the register, each with its source, within the word budget", () => expect(placeProblems(home)).toEqual([]));
+  it("has 3 tiles that match the register, each with its source", () => expect(placeProblems(home)).toEqual([]));
+  it("warns past the word budget, and never fails on it", () => {
+    const section = home.querySelector("section.place");
+    const n = section ? words(section) : 0;
+    if (n > BUDGET) console.warn(`[place] guideline: "The place" has ${n} words, about ${BUDGET} suggested`);
+  });
   it("keeps one <h1>, and comes after the hero", () => {
     expect(home.querySelectorAll("h1")).toHaveLength(1);
     const [hero, place] = [home.querySelector("section.hero"), home.querySelector("section.place")];

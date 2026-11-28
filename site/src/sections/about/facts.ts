@@ -30,7 +30,8 @@ export const ACCESS = {
   report: link("Report a problem", `${REPO}/issues/new?template=5-accessibility.yml`),
 };
 
-/** Licences and third-party credits. A `liveMap` row shows once components/map/LiveMap.astro exists. */
+/** Licences and third-party credits. A `liveMap` row shows once components/map/LiveMap.astro exists.
+ * README.md's License section links the same outside pages; test/dom/about.test.ts checks they match. */
 export const CREDITS: { id: string; part: string; from: Part[]; terms: Part[]; liveMap?: true }[] = [
   { id: "content", part: "Words and data", from: ["Colorado Startups"], terms: [link("CC0 1.0", blob("LICENSE"))] },
   { id: "code", part: "Code", from: ["Colorado Startups"], terms: [link("CC0 1.0", blob("LICENSES/CC0-1.0.txt")), " or ", link("0BSD", blob("LICENSES/0BSD.txt"))] },
@@ -41,8 +42,12 @@ export const CREDITS: { id: string; part: string; from: Part[]; terms: Part[]; l
     terms: [link("SIL OFL 1.1", "https://github.com/google/fonts/blob/main/ofl/atkinsonhyperlegible/OFL.txt")],
   },
   {
+    id: "coc", part: "Code of Conduct", terms: [link("CC BY-SA 4.0", "https://creativecommons.org/licenses/by-sa/4.0/")],
+    from: [link("Contributor Covenant 3.0", "https://www.contributor-covenant.org/version/3/0/"), ", adapted in ", link("CODE_OF_CONDUCT.md", blob("CODE_OF_CONDUCT.md"))],
+  },
+  {
     id: "tiles", part: "Live map tiles", liveMap: true, terms: ["Credited on the map"],
-    from: [link("© OpenStreetMap contributors", "https://www.openstreetmap.org/copyright"), ", ", link("OpenMapTiles", "https://www.openmaptiles.org/"), ", ",
+    from: [link("© OpenStreetMap contributors", "https://www.openstreetmap.org/copyright"), ", ", link("OpenMapTiles", "https://openmaptiles.org/"), ", ",
       link("OpenFreeMap", "https://openfreemap.org/"), ", ", link("Mapterhorn", "https://mapterhorn.com/attribution")],
   },
 ];

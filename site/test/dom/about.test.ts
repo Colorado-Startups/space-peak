@@ -53,6 +53,14 @@ describe("about facts against the repo", () => {
     expect(read("wrangler.jsonc")).toMatch(/"observability": \{ "enabled": true \}/);
   });
 
+  it("links the same outside credit pages as the README's License section, item for item", () => {
+    const outside = (hrefs: string[]) => [...new Set(hrefs.filter((h) => h.startsWith("https://") && !h.startsWith(REPO)))].sort();
+    const license = read("README.md").split(/^## /m).find((s) => s.startsWith("License\n")) ?? "";
+    const readme = outside([...license.matchAll(/\]\((https:[^)\s]+)\)/g)].map((m) => m[1]));
+    expect(readme.length).toBeGreaterThan(0);
+    expect(readme).toEqual(outside(CREDITS.flatMap((c) => linksIn([...c.from, ...c.terms]).map((l) => l.href))));
+  });
+
   it("credits every font the build ships, and the nav gains /about/ with its page", () => {
     const fonts = [...read("site/astro.config.mjs").matchAll(/\{ name: "([^"]+)"/g)].map((m) => `${m[1]} font`);
     expect(CREDITS.map((c) => c.part)).toEqual(expect.arrayContaining(fonts.length ? fonts : ["no fonts found"]));

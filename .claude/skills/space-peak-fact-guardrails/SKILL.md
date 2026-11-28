@@ -7,7 +7,7 @@ description: Walk the Space Peak honesty gate against a named file, checking eve
 
 **Precedence.** `02_substance/claims_register.md` wins on claims and their status. `04_tools/space_peak_rules.json` wins on term lists and severities. Code-OS `rules/writing-and-gates.md` wins on gate design. Where this skill disagrees, **it is corrected in the same session**.
 
-**This gate waits.** `ci.yml` runs the mechanical half on every pull request. It adds the web verification and register update no check can do.
+**This gate waits.** `ci.yml` runs the mechanical half on every pull request. This skill adds web verification and register updates no check can do.
 
 Use it when a file for external use states facts, figures or land statuses, and at MASTER_PLAN PT 3.3, the pre-ship gate. Skip pure process docs with no factual claims.
 

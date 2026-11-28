@@ -18,14 +18,14 @@ const STYLE = {
 // SwiftShader gives headless Chromium a software WebGL2 on a CI runner with no GPU.
 test.use({ launchOptions: { args: ["--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--ignore-gpu-blocklist"] } });
 
-// The style and empty vector tiles from OpenFreeMap; Mapterhorn answers 404, which MapLibre treats as no data. Down: all abort.
+// The style and empty (204) vector tiles from OpenFreeMap; Mapterhorn answers 404, which MapLibre treats as no data.
+// Down: all abort. context.route also catches what MapLibre's worker fetches.
 async function tiles(page: Page, up = true): Promise<string[]> {
-  await page.route(/^https:\/\/tiles\.(openfreemap\.org|mapterhorn\.com)\//, (route) => {
+  await page.context().route(/^https:\/\/tiles\.(openfreemap\.org|mapterhorn\.com)\//, (route) => {
     const url = route.request().url();
     if (!up) return route.abort();
     if (url.endsWith("/styles/positron")) return route.fulfill({ json: STYLE });
-    if (url.includes("openfreemap")) return route.fulfill({ body: Buffer.alloc(0), contentType: "application/x-protobuf" });
-    return route.fulfill({ status: 404 });
+    return route.fulfill({ status: url.includes("openfreemap") ? 204 : 404 });
   });
   const seen: string[] = [];
   page.on("request", (r) => seen.push(r.url()));
@@ -52,20 +52,29 @@ test("nothing map-related downloads before the press", async ({ page }) => {
 });
 
 test("the press loads MapLibre and draws the region over the tiles, with every credit", async ({ page }) => {
-  const errors: string[] = [];
-  page.on("pageerror", (e) => errors.push(e.message));
+  test.setTimeout(90_000); // A software renderer on a shared runner.
+  const notes: string[] = [];
+  page.on("pageerror", (e) => notes.push(`pageerror: ${e.message}`));
+  page.on("console", (m) => void (["error", "warning"].includes(m.type()) && notes.push(`${m.type()}: ${m.text()}`)));
+  page.on("requestfailed", (r) => notes.push(`failed: ${r.url()} ${r.failure()?.errorText}`));
+  page.on("worker", (w) => notes.push(`worker: ${w.url()}`));
   await tiles(page);
   await page.goto("/map/");
   const chunk = page.waitForRequest(/\/maplibre-gl[^/]*\.js$/);
   await press(page);
   await chunk;
   const frame = page.locator('[data-live-map][data-state="open"]');
-  await expect(frame, "the map reached its first full draw").toBeVisible({ timeout: 30_000 });
+  const status = page.locator("[data-live-status]");
+  // On a miss, say why: the status line, then what the console and the network saw.
+  await frame.waitFor({ state: "visible", timeout: 60_000 }).catch(async () => {
+    throw new Error(`No first full draw. Status: "${await status.textContent()}"\n${notes.join("\n")}`);
+  });
   await expect(frame.locator("canvas.maplibregl-canvas")).toBeVisible();
+  await expect(frame, "the region and relief layers are on the live map").toHaveAttribute("data-layers", "sp-relief sp-region-fill sp-region-line");
   const credits = frame.locator(".maplibregl-ctrl-attrib");
   for (const name of ["OpenStreetMap contributors", "OpenMapTiles", "OpenFreeMap", "Mapterhorn", "Region: coloradostartups.org"]) await expect(credits).toContainText(name);
-  await expect(page.locator("[data-live-status]")).toContainText("Live map open");
-  expect(errors).toEqual([]);
+  await expect(status).toContainText("Live map open");
+  expect(notes.filter((n) => n.startsWith("pageerror"))).toEqual([]);
 });
 
 test("with no WebGL2 the press keeps the drawing and the list, says why, and fetches no MapLibre", async ({ page }) => {

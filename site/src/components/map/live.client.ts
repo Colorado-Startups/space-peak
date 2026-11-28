@@ -71,12 +71,16 @@ export async function open(doc: Document): Promise<void> {
     return fail(WHY.webgl);
   }
   // Relief is decoration, so a Mapterhorn miss leaves the map whole. Any other error before the first full draw ends it.
+  // A listener silences MapLibre's own console.error, so the error is logged here.
   map.on("error", (e) => {
-    if (!loaded && map && (e as { sourceId?: string }).sourceId !== "sp-terrain") fail(WHY.tiles);
+    const sourceId = (e as { sourceId?: string }).sourceId;
+    console.error(`live map${sourceId ? ` (${sourceId})` : ""}:`, e.error);
+    if (!loaded && map && sourceId !== "sp-terrain") fail(WHY.tiles);
   });
   map.once("load", () => {
     loaded = true;
     frame.dataset.state = "open";
+    frame.dataset.layers = map?.getLayersOrder().filter((id) => id.startsWith("sp-")).join(" ") ?? "";
     say("Live map open: drag to move, pinch or scroll to zoom.");
   });
   setTimeout(() => map && !loaded && fail(WHY.tiles), WAIT_MS);

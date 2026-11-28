@@ -6,10 +6,10 @@ import Base from "../../layouts/Base.astro";
 const modules = import.meta.glob<{ default: any }>("../../sections/launch/*.astro", { eager: true });
 const sections = Object.keys(modules).sort().map((key) => modules[key].default);
 ---
-<Base title="Launch: a speculative mass driver | Space Peak" description="A speculative mass driver through a Colorado peak: its run, and what makes or breaks it. Every value carries its claims-register status.">
+<Base title="Launch: a speculative mass driver | Space Peak" description="A speculative mass driver through a Colorado peak: its run, what makes or breaks it, the ranked sites and the risks. Every value carries its claims-register status.">
   <h1>Launch</h1>
   <p class="launch-lead"><span class="hatch-tag">speculative</span> A mass driver through a Colorado peak: a venture thesis, not an engineering proposal.</p>
-  <nav class="launch-jump" aria-label="On this page"><a href="#profile">The profile</a><a href="#make-or-break">Make or break</a></nav>
+  <nav class="launch-jump" aria-label="On this page"><a href="#profile">The profile</a><a href="#make-or-break">Make or break</a><a href="#sites">The sites</a><a href="#risks">The risks</a></nav>
   {sections.map((Section) => <Section />)}
 </Base>
 

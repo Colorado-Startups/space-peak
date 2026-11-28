@@ -1,5 +1,10 @@
 /* The /map/ page. Tokens only (issue #60). Targets are at least --size-tap. */
 .map-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-block: var(--s-4) var(--s-5); }
+/* The live map's controls (live/controls.ts): pan pad, zoom and 3D terrain. base.css makes each button a --size-tap target. */
+.sp-controls { display: grid; grid-template-columns: repeat(3, var(--size-tap)); grid-template-areas: ". n ." "w . e" ". s ." "in out t"; gap: var(--s-1); float: right; clear: both; margin: var(--s-3); padding: var(--s-1); border: var(--line-hair) solid var(--c-rule); border-radius: var(--r-chisel); background: var(--c-ground); pointer-events: auto; }
+.sp-controls button { justify-content: center; padding: 0; border: var(--line-hair) solid var(--c-border); border-radius: var(--r-chisel); background: var(--c-surface); color: var(--c-text); font-family: inherit; font-size: var(--t-step-0); font-weight: 700; cursor: pointer; }
+.sp-controls button:hover { background: var(--c-surface-2); }
+.sp-controls button[aria-pressed="true"] { background: var(--c-region-space-peak); color: var(--c-on-region-space-peak); }
 .space-map { margin: 0 0 var(--s-5); }
 /* The viewBox is 800 units wide, so 50rem keeps its 15 and 18 unit labels near full size; a narrower frame scrolls, not the page. */
 .space-map__frame { overflow-x: auto; border: var(--line-hair) solid var(--c-rule); background: var(--c-surface); }

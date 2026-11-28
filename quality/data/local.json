@@ -1,0 +1,4027 @@
+{
+  "generated_at": "2026-11-28T03:18:44.374Z",
+  "commit": "5960fbd33ea8771167cbd98e0b15576ee4fcc2d9",
+  "mode": "local",
+  "collectors": [
+    "deploy",
+    "claude",
+    "claude_settings",
+    "blockers",
+    "tokens",
+    "instructions",
+    "simplicity",
+    "desktop_app",
+    "credits"
+  ],
+  "metrics": {
+    "ci.latest_flow": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api actions/workflows/{id}/runs per head SHA, the latest pull request head that went all green; each stage's latest run of the last 20 per workflow (N = 20, a template choice: few enough that new runs replace them), with its pass rate over those 20; review and deploy stages from the latest of the last 20 merged pull requests; stages from .claude/settings.json, the git hooks in params.hooks_dir, .github/workflows and params.stages",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "ci.latest_full_run_minutes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: GraphQL check runs and steps of the last 20 runs per workflow (N = 20, a template choice: few enough that new runs replace them), each workflow's latest run that did real work",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "ci.main_red_minutes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api actions/workflows/{id}/runs, each workflow's runs on a push to the default branch: when its latest decided run failed, red from the end of the first failure after its latest success",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "ci.latest_pr_dollars": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: the latest of the last 20 merged pull requests (when it opened before the runs read cover every workflow, or only runs its merge started are still going, the newest before it that can be priced, each one passed over named in the note; could_not_check when none can, or a branch run of it is still going); its runs (its branch's pull_request runs and its merge commit's push runs, gh api actions/workflows/{id}/runs), each priced from its own jobs (gh api actions/runs/{id}/jobs, one call per run at most: each job's billed minutes, rounded up, times its runs-on label's list rate: ubuntu-slim $0.002, Linux 2-core x64 $0.006, Linux 2-core arm64 $0.005, Windows $0.010, macOS 3 or 4-core $0.062 a minute, GitHub docs, Actions runner pricing, read 2026-11-03)",
+      "weak": true,
+      "unit": "dollars"
+    },
+    "issues.latest_fix_ci_minutes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: the latest merged pull request that closed an issue (GraphQL closingIssuesReferences; when it opened before the runs read cover every workflow, or only runs its merge started are still going, the newest such one before it that can be priced, each one passed over named in the note; could_not_check when none can, or a branch run of it is still going); its runs (gh api actions/workflows/{id}/runs), each job's billed minutes from its own jobs (gh api actions/runs/{id}/jobs, one call per run at most, rounded up to the minute), summed and divided by the issues it closed",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "security.latest_scan_minutes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api actions/runs/{id}/jobs (each job's billed minutes, rounded up) for each workflow whose name matches params.security_workflows: the repo's own, its latest run that did real work of the newest 10 of its last 20 runs (N = 20, a template choice: few enough that new runs replace them); GitHub's dynamic ones such as CodeQL default setup, their latest passed run; summed. GitHub's dynamic CodeQL - Code Quality run is left out: code.quality_scan_minutes reads it",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "code.quality_scan_minutes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api actions/runs/{id}/jobs (each job's billed minutes, rounded up) for GitHub's dynamic workflow named CodeQL - Code Quality, its latest passed run, read with the security scans, so no extra request",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "ci.light_run_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "GraphQL check runs and steps (step conclusions) of the last 20 runs per workflow (N = 20, a template choice: enough for a median and a p90, few enough that new runs replace them); weighted by each workflow and event's runs since the start of the shortest full list of 100",
+      "weak": true,
+      "unit": "%"
+    },
+    "ci.latest_main_push_minutes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api actions/workflows/{id}/runs, the push runs of the latest commit on the default branch whose runs all ended (the run collecting and any push with a run still going passed over, up to 5, each named in the note); their REST jobs (gh api actions/runs/{id}/jobs, one call per run at most): each job's billed minutes, rounded up, summed",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "ci.skip_unchanged_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: .github/workflows, each pull_request and push to main trigger: a paths or paths-ignore filter, a job whose if reads a needs.*.outputs value (a changes job), or a job calling ci-standard.yml with paths",
+      "weak": true,
+      "unit": "%"
+    },
+    "ci.flaky_reruns": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api actions/workflows/{id}/runs, the last 20 runs per workflow (N = 20, a template choice: enough for a median and a p90, few enough that new runs replace them), and runs/{id}/attempts/1 for every rerun that passed; a later pass counts on a push, and on a pull request only as a rerun",
+      "weak": true,
+      "unit": "%"
+    },
+    "ci.cache_hit_rate": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api repos/{repo}/actions/jobs/{id}/logs (setup-node's npm cache line, newest 12 jobs of the last 20 runs per workflow)",
+      "weak": true,
+      "unit": "%"
+    },
+    "ci.queue_seconds_p90": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "last 10 completed runs per workflow, the queue sample the CI tab already reads (gh api actions/runs/{id}/jobs): each job's started_at less created_at",
+      "weak": true,
+      "unit": "seconds"
+    },
+    "ci.failed_run_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api actions/workflows/{id}/runs, the last 20 runs per workflow (N = 20, a template choice: few enough that new runs replace them): runs that ended failure, timed_out or startup_failure, over those that passed or failed, on any event",
+      "weak": true,
+      "unit": "%"
+    },
+    "insights.failed_minutes_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "GraphQL check runs of the last 20 runs per workflow: each job's minutes rounded up as GitHub bills them, summed for runs that ended cancelled, timed_out or startup_failure, or failed outside a pull request or merge queue, over all",
+      "weak": true,
+      "unit": "%"
+    },
+    "ci.runner_cents_per_minute": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "last 10 completed runs per workflow, the queue sample the Actions tab already reads (gh api actions/runs/{id}/jobs): each job's billed minutes, rounded up, times its runs-on label's list rate (RUNNER_RATES), over the minutes; could_not_check when a job ran on a runner with no list price",
+      "weak": true,
+      "unit": "cents"
+    },
+    "ci.api_headroom": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api rate_limit (counts against no limit), each bucket's remaining over its limit, read with the token the run holds: latest.json the CI run's, local.json the account's login",
+      "weak": true,
+      "unit": "%"
+    },
+    "ci.pr_run_requests": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api actions/workflows/pages.yml/runs (green pull_request runs from this repo), of the newest 3 the first whose jobs printed a notice, its jobs and their check-run annotations: each job's GitHub requests notice from quality/gh-replay.mjs, live REST plus GraphQL, summed",
+      "weak": true,
+      "unit": "requests"
+    },
+    "code.loc_change_pct": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "last N merged PRs: code lines now against main just before its last params.merged_prs merged PRs, counted from git's tree with the same rules (git log --first-parent of origin/<branch>, then <branch>, then HEAD, where the branch is ci.json's params.default_branch, else params.main_branch; with neither, HEAD; ls-tree, cat-file); detail is lines added less removed per area. N is params.merged_prs, 20 by default: a repo sets it so N merged PRs turn over within hours at its own merge rate",
+      "weak": true,
+      "unit": "%"
+    },
+    "code.long_files": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: code lines per .ts, .mjs, .astro, .css, .py and .sh file in params.areas; a comment or a Python docstring is not a code line (quality/collectors/code/complexity.mjs)",
+      "weak": true,
+      "unit": "files"
+    },
+    "code.long_functions": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: TypeScript compiler API, and Python's ast through one python3 -I call, code lines per function in params.areas (quality/collectors/code/complexity.mjs)",
+      "weak": true,
+      "unit": "functions"
+    },
+    "code.complex_functions": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: TypeScript compiler API over .ts, .mjs and .astro script blocks, and Python's ast over .py files through one python3 -I call, in params.areas (quality/collectors/code/complexity.mjs)",
+      "weak": true,
+      "unit": "functions"
+    },
+    "code.duplicated_pct": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: runs of 5+ code lines and 50+ tokens (jscpd's defaults) seen earlier in params.areas, line-based (quality/collectors/code/shape.mjs)",
+      "weak": true,
+      "unit": "%"
+    },
+    "code.dead_files": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: knip --reporter json, files inside params.areas",
+      "weak": true,
+      "unit": "files"
+    },
+    "code.dead_exports": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: knip --reporter json: unused exports, types, enum, namespace and class members inside params.areas",
+      "weak": true,
+      "unit": "exports"
+    },
+    "code.dead_dependencies": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: knip --reporter json: dependencies, devDependencies and optional peers in every package.json",
+      "weak": true,
+      "unit": "dependencies"
+    },
+    "code.dead_functions": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: each .py file's top-level functions in params.areas (Python's ast through one python3 -I call) whose name no .py file there, tests and fixtures included, reads, imports, reaches as an attribute or holds as a string; a method is not judged (quality/collectors/code/code-python.mjs)",
+      "weak": true,
+      "unit": "functions"
+    },
+    "code.drift_markers": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: TODO, FIXME and XXX inside comments in params.areas",
+      "weak": true,
+      "unit": "markers"
+    },
+    "code.commented_code": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: 3 or more comment lines in a row that parse as TypeScript statements, in params.areas",
+      "weak": true,
+      "unit": "blocks"
+    },
+    "code.missing_refs": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: repo paths in comments and strings in params.areas that git log shows were committed and are now gone (needs full history: fetch-depth 0)",
+      "weak": true,
+      "unit": "references"
+    },
+    "code.export_comments_pct": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: exported functions in params.areas with a comment ending on the line above (TypeScript compiler API), and each .py file's public top-level functions with a docstring or such a comment (Python's ast)",
+      "weak": true,
+      "unit": "%"
+    },
+    "code.purpose_comments_pct": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: code files in params.areas whose first thing, after any shebang or .astro fence, is a comment of 3+ words besides tool directives (quality/collectors/code/complexity.mjs)",
+      "weak": true,
+      "unit": "%"
+    },
+    "code.naming_pct": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: git ls-files in params.areas, each code file and each folder holding one against the first rule in params.naming whose path pattern matches it, a folder as its path ending in a slash (quality/collectors/code/shape.mjs); by default .astro components PascalCase, pages kebab-case or [param], .py and .sh snake_case, other code and folders kebab-case",
+      "weak": true,
+      "unit": "%"
+    },
+    "code.mapped_areas_pct": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: git ls-files: each area in params.areas named as a folder, its path ending in a slash, in a table row or a mermaid block of a README.md above it or of a Markdown doc that README links in its own folder, or holding a README.md with a table or a diagram of its own (quality/collectors/code/code-structure.mjs)",
+      "weak": true,
+      "unit": "%"
+    },
+    "code.import_cycles": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: relative imports and re-exports of each .ts, .mjs and .js file in params.areas (TypeScript compiler API) and sibling-module imports of each .py file; strongly connected groups of two or more files (quality/collectors/code/code-cycles.mjs)",
+      "weak": true,
+      "unit": "cycles"
+    },
+    "code.test_coverage_pct": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: vitest v8 coverage, json-summary, or for a params.test_suites suite with runner node, the node --test --experimental-test-coverage lcov its CI job printed (code-lcov.mjs), read from that workflow's newest successful run on the default branch; in ci mode only: covered lines plus covered branches over all lines plus branches of each suite's cover folders, suites summed, never averaged; lines only, with the suite named, when a report has no branch data. node counts only the files a test loads",
+      "weak": true,
+      "unit": "%"
+    },
+    "code.worker_wall_max_ms": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "last N requests: cf workers deployments list per Worker in params.workers (the first is the one serving traffic), then cf sql query on logs.workersLogs, the newest params.last_requests fetch invocations since that deploy; the largest wallTimeMs, worst Worker; local mode only. N is params.last_requests (100 by default): a repo sets it so that many requests turn over within hours at its own traffic",
+      "weak": true,
+      "unit": "ms"
+    },
+    "code.worker_cpu_max_ms": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "last N requests: cf workers deployments list per Worker in params.workers, then cf sql query on logs.workersLogs, the newest params.last_requests fetch invocations since that deploy; the largest cpuTimeMs, worst Worker; local mode only. N is params.last_requests (100 by default): a repo sets it so that many requests turn over within hours at its own traffic",
+      "weak": true,
+      "unit": "ms"
+    },
+    "code.worker_bundle_kb": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: wrangler deploy --dry-run --outdir <tmp> in each folder of params.workers; gzip of the bundled modules; the largest Worker",
+      "weak": true,
+      "unit": "KB"
+    },
+    "code.client_js_kb": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: the built static site in params.client_dist.dir: each page's first-party scripts, modulepreloads and their imports, gzipped; heaviest page. A build older than the newest commit touching params.client_dist.source is not measured",
+      "weak": true,
+      "unit": "KiB"
+    },
+    "code.build_seconds": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: wall time of wrangler deploy --dry-run for each folder of params.workers, this run",
+      "weak": true,
+      "unit": "s"
+    },
+    "code.check_seconds": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: wall time of params.check's job in its workflow's newest successful run on the default branch; detail is that job in each of the newest successful runs",
+      "weak": true,
+      "unit": "s"
+    },
+    "code.code_tokens": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: bytes of the code files in each area of params.areas, tests included, over params.bytes_per_token; the largest area. An area leaves out any folder that is an area of its own",
+      "weak": true,
+      "unit": "tokens"
+    },
+    "code.largest_file_tokens": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: bytes of the largest code file in params.areas, tests included, over params.bytes_per_token; detail is the ten largest",
+      "weak": true,
+      "unit": "tokens"
+    },
+    "code.worker_startup_ms": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: per Worker in params.workers, cf workers get (its tag), cf builds list (the newest successful Workers Build) and cf builds logs get: the Worker Startup Time that wrangler deploy printed; the slowest Worker; local mode only",
+      "weak": true,
+      "unit": "ms"
+    },
+    "deploy.waiting_merges": {
+      "value": 0,
+      "detail": [],
+      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; merges on main touching any path that production does not hold now; detail is hours each has waited; the latest code deploy, 2026-11-28T03:14Z, holds 5960fbd (main when it was uploaded)",
+      "read_at": "2026-11-28T03:17:49.802Z",
+      "unit": "merges"
+    },
+    "deploy.oldest_waiting_hours": {
+      "value": 0,
+      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; hours since the oldest merge production does not hold was merged, 0 when none waits; the latest code deploy, 2026-11-28T03:14Z, holds 5960fbd (main when it was uploaded)",
+      "read_at": "2026-11-28T03:17:49.802Z",
+      "unit": "h"
+    },
+    "deploy.latest_lead_hours": {
+      "value": 0,
+      "detail": [
+        {
+          "label": "5960fbd",
+          "value": 0,
+          "unit": "h"
+        },
+        {
+          "label": "0f815a2",
+          "value": 0,
+          "unit": "h"
+        }
+      ],
+      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; the latest deploy that shipped a merge, 2026-11-28T03:13Z (5960fbd): hours from its earliest merge to the deploy",
+      "read_at": "2026-11-28T03:17:49.802Z",
+      "unit": "h"
+    },
+    "deploy.latest_failed": {
+      "value": 0,
+      "detail": [
+        {
+          "label": "2026-11-28 03:14 5960fbd",
+          "value": 0,
+          "unit": ""
+        }
+      ],
+      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; a deploy failed when the next one rolled it back or when it first shipped a PR that a bug issue names in a \"Regressed-by: #N\" line (gh issue list -R Colorado-Startups/space-peak --search \"Regressed-by\" in:body); restored at the rollback or at the first deploy after the issue closed; 1 when the latest code deploy failed or was itself a rollback",
+      "read_at": "2026-11-28T03:17:49.802Z",
+      "unit": ""
+    },
+    "deploy.failure_rate_last10": {
+      "value": 0,
+      "detail": [
+        {
+          "label": "2026-11-28 02:07",
+          "value": 57,
+          "unit": "merges",
+          "commit": "3e977d8",
+          "commit_from": "time",
+          "lead_hours": 269.7,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 02:37",
+          "value": 2,
+          "unit": "merges",
+          "commit": "22619ff",
+          "commit_from": "time",
+          "lead_hours": 0,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 02:38",
+          "value": 0,
+          "unit": "merges",
+          "commit": "22619ff",
+          "commit_from": "time",
+          "lead_hours": null,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 02:39",
+          "value": 1,
+          "unit": "merges",
+          "commit": "6170e07",
+          "commit_from": "time",
+          "lead_hours": 0,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 02:49",
+          "value": 1,
+          "unit": "merges",
+          "commit": "748604a",
+          "commit_from": "time",
+          "lead_hours": 0,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 03:01",
+          "value": 1,
+          "unit": "merges",
+          "commit": "dbf2d57",
+          "commit_from": "time",
+          "lead_hours": 0,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 03:05",
+          "value": 3,
+          "unit": "merges",
+          "commit": "7c73456",
+          "commit_from": "time",
+          "lead_hours": 0,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 03:05",
+          "value": 0,
+          "unit": "merges",
+          "commit": "7c73456",
+          "commit_from": "time",
+          "lead_hours": null,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 03:13",
+          "value": 2,
+          "unit": "merges",
+          "commit": "5960fbd",
+          "commit_from": "time",
+          "lead_hours": 0,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 03:14",
+          "value": 0,
+          "unit": "merges",
+          "commit": "5960fbd",
+          "commit_from": "time",
+          "lead_hours": null,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        }
+      ],
+      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; a deploy failed when the next one rolled it back or when it first shipped a PR that a bug issue names in a \"Regressed-by: #N\" line (gh issue list -R Colorado-Startups/space-peak --search \"Regressed-by\" in:body); restored at the rollback or at the first deploy after the issue closed; the last 10 code deploys (secret-only deploys left out), N = 10 because Wrangler lists only the 10 most recent",
+      "read_at": "2026-11-28T03:17:49.802Z",
+      "unit": "%"
+    },
+    "deploy.latest_restore_hours": {
+      "could_not_check": "none of the last 10 deploys failed, so there is nothing to restore",
+      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; a deploy failed when the next one rolled it back or when it first shipped a PR that a bug issue names in a \"Regressed-by: #N\" line (gh issue list -R Colorado-Startups/space-peak --search \"Regressed-by\" in:body); restored at the rollback or at the first deploy after the issue closed",
+      "unit": "h"
+    },
+    "deploy.latest_build_minutes": {
+      "value": 4,
+      "detail": [
+        {
+          "label": "pages",
+          "value": 3,
+          "unit": "min"
+        },
+        {
+          "label": "ci",
+          "value": 1,
+          "unit": "min"
+        }
+      ],
+      "source": "latest: the workflow runs the push to main of the latest production deploy's commit started (gh api actions/runs?head_sha=&event=push, then runs/{id}/jobs), each job rounded up to the whole minute as GitHub bills it (docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions); Workers Builds minutes are not read; the deploy of 2026-11-28T03:14Z (5960fbd)",
+      "read_at": "2026-11-28T03:17:49.802Z",
+      "unit": "min"
+    },
+    "design.raw_hex": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: regex scan of params.src_dirs (params.scan_extensions), comments stripped; params.raw_scan_exempt says which files or lines are left out, and why",
+      "weak": true,
+      "unit": "values"
+    },
+    "design.raw_px": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: regex scan of params.src_dirs (params.scan_extensions), comments stripped; params.raw_scan_exempt says which files or lines are left out",
+      "weak": true,
+      "unit": "values"
+    },
+    "design.font_sizes_off_scale": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: Playwright (Chrome) computed font-size of visible text on params.key_pages at params.widths, against the type scale in params.tokens (within 0.5 px)",
+      "weak": true,
+      "unit": "distinct sizes"
+    },
+    "design.text_colors_off_token": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: Playwright (Chrome) computed color of visible text on params.key_pages at params.widths, against the colors in params.tokens",
+      "weak": true,
+      "unit": "distinct colors"
+    },
+    "design.contrast_violations": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: axe-core color-contrast (the version installed in the repo, else beside the collectors) injected by Playwright (Chrome), params.key_pages at params.widths",
+      "weak": true,
+      "unit": "elements"
+    },
+    "design.lcp_mobile": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: PageSpeed Insights API v5, strategy=mobile, lab LCP, params.key_pages; a page PSI cannot answer, and every page of a built static site, is measured by our own Playwright lab run under Lighthouse's mobile settings and marked (lab)",
+      "weak": true,
+      "unit": "s"
+    },
+    "design.cls_mobile": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: PageSpeed Insights API v5, strategy=mobile, lab CLS, params.key_pages; a page PSI cannot answer, and every page of a built static site, is measured by our own Playwright lab run under Lighthouse's mobile settings and marked (lab)",
+      "weak": true,
+      "unit": "score"
+    },
+    "design.total_bytes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: Playwright (Chrome) network log, all responses at load, params.key_pages at params.widths",
+      "weak": true,
+      "unit": "KiB"
+    },
+    "docs.dead_paths": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: each word of inline code and code blocks in the doc set that starts with a top-level repo entry and exists neither from the repo root nor from the doc's folder; git-ignored paths and records (docs with an empty area in params.areas) skipped. A heuristic",
+      "weak": true,
+      "unit": "paths"
+    },
+    "docs.dead_scripts": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: npm run, npm test and npm start in inline code and code blocks of the doc set, against the scripts of the root package.json and its workspaces; with -w, against that workspace alone. Records (docs with an empty area in params.areas) are skipped",
+      "weak": true,
+      "unit": "scripts"
+    },
+    "docs.broken_links": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: relative markdown links and #anchors in the doc set, resolved against the repo and GitHub heading slugs",
+      "weak": true,
+      "unit": "links"
+    },
+    "docs.lint_warn": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: params.lint over the doc set: the summary line 'N file(s) checked, X FAIL, Y WARN'. Docs outside the lint's scope are skipped by the lint. A repo with no params.lint names no lint, and this metric is not measured",
+      "weak": true,
+      "unit": "findings"
+    },
+    "docs.markup_faults": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: in each doc of the doc set, outside code, a heading more than one level below the one before it, an H1 after the first, a heading whose text repeats at its level anywhere in the doc, and an image with no alt text or alt text over params.alt_max_chars",
+      "weak": true,
+      "unit": "faults"
+    },
+    "docs.stale_markers": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: each of params.markers outside code and comments in the doc set, counted per doc",
+      "weak": true,
+      "unit": "markers"
+    },
+    "docs.stale_dates": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: each params.as_of phrase and its date outside code in the doc set, against the last commit to the doc's area in params.areas; detail is days older",
+      "weak": true,
+      "unit": "dates"
+    },
+    "docs.oldest_lag_days": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: git log -1 --format=%ct for each doc and for its area in params.areas; the largest gap of any doc now, which the detail names",
+      "weak": true,
+      "unit": "days"
+    },
+    "docs.unmapped": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: each doc in params.doc_set against params.areas, the first entry whose doc glob matches, and each area path it names through git ls-files. A path that matches no tracked file is dead, and so is an area whose paths together match only the doc; an area of [] is a record, mapped on purpose; the detail names each doc and path",
+      "weak": true,
+      "unit": "docs and paths"
+    },
+    "docs.folder_coverage": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: top-level folders, less dot folders and git-ignored ones, with a README or a row under params.folder_map.heading in params.folder_map.doc",
+      "weak": true,
+      "unit": "%"
+    },
+    "docs.runbooks_verified": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: \"last verified <date>\" (params.verified) outside code in each of params.runbooks, less params.doc_set_left_out; detail is the newest date",
+      "weak": true,
+      "unit": "%"
+    },
+    "docs.community_files": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: each entry of params.community_files (README, license, contributing guide, code of conduct, support file, pull request template) with a file at any of its globs",
+      "weak": true,
+      "unit": "%"
+    },
+    "docs.over_read_goal": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: docs of params.doc_set with more words than params.minutes_goal times params.words_per_minute, counted by top-level folder",
+      "weak": true,
+      "unit": "docs"
+    },
+    "docs.interactive_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: docs of the doc set outside params.agent_docs with a mermaid diagram, a mermaid chart (params.mermaid_charts) or a <details> block, outside code; detail counts each element type",
+      "weak": true,
+      "unit": "%"
+    },
+    "docs.text_only": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: docs of the doc set whose table (two or more columns; a one-column table is a list), code, diagram and image lines are under params.text_only_below percent of their non-blank lines, counted by top-level folder",
+      "weak": true,
+      "unit": "docs"
+    },
+    "docs.tokens_past_read_goal": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: quality/collectors/docs/docs.mjs: bytes / 4 of each doc of params.doc_set (the estimate the Instructions tab uses), the share of its words past params.minutes_goal times params.words_per_minute, summed; detail is the heaviest docs",
+      "weak": true,
+      "unit": "tokens"
+    },
+    "issues.open_bugs": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: repository.issues, open issues of the Bug type (params.bug_type; on a user's repo, which has no types, the label params.bug_label), by area label (params.area_labels)",
+      "weak": true,
+      "unit": "bugs"
+    },
+    "issues.parked_open": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: repository.issues, open issues older than params.park_hours whose issueType is not in params.issue_types; not measured for a user's repo, which has no issue types",
+      "weak": true,
+      "unit": "issues"
+    },
+    "issues.area_labeled": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: repository.issues, labels named in params.area_labels",
+      "weak": true,
+      "unit": "%"
+    },
+    "issues.stray_labels": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/labels (archived_at) and gh api graphql: repository.labels (issues and pullRequests totalCount); a label not archived that nothing carries and that is neither params.bug_label nor in params.area_labels",
+      "weak": true,
+      "unit": "labels"
+    },
+    "issues.intake_ready": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: .github/ISSUE_TEMPLATE: each YAML issue form parsed for the keys GitHub requires (name, description, body) and its type, and config.yml for blank_issues_enabled; a form that does not parse is a miss, as GitHub rejects it; the type check is against params.issue_types and is left out when that is empty",
+      "weak": true,
+      "unit": "%"
+    },
+    "issues.closed_by_pr": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: repository.issues, the last 20 issues of the Bug type (params.bug_type; on a user's repo, the label params.bug_label) closed as completed (N = 20, a template choice: enough for a median, few enough that new closes replace them), ClosedEvent closer (a merged PR, or a commit from one); left out before the 20 are taken: not-planned and duplicate closes, and a record, closed by hand within params.record_minutes of opening",
+      "weak": true,
+      "unit": "%"
+    },
+    "issues.reopened": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: repository.issues, the last 20 issues closed as completed (N = 20, a template choice: enough for a median, few enough that new closes replace them), REOPENED_EVENT count; not-planned and duplicate closes, and a record closed by hand within params.record_minutes of opening, left out",
+      "weak": true,
+      "unit": "%"
+    },
+    "issues.latest_close_hours": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api graphql: repository.issues, the latest issue closed as completed (a point in time, never a median over a window): closedAt minus createdAt; a not-planned or duplicate close, or a record closed by hand within params.record_minutes of opening, is left out",
+      "weak": true,
+      "unit": "hours"
+    },
+    "issues.oldest_open_days": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: repository.issues, open issues, age at read time",
+      "weak": true,
+      "unit": "days"
+    },
+    "issues.latest_card_words": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api graphql: of the 20 newest issues (N = 20, a template choice: few enough that new issues replace them), the latest with a body; words left after removing tables, fenced code and diagrams, inline code, link targets, HTML comments and params.pr_body_ignore (proseWords in github.mjs)",
+      "weak": true,
+      "unit": "words"
+    },
+    "issues.card_visual_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the body of each of the 20 newest issues (N = 20, a template choice: enough for a median, few enough that new issues replace them); a table, a Mermaid, GeoJSON, TopoJSON or STL block, or an image outside code (hasVisual in github.mjs)",
+      "weak": true,
+      "unit": "%"
+    },
+    "pull_requests.green_at_head": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the last 20 merged pullRequests (N = 20, a template choice: enough for a median, few enough that new merges replace them), head commit statusCheckRollup: state SUCCESS, or each check's latest run passed, since the rollup also counts an earlier run of a check that ran again on the same commit",
+      "weak": true,
+      "unit": "%"
+    },
+    "pull_requests.reviewed": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the last 20 merged pullRequests (N = 20, a template choice: enough for a median, few enough that new merges replace them); reviewed when a person submitted a review whose commit.oid is the merged headRefOid, or a member posted a comment whose first line is Review: MERGE at that SHA, no later than mergedAt (bot reviews left out)",
+      "weak": true,
+      "unit": "%"
+    },
+    "pull_requests.fixed_after_review": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the last 20 merged pullRequests (N = 20, a template choice: enough for a median, few enough that new merges replace them) with a person's review, or a member's Review: MERGE|BLOCK at <sha> comment, before the merge; fixed when that first one read a commit other than the merged head, as a BLOCK at an earlier head does",
+      "weak": true,
+      "unit": "%"
+    },
+    "pull_requests.reverted": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the last 20 merged pullRequests (N = 20, a template choice: enough for a median, few enough that new merges replace them); a PR titled Revert \"<title>\" undoes the merged PR with that title, and every such revert among the 20 counts",
+      "weak": true,
+      "unit": "PRs"
+    },
+    "pull_requests.commits_via_pr": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the last 20 commits on the default branch (N = 20, as for merged PRs: each merge adds at least one commit), associatedPullRequests merged",
+      "weak": true,
+      "unit": "%"
+    },
+    "pull_requests.merged_off_default": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the last 20 merged pullRequests (N = 20, a template choice: enough for a median, few enough that new merges replace them), baseRefName other than its base repository's defaultBranchRef.name, read in the same query; each with its reviewed lines",
+      "weak": true,
+      "unit": "PRs"
+    },
+    "pull_requests.latest_body_words": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api graphql: of the last 20 merged pullRequests (N = 20, a template choice: few enough that new merges replace them), the latest with a description; words left after removing tables, fenced code and diagrams, inline code, link targets, HTML comments and params.pr_body_ignore (proseWords in github.mjs)",
+      "weak": true,
+      "unit": "words"
+    },
+    "pull_requests.body_table_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the body of each of the last 20 merged pullRequests (N = 20, a template choice: enough for a median, few enough that new merges replace them); a markdown table row followed by its separator row, outside fenced blocks (hasTable in github.mjs)",
+      "weak": true,
+      "unit": "%"
+    },
+    "pull_requests.linked_issue_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the body of each of the last 20 merged pullRequests (N = 20, a template choice: enough for a median, few enough that new merges replace them); a closing keyword (close, fix or resolve) or Part of before an issue reference, outside fenced blocks (linksIssue in github.mjs)",
+      "weak": true,
+      "unit": "%"
+    },
+    "pull_requests.latest_lines": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api graphql: the latest merged pullRequest, additions plus deletions, less the lines of lockfiles, generated code, data snapshots and params.not_reviewed (NOT_REVIEWED in github.mjs), and the lines of files removed whole (changeType DELETED), and two for each line its merge commit moves, one when it left with a removed file (git diff, readLines in github-reviews.mjs)",
+      "weak": true,
+      "unit": "lines"
+    },
+    "pull_requests.over_400_lines": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the last 20 merged pullRequests (N = 20, a template choice: enough for a median, few enough that new merges replace them), additions plus deletions, less lockfile, generated and snapshot lines, files removed whole (changeType DELETED) and the lines each merge commit moves (git diff, readLines in github-reviews.mjs)",
+      "weak": true,
+      "unit": "%"
+    },
+    "pull_requests.latest_merge_hours": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api graphql: the latest merged pullRequest (a point in time, never a median over a window): mergedAt minus createdAt; its stages from head check times and reviews at head",
+      "weak": true,
+      "unit": "hours"
+    },
+    "pull_requests.green_to_merge_minutes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the last 10 merged pullRequests (N = 10, a template choice), median of mergedAt minus the last check's completion on the merged head, for each PR whose head rollup is SUCCESS",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "pull_requests.open_now": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: open pullRequests, by age at read time",
+      "weak": true,
+      "unit": "PRs"
+    },
+    "pull_requests.green_waiting_minutes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: open pullRequests that are not drafts, not Dependabot's, green at head (statusCheckRollup SUCCESS) and not blocked there (a Review: BLOCK verdict, or reviewDecision CHANGES_REQUESTED); the longest time since the head's last check completed, at read time, the five longest as rows",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "pull_requests.conflicting": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: open pullRequests, mergeable is CONFLICTING",
+      "weak": true,
+      "unit": "PRs"
+    },
+    "pull_requests.oldest_open_days": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: open pullRequests, age at read time",
+      "weak": true,
+      "unit": "days"
+    },
+    "pull_requests.dependabot_open": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: open pullRequests authored by dependabot, by ecosystem label",
+      "weak": true,
+      "unit": "PRs"
+    },
+    "actions.pinned_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: .github/workflows/*.yml: each job's and step's uses:, read from the parsed YAML, ending in a 40-character SHA, or a step's reference that .github/workflows/actions.lock records for its workflow; local ./ and $/ actions left out",
+      "weak": true,
+      "unit": "%"
+    },
+    "actions.permissions_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: .github/workflows/*.yml: a top-level permissions: block, or one on every job",
+      "weak": true,
+      "unit": "%"
+    },
+    "actions.locked_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: each .github/workflows/*.yml with an outside action in a step, against the workflows listed in .github/workflows/actions.lock; a workflow with only a job-level call or local actions is left out, since a lockfile does not cover them",
+      "weak": true,
+      "unit": "%"
+    },
+    "security.policy_on": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: repository.isSecurityPolicyEnabled",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "security.dependabot_alerts_on": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api graphql: repository.hasVulnerabilityAlertsEnabled",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "security.code_scanning_on": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/code-scanning/default-setup (state configured) or code-scanning/analyses; off is a miss even when the plan charges for it",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "security.secret_scanning_on": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}: security_and_analysis.secret_scanning and secret_scanning_push_protection both enabled; off is a miss even when the plan charges for it",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "security.code_quality_on": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/code-quality/setup (state configured); off is a miss even when the plan charges for it",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "security.dependabot_open": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api dependabot/alerts: open alerts that are vulnerabilities (malware left out), by security_advisory.severity",
+      "weak": true,
+      "unit": "alerts"
+    },
+    "security.malware_open": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/dependabot/alerts --paginate: open alerts whose security_advisory.classification is malware",
+      "weak": true,
+      "unit": "alerts"
+    },
+    "security.code_scanning_open": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/code-scanning/alerts --paginate: open alerts by severity; could_not_check while code scanning is off",
+      "weak": true,
+      "unit": "alerts"
+    },
+    "security.secret_scanning_open": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/secret-scanning/alerts --paginate: open alerts by secret type; could_not_check while secret scanning is off",
+      "weak": true,
+      "unit": "alerts"
+    },
+    "security.code_quality_open": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/code-quality/findings?state=open --paginate, by severity; could_not_check while code quality is off",
+      "weak": true,
+      "unit": "findings"
+    },
+    "security.headers": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: HEAD params.site_url: Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy",
+      "weak": true,
+      "unit": "of 4"
+    },
+    "security.token_default_read": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/actions/permissions/workflow: default_workflow_permissions is read",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "security.actions_policy_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/actions/permissions: allowed_actions is not all, and sha_pinning_required is true",
+      "weak": true,
+      "unit": "%"
+    },
+    "security.prt_head_checkouts": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: .github/workflows/*.yml: jobs of a pull_request_target or workflow_run workflow that check out the pull request's code (actions/checkout of its head, gh pr checkout, or git fetch or checkout of refs/pull/*)",
+      "weak": true,
+      "unit": "jobs"
+    },
+    "security.dependabot_cooldown": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: .github/dependabot.yml: each updates entry's shortest cooldown days against params.cooldown_days",
+      "weak": true,
+      "unit": "%"
+    },
+    "security.lockfile_registry_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: package-lock.json at the root: each package's resolved URL against params.registries, parsed: https, the registry's host, under its path",
+      "weak": true,
+      "unit": "%"
+    },
+    "security.young_lockfile_packages": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: package-lock.json against itself params.cooldown_days ago (git); each entry added since on an allowed registry (parsed: https, its host, under its path): a HEAD of its download for Last-Modified, then the registry's full document only where that is recent; no redirects, at most params.max_registry_reads requests; could_not_check on a shallow clone, an unreachable registry or a missing publish time",
+      "weak": true,
+      "unit": "packages"
+    },
+    "security.threat_model_current": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: git log at the root: the latest commit to params.threat_model (a path, or a list of paths that must all exist) against the latest to params.threat_model_covers, less params.threat_model_grace_days; could_not_check on a shallow clone or with no covered paths",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "security.claude_review_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "gh api graphql: the last 20 merged pullRequests (N = 20, as for the Pull requests tab): a head check run from an app in params.review_apps, or a review or comment by a Bot whose login is in params.review_authors, named like params.security_review; only PRs that change a file params.review_paths names, when it names any",
+      "weak": true,
+      "unit": "%"
+    },
+    "security.latest_fix_days": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api dependabot/alerts, and code-scanning/alerts and secret-scanning/alerts while those features are on: the latest fixed alert, fixed_at or resolved_at (revoked) minus created_at",
+      "weak": true,
+      "unit": "days"
+    },
+    "security.oldest_open_alert_days": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api dependabot/alerts, and code-scanning/alerts, secret-scanning/alerts and code-quality/findings while those features are on: the oldest open one's age at read time",
+      "weak": true,
+      "unit": "days"
+    },
+    "security.features_dollars_per_month": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api orgs/{owner}/settings/billing/advanced-security, active committers billed for Code Security and Secret Protection, times their list prices ($30 and $19 a month, github.com/security/plans, read 2026-11-03); Code Quality's per-seat licence is not in this read",
+      "weak": true,
+      "unit": "dollars"
+    },
+    "settings.main_protected": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api branches/{branch}/protection and rules/branches/{branch}, {branch} the default branch: a pull request required, force pushes blocked, deletion blocked",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "settings.required_checks": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api branches/{branch}/protection required_status_checks and rules/branches/{branch} required_status_checks, {branch} the default branch",
+      "weak": true,
+      "unit": "checks"
+    },
+    "settings.dependabot_security_updates": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}: security_and_analysis.dependabot_security_updates.status",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "settings.pages_private": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/pages: public is false; not measured for a public repo, a user's repo, or an organization whose plan is not Enterprise (gh api repos/{repo}, orgs/{owner})",
+      "weak": true,
+      "unit": "on/off"
+    },
+    "settings.dependabot_grouping": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: .github/dependabot.yml: updates entries with a groups: block",
+      "weak": true,
+      "unit": "%"
+    },
+    "insights.community_health_pct": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/community/profile, GitHub's health percentage and the files it found",
+      "weak": true,
+      "unit": "%"
+    },
+    "insights.leftover_branches": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: GraphQL refs under refs/heads (the first 1000) with their pull requests: a branch whose pull request closed or merged, or one older than params.branch_grace_hours (24) with none; the default branch, open pull requests and params.keep_branches do not count",
+      "weak": true,
+      "unit": "branches"
+    },
+    "insights.oldest_leftover_hours": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: GraphQL refs under refs/heads (the first 1000) with their pull requests: a branch whose pull request closed or merged, or one older than params.branch_grace_hours (24) with none; the default branch, open pull requests and params.keep_branches do not count; each timed from its pull request's close, or from its last commit",
+      "weak": true,
+      "unit": "hours"
+    },
+    "insights.idle_access": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/collaborators (people who can push, the first 100) and each one's latest default-branch commit: those with none in params.idle_days days (90, the benchmark's line); org owners left out, since GitHub recommends at least two and no repo review can remove one",
+      "weak": true,
+      "unit": "people"
+    },
+    "settings.protections_missing": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api rulesets and each active one (bypass_actors, tag rules deletion and update, push rule file_path_restriction against params.blocked_paths), branches/{branch}/protection (enforce_admins), tags (the first listed), environments (deployment_branch_policy); a row with nothing to guard is left out",
+      "weak": true,
+      "unit": "missing"
+    },
+    "settings.general_drift": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}, each field named in params.expected against its value there",
+      "weak": true,
+      "unit": "settings"
+    },
+    "settings.outside_access": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/collaborators?affiliation=outside and repos/{repo}/invitations, counted",
+      "weak": true,
+      "unit": "people"
+    },
+    "settings.unused_secrets": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/actions/secrets and each environment's secrets (names only), against secrets.NAME in .github/workflows/*.yml of the checkout",
+      "weak": true,
+      "unit": "secrets"
+    },
+    "settings.person_waits": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: pull_request rules of the active rulesets on the default branch and of its classic protection (approvals, code owner review, last-push approval, required reviewers), and each environment's protection_rules (required_reviewers, wait_timer)",
+      "weak": true,
+      "unit": "rules"
+    },
+    "settings.metered_on": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo}/actions/cache/storage-limit (max_cache_size_gb against params.included_cache_gb) and the active rulesets' copilot_code_review rules; not measured for a public repo",
+      "weak": true,
+      "unit": "settings"
+    },
+    "settings.open_repo_missing": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh api repos/{repo} (has_discussions, security_and_analysis.secret_scanning_push_protection), repos/{repo}/actions/permissions/fork-pr-contributor-approval (approval_policy) and repos/{repo}/private-vulnerability-reporting (enabled); not measured for a private repo",
+      "weak": true,
+      "unit": "settings"
+    },
+    "settings.admin_read_age_hours": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: generated_at of local.json in the repo's data folder, the last collect.mjs --local run, against the time of this CI run",
+      "weak": true,
+      "unit": "hours"
+    },
+    "tests.e2e_routes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: page files in params.pages_dir and the site paths the specs of params.suites' e2e suite name, in code lines",
+      "weak": true,
+      "unit": "%"
+    },
+    "tests.axe_routes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: page files in params.pages_dir and the site paths named by the e2e suite's specs that run AxeBuilder",
+      "weak": true,
+      "unit": "%"
+    },
+    "tests.main_pass_rate": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "last N runs: gh api runs of each workflow in params.workflows (newest 100 runs a workflow), with GraphQL check runs: the last 20 runs on main of each workflow that runs there; a run counts when a test job ran, and cancelled runs and runs that skipped every test job are left out. N is 20 (ci.mjs's LAST_RUNS): enough to turn over within hours where the test workflows run many times a day",
+      "weak": true,
+      "unit": "%"
+    },
+    "tests.skipped": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: git ls-files in params.suites; skip, todo and fixme markers in code lines, a marked block by its cases. skipIf, runIf and run-time skips are read from code, not CI, and shown apart",
+      "weak": true,
+      "unit": "tests"
+    },
+    "tests.site_tests_p50": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "last N passing jobs: gh api runs of the suite workflow in params.workflows (newest 100 runs a workflow), with GraphQL check runs: the last 20 passing test jobs. N is 20 (ci.mjs's LAST_RUNS): enough to turn over within hours where the test workflows run many times a day",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "tests.e2e_shard_p50": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "last N passing jobs: gh api runs of the e2e workflow in params.workflows (newest 100 runs a workflow), with GraphQL check runs: the last 20 passing jobs of each shard. N is 20 (ci.mjs's LAST_RUNS): enough to turn over within hours where the test workflows run many times a day",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "tests.ci_minutes_latest_main": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: the latest completed run of each workflow in params.workflows whose test jobs ran, on main where the workflow runs there, else its latest pull request run (newest 100 runs a workflow); GitHub bills each job by the whole minute",
+      "weak": true,
+      "unit": "minutes"
+    },
+    "tools.deps_latest_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: package.json (root and workspaces) with its lockfile (package-lock.json, npm-shrinkwrap.json, pnpm-lock.yaml or yarn.lock) and npm view <name> time --json",
+      "weak": true,
+      "unit": "%"
+    },
+    "tools.majors_behind": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: npm view <name> time --json against the lockfile",
+      "weak": true,
+      "unit": "dependencies"
+    },
+    "tools.actions_latest_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: uses: pins in .github/workflows and gh api repos/<owner>/<repo>/releases; actions of params.own_action_owners (default the repo's owner) left out",
+      "weak": true,
+      "unit": "%"
+    },
+    "tools.adopters_latest_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: each params.adopters repo's .github/workflows uses: pins (gh api contents), this repo's version tags (gh api tags) and the committer date of each tag younger than that, highest version first, up to the first old enough (gh api git/commits). A pin no version tag names is behind; with no tag that old, the metric is not read",
+      "weak": true,
+      "unit": "%"
+    },
+    "tools.node_lts": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: each actions/setup-node step in .github/workflows (else .nvmrc or .node-version) and nodejs.org/dist/index.json",
+      "weak": true,
+      "unit": ""
+    },
+    "tools.oldest_update_wait_days": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: npm view <name> time --json against the lockfile",
+      "weak": true,
+      "unit": "days"
+    },
+    "tools.open_dependency_prs": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh pr list --label params.dependency_label (default dependencies, the label Dependabot adds to every PR) --state open",
+      "weak": true,
+      "unit": "PRs"
+    },
+    "tools.oldest_dependency_pr_days": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: gh pr list --label params.dependency_label --state open",
+      "weak": true,
+      "unit": "days"
+    },
+    "tools.latest_dependency_pr_ci_minutes": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "the newest merged PR among the last 10 (params.last_n): gh pr list --label params.dependency_label --state merged, by mergedAt, then actions/runs?head_sha= and runs/{id}/jobs; the others beside it. A value read now, never a median",
+      "weak": true,
+      "unit": "min"
+    },
+    "tools.npm_ci_seconds": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: gh api actions/runs (or params.install_workflow's runs) and runs/{id}/jobs, the newest successful push run with an npm ci, pnpm install or yarn install step",
+      "weak": true,
+      "unit": "s"
+    },
+    "usability.reading_grade": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: Flesch-Kincaid grade of the main element's prose, params.key_pages at the widest of params.widths, via Playwright (Chrome)",
+      "weak": true,
+      "unit": "grade"
+    },
+    "usability.long_sentences": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: main element's prose, params.key_pages at the widest of params.widths, via Playwright (Chrome)",
+      "weak": true,
+      "unit": "sentences"
+    },
+    "usability.axe_violations": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: axe-core (the version installed in the repo, else beside the collectors) injected by Playwright (Chrome), params.key_pages at params.widths, all default rules but color-contrast and target-size",
+      "weak": true,
+      "unit": "elements"
+    },
+    "usability.target_size_375": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: axe-core target-size (switched on), params.key_pages at the narrowest of params.widths, under 768 px, via Playwright (Chrome)",
+      "weak": true,
+      "unit": "elements"
+    },
+    "usability.unlabeled_fields": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: Playwright (Chrome) on params.form_pages, loaded and never submitted",
+      "weak": true,
+      "unit": "fields"
+    },
+    "usability.broken_links": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: GET crawl of the site from /, same origin, at most params.crawl_max fetches, params.crawl_skip never fetched",
+      "weak": true,
+      "unit": "targets"
+    },
+    "usability.keyboard_task_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: Playwright (Chrome) at 1280 px follows each task in params.tasks along its shortest route from / in the crawl, from a fresh load: on each page, Tab until the link that leads on has focus, then Enter, which must land on the next page. Tab stops when focus leaves the page or wraps; a task still unreached after 2,000 presses, or a page that fails to load, is named and not counted",
+      "weak": true,
+      "unit": "%"
+    },
+    "usability.task_clicks": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: shortest path from / in the crawled link graph to each task in params.tasks",
+      "weak": true,
+      "unit": "clicks"
+    },
+    "usability.words_before_action": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: visible words in main before its first link, button or field, params.key_pages at the widest of params.widths, via Playwright (Chrome)",
+      "weak": true,
+      "unit": "words"
+    },
+    "usability.tbt_mobile": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: PageSpeed Insights API v5, strategy=mobile, lab TBT, params.key_pages; a page PSI cannot answer, and every page of a built static site, is measured by our own Playwright lab run under Lighthouse's mobile settings and marked (lab)",
+      "weak": true,
+      "unit": "ms"
+    },
+    "usability.form_page_kib": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state: Playwright (Chrome) network log, all responses at load, each of params.form_pages at 1280 px in a fresh context; value is the heaviest form page",
+      "weak": true,
+      "unit": "KiB"
+    },
+    "blockers.costly": {
+      "value": 1,
+      "detail": [
+        {
+          "label": "pinned review",
+          "group": "Quality",
+          "fires": 11,
+          "false_alarm": 9.1,
+          "hours": 1.28,
+          "tokens": 6465107,
+          "value": 6465107,
+          "verdict": "helps"
+        },
+        {
+          "label": "git pre-commit hook",
+          "group": "Quality",
+          "fires": 23,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 108,
+          "value": 108,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "CI checks",
+          "group": "Quality",
+          "fires": 63,
+          "false_alarm": 0,
+          "hours": 1.81,
+          "tokens": null,
+          "value": null,
+          "verdict": "helps"
+        },
+        {
+          "label": "git pre-push hook",
+          "group": "Quality",
+          "fires": 17,
+          "false_alarm": null,
+          "hours": 0.01,
+          "tokens": null,
+          "value": null,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "permission rules",
+          "group": "Speed",
+          "fires": 6,
+          "false_alarm": 83.3,
+          "hours": 0.01,
+          "tokens": 1925956,
+          "value": 1925956,
+          "verdict": "costs"
+        },
+        {
+          "label": "managed CLAUDE.md",
+          "group": "Tokens",
+          "fires": 641,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 1082649,
+          "value": 1082649,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "rules/delegation.md",
+          "group": "Tokens",
+          "fires": 641,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 499339,
+          "value": 499339,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "rules/compute.md",
+          "group": "Tokens",
+          "fires": 641,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 344858,
+          "value": 344858,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "session start hooks",
+          "group": "Tokens",
+          "fires": 25,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 316575,
+          "value": 316575,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "rules/writing-and-gates.md",
+          "group": "Tokens",
+          "fires": 641,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 306398,
+          "value": 306398,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "rules/delegation-detail.md",
+          "group": "Tokens",
+          "fires": 641,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 246785,
+          "value": 246785,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "memory index",
+          "group": "Tokens",
+          "fires": 641,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 190377,
+          "value": 190377,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "rules/keys.md",
+          "group": "Tokens",
+          "fires": 641,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 130123,
+          "value": 130123,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "repo CLAUDE.md",
+          "group": "Tokens",
+          "fires": 641,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 79484,
+          "value": 79484,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:Edit",
+          "group": "Tokens",
+          "fires": 71,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 28540,
+          "value": 28540,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:Write",
+          "group": "Tokens",
+          "fires": 71,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 10990,
+          "value": 10990,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "app: preview reminder",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 1150,
+          "value": 1150,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "bash guard notes",
+          "group": "Tokens",
+          "fires": 559,
+          "false_alarm": null,
+          "hours": 0.01,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:Bash",
+          "group": "Tokens",
+          "fires": 544,
+          "false_alarm": null,
+          "hours": 0.01,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:Agent",
+          "group": "Tokens",
+          "fires": 18,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:Artifact",
+          "group": "Tokens",
+          "fires": 6,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:Read",
+          "group": "Tokens",
+          "fires": 8,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:SendMessage",
+          "group": "Tokens",
+          "fires": 10,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:Skill",
+          "group": "Tokens",
+          "fires": 2,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:ToolSearch",
+          "group": "Tokens",
+          "fires": 18,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:WebFetch",
+          "group": "Tokens",
+          "fires": 16,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:WebSearch",
+          "group": "Tokens",
+          "fires": 19,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__browser_batch",
+          "group": "Tokens",
+          "fires": 17,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__computer",
+          "group": "Tokens",
+          "fires": 11,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__javascript_tool",
+          "group": "Tokens",
+          "fires": 30,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__navigate",
+          "group": "Tokens",
+          "fires": 6,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_logs",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_start",
+          "group": "Tokens",
+          "fires": 8,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_stop",
+          "group": "Tokens",
+          "fires": 6,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__resize_window",
+          "group": "Tokens",
+          "fires": 15,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__tabs_context",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_pr__get_status",
+          "group": "Tokens",
+          "fires": 10,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_pr__set_monitor",
+          "group": "Tokens",
+          "fires": 2,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_session__start_session",
+          "group": "Tokens",
+          "fires": 5,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_session_mgmt__get_session",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_session_mgmt__get_usage",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_session_mgmt__send_message",
+          "group": "Tokens",
+          "fires": 9,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_turn__update_plan",
+          "group": "Tokens",
+          "fires": 69,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_turn__wrap_up",
+          "group": "Tokens",
+          "fires": 25,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:mcp__claude-in-chrome__tabs_context_mcp",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:Agent",
+          "group": "Tokens",
+          "fires": 18,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:Artifact",
+          "group": "Tokens",
+          "fires": 6,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:Edit",
+          "group": "Tokens",
+          "fires": 66,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:Read",
+          "group": "Tokens",
+          "fires": 8,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:SendMessage",
+          "group": "Tokens",
+          "fires": 10,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:Skill",
+          "group": "Tokens",
+          "fires": 2,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:ToolSearch",
+          "group": "Tokens",
+          "fires": 18,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:WebFetch",
+          "group": "Tokens",
+          "fires": 16,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:WebSearch",
+          "group": "Tokens",
+          "fires": 19,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:Write",
+          "group": "Tokens",
+          "fires": 65,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__browser_batch",
+          "group": "Tokens",
+          "fires": 17,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__computer",
+          "group": "Tokens",
+          "fires": 11,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__javascript_tool",
+          "group": "Tokens",
+          "fires": 30,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__navigate",
+          "group": "Tokens",
+          "fires": 6,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_logs",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_start",
+          "group": "Tokens",
+          "fires": 8,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_stop",
+          "group": "Tokens",
+          "fires": 7,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__resize_window",
+          "group": "Tokens",
+          "fires": 15,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__tabs_context",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_pr__get_status",
+          "group": "Tokens",
+          "fires": 10,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_pr__set_monitor",
+          "group": "Tokens",
+          "fires": 2,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_session__start_session",
+          "group": "Tokens",
+          "fires": 5,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_session_mgmt__get_session",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_session_mgmt__get_usage",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_session_mgmt__send_message",
+          "group": "Tokens",
+          "fires": 9,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_turn__update_plan",
+          "group": "Tokens",
+          "fires": 69,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_turn__wrap_up",
+          "group": "Tokens",
+          "fires": 25,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__claude-in-chrome__navigate",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PreToolUse:mcp__claude-in-chrome__tabs_context_mcp",
+          "group": "Tokens",
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: Stop",
+          "group": "Tokens",
+          "fires": 42,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        }
+      ],
+      "source": "every blocker read above: fires, hours and tokens summed over the last 1000 tool calls (1000 wanted), 2026-11-28 02:18 to 2026-11-28 03:18 UTC, the pinned review and CI checks over the last 20 merged PRs; verdict() in quality/collectors/blockers/blockers.mjs",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "blockers"
+    },
+    "blockers.enforcement_reverts": {
+      "value": 0,
+      "detail": [
+        {
+          "label": "enforcement PRs merged",
+          "value": 2,
+          "unit": "PRs"
+        }
+      ],
+      "source": "the last 20 merged PRs touching ^\\.github\\/workflows\\/, ^\\.githooks\\/, ^\\.claude\\/hooks\\/, (^|\\/)(bash|write)_guard[\\w.]*$, (^|\\/)settings[^/]*\\.json$, _rules\\.json$, (^|\\/)verify\\.sh$, (^|\\/)manifest\\.json$, (^|\\/)cloud-test\\.json$, (^|\\/)protected_clauses\\.json$ (gh api graphql files), against later merged PRs titled Revert that name them (gh pr list, title and body) and bug issues opened since the oldest of them merged that name them as the cause, with a Regressed-by line or a cause phrase such as \"caused by #N\" (gh issue list --type Bug)",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "PRs"
+    },
+    "blockers.guard_blocks_per_100_calls": {
+      "value": 0.6,
+      "detail": [
+        {
+          "label": "permission rules",
+          "value": 0.6
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: Claude Code permission refusals (Auto mode, deny rules and built-in safety checks) and hook blocks (hookify and app hooks), per 100 tool calls over the last 1000 tool calls (1000 wanted), 2026-11-28 02:18 to 2026-11-28 03:18 UTC; 6 refusals",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "blocks"
+    },
+    "blockers.latest_block_seconds": {
+      "value": 8.4,
+      "detail": [
+        {
+          "label": "permission rules",
+          "value": 8.4
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: refusals by the retired bash and write guards (old transcripts), app hooks, permission checks and git hooks, over the last 1000 tool calls (1000 wanted), 2026-11-28 02:18 to 2026-11-28 03:18 UTC; the latest block (permission rules, 2026-11-28 03:17 UTC) to the next call, at most 10 minutes; beside it, each blocker's latest",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "s"
+    },
+    "blockers.git_commit_seconds": {
+      "value": 0.2,
+      "detail": [
+        {
+          "label": "pre-commit runs timed",
+          "value": 20,
+          "unit": ""
+        },
+        {
+          "label": "p90",
+          "value": 0.8,
+          "unit": "s"
+        },
+        {
+          "label": "slowest",
+          "value": 1.1,
+          "unit": "s"
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: the last 20 Bash calls that run git commit alone, tool call to tool result; 20 read, from 2026-11-27 23:31 UTC",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "s"
+    },
+    "blockers.git_push_seconds": {
+      "value": 2.6,
+      "detail": [
+        {
+          "label": "pre-push runs timed",
+          "value": 20,
+          "unit": ""
+        },
+        {
+          "label": "p90",
+          "value": 6.9,
+          "unit": "s"
+        },
+        {
+          "label": "slowest",
+          "value": 19.1,
+          "unit": "s"
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: the last 20 Bash calls that run git push alone, tool call to tool result; 20 read, from 2026-11-12 22:10 UTC",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "s"
+    },
+    "blockers.pushes_per_merged_pr": {
+      "value": 3.15,
+      "detail": [
+        {
+          "label": "1 push",
+          "value": 4,
+          "unit": "PRs"
+        },
+        {
+          "label": "2 pushes",
+          "value": 4,
+          "unit": "PRs"
+        },
+        {
+          "label": "3 pushes",
+          "value": 4,
+          "unit": "PRs"
+        },
+        {
+          "label": "4 or more",
+          "value": 8,
+          "unit": "PRs"
+        }
+      ],
+      "source": "gh api graphql: merged pullRequests, 20 to a query, with pinned reviews and every check run attempt of their last 30 commits; the last 20 merged PRs, 20 read, merged 2026-11-27 23:29 to 2026-11-28 03:13 UTC",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "pushes"
+    },
+    "blockers.latest_block_tokens": {
+      "value": 287648,
+      "detail": [
+        {
+          "label": "permission rules",
+          "value": 287648
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: refusals by the retired bash and write guards (old transcripts), app hooks, permission checks and git hooks, over the last 1000 tool calls (1000 wanted), 2026-11-28 02:18 to 2026-11-28 03:18 UTC; message.usage of the call that answered the latest block (permission rules, 2026-11-28 03:17 UTC), in full, one share when blocks refused together share it; 1548 of them new tokens (input, output, cache write), the rest the conversation that call read again; beside it, each blocker's latest",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "tokens"
+    },
+    "blockers.hook_tokens_per_session": {
+      "value": 66073,
+      "detail": [
+        {
+          "label": "session start hooks",
+          "value": 63315
+        },
+        {
+          "label": "hook: PostToolUse:Edit",
+          "value": 1890
+        },
+        {
+          "label": "hook: PostToolUse:Write",
+          "value": 638
+        },
+        {
+          "label": "app: preview reminder",
+          "value": 230
+        },
+        {
+          "label": "bash guard notes",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:Agent",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:Bash",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:Read",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:SendMessage",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:Skill",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:ToolSearch",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:WebFetch",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:WebSearch",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__browser_batch",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__computer",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__javascript_tool",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__navigate",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_start",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_stop",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__resize_window",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__Claude_Browser__tabs_context",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_pr__get_status",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_session_mgmt__get_usage",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_session_mgmt__send_message",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_turn__update_plan",
+          "value": 0
+        },
+        {
+          "label": "hook: PostToolUse:mcp__ccd_turn__wrap_up",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:Agent",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:Edit",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:Read",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:SendMessage",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:Skill",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:ToolSearch",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:WebFetch",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:WebSearch",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:Write",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__browser_batch",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__computer",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__javascript_tool",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__navigate",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_start",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_stop",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__resize_window",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__Claude_Browser__tabs_context",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_pr__get_status",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_session_mgmt__get_usage",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_session_mgmt__send_message",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_turn__update_plan",
+          "value": 0
+        },
+        {
+          "label": "hook: PreToolUse:mcp__ccd_turn__wrap_up",
+          "value": 0
+        },
+        {
+          "label": "hook: Stop",
+          "value": 0
+        },
+        {
+          "label": "tool calls a session, these sessions",
+          "value": 97.6,
+          "unit": ""
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: hook attachments and git WARN and INFRA lines, characters / 4, times the calls that read them again up to the next compaction, summed per session, mean over the last 5 main sessions by start, each with its subagents; 5 read, started 2026-11-28 02:33 to 2026-11-28 03:12 UTC",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "tokens"
+    },
+    "blockers.review_tokens_per_pr": {
+      "value": 323255,
+      "detail": [
+        {
+          "label": "review subagent tokens",
+          "value": 6465107,
+          "unit": "tokens"
+        },
+        {
+          "label": "merged PRs",
+          "value": 20,
+          "unit": "PRs"
+        },
+        {
+          "label": "#114",
+          "value": 594612,
+          "unit": "tokens"
+        },
+        {
+          "label": "#118",
+          "value": 516781,
+          "unit": "tokens"
+        },
+        {
+          "label": "#108",
+          "value": 469863,
+          "unit": "tokens"
+        },
+        {
+          "label": "#119",
+          "value": 410215,
+          "unit": "tokens"
+        },
+        {
+          "label": "#126",
+          "value": 355741,
+          "unit": "tokens"
+        },
+        {
+          "label": "#133",
+          "value": 353215,
+          "unit": "tokens"
+        },
+        {
+          "label": "#112",
+          "value": 351067,
+          "unit": "tokens"
+        },
+        {
+          "label": "#116",
+          "value": 349211,
+          "unit": "tokens"
+        },
+        {
+          "label": "#141",
+          "value": 318393,
+          "unit": "tokens"
+        },
+        {
+          "label": "#127",
+          "value": 311749,
+          "unit": "tokens"
+        },
+        {
+          "label": "#107",
+          "value": 291347,
+          "unit": "tokens"
+        },
+        {
+          "label": "#136",
+          "value": 275281,
+          "unit": "tokens"
+        },
+        {
+          "label": "#111",
+          "value": 267815,
+          "unit": "tokens"
+        },
+        {
+          "label": "#137",
+          "value": 264112,
+          "unit": "tokens"
+        },
+        {
+          "label": "#117",
+          "value": 242596,
+          "unit": "tokens"
+        },
+        {
+          "label": "#143",
+          "value": 171460,
+          "unit": "tokens"
+        },
+        {
+          "label": "#132",
+          "value": 136876,
+          "unit": "tokens"
+        },
+        {
+          "label": "#135",
+          "value": 135480,
+          "unit": "tokens"
+        },
+        {
+          "label": "#134",
+          "value": 127677,
+          "unit": "tokens"
+        },
+        {
+          "label": "#121",
+          "value": 111515,
+          "unit": "tokens"
+        },
+        {
+          "label": "review subagents naming no PR",
+          "value": 410101,
+          "unit": "tokens"
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: subagents whose meta.json says review, message.usage; one whose Agent call names PRs is charged to them, one naming none counts after the merge before the last 20 merged PRs up to the newest merge; gh api graphql: merged pullRequests, 20 to a query, with pinned reviews and every check run attempt of their last 30 commits; the last 20 merged PRs, 20 read, merged 2026-11-27 23:29 to 2026-11-28 03:13 UTC",
+      "read_at": "2026-11-28T03:18:15.945Z",
+      "unit": "tokens"
+    },
+    "claude_settings.valid": {
+      "value": 0,
+      "source": "state: each file in params.files that exists, parsed as strict JSON; top-level and permissions keys against the settings index (code.claude.com/docs/en/settings-reference, read 2026-11-04); permissions.defaultMode against the modes (code.claude.com/docs/en/permission-modes); each allow, ask and deny rule against the rule syntax (code.claude.com/docs/en/permissions, read 2026-11-04; ruleProblem() in quality/collectors/claude/claude-settings.mjs); .claude/settings.json",
+      "detail": [
+        {
+          "label": ".claude/settings.json: no problem",
+          "value": 0,
+          "unit": ""
+        }
+      ],
+      "unit": "problems"
+    },
+    "claude_settings.deny_coverage": {
+      "value": 100,
+      "source": "state: the Read(...) rules in permissions.deny of each file in params.files, against params.credential_patterns (denyMetric() in collectors/claude/claude-settings.mjs)",
+      "detail": [
+        {
+          "label": ".env",
+          "value": 1,
+          "unit": "denied"
+        },
+        {
+          "label": ".env.*",
+          "value": 1,
+          "unit": "denied"
+        },
+        {
+          "label": "secrets/**",
+          "value": 1,
+          "unit": "denied"
+        },
+        {
+          "label": "**/*.pem",
+          "value": 1,
+          "unit": "denied"
+        },
+        {
+          "label": "**/*.key",
+          "value": 1,
+          "unit": "denied"
+        }
+      ],
+      "unit": "%"
+    },
+    "claude_settings.setup_files": {
+      "value": 75,
+      "source": "state: each path in params.setup_files exists in the repo (setupMetric() in collectors/claude/claude-settings.mjs)",
+      "detail": [
+        {
+          "label": "AGENTS.md",
+          "value": 1,
+          "unit": "in place"
+        },
+        {
+          "label": "CLAUDE.md",
+          "value": 1,
+          "unit": "in place"
+        },
+        {
+          "label": ".claude/settings.json",
+          "value": 1,
+          "unit": "in place"
+        },
+        {
+          "label": ".claude/skills/bump-pins/SKILL.md",
+          "value": 0,
+          "unit": "in place"
+        }
+      ],
+      "unit": "%"
+    },
+    "claude_settings.prompts_per_100_calls": {
+      "value": 0.9,
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: this repo's transcripts: the permissionDecision of each tool result, newest 1,000 that carry one; a prompt is a source starting user (user_temporary, user_permanent). ExitPlanMode and AskUserQuestion are left out: asking is their job. N = 1,000 tool calls, so new work replaces old within hours; 1000 read, 2026-11-28T02:17 to 2026-11-28T03:17 UTC",
+      "detail": [
+        {
+          "label": "rule:mcpServerPolicy",
+          "value": 5,
+          "unit": "prompts"
+        },
+        {
+          "label": "rule:userSettings",
+          "value": 4,
+          "unit": "prompts"
+        },
+        {
+          "label": "tool calls read",
+          "value": 1000,
+          "unit": "calls"
+        }
+      ],
+      "unit": "prompts"
+    },
+    "claude.pr_merge_share": {
+      "value": 100,
+      "detail": [
+        {
+          "label": "merged or closed",
+          "value": 20,
+          "unit": "PRs"
+        },
+        {
+          "label": "merged",
+          "value": 20,
+          "unit": "PRs"
+        },
+        {
+          "label": "not reverted so far",
+          "value": 20,
+          "unit": "PRs"
+        }
+      ],
+      "source": "gh api graphql: each linked pullRequest, 50 to a query, with PULL_FIELDS from github.mjs plus state, author type, commits and head checks; the last 20 opened Claude PRs that merged or closed",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "%"
+    },
+    "claude.first_push_green_share": {
+      "value": 55,
+      "detail": [
+        {
+          "label": "green",
+          "value": 11,
+          "unit": "PRs"
+        },
+        {
+          "label": "red",
+          "value": 9,
+          "unit": "PRs"
+        },
+        {
+          "label": "pending",
+          "value": 0,
+          "unit": "PRs"
+        },
+        {
+          "label": "cancelled, no verdict",
+          "value": 0,
+          "unit": "PRs"
+        },
+        {
+          "label": "no checks",
+          "value": 0,
+          "unit": "PRs"
+        },
+        {
+          "label": "failed: ci / ci-ok",
+          "value": 9,
+          "unit": "PRs"
+        },
+        {
+          "label": "failed: ci / standard",
+          "value": 7,
+          "unit": "PRs"
+        },
+        {
+          "label": "failed: ci / short",
+          "value": 1,
+          "unit": "PRs"
+        }
+      ],
+      "source": "gh api graphql: each linked pullRequest, 50 to a query, with PULL_FIELDS from github.mjs plus state, author type, commits and head checks; gh api graphql commit statusCheckRollup; a cancelled check is no verdict, and no check (params.not_code_checks: they read the PR, not run it) is left out; the last 20 opened Claude PRs",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "%"
+    },
+    "claude.escaped_bugs_per_10_prs": {
+      "value": 0,
+      "detail": [
+        {
+          "label": "bug issues naming a merged PR as the cause",
+          "value": 0,
+          "unit": "issues"
+        },
+        {
+          "label": "merged Claude PRs",
+          "value": 20,
+          "unit": "PRs"
+        },
+        {
+          "label": "all time, per 10 merged PRs",
+          "value": 0,
+          "unit": "bugs"
+        }
+      ],
+      "source": "gh issue list -R <repo> --type Bug --state all --json number,title,body,createdAt; bugs naming a Claude PR as the cause (a Regressed-by: #N line, or a phrase such as \"introduced in #N\" or \"caused by #N\"; a mention for context is no cause) filed after it merged, up to now, per 10 of the last 20 merged Claude PRs",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "bugs"
+    },
+    "claude.code_prs_with_tests_share": {
+      "value": 100,
+      "detail": [
+        {
+          "label": "code and a test",
+          "value": 15,
+          "unit": "PRs"
+        },
+        {
+          "label": "code without a test",
+          "value": 0,
+          "unit": "PRs"
+        }
+      ],
+      "source": "gh api graphql: each linked pullRequest, 50 to a query, with PULL_FIELDS from github.mjs plus state, author type, commits and head checks; the last 20 merged Claude PRs; file paths only",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "%"
+    },
+    "claude.hours_session_to_pr": {
+      "value": 0.19,
+      "detail": [
+        {
+          "label": "PRs opened",
+          "value": 20,
+          "unit": "PRs"
+        },
+        {
+          "label": "p90",
+          "value": 271.27,
+          "unit": "h"
+        },
+        {
+          "label": "all time, median",
+          "value": 0.12,
+          "unit": "h"
+        }
+      ],
+      "source": "gh api graphql: each linked pullRequest, 50 to a query, with PULL_FIELDS from github.mjs plus state, author type, commits and head checks; the last 20 opened Claude PRs; ~/.claude/projects/<this repo's project folder>/**/*.jsonl: first timestamp of the linking session",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "h"
+    },
+    "claude.tokens_per_merged_pr": {
+      "value": 599596,
+      "detail": [
+        {
+          "label": "cache write",
+          "value": 498760,
+          "unit": "tokens"
+        },
+        {
+          "label": "output",
+          "value": 100659,
+          "unit": "tokens"
+        },
+        {
+          "label": "fresh input",
+          "value": 177,
+          "unit": "tokens"
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: message.usage, one count per message.id; the last 10 merged Claude PRs, each with its linking session's tokens split evenly over the PRs that session opened and merged",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "tokens"
+    },
+    "claude.cache_read_share": {
+      "value": 98,
+      "detail": [
+        {
+          "label": "cache read",
+          "value": 299044853,
+          "unit": "tokens"
+        },
+        {
+          "label": "cache write",
+          "value": 6108194,
+          "unit": "tokens"
+        },
+        {
+          "label": "fresh input",
+          "value": 2100,
+          "unit": "tokens"
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: message.usage, one count per message.id; the last 1000 model calls (1000 read)",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "%"
+    },
+    "claude.cost_per_merged_pr_usd": {
+      "value": 9.46,
+      "detail": [
+        {
+          "label": "API-equivalent cost, these PRs",
+          "value": 94.59,
+          "unit": "USD"
+        },
+        {
+          "label": "merged PRs with a costed session",
+          "value": 10,
+          "unit": "PRs"
+        },
+        {
+          "label": "merged PRs without one, left out",
+          "value": 0,
+          "unit": "PRs"
+        },
+        {
+          "label": "all time, per merged PR",
+          "value": 5.41,
+          "unit": "USD"
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: last cost-state record per session; the last 10 merged Claude PRs whose linking session has one, its totalCostUSD split evenly over the PRs that session opened and merged",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "USD"
+    },
+    "claude.context_per_call": {
+      "value": 307164,
+      "detail": [
+        {
+          "label": "main sessions, median",
+          "value": 326131,
+          "unit": "tokens"
+        },
+        {
+          "label": "subagents, median",
+          "value": 128695,
+          "unit": "tokens"
+        },
+        {
+          "label": "p90, all calls",
+          "value": 438737,
+          "unit": "tokens"
+        },
+        {
+          "label": "all time, median",
+          "value": 220863,
+          "unit": "tokens"
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: message.usage, one count per message.id; the last 1000 model calls",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "tokens"
+    },
+    "claude.compactions_per_10_prs": {
+      "value": 0.19,
+      "detail": [
+        {
+          "label": "compactions, these PRs",
+          "value": 0.38,
+          "unit": "compactions"
+        },
+        {
+          "label": "sessions that compacted",
+          "value": 1,
+          "unit": "sessions"
+        },
+        {
+          "label": "merged PRs",
+          "value": 20,
+          "unit": "PRs"
+        },
+        {
+          "label": "all time, per 10 merged PRs",
+          "value": 0.17,
+          "unit": "compactions"
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: type system, subtype compact_boundary (a field observed in transcripts, not in Anthropic's public docs); per 10 of the last 20 merged Claude PRs, each with its linking session's compactions split evenly over the PRs that session opened and merged",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "compactions"
+    },
+    "claude.subagent_cost_share": {
+      "value": 10.9,
+      "detail": [
+        {
+          "label": "main sessions",
+          "value": 101.39,
+          "unit": "USD"
+        },
+        {
+          "label": "subagents",
+          "value": 12.35,
+          "unit": "USD"
+        },
+        {
+          "label": "subagents on claude-opus-5-5",
+          "value": 5.96,
+          "unit": "USD"
+        },
+        {
+          "label": "subagents on claude-sonnet-5-5",
+          "value": 5.85,
+          "unit": "USD"
+        },
+        {
+          "label": "subagents on claude-haiku-5-5",
+          "value": 0.53,
+          "unit": "USD"
+        },
+        {
+          "label": "calls with no price, left out",
+          "value": 0,
+          "unit": "calls"
+        }
+      ],
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: message.usage, one count per message.id; the last 1000 model calls, of them rows from Claude Code 2.1.307 on (or, with no version, from 2026-10-21): earlier subagent transcripts held placeholder usage (github.com/anthropics/claude-code/releases/tag/v2.1.307); each call priced by priceCall in claude.mjs: its model's input and output price per million, the long tier over 100000 prompt tokens, 5-minute writes x1.25, 1-hour writes x2 and reads at the model's cache_read_x, else x0.1, of input (params.prices, https://platform.claude.com/docs/en/about-claude/pricing)",
+      "read_at": "2026-11-28T03:18:01.807Z",
+      "unit": "%"
+    },
+    "desktop_app.connectors_broken": {
+      "value": 112,
+      "detail": [
+        {
+          "label": "need sign-in",
+          "value": 98,
+          "unit": "servers"
+        },
+        {
+          "label": "failed to connect",
+          "value": 14,
+          "unit": "servers"
+        }
+      ],
+      "source": "state: the last tool listing of the newest desktop session",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "servers"
+    },
+    "desktop_app.plugins_unused": {
+      "value": 85,
+      "detail": [
+        {
+          "label": "plugins loaded",
+          "value": 116,
+          "unit": "plugins"
+        },
+        {
+          "label": "plugins called",
+          "value": 31,
+          "unit": "plugins"
+        },
+        {
+          "label": "adobe-for-creativity",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "agent-sdk-dev",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "ai-governance-legal",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "amazon-location-service",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "amd-skills",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "aws-agents-for-devsecops",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "aws-context",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "aws-continuum",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "aws-data-analytics",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "aws-serverless",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "aws-transform",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "bio-research",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "brand-voice",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "canva",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "claude-code-setup",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "claude-for-manufacturing",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "claude-for-msft-365-install",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "claude-md-management",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "code-review",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "code-simplifier",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "comfy-cloud",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "commit-commands",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "corporate-legal",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "cowork-plugin-management",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "customer-support",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "data",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "databases-on-aws",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "deploy-on-aws",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "design",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "discord",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "earnings-reviewer",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "engineering",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "enterprise-search",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "equity-research",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "figma",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "finance",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "fund-admin",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "gc-ai",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "gl-reconciler",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "hookify",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "human-resources",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "investment-banking",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "kyc-screener",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "law-student",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "legal",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "legal-builder-hub",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "legal-clinic",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "legalzoom",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "litigation-legal",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "lseg",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "market-researcher",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "marketing",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "math-olympiad",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "mcp-tunnels",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "meeting-prep-agent",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "meshy-3d-agent",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "migration-to-aws",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "miro",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "model-builder",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "month-end-closer",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "nvidia-skills",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "operations",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "pandadoc",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "pdf-viewer",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "pitch-agent",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "playground",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "postiz",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "privacy-legal",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "private-equity",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "product-legal",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "product-management",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "productivity",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "project-artifact",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "ralph-loop",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "regulatory-legal",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "sagemaker-ai",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "session-report",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "skill-creator",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "slack-by-salesforce",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "sp-global",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "statement-auditor",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "unity",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "unreal-engine-skills-for-claude-code",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "valuation-reviewer",
+          "value": 0,
+          "unit": "calls"
+        },
+        {
+          "label": "zapier",
+          "value": 0,
+          "unit": "calls"
+        }
+      ],
+      "source": "state: the newest desktop session's listings against the calls of the account's last 200 sessions (entrypoint in params.usage_entrypoints) across every project folder and Cowork session, with their subagents; N = 200 sessions, 200 read",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "plugins"
+    },
+    "desktop_app.connectors_unused": {
+      "value": 44,
+      "detail": [
+        {
+          "label": "servers connected",
+          "value": 66,
+          "unit": "servers"
+        },
+        {
+          "label": "servers called",
+          "value": 22,
+          "unit": "servers"
+        },
+        {
+          "label": "plugin servers unused",
+          "value": 18,
+          "unit": "servers"
+        },
+        {
+          "label": "account connectors unused",
+          "value": 22,
+          "unit": "servers"
+        },
+        {
+          "label": "other servers unused",
+          "value": 4,
+          "unit": "servers"
+        }
+      ],
+      "source": "state: the newest desktop session's listings against the calls of the account's last 200 sessions (entrypoint in params.usage_entrypoints) across every project folder and Cowork session, with their subagents; N = 200 sessions, 200 read",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "servers"
+    },
+    "desktop_app.turns_closed": {
+      "value": 100,
+      "detail": [
+        {
+          "label": "work turns judged",
+          "value": 12,
+          "unit": "turns"
+        },
+        {
+          "label": "with a task list and a recap",
+          "value": 12,
+          "unit": "turns"
+        },
+        {
+          "label": "left out: a question, an approval or an interrupt",
+          "value": 3,
+          "unit": "turns"
+        },
+        {
+          "label": "left out: still open",
+          "value": 1,
+          "unit": "turns"
+        }
+      ],
+      "source": "the last 20 work turns a person started; N = 20 turns",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "%"
+    },
+    "desktop_app.plans_first_pass": {
+      "value": 0,
+      "detail": [
+        {
+          "label": "sessions that showed a plan",
+          "value": 2,
+          "unit": "sessions"
+        },
+        {
+          "label": "plans first shown",
+          "value": 2,
+          "unit": "plans"
+        },
+        {
+          "label": "approved as shown",
+          "value": 0,
+          "unit": "plans"
+        }
+      ],
+      "source": "the last 20 sessions that showed a plan: the share of first-shown plans (the first, or one after an approval) whose params.plan_exit_tool result is no error; N = 20 plan sessions",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "%"
+    },
+    "desktop_app.sub_sessions_closed": {
+      "value": 100,
+      "detail": [
+        {
+          "label": "sub-sessions judged",
+          "value": 3,
+          "unit": "sessions"
+        },
+        {
+          "label": "archived by their starter",
+          "value": 3,
+          "unit": "sessions"
+        },
+        {
+          "label": "left out: started in a live session",
+          "value": 42,
+          "unit": "sessions"
+        }
+      ],
+      "source": "the last 10 sub-sessions started; N = 10 sub-sessions",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "%"
+    },
+    "desktop_app.subagents_killed": {
+      "value": 0,
+      "detail": [
+        {
+          "label": "subagent notices",
+          "value": 38,
+          "unit": "notices"
+        },
+        {
+          "label": "killed or failed",
+          "value": 0,
+          "unit": "notices"
+        }
+      ],
+      "source": "the last 50 notices that answer an Agent call; N = 50 notices",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "%"
+    },
+    "desktop_app.connectors_pending": {
+      "value": 11,
+      "detail": [
+        {
+          "label": "still connecting",
+          "value": 11,
+          "unit": "servers"
+        }
+      ],
+      "source": "state: the first tool listing of the newest desktop session, the app's own servers set aside",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "servers"
+    },
+    "desktop_app.parallel_share": {
+      "value": 99.2,
+      "detail": [
+        {
+          "label": "turns with two or more Agent calls",
+          "value": 14,
+          "unit": "turns"
+        },
+        {
+          "label": "Agent calls",
+          "value": 119,
+          "unit": "calls"
+        },
+        {
+          "label": "sent after an earlier one, with nothing learned between",
+          "value": 1,
+          "unit": "calls"
+        }
+      ],
+      "source": "the last 20 turns with two or more Agent calls; N = 20 turns",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "%"
+    },
+    "desktop_app.listing_tokens": {
+      "value": 53978,
+      "detail": [
+        {
+          "label": "tool names",
+          "value": 19788,
+          "unit": "tokens"
+        },
+        {
+          "label": "skills",
+          "value": 11083,
+          "unit": "tokens"
+        },
+        {
+          "label": "agents",
+          "value": 11261,
+          "unit": "tokens"
+        },
+        {
+          "label": "server instructions",
+          "value": 11846,
+          "unit": "tokens"
+        }
+      ],
+      "source": "state: bytes / 4 of the four listings of the newest desktop session, every delta added up",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "tokens"
+    },
+    "desktop_app.subagent_start_tokens": {
+      "value": 128548,
+      "detail": [
+        {
+          "label": "subagent runs read",
+          "value": 20,
+          "unit": "runs"
+        },
+        {
+          "label": "pr-review-toolkit:code-reviewer (17 runs)",
+          "value": 128548,
+          "unit": "tokens"
+        },
+        {
+          "label": "space-peak-fact-reviewer (3 runs)",
+          "value": 15538,
+          "unit": "tokens"
+        }
+      ],
+      "source": "the last 20 subagent runs: the context of each run's first model call, the median of each agent type, the largest; N = 20 runs",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "tokens"
+    },
+    "desktop_app.plugins_untrusted": {
+      "value": 0,
+      "detail": [
+        {
+          "label": "official tier, enabled",
+          "value": 60,
+          "unit": "plugins"
+        },
+        {
+          "label": "directory tier, enabled",
+          "value": 106,
+          "unit": "plugins"
+        },
+        {
+          "label": "community tier, enabled",
+          "value": 0,
+          "unit": "plugins"
+        },
+        {
+          "label": "third-party tier, enabled",
+          "value": 3,
+          "unit": "plugins"
+        }
+      ],
+      "source": "state: enabled plugins from Claude Code install records (user settings, this repo's settings) and the desktop app plugin manifest under params.cowork_dir, each placed by its marketplace name in params.official_marketplaces, params.directory_marketplaces or params.community_marketplaces, else third-party; marketplaces from the repo owner's GitHub account, params.own_marketplaces and params.kept_plugins set aside",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "plugins"
+    },
+    "desktop_app.plugins_replaceable": {
+      "value": 0,
+      "detail": [],
+      "source": "state: the custom skills, agents and hook commands in the user's and this repo's params.claude_dir_name folders, against anthropic-equivalents.json and against the official-tier catalogs Claude Code has cloned (a community or third-party plugin whose name an official marketplace also lists)",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "items"
+    },
+    "desktop_app.plugins_stale": {
+      "value": 0,
+      "detail": [],
+      "source": "state: Claude Code install records no settings source enables, plugins in flagged-plugins.json, and enabled plugins whose last_updated in plugin-catalog-cache.json (fetched 2026-09-13) is older than params.stale_days",
+      "read_at": "2026-11-28T03:18:36.356Z",
+      "unit": "plugins"
+    },
+    "instructions.protected_clauses_missing": {
+      "could_not_check": "could not read (ENOENT)",
+      "source": "state: each clause of tools/protected_clauses.json in the Git Crafter checkout (params.code_os_checkout <a local path>) against the installed copy (params.installed_from_code_os), case and whitespace ignored as Git Crafter clause_check does",
+      "unit": "clauses"
+    },
+    "instructions.unused": {
+      "value": 1,
+      "detail": [
+        {
+          "label": "skill: space-peak-publish-gate",
+          "value": 0,
+          "unit": "uses"
+        },
+        {
+          "label": "agent: space-peak-fact-reviewer",
+          "value": 8,
+          "unit": "uses"
+        },
+        {
+          "label": "skill: space-peak-fact-guardrails",
+          "value": 5,
+          "unit": "uses"
+        }
+      ],
+      "source": "the last 50 main sessions by start, each with its subagents: Skill calls and typed slash commands by name, Agent calls by subagent_type (none is general-purpose), and a paths rule when a Read, Edit, Write, MultiEdit, NotebookEdit call touched a matching file under the session's folder; a rule with no paths loads every session and is left out, and so is a rule in params.kept_rules (none); 50 sessions read, from 2026-11-12 20:35 UTC; 3 items",
+      "read_at": "2026-11-28T03:18:33.872Z",
+      "unit": "items"
+    },
+    "instructions.lines_before_action": {
+      "value": 9,
+      "detail": [
+        {
+          "label": "CLAUDE.md",
+          "value": 9,
+          "unit": "lines"
+        },
+        {
+          "label": "memory index head",
+          "value": 7,
+          "unit": "lines"
+        }
+      ],
+      "source": "state: line breaks of each always-loaded file the repo controls (params repo_claude_md, repo_rules, the user_rules whose source the repo holds by installed_from_code_os, a rule with paths left out) and the MEMORY index head; the largest; 2 files",
+      "read_at": "2026-11-28T03:18:33.872Z",
+      "unit": "lines"
+    },
+    "claude.instruction_tokens": {
+      "value": 4194,
+      "detail": [
+        {
+          "label": "managed CLAUDE.md",
+          "value": 1689,
+          "unit": "tokens"
+        },
+        {
+          "label": "repo CLAUDE.md",
+          "value": 124,
+          "unit": "tokens"
+        },
+        {
+          "label": "house rules (5 files)",
+          "value": 2382,
+          "unit": "tokens"
+        }
+      ],
+      "source": "state: bytes / 4 of managed CLAUDE.md, user CLAUDE.md, repo CLAUDE.md, house rules, repo rules (params managed_claude_md /Library/Application Support/ClaudeCode/CLAUDE.md; user_claude_md ~/.claude/CLAUDE.md; repo_claude_md CLAUDE.md + .claude/CLAUDE.md + CLAUDE.local.md; user_rules ~/.claude/rules; repo_rules .claude/rules; a rule whose frontmatter has paths is left out); the MEMORY index is counted apart",
+      "read_at": "2026-11-28T03:18:33.872Z",
+      "unit": "tokens"
+    },
+    "instructions.memory_index_tokens": {
+      "value": 297,
+      "detail": [
+        {
+          "label": "lines that load",
+          "value": 7,
+          "unit": "lines"
+        }
+      ],
+      "source": "state: bytes / 4 of memory/MEMORY.md in the ~/.claude/projects folder ending <this repo's project folder>, up to its first 200 lines or 25600 bytes, whichever comes first (the part that loads)",
+      "read_at": "2026-11-28T03:18:33.872Z",
+      "unit": "tokens"
+    },
+    "instructions.description_tokens": {
+      "value": 853,
+      "detail": [
+        {
+          "label": "project skills (2)",
+          "value": 153,
+          "unit": "tokens"
+        },
+        {
+          "label": "installed skills (8)",
+          "value": 621,
+          "unit": "tokens"
+        },
+        {
+          "label": "project agents (1)",
+          "value": 80,
+          "unit": "tokens"
+        },
+        {
+          "label": "installed skills: comfy-deploy",
+          "value": 135,
+          "unit": "tokens"
+        },
+        {
+          "label": "installed skills: comfy-build",
+          "value": 125,
+          "unit": "tokens"
+        },
+        {
+          "label": "project skills: space-peak-fact-guardrails",
+          "value": 86,
+          "unit": "tokens"
+        },
+        {
+          "label": "installed skills: comfy-custom-nodes",
+          "value": 83,
+          "unit": "tokens"
+        },
+        {
+          "label": "project agents: space-peak-fact-reviewer",
+          "value": 80,
+          "unit": "tokens"
+        },
+        {
+          "label": "installed skills: comfy-director",
+          "value": 77,
+          "unit": "tokens"
+        },
+        {
+          "label": "installed skills: comfy-relay",
+          "value": 72,
+          "unit": "tokens"
+        },
+        {
+          "label": "project skills: space-peak-publish-gate",
+          "value": 67,
+          "unit": "tokens"
+        },
+        {
+          "label": "installed skills: comfy",
+          "value": 48,
+          "unit": "tokens"
+        },
+        {
+          "label": "installed skills: merging",
+          "value": 44,
+          "unit": "tokens"
+        }
+      ],
+      "source": "state: bytes / 4 of the name, description and when_to_use frontmatter of every SKILL.md under params repo_skills (.claude/skills) and user_skills (~/.claude/skills), and every agent file under repo_agents (.claude/agents); 11 read",
+      "read_at": "2026-11-28T03:18:33.872Z",
+      "unit": "tokens"
+    },
+    "lead_time.hours": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "last N merged PRs timed end to end (N = params.last_prs, default 10): the median hours of session start to PR open (this Mac's transcripts, local runs only; in CI it is named in missing and the total starts at the PR opening), PR open to all green, all green to merge and merge to live (gh api graphql: createdAt, the merged head's last check, mergedAt, and the first successful params.environment deployment created at or after the merge), summed, so the parts add up to the whole (quality/collectors/claude/lead-time.mjs)",
+      "weak": true,
+      "unit": "h"
+    },
+    "simplicity.restated_rules": {
+      "value": 0,
+      "detail": [],
+      "source": "sentences of 8 or more words, markdown and case ignored, in /Library/Application Support/ClaudeCode/CLAUDE.md, ~/.claude/CLAUDE.md, ~/.claude/rules/*.md, the repo CLAUDE.md and the memory index",
+      "read_at": "2026-11-28T03:18:35.401Z",
+      "unit": "sentences"
+    },
+    "simplicity.broken_refs": {
+      "value": 15,
+      "detail": [
+        {
+          "label": "rules/comfy.md: tools/comfy_guard.py",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/comfy.md: ../tools/comfy_guard.py",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/comfy.md: tools/claude_deny.json",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/compute-detail.md: .github/workflows/ci-standard.yml",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/compute-detail.md: tools/ci_standard.py",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/compute-detail.md: ../templates/ci/POOL.md",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/compute-detail.md: templates/ci/ci-pool.yml",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/compute-detail.md: templates/ci/CI-POOL.md",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/compute-detail.md: tools/claude_deny.json",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/gates.md: templates/agents/AGENTS.md",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "rules/keys.md: tools/claude_deny.json",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "memory/space-peak-repo-location.md: .claude/worktrees/",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "memory/space-peak-repo-location.md: <a path under home>",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "memory/space-peak-repo-location.md: <a path under home>",
+          "value": 1,
+          "unit": "references"
+        },
+        {
+          "label": "memory/spacepeak-launch-plan.md: data/estimates/q-03",
+          "value": 1,
+          "unit": "references"
+        }
+      ],
+      "source": "paths in code spans and markdown links of ~/.claude/rules/*.md, the repo CLAUDE.md and the memory, resolved from home, the naming file's folder, the repo and the Git Crafter checkout; a path in a never or do-not line, or named as another's (another-repo's `x`), is left out; so is the managed CLAUDE.md, which may name other accounts' paths and which an administrator owns; living docs are docs.dead_paths on the Docs tab",
+      "read_at": "2026-11-28T03:18:35.401Z",
+      "unit": "references"
+    },
+    "simplicity.copy_drift": {
+      "could_not_check": "sync status: /opt/homebrew/Cellar/python@3.15/3.15.2/Frameworks/Python.framework/Versions/3.15/Resources/Python.app/Contents/MacOS/Python: can't open file '<a local path>",
+      "source": "the Git Crafter checkout: tools/code_os_sync.py status user-claude, every file not in-sync",
+      "unit": "copies"
+    },
+    "simplicity.undated_figures": {
+      "value": 31,
+      "detail": [
+        {
+          "label": "no read date",
+          "value": 31,
+          "unit": "figures"
+        },
+        {
+          "label": "read over 30 days ago",
+          "value": 0,
+          "unit": "figures"
+        },
+        {
+          "label": "02_substance/claims_register.md",
+          "value": 16,
+          "unit": "figures"
+        },
+        {
+          "label": "02_substance/Space-Peak-Concept-Brief.md",
+          "value": 14,
+          "unit": "figures"
+        },
+        {
+          "label": ".claude/skills/space-peak-fact-guardrails/SKILL.md",
+          "value": 1,
+          "unit": "figures"
+        }
+      ],
+      "source": "the Docs tab's doc set (params.doc_set on quality/targets/docs.json, less its doc_set_left_out, skipping its skip_dirs) less params.not_living; a figure is a percent, money, a comma-grouped number or a number with a unit, outside code; its sentence or table row needs a YYYY-MM-DD within 30 days; 18 docs",
+      "read_at": "2026-11-28T03:18:35.401Z",
+      "unit": "figures"
+    },
+    "simplicity.memory_stale_refs": {
+      "value": 2,
+      "detail": [
+        {
+          "label": "memory/space-peak-repo-location.md",
+          "value": 3,
+          "unit": "names"
+        },
+        {
+          "label": "memory/spacepeak-launch-plan.md",
+          "value": 1,
+          "unit": "names"
+        }
+      ],
+      "source": "memory notes (not the index): paths as in simplicity.broken_refs, and --flags of commands the repo ships, in code spans, that git grep finds in neither the repo nor the Git Crafter checkout",
+      "read_at": "2026-11-28T03:18:35.401Z",
+      "unit": "notes"
+    },
+    "tokens.latest_pr_rework_tokens": {
+      "value": 9893,
+      "by_repo": {
+        "space-peak": 9893
+      },
+      "detail": [
+        {
+          "label": "space-peak",
+          "value": 7257121,
+          "unit": "tokens",
+          "share": 100,
+          "cache_read_share": 98,
+          "merged": 20,
+          "tokens_per_pr": 630728,
+          "waste_share": 0,
+          "latest_rework": 9893,
+          "per_hour": 1633663
+        }
+      ],
+      "source": "~/.claude/projects/*/**/*.jsonl: message.usage input + output + cache write, one count per message.id; 27 project folders in 1 repos (space-peak); 257 left out: 119 no git remote, 111 a repo outside params.owners and params.repos, 27 no transcript records a cwd; pr-link entries joined with gh api graphql (state, merge time, pinned reviews), 50 PRs to a query; reviewRounds in blockers.mjs: the linking session's tokens after the first pinned review that found something, until the merge, on the latest merged PR among the last 20 merged linked PRs; the table's tokens and shares are over the last 1000 model calls, its PR columns over each repo's own last 20, its rework column each repo's latest merged PR, its per-hour column over the last 5 sessions with a cost record, by start; 4 GraphQL calls; the latest, space-peak#141, merged 2026-11-28",
+      "read_at": "2026-11-28T03:18:24.582Z",
+      "unit": "tokens"
+    },
+    "tokens.waste_share": {
+      "value": 0,
+      "by_repo": {
+        "space-peak": 0
+      },
+      "detail": [
+        {
+          "label": "on PRs closed unmerged",
+          "value": 0,
+          "unit": "tokens"
+        },
+        {
+          "label": "on merged PRs",
+          "value": 12634227,
+          "unit": "tokens"
+        },
+        {
+          "label": "PRs read",
+          "value": 20,
+          "unit": "PRs"
+        }
+      ],
+      "source": "~/.claude/projects/*/**/*.jsonl: message.usage input + output + cache write, one count per message.id; 27 project folders in 1 repos (space-peak); 257 left out: 119 no git remote, 111 a repo outside params.owners and params.repos, 27 no transcript records a cwd; pr-link entries joined with gh api graphql (state, merge time, pinned reviews), 50 PRs to a query; the last 20 opened linked PRs that merged or closed, each with its linking session's tokens split evenly over that session's merged and closed PRs",
+      "read_at": "2026-11-28T03:18:24.582Z",
+      "unit": "%"
+    },
+    "tokens.plan_used": {
+      "value": 23,
+      "detail": [
+        {
+          "label": "Weekly · all models",
+          "value": 23,
+          "unit": "%"
+        },
+        {
+          "label": "Weekly · Fable",
+          "value": 19,
+          "unit": "%"
+        },
+        {
+          "label": "days until the tightest resets",
+          "value": 5.8,
+          "unit": "days"
+        }
+      ],
+      "source": "state: quality/data/plan-usage.json, the app's get_usage weekly windows as a session last read them: percent used now of the tightest one (Weekly · all models), read 2026-11-28T03:17Z",
+      "read_at": "2026-11-28T03:18:24.582Z",
+      "unit": "%"
+    },
+    "tokens.latest_subagent_return_tokens": {
+      "value": 421,
+      "by_repo": {
+        "space-peak": 421
+      },
+      "detail": [
+        {
+          "label": "space-peak, 2026-11-28 03:17 UTC",
+          "value": 421,
+          "unit": "tokens"
+        },
+        {
+          "label": "space-peak, 2026-11-28 03:17 UTC",
+          "value": 5237,
+          "unit": "tokens"
+        },
+        {
+          "label": "space-peak, 2026-11-28 03:12 UTC",
+          "value": 58,
+          "unit": "tokens"
+        },
+        {
+          "label": "space-peak, 2026-11-28 03:12 UTC",
+          "value": 220,
+          "unit": "tokens"
+        },
+        {
+          "label": "space-peak, 2026-11-28 03:00 UTC",
+          "value": 302,
+          "unit": "tokens"
+        }
+      ],
+      "source": "~/.claude/projects/*/**/*.jsonl: message.usage input + output + cache write, one count per message.id; 27 project folders in 1 repos (space-peak); 257 left out: 119 no git remote, 111 a repo outside params.owners and params.repos, 27 no transcript records a cwd; a subagent transcript's last reply's text at 4 characters a token, which is what it returns to its parent (thinking is never returned; a reply with no text counts its output_tokens); the latest of the last 20 subagents to finish",
+      "read_at": "2026-11-28T03:18:24.582Z",
+      "unit": "tokens"
+    },
+    "tokens.review_fix_rounds_per_pr": {
+      "value": 0.5,
+      "detail": [
+        {
+          "label": "merged PRs",
+          "value": 10,
+          "unit": "PRs"
+        },
+        {
+          "label": "with a round that found something",
+          "value": 5,
+          "unit": "PRs"
+        },
+        {
+          "label": "rounds that found something",
+          "value": 5,
+          "unit": "rounds"
+        }
+      ],
+      "source": "~/.claude/projects/*/**/*.jsonl: message.usage input + output + cache write, one count per message.id; 27 project folders in 1 repos (space-peak); 257 left out: 119 no git remote, 111 a repo outside params.owners and params.repos, 27 no transcript records a cwd; pr-link entries joined with gh api graphql (state, merge time, pinned reviews), 50 PRs to a query; reviewRounds in blockers.mjs: pinned review rounds that found something, mean over the last 10 merged linked PRs",
+      "read_at": "2026-11-28T03:18:24.582Z",
+      "unit": "rounds"
+    },
+    "credits.idle_replaceable": {
+      "could_not_check": "no allowance to read: list them in params.allowances on targets/credits.json, or name a registry",
+      "source": "params.allowances",
+      "unit": "allowances"
+    },
+    "credits.unclaimed_free": {
+      "could_not_check": "no allowance to read: list them in params.allowances on targets/credits.json, or name a registry",
+      "source": "params.allowances",
+      "unit": "allowances"
+    },
+    "credits.highest_used_share": {
+      "could_not_check": "no allowance to read: list them in params.allowances on targets/credits.json, or name a registry",
+      "source": "params.allowances",
+      "unit": "%"
+    },
+    "credits.actions_pool_used": {
+      "could_not_check": "no allowance to read: list them in params.allowances on targets/credits.json, or name a registry",
+      "source": "params.allowances",
+      "unit": "%"
+    },
+    "credits.usage_read_share": {
+      "could_not_check": "no allowance to read: list them in params.allowances on targets/credits.json, or name a registry",
+      "source": "params.allowances",
+      "unit": "%"
+    },
+    "credits.registry_age_days": {
+      "could_not_check": "no allowance to read: list them in params.allowances on targets/credits.json, or name a registry",
+      "source": "params.allowances",
+      "unit": "days"
+    },
+    "site.orgs_sourced_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state now: data/orgs/*.yaml whose fact cites a source with an https URL, a quote and a read date, and that site/src/lib/orgs/check.ts checkOrgs gives no fact.source issue (a source read over 365 days ago, or a fact URL another org uses)",
+      "weak": true,
+      "unit": "%"
+    },
+    "site.figures_with_status_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state now: elements with data-claim or class figure on the site/dist pages that hold a .figure-chip whose word is the claim's status in site/dist/data/claims.json; not measured while the built pages show no figure",
+      "weak": true,
+      "unit": "%"
+    },
+    "site.orgs_per_kind": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state now: data/orgs/*.yaml counted by each kind in site/src/lib/orgs/kinds.ts; the value is the smallest count, and a kind with no org counts 0",
+      "weak": true,
+      "unit": "orgs"
+    },
+    "ai.files_valid_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "state now: site/dist/data/index.json and every file it lists, each against its sha256 there and its JSON Schema under site/dist/data/schemas/ (zod fromJSONSchema), orgs.csv row by row; a schema file must load as a JSON Schema",
+      "weak": true,
+      "unit": "%"
+    }
+  }
+}

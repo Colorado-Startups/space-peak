@@ -4,7 +4,7 @@
   "by": "04_tools/space_peak_map.py",
   "date": "2026-11-27",
   "register": "02_substance/claims_register.md",
-  "register_git_blob": "543cc6c7ac5e1708b916f1a976c11fecd3ed0623",
+  "register_git_blob": "8e8f1731462c6ae191e7ff3199cec30d863db3dd",
   "license": "CC0-1.0"
  },
  "features": [
@@ -763,12 +763,17 @@
      },
      {
       "id": "S-05",
-      "claim": "Southernmost 14er, about 37.1 N",
-      "status": "unverified"
+      "claim": "Colorado's southernmost 14er, about 37.1 N",
+      "status": "corrected"
      },
      {
       "id": "S-06",
       "claim": "Privately owned, Cielo Vista Ranch, single landowner",
+      "status": "unverified"
+     },
+     {
+      "id": "S-21",
+      "claim": "Private-deal complexity; watershed",
       "status": "unverified"
      }
     ]
@@ -909,7 +914,7 @@
      {
       "id": "S-20",
       "claim": "Sisnaajini, sacred to the Navajo",
-      "status": "unverified"
+      "status": "verified"
      }
     ]
    },

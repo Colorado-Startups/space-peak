@@ -77,7 +77,6 @@
      "area": [
       "03_deliverables/map/",
       ":(exclude)03_deliverables/map/space_peak_map.geojson",
-      "site/src/components/figure.ts",
       "site/src/pages/map/"
      ]
     },

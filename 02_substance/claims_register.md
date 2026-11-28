@@ -33,27 +33,29 @@ A reader must see that a figure is unconfirmed without inferring it from the ton
 | `unverifiable` | It says no public source settles the claim, or drops it | As `unverified` |
 | `open` | It says the row is an estimate or a decision, never a fact | The odds cards say "estimate" |
 
-Paul set the site column on 2026-11-28 (issue #153). A page shows no status chip, claim ID or read date; this file and `/data/claims.json` keep them.
+Paul set the site column on 2026-11-28 (issue #153). A page shows no status chip, claim ID or read date. This file and `/data/claims.json` keep them.
 
-**A goal is not a claim.** The home page's "Colorado's hub for the future of space." is the goal of the launch plan Paul approved on 2026-11-16, in his words. It needs no row and no label. A goal with a number still names itself a goal, per the no-bare-figures warning in `01_doctrine/voice-machine-rules.md`.
+The site takes a confirmed figure's link from the first URL in its Source cell, or from the row it cites ("Per P-03"). G- and R- rows take their section's source. A confirmed row with none of these shows no link, as S-18 would.
 
-`04_tools/space_peak_claims.py` warns (`unlabeled-claim`) when an unconfirmed place claim has no cue in its sentence. Its cues, in `04_tools/space_peak_rules.json`, are wider than this rule, so a clean run is not proof.
+**A goal is not a claim.** The home page's "Colorado's hub for the future of space." states the project's aim, not a factual claim. It needs no row and no label. A goal with a number still names itself a goal, per the no-bare-figures warning in `01_doctrine/voice-machine-rules.md`.
+
+`04_tools/space_peak_claims.py` warns (`unlabeled-claim`) when an `unverified` place claim has no cue in its sentence. Its cues, in `04_tools/space_peak_rules.json`, are wider than this rule, so a clean run is not proof.
 
 ## Site table claims
 
-Transcribed from the brief's site tour. Every elevation, ownership status, land status, and firing-lane claim below is `unverified` until checked against a public source. S-05, S-16, S-18 and S-20 have been checked.
+Transcribed from the brief's site tour. Every elevation, ownership status, land status, and firing-lane claim below is `unverified` until checked against a public source. S-05, S-06, S-16, S-18 and S-20 have been checked.
 
 | ID | Site | Claim | Status | Source | Notes |
 | --- | --- | --- | --- | --- | --- |
 | S-01 | Greenhorn / Wet Mtns | Elevation about 12,300 ft | `unverified` | | |
 | S-02 | Greenhorn / Wet Mtns | Fires east over Pinon Canyon Army live-fire land | `unverified` | | Corridor control is the whole engineering argument for this site. A search on 2026-11-27, a lead and not a read, found live fire at the Pinon Canyon Maneuver Site limited to .50 caliber and below in late 2025. Army plans from 2025 and 2026 would add larger weapons |
-| S-03 | Greenhorn / Wet Mtns | Federal land | `unverified` | | A lead, not a read. A search on 2026-11-27 found the Greenhorn Mountain Wilderness in San Isabel National Forest. Whether the summit lies inside it is unchecked. E-07 rates national forest brutal |
+| S-03 | Greenhorn / Wet Mtns | Federal land | `unverified` | | A lead, not a read. A search on 2026-11-27 found the Greenhorn Mountain Wilderness in San Isabel National Forest. Whether the summit lies inside it is unchecked. The brief's risk register rates national forest land brutal |
 | S-04 | Culebra Peak | Elevation 14,047 ft | `unverified` | | |
 | S-05 | Culebra Peak | Colorado's southernmost 14er, about 37.1 N | `corrected` | Wikipedia, List of Colorado fourteeners, https://en.wikipedia.org/wiki/List_of_Colorado_fourteeners, read 2026-11-27 | Corrected. Was "Southernmost 14er". Mount Whitney in California lies further south. GNIS 269051 puts it at 36.57858 N, queried 2026-11-27 as in Site coordinates. NPS gives its summit as 14,505 ft (https://www.nps.gov/seki/planyourvisit/whitney.htm, read 2026-11-27). The list puts Culebra at 37.1224 N and the next, Little Bear Peak, at 37.5666 N. Latitude drives the spin argument |
-| S-06 | Culebra Peak | Privately owned, Cielo Vista Ranch, single landowner | `unverified` | | Ownership may have changed; check current records. A search on 2026-11-27, a lead and not a read, found William Harrison as owner since a 2017 sale. The Colorado Sun still named him on 2026-02-20. Land-grant heirs hold access rights there under Lobato v. Taylor. Land-grant heirs won grazing rights there in May 2026, per the Colorado Sun of 2026-05-14 (a lead) |
+| S-06 | Culebra Peak | Privately owned, Cielo Vista Ranch, single landowner | `verified` | The Colorado Sun, J. Brown, Sheep win in San Luis Valley livestock vs. billionaire ranch owner battle, 2026-05-14, https://coloradosun.com/2026/05/14/san-luis-ranch-land-battle-fence/, read 2026-11-28; The Colorado Sun, J. Brown, Colorado should buy part of San Luis Valley ranch at the center of a long-running land battle, report says, 2026-10-08, https://coloradosun.com/2026/10/08/san-luis-valley-land-battle-salazar-report/, read 2026-11-28 | Verified 2026-11-28. The May article says William Harrison owns the land and shares rights with heirs of the 1844 Sangre de Cristo Land Grant. It names Culebra Peak as the ranch's tallest mountain. Heirs hold access rights under Lobato v. Taylor, filed 1981. A special master's ruling that May kept their grazing but ended firewood collection in a 233-acre buffer around Harrison's new house. The October article says Harrison bought the ranch in 2017 for $105 million and declined to sell all of it to the state. It reports a state envoy's recommendation that Colorado buy about 10,000 acres of the ranch. The Next Summit (A. Derr, 2026-10-09, https://thenextsummit.org/colorado-may-buy-10000-acres-of-cielo-vista-ranch-culebra/, read 2026-11-28) adds that the envoy's report never names Culebra. It also says the report gave the parties 45 days to agree. That window closed about 2026-11-21, and searches on 2026-11-28 found no deal reported. A purchase would put a second owner on the ranch, and on Culebra if the parcel includes it. The Sun gives the ranch as 77,000 acres in May and 83,000 in October |
 | S-07 | Spanish Peaks | Elevation about 13,600 ft | `unverified` | | |
 | S-08 | Spanish Peaks | Open southeast shot over Comanche National Grassland | `unverified` | | |
-| S-09 | Spanish Peaks | Federal land | `unverified` | | A lead, not a read. A search on 2026-11-27 put the peaks in the Spanish Peaks Wilderness, San Isabel National Forest, run by the USDA Forest Service. E-07 rates national forest brutal |
+| S-09 | Spanish Peaks | Federal land | `unverified` | | A lead, not a read. A search on 2026-11-27 put the peaks in the Spanish Peaks Wilderness, San Isabel National Forest, run by the USDA Forest Service. The brief's risk register rates national forest land brutal |
 | S-10 | Almagre (Baldy) | Elevation 12,367 ft | `unverified` | | |
 | S-11 | Almagre (Baldy) | Same granite batholith as Pikes | `unverified` | | |
 | S-12 | Almagre (Baldy) | USFS land; city watershed on its flanks | `unverified` | | |
@@ -62,7 +64,7 @@ Transcribed from the brief's site tour. Every elevation, ownership status, land 
 | S-15 | Pikes Peak | About 39 N; fires east over Kansas and metro | `unverified` | | |
 | S-16 | Pikes Peak | National Historic Landmark | `verified` | NPS, List of NHLs by State, https://www.nps.gov/subjects/nationalhistoriclandmarks/list-of-nhls-by-state.htm, read 2026-11-16 | Listed as "Pike's Peak - 07/04/61, El Paso County, CO" among Colorado's designated NHLs, not the "determined eligible" list |
 | S-17 | Crestones / Sand Dunes | Elevation about 14,000 ft | `unverified` | | |
-| S-18 | Crestones / Sand Dunes | Great Sand Dunes National Park & Preserve; the Crestones in the Sangre de Cristo Wilderness, Rio Grande National Forest, beside it | `verified` | USGS Geolex (Crestone Peak quadrangle); NPS Great Sand Dunes "Nearby attractions" | |
+| S-18 | Crestones / Sand Dunes | Great Sand Dunes National Park & Preserve; the Crestones in the Sangre de Cristo Wilderness, Rio Grande National Forest, beside it | `verified` | USGS Geolex (Crestone Peak quadrangle); NPS Great Sand Dunes "Nearby attractions" | No URL yet, so it would show without a link |
 | S-19 | Blanca Peak | Elevation 14,345 ft | `unverified` | | |
 | S-20 | Blanca Peak | Sisnaajini, sacred to the Navajo | `verified` | Great Sand Dunes NPP photo caption, 2016-12-08, https://commons.wikimedia.org/wiki/File:Blanca_Peak_(Sisnaajini)_(32221679993).jpg, read 2026-11-27 | Verified 2026-11-27. The park's caption calls it one of four sacred mountains to the Navajo. It gives the name as Sisnaajini, Dawn or White Shell Mountain. Credited NPS/Patrick Myers, from the park's Flickr account greatsanddunesnpp. The brief spells it Sisnaajiní |
 | S-21 | Culebra Peak | Private-deal complexity; watershed | `unverified` | | The brief's veto for Culebra |

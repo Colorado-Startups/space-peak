@@ -44,4 +44,4 @@ The same workflow serves the map in `03_deliverables/map/` at `/map/`. It is a r
 | Where | Rule |
 | --- | --- |
 | The map page | It says "speculative" once, and every summit point keeps its USGS GNIS source |
-| Across the site | A sourced figure shows a small "source" link. A page with an unconfirmed figure says so in one line (`01_doctrine/voice-map-and-site.md`, Figures on the site) |
+| Across the site | Each figure is labelled as the claims register's [labelling rule](../02_substance/claims_register.md#labelling-an-unconfirmed-figure) says |

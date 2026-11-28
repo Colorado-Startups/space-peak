@@ -6,7 +6,7 @@ From the [Space Peak concept brief](../Space-Peak-Concept-Brief.md), a speculati
 
 Selection criteria, in priority order: **southern latitude** (more free spin from Earth's rotation), **clean east/southeast firing lane over empty land**, **good granite**, **road/rail access**, **fewest stakeholders**.
 
-*Every elevation, land status, ownership and firing-lane claim in this table is unverified (claims register S-01 to S-21). The exceptions are the Pikes Peak landmark (S-16), the Crestones land status (S-18), Blanca's sacred status (S-20) and Culebra as Colorado's southernmost 14er (S-05, corrected).*
+*Every elevation, land status, ownership and firing-lane claim in this table is unverified (claims register S-01 to S-21). The exceptions are the Pikes Peak landmark (S-16), the Crestones land status (S-18), Blanca's sacred status (S-20), Culebra as Colorado's southernmost 14er (S-05, corrected) and Culebra's single private owner (S-06).*
 
 | Site | Elev (ft) | Why it's interesting | The veto |
 |---|---|---|---|

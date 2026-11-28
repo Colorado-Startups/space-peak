@@ -58,10 +58,6 @@ const rows = orgs.map((org) => ({ org, source: org.sources.find((s) => s.id === 
           </tbody>
         </table>
       </div>
-      <script>
-        // A dynamic import keeps Astro from inlining the script, which the CSP (script-src 'self') would block.
-        import("../../scripts/guide-filter.client.ts").then((m) => m.init(document));
-      </script>
     </>
   )}
 </section>

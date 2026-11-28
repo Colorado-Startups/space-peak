@@ -1,6 +1,6 @@
 ---
 // The home page. Each home section is its own file in src/sections/home/, rendered in filename order
-// (10-hero, 20-place, ...), so a step adds a section by adding a file. Until the hero lands, the headline below is the page.
+// (10-hero, 20-place, ...), so a step adds a section by adding a file. With no section file, the headline below is the page.
 import Base from "../layouts/Base.astro";
 import { liveLinks } from "../lib/nav";
 const modules = import.meta.glob<{ default: any }>("../sections/home/*.astro", { eager: true });

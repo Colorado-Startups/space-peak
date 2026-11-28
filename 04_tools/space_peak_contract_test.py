@@ -215,7 +215,7 @@ def deny_contract(rules, settings):
 
 
 def hook_contracts(rules, paths):
-    """C9, C10 and C15, read from the settings file, not header comments."""
+    """C9, C9b, C10 and C15, read from the settings file, not header comments."""
     print()
     print("hook wiring (settings file, not header comments)")
     settings_rel = ".claude/settings.json"

@@ -67,6 +67,14 @@ describe("the world's launch count, read from E-02", () => {
   it("fails the build on a claim without a dated count", () => {
     expect(() => busyYear({ ...row, claim: "About 250 rocket launches worldwide in a busy year" })).toThrow(/E-02: the claim names no/);
   });
+
+  it("fails the build on a count below 1", () => {
+    expect(() => busyYear({ ...row, claim: "The world made 0 orbital launch attempts in 2024" })).toThrow(/E-02: the launch count must be 1 or more, got 0/);
+  });
+
+  it("fails the build on stray commas rather than reading a wrong count", () => {
+    expect(() => busyYear({ ...row, claim: "The world made 1,0,,2 orbital launch attempts in 2024" })).toThrow(/E-02: the claim names no/);
+  });
 });
 
 describe("the cadence script on a fixture", () => {

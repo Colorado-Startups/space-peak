@@ -33,7 +33,7 @@ const ends = [STOPS[0], STOPS[STOPS.length - 1]].map(formatCount);
         <span class="cadence-track" aria-hidden="true"><span class="cadence-bar cadence-bar--rate" data-cadence-bar="rate" style={`--share: ${view.share.rate}`}></span></span>
       </p>
       <p class="cadence-row">
-        <span class="cadence-label">World, orbital launches <Figure claim="E-02" value={`${formatCount(world.count)} in ${world.year}`} /></span>
+        <span class="cadence-label">World, orbital launch attempts <Figure claim="E-02" value={`${formatCount(world.count)} in ${world.year}`} /></span>
         <span class="cadence-track" aria-hidden="true"><span class="cadence-bar cadence-bar--world" data-cadence-bar="world" style={`--share: ${view.share.world}`}></span></span>
       </p>
     </div>

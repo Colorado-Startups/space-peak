@@ -1,5 +1,5 @@
 // Step 27 (issue #122): the live map on /map/ loads only on press, and the drawing and list stay the map without it.
-// Tile hosts have no SLA, so every test routes them to local answers. The size test walks dist/ as Git Crafter's
+// Tile hosts have no SLA, so no test reaches them. The size test walks dist/ as Git Crafter's
 // quality/collectors/code/code-client.mjs does for code.client_js_kb, with backtick specifiers followed too.
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync, readdirSync } from "node:fs";
@@ -10,26 +10,41 @@ const DIST = join(import.meta.dirname, "..", "dist");
 const BUDGET_KIB = 307; // code.client_js_kb's goal (Git Crafter code-os #120).
 const MAP_CODE = /maplibre|live\.client|tiles\.openfreemap\.org|tiles\.mapterhorn\.com|\/data\/map\.geojson/;
 const CREDIT = '<a href="https://openfreemap.org">OpenFreeMap</a> <a href="https://www.openmaptiles.org/">© OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
-const STYLE = {
+// Vector tiles come from the test server, which answers 404, and MapLibre reads a 404 as no data.
+const STYLE = (origin: string) => ({
   version: 8,
-  sources: { openmaptiles: { type: "vector", tiles: ["https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf"], maxzoom: 14, attribution: CREDIT } },
+  sources: { openmaptiles: { type: "vector", tiles: [`${origin}/no-tiles/{z}/{x}/{y}.pbf`], maxzoom: 14, attribution: CREDIT } },
   layers: [{ id: "background", type: "background" }, { id: "water", type: "fill", source: "openmaptiles", "source-layer": "water" }],
-};
+});
 // SwiftShader gives headless Chromium a software WebGL2 on a CI runner with no GPU.
 test.use({ launchOptions: { args: ["--enable-unsafe-swiftshader", "--use-angle=swiftshader", "--ignore-gpu-blocklist"] } });
 
-// The style and empty (204) vector tiles from OpenFreeMap; Mapterhorn answers 404, which MapLibre treats as no data.
-// Down: all abort. context.route also catches what MapLibre's worker fetches.
+const ORIGIN = () => new URL(String(test.info().project.use.baseURL)).origin;
+
+// For the tests that never draw a map: the tile hosts are routed, and down means every request aborts.
 async function tiles(page: Page, up = true): Promise<string[]> {
   await page.context().route(/^https:\/\/tiles\.(openfreemap\.org|mapterhorn\.com)\//, (route) => {
-    const url = route.request().url();
     if (!up) return route.abort();
-    if (url.endsWith("/styles/positron")) return route.fulfill({ json: STYLE });
-    return route.fulfill({ status: url.includes("openfreemap") ? 204 : 404 });
+    if (route.request().url().endsWith("/styles/positron")) return route.fulfill({ json: STYLE(ORIGIN()) });
+    return route.fulfill({ status: 404 });
   });
   const seen: string[] = [];
   page.on("request", (r) => seen.push(r.url()));
   return seen;
+}
+// For the test that draws one: with routes on, the map never reached its first full draw in CI and logged no error
+// (runs 46097037327 and 46099126170). MapLibre's worker fetches the vector tiles, so nothing is routed here: the
+// page's own fetch answers OpenFreeMap's style and Mapterhorn's relief (404, no data), and the test server the tiles.
+async function fakeHosts(page: Page): Promise<void> {
+  await page.addInitScript((style) => {
+    const real = window.fetch.bind(window);
+    window.fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = input instanceof Request ? input.url : String(input);
+      if (url.startsWith("https://tiles.openfreemap.org/styles/")) return Promise.resolve(Response.json(style));
+      if (url.startsWith("https://tiles.mapterhorn.com/")) return Promise.resolve(new Response(null, { status: 404 }));
+      return real(input, init);
+    }) as typeof fetch;
+  }, STYLE(ORIGIN()));
 }
 const press = (page: Page) => page.getByRole("button", { name: "Open the live map" }).click();
 
@@ -58,7 +73,9 @@ test("the press loads MapLibre and draws the region over the tiles, with every c
   page.on("console", (m) => void (["error", "warning"].includes(m.type()) && notes.push(`${m.type()}: ${m.text()}`)));
   page.on("requestfailed", (r) => notes.push(`failed: ${r.url()} ${r.failure()?.errorText}`));
   page.on("worker", (w) => notes.push(`worker: ${w.url()}`));
-  await tiles(page);
+  const hosts: string[] = [];
+  page.context().on("request", (r) => void (/^https:\/\/tiles\./.test(r.url()) && hosts.push(r.url())));
+  await fakeHosts(page);
   await page.goto("/map/");
   const chunk = page.waitForRequest(/\/maplibre-gl[^/]*\.js$/);
   await press(page);
@@ -75,6 +92,7 @@ test("the press loads MapLibre and draws the region over the tiles, with every c
   for (const name of ["OpenStreetMap contributors", "OpenMapTiles", "OpenFreeMap", "Mapterhorn", "Region: coloradostartups.org"]) await expect(credits).toContainText(name);
   await expect(status).toContainText("Live map open");
   expect(notes.filter((n) => n.startsWith("pageerror"))).toEqual([]);
+  expect(hosts, "the tile hosts were reached over the network").toEqual([]);
 });
 
 test("with no WebGL2 the press keeps the drawing and the list, says why, and fetches no MapLibre", async ({ page }) => {

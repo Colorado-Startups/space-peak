@@ -1,0 +1,39 @@
+{
+  "comment": "The startup-credits catalog /guide/ shows, read by scripts/resources/pull.mjs. sha256 is the catalog file at commit. Change commit and sha256 together, then run node scripts/resources/pull.mjs; it writes links_checked, left_out and outputs.",
+  "repo": "Colorado-Startups/startup-credits",
+  "commit": "50b11d0c0bee91870844fee0d20680a4d5934319",
+  "path": "catalog/programs.json",
+  "license": "CC0-1.0",
+  "sha256": "ba846244eacdd9e43bfbb03a558cab9a1761a29ad8ac1c8c18e5caf096ab7ef7",
+  "links_checked": "2026-11-27",
+  "left_out": [
+    {
+      "id": "akamai-rise",
+      "link": "https://www.akamai.com/cloud/start-ups/rise",
+      "problem": "HTTP 403"
+    },
+    {
+      "id": "cloudflare-tier3",
+      "link": "https://www.cloudflare.com/lp/startups",
+      "problem": "HTTP 404"
+    },
+    {
+      "id": "hyperstack-inception",
+      "link": "https://nvidia.my.site.com/Inception/s/NVIDIA-Inception-for-Startups",
+      "problem": "fetch failed: UNABLE_TO_VERIFY_LEAF_SIGNATURE"
+    },
+    {
+      "id": "inception",
+      "link": "https://programs.nvidia.com/phoenix/application",
+      "problem": "fetch failed: UNABLE_TO_VERIFY_LEAF_SIGNATURE"
+    },
+    {
+      "id": "cloudflare-tier2-1",
+      "link": "https://www.cloudflare.com/lp/startups",
+      "problem": "HTTP 404"
+    }
+  ],
+  "outputs": {
+    "data/resources.json": "7b86e3c8cfb83529b8df69d5d5e23a24bcad308268849a4c7e4496a8659572e3"
+  }
+}

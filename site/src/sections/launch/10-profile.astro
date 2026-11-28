@@ -1,0 +1,75 @@
+---
+// The mass driver's run through a peak, drawn at build time in the speculative yellow hatch. The drawing
+// carries no number: each lettered point is keyed to a register row, which <Figure> shows with its status.
+import Figure from "../../components/Figure.astro";
+import { launch, markOf, type Anchor } from "../../lib/launch/data";
+
+const [PORTAL, MUZZLE] = [[110, 340], [436, 93]] as const;
+// Where each letter sits, beside the point it marks, in the 800 by 440 viewBox.
+const AT: Record<Anchor, readonly [number, number]> = {
+  portal: [96, 386], tunnel: [218, 313], muzzle: [486, 150], air: [36, 93], arc: [600, 84], orbit: [748, 66],
+};
+const marks = launch().profile.map((e, i) => ({ ...e, mark: markOf(i), xy: AT[e.at] }));
+const ROCK = "M0 352L70 348L110 340L190 262L270 190L350 128L420 100L440 90L458 98L530 160L610 262L700 300L800 308V440H0Z";
+const ARC = `M${MUZZLE.join(" ")}C520 30 650 16 774 14`;
+const tilt = Math.round((Math.atan2(MUZZLE[1] - PORTAL[1], MUZZLE[0] - PORTAL[0]) * 1800) / Math.PI) / 10;
+const tunnel = { x1: PORTAL[0], y1: PORTAL[1], x2: MUZZLE[0], y2: MUZZLE[1] };
+---
+<section aria-labelledby="profile">
+  <h2 id="profile">The profile</h2>
+  <div class="profile-body">
+    <figure class="profile-figure">
+      <svg viewBox="0 0 800 440" role="img" aria-labelledby="profile-title profile-desc">
+        <title id="profile-title">The mass driver's run through a peak, speculative</title>
+        <desc id="profile-desc">Side view, west on the left. A tunnel climbs from a portal at the foot of a peak to a muzzle near its summit. A flight arc then rises east toward orbit. Not to scale. Each lettered point is in the key.</desc>
+        <defs>
+          <pattern id="launch-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="12" height="12" fill="var(--c-ground)" /><rect width="6" height="12" fill="var(--co-yellow)" />
+          </pattern>
+        </defs>
+        <path d={ROCK} fill="var(--c-surface-2)" stroke="var(--c-text-dim)" stroke-width="2" />
+        <g data-layer="tunnel">
+          <line {...tunnel} stroke="var(--c-text)" stroke-width="22" />
+          <line {...tunnel} stroke="url(#launch-hatch)" stroke-width="18" />
+        </g>
+        <line x1="66" y1={MUZZLE[1]} x2={MUZZLE[0] - 4} y2={MUZZLE[1]} stroke="var(--c-text-dim)" stroke-width="2" stroke-dasharray="8 8" />
+        <path d={ARC} fill="none" stroke="var(--c-text)" stroke-width="4" stroke-dasharray="2 10" stroke-linecap="round" data-layer="arc" />
+        <polygon points="774,3 796,14 774,25" fill="var(--c-text)" />
+        <text x="347" y="206" transform={`rotate(${tilt} 347 206)`} text-anchor="middle" dominant-baseline="middle" font-size="34" font-style="italic" font-weight="700" fill="var(--c-text)">speculative</text>
+        <text x="12" y="428" font-size="26" fill="var(--c-text-dim)">west</text>
+        <text x="788" y="428" font-size="26" text-anchor="end" fill="var(--c-text-dim)">east</text>
+        {marks.map((m) => (
+          <g data-mark={m.mark}>
+            <circle cx={m.xy[0]} cy={m.xy[1]} r="26" fill="var(--c-ground)" stroke="var(--c-text)" stroke-width="3" />
+            <text x={m.xy[0]} y={m.xy[1]} text-anchor="middle" dominant-baseline="central" font-size="30" font-weight="700" fill="var(--c-text)">{m.mark}</text>
+          </g>
+        ))}
+      </svg>
+      <figcaption>Side view, west to east, not to scale. Each value is a claims-register row, with its status.</figcaption>
+    </figure>
+    <ol class="profile-key">
+      {marks.map((m) => (
+        <li data-mark={m.mark}>
+          <span class="profile-mark">{m.mark}</span>
+          <span class="profile-label">{m.label}</span>
+          <Figure claim={m.claim} />
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .profile-body { display: grid; gap: var(--s-5); margin-block-end: var(--s-7); }
+  .profile-figure { margin: 0; display: grid; gap: var(--s-3); }
+  .profile-figure svg { display: block; inline-size: 100%; block-size: auto; }
+  figcaption { color: var(--c-text-dim); font-size: var(--t-step--1); }
+  .profile-key { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-4); max-width: none; }
+  .profile-key li { display: grid; grid-template-columns: auto 1fr; gap: var(--s-1) var(--s-3); align-items: start; }
+  .profile-mark {
+    grid-row: span 2; display: inline-grid; place-items: center; inline-size: var(--size-tap); block-size: var(--size-tap);
+    border: var(--line-bold) solid var(--c-text); border-radius: 50%; font-weight: 700;
+  }
+  .profile-label { color: var(--c-text-dim); font-size: var(--t-step--1); font-weight: 700; }
+  @media (min-width: 64rem) { .profile-body { grid-template-columns: 3fr 2fr; align-items: start; } }
+</style>

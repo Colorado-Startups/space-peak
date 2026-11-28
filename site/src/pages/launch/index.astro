@@ -1,0 +1,30 @@
+---
+// /launch/ (step 33): the speculative mass driver. Each section is its own file in src/sections/launch/,
+// rendered in filename order (10-profile, 20-make-or-break), so a later step adds one by adding a file.
+import Base from "../../layouts/Base.astro";
+
+const modules = import.meta.glob<{ default: any }>("../../sections/launch/*.astro", { eager: true });
+const sections = Object.keys(modules).sort().map((key) => modules[key].default);
+---
+<Base title="Launch: a speculative mass driver | Space Peak" description="A speculative mass driver through a Colorado peak: its run, and what makes or breaks it. Every value carries its claims-register status.">
+  <h1>Launch</h1>
+  <p class="launch-lead"><span class="hatch-tag">speculative</span> A mass driver through a Colorado peak: a venture thesis, not an engineering proposal.</p>
+  <nav class="launch-jump" aria-label="On this page"><a href="#profile">The profile</a><a href="#make-or-break">Make or break</a></nav>
+  {sections.map((Section) => <Section />)}
+</Base>
+
+<style>
+  .launch-lead { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2); font-size: var(--t-step-1); }
+  /* The speculative hatch, as on an unverified chip (styles/figure.css). */
+  .hatch-tag {
+    padding: 0.1em 0.55em;
+    border: var(--line-edge) solid var(--c-text);
+    border-radius: var(--r-chisel);
+    background: repeating-linear-gradient(-45deg, var(--co-yellow) 0 0.3em, var(--c-ground) 0.3em 0.6em);
+    color: var(--c-ink);
+    font-weight: 700;
+    text-shadow: 0 0 0.2em var(--c-ground), 0 0 0.2em var(--c-ground);
+  }
+  .launch-jump { display: flex; flex-wrap: wrap; gap: var(--s-4); margin-block-end: var(--s-6); }
+  .launch-jump a { display: inline-flex; align-items: center; min-height: var(--size-tap); }
+</style>

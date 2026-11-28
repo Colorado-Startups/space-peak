@@ -1,0 +1,18 @@
+---
+// The brief's make-or-break items, each its register row's own words with that row's status.
+import Figure from "../../components/Figure.astro";
+import { launch } from "../../lib/launch/data";
+
+const items = launch().make_or_break;
+---
+<section aria-labelledby="make-or-break">
+  <h2 id="make-or-break">Make or break</h2>
+  <p>The brief calls the mountain the romantic part. It says the business lives or dies on these.</p>
+  <ol class="mob">{items.map((id) => <li><Figure claim={id} /></li>)}</ol>
+</section>
+
+<style>
+  .mob { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); padding: 0; max-width: none; list-style-position: inside; }
+  .mob li { padding: var(--s-4); border: var(--line-hair) solid var(--c-rule); border-inline-start: var(--line-bold) solid var(--c-region-space-peak); border-radius: var(--r-card); }
+  .mob li::marker { font-weight: 700; }
+</style>

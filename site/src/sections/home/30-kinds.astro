@@ -1,0 +1,59 @@
+---
+// Home section 3, "Who is here" (step 32, issue #123): one tile per kind, its count taken from data/orgs at build,
+// each opening the guide filtered to that kind (guide-filter.client.ts reads ?kind=). Beside them, the region
+// drawing that /maps/region.svg serves, as a small map that opens /map/. No script.
+import { getCollection } from "astro:content";
+import { frame } from "../../lib/map/draw";
+import { KINDS, type Kind } from "../../lib/orgs/kinds";
+
+const LABEL: Record<Kind, string> = {
+  command_base: "Commands and bases",
+  institution: "Universities and institutions",
+  company: "Companies and startups",
+};
+// The guide's rule: every org that is not closed.
+const orgs = (await getCollection("orgs")).map((entry) => entry.data).filter((org) => org.status !== "closed");
+const tiles = KINDS.map((kind) => ({ kind, label: LABEL[kind], count: orgs.filter((org) => org.kind === kind).length }));
+const { width, height } = frame("region");
+---
+<section class="kinds" aria-labelledby="kinds-title">
+  <h2 id="kinds-title">Who is here</h2>
+  <div class="kinds-body">
+    <ul class="kinds-tiles">
+      {tiles.map(({ kind, label, count }) => (
+        <li>
+          <a href={`/guide/?kind=${kind}`} data-kind-tile={kind} data-count={count}>
+            <span class="kinds-n"><span class="kinds-mark" data-kind={kind} aria-hidden="true"></span>{count}</span>
+            <span class="kinds-label">{label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a class="kinds-map" href="/map/">
+      <img src="/maps/region.svg" alt="The region drawing, with each organisation marked by kind." width={width} height={height} loading="lazy" decoding="async" />
+      <span class="kinds-map-label">Open the map</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .kinds { margin-block: var(--s-8) 0; }
+  .kinds-body { display: grid; gap: var(--s-5); align-items: start; }
+  .kinds-tiles { display: grid; gap: var(--s-3); margin: 0; padding: 0; list-style: none; max-width: none; }
+  .kinds-tiles a { display: grid; gap: var(--s-1); min-height: var(--size-tap); padding: var(--s-4) var(--s-5); border: var(--line-hair) solid var(--c-rule); border-inline-start: var(--size-ledge) solid var(--c-region-space-peak); border-radius: var(--r-chisel); text-decoration: none; }
+  .kinds-tiles a:hover { border-color: var(--c-text); }
+  .kinds-n { display: inline-flex; align-items: center; gap: var(--s-3); font-family: var(--font-display); font-size: var(--t-step-4); font-weight: 700; line-height: 1; }
+  .kinds-label { font-weight: 700; }
+  /* Kind looks, as on the guide and the map: blue square, green diamond, purple circle. */
+  .kinds-mark { display: inline-block; flex: none; width: var(--size-check); height: var(--size-check); }
+  .kinds-mark[data-kind="command_base"] { background: var(--c-kind-blue); }
+  .kinds-mark[data-kind="institution"] { background: var(--c-kind-green); transform: rotate(45deg) scale(0.85); }
+  .kinds-mark[data-kind="company"] { background: var(--c-kind-purple); border-radius: 50%; }
+  .kinds-map { display: grid; gap: var(--s-2); justify-items: start; max-width: 24rem; font-weight: 700; }
+  .kinds-map img { display: block; width: 100%; height: auto; border: var(--line-hair) solid var(--c-rule); }
+  .kinds-map-label { display: inline-flex; align-items: center; min-height: var(--size-tap); }
+  @media (min-width: 48rem) {
+    .kinds-body { grid-template-columns: minmax(0, 1fr) minmax(0, 24rem); }
+    .kinds-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+</style>

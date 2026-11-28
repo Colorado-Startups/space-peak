@@ -11,7 +11,11 @@ const sections = Object.keys(modules).sort().map((key) => modules[key].default);
 const orgs = (await getCollection("orgs")).filter((o) => o.data.status !== "closed").sort((a, b) => a.data.name.localeCompare(b.data.name));
 const list = itemList("Who is here in the Space Peak region", orgs.map((o) => ({ name: o.data.name, url: `/guide/#org-${o.id}` })));
 ---
-<Base title="Guide: who is here | Space Peak" description="The commands, bases, institutions and companies in the Space Peak region, each with one sourced fact." jsonld={[list]}>
+<Base title="Guide: who is here | Space Peak" description="The commands, bases, institutions and companies in the Space Peak region, each with one sourced fact, and the startup credits a founder can apply for." jsonld={[list]}>
   <h1>Who is here</h1>
   {sections.map((Section) => <Section />)}
+  <script>
+    // One filter for every section's table. A dynamic import keeps Astro from inlining the script, which the CSP (script-src 'self') would block.
+    import("../../scripts/guide-filter.client.ts").then((m) => m.init(document));
+  </script>
 </Base>

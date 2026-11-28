@@ -1,7 +1,7 @@
 # Each case patches valid/example-command.yaml and must fail at `path`.
 - { path: id, patch: { id: Not_Kebab } }
 - { path: name, patch: { name: "" } }
-- { path: summary, patch: { summary: "{long}" } }
+- { path: summary, patch: { summary: "" } }
 - { path: kind, patch: { kind: agency } }
 - { path: subkind, patch: { subkind: startup } }
 - { path: city, patch: { city: denver } }

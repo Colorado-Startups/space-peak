@@ -14,6 +14,7 @@ export const sourceSchema = z.strictObject({
     (v) => (v instanceof Date ? v.toISOString().slice(0, 10) : v),
     z.iso.date().refine((d) => d <= today(), "read date is in the future"),
   ),
+  // A real check, not a guideline (issue #154): it limits how much of someone else's page we copy, a copyright guard.
   quote: z.string().trim().min(1).refine((q) => words(q) <= 15, "quote is over 15 words").optional(),
 });
 
@@ -21,7 +22,7 @@ export const orgSchema = z
   .strictObject({
     id: kebab,
     name: z.string().trim().min(1),
-    summary: z.string().trim().min(1).max(200),
+    summary: z.string().trim().min(1), // length is a guideline: check.ts warns past SUMMARY_CHARS
     kind: z.enum(KINDS),
     subkind: z.string(),
     city: z.enum(CITIES),

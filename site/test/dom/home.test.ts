@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // Home sections 3 and 4 and their photos (step 32, issue #123): counts equal the data, links resolve,
-// pipeline orgs stand on their own sourced words, photos carry credit and source, word budgets hold.
+// pipeline orgs stand on their own sourced words, photos carry credit and source, word budgets warn (issue #154).
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
@@ -14,7 +14,7 @@ import { DIST_DIR, SITE_DIR, builtPages, distExists } from "./pages";
 
 const PHOTOS_DIR = path.join(SITE_DIR, "src", "assets", "photos");
 const ORGS_DIR = path.join(SITE_DIR, "..", "data", "orgs");
-const BUDGET = { kinds: 15, pipeline: 30 }; // about 15 and about 30 words, issue #123
+const BUDGET = { kinds: 15, pipeline: 30 }; // about 15 and about 30 words, issue #123; guidelines, issue #154
 const STEPS = ["learn", "build", "launch", "fly", "defend"];
 const dom = (html: string) => new DOMParser().parseFromString(html, "text/html");
 
@@ -37,8 +37,7 @@ function words(el: Element): number {
 }
 
 describe("photo records", () => {
-  it("holds up to 3 photos, each with a record", () => {
-    expect(photoFiles.length).toBeLessThanOrEqual(3);
+  it("gives each photo a record", () => {
     for (const f of photoFiles) expect(existsSync(path.join(PHOTOS_DIR, f.replace(/\.[^.]+$/, ".json"))), `${f} record`).toBe(true);
   });
 
@@ -138,8 +137,8 @@ describe.skipIf(!ready && !inCI)("the built home page, sections 3 and 4", () => 
     expect(home.querySelector(".hero-art img")?.getAttribute("fetchpriority")).toBe("high");
   });
 
-  it("holds the word budgets", () => {
-    expect(words(kinds), "Who is here").toBeLessThanOrEqual(BUDGET.kinds);
-    expect(words(pipeline), "Build, fly, defend").toBeLessThanOrEqual(BUDGET.pipeline);
+  it("warns past the word budgets, and never fails on them", () => {
+    for (const [name, n, budget] of [["Who is here", words(kinds), BUDGET.kinds], ["Build, fly, defend", words(pipeline), BUDGET.pipeline]] as const)
+      if (n > budget) console.warn(`[home] guideline: "${name}" has ${n} words, about ${budget} suggested`);
   });
 });

@@ -24,7 +24,6 @@ describe("orgs schema", () => {
   });
 
   it.each(cases)("rejects a bad $path", ({ path, patch }) => {
-    if (patch.summary === "{long}") patch.summary = "x".repeat(201);
     const result = orgSchema.safeParse({ ...base, ...patch });
     expect(result.success).toBe(false);
     expect(result.error?.issues.map((i) => i.path.join("."))).toContain(path);

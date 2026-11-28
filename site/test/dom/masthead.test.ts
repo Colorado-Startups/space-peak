@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-// Issue #94: the support line's exact words and order, the credits, the home word budgets and the aerie loop's pause button.
+// Issue #94: the support line's exact words and order, the credits, the home word budgets (warnings) and the aerie loop's pause button.
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -88,12 +88,15 @@ describe.skipIf(!ready && !process.env.CI)("built pages", () => {
     expect(text(doc.querySelector("footer [data-credits]"))).toMatch(/AI-made.*Source photo by Huttarl, CC BY 2\.5/);
     expect(text(doc.querySelector("footer"))).toContain("No cookies. No tracking.");
   });
-  it("home: one <h1>, the plan's word budgets, the support line in get listed, the loop hidden until motion is allowed", () => {
+  it("home: one <h1>, the plan's word budgets as warnings, the support line in get listed, the loop hidden until motion is allowed", () => {
     const doc = parse(pages.find((p) => p.route === "/")!.html);
     expect(doc.querySelectorAll("h1")).toHaveLength(1);
-    // Plan budgets: aerie 15 words beside the brand's lore line (its caption quote), get listed 20.
-    expect(visibleWords(doc.querySelector("section.aerie")!, `${SKIP}, figcaption > span`)).toBeLessThanOrEqual(15);
-    expect(visibleWords(doc.querySelector("section.join")!)).toBeLessThanOrEqual(20);
+    // Plan budgets, guidelines that warn (issue #154): aerie 15 words beside the brand's lore line (its caption quote), get listed 20.
+    const budgets = [
+      ["section.aerie", visibleWords(doc.querySelector("section.aerie")!, `${SKIP}, figcaption > span`), 15],
+      ["section.join", visibleWords(doc.querySelector("section.join")!), 20],
+    ] as const;
+    for (const [name, n, budget] of budgets) if (n > budget) console.warn(`[masthead] guideline: ${name} has ${n} words, about ${budget} suggested`);
     expect(supportProblems(doc.querySelector("section.join"))).toEqual([]);
     expect(doc.querySelector("[data-loop] video:not([autoplay])[preload='none']"), "no autoplay, preload none").not.toBeNull();
     expect(doc.querySelector("[data-loop] button[type='button']")?.hasAttribute("hidden")).toBe(true);

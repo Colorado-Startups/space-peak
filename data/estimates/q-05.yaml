@@ -5,7 +5,7 @@ resolves:
   criteria: Yes if a provider's own published price for a dedicated launch, divided by its own published reusable payload to low Earth orbit, is below 1,000 nominal US dollars per kg.
 p: 0.3
 reasoning: >-
-  Register row E-03 says reusable rockets already cut dollars per kilogram tenfold, and that row is unverified.
+  This project's first draft says reusable rockets already cut dollars per kilogram tenfold; we have not checked that.
   Wikipedia's Falcon 9 page gives 74 million dollars a launch and 17,500 kg to low Earth orbit when reused.
   That works out to about 4,230 dollars per kg, so the question needs another fourfold cut.
   A fully reusable heavy rocket is the likeliest route to that cut, and none has a published price in that source.

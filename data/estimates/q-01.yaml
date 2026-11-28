@@ -5,7 +5,7 @@ resolves:
   criteria: Yes if the operator and one independent orbit catalogue report a payload in orbit that left the ground on a mass driver, coilgun, railgun or centrifuge, with at most a small onboard kick motor.
 p: 0.07
 reasoning: >-
-  Orbit needs about 17,500 mph sideways (P-01), and at the 200 g design target that takes a run of about 10 miles (P-03).
+  Orbit needs about 17,500 mph sideways, NASA says, and at this project's 200 g design target that takes a run of about 10 miles.
   NewSpace Index lists the SpinLaunch launcher as in development with no first launch date, and says the company has focused on its Meridian constellation since August 2025.
   KeepTrack says SpinLaunch's kinetic launch system has not reached orbit.
   Neither source names a funded orbital accelerator, so fourteen years is short for a first build.

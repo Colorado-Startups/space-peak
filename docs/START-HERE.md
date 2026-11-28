@@ -7,6 +7,13 @@
 | Know where checks run | [7. Where checks run](#7-where-checks-run) |
 | Fix a mountain claim | `02_substance/claims_register.md` |
 
+```mermaid
+flowchart LR
+  A["1. What this is"] --> B["2. One habit"] --> C["3. Set up"] --> D["4. See the checks"] --> E["5. Where the work is"]
+  E --> F["6. Add an organisation"]
+  E --> G["A pull request, which CI checks (7)"]
+```
+
 ## 1. What this is (5 min)
 
 Read `README.md`, then `02_substance/Space-Peak-Concept-Brief.md` as far as "The core insight". You do not need the whole brief yet.

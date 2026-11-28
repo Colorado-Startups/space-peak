@@ -12,6 +12,10 @@ import { defineConfig, devices } from "@playwright/test";
 const PORT = 3321;
 const HOST = "127.0.0.1";
 const BASE_URL = `http://${HOST}:${PORT}`;
+// The /mcp Worker runs under `wrangler dev` over the same dist/, from the repo root where wrangler.jsonc is.
+// 3322 for the Worker, 3323 for its inspector: both in this account's block, not vendor defaults.
+const MCP_PORT = 3322;
+export const MCP_URL = `http://${HOST}:${MCP_PORT}/mcp`;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -21,10 +25,20 @@ export default defineConfig({
   reporter: "list",
   use: { baseURL: BASE_URL, trace: "retain-on-failure" },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
-  webServer: {
-    command: `node scripts/serve-dist.mjs --port ${PORT} --host ${HOST}`,
-    url: BASE_URL,
-    reuseExistingServer: false,
-    timeout: 30_000,
-  },
+  webServer: [
+    {
+      command: `node scripts/serve-dist.mjs --port ${PORT} --host ${HOST}`,
+      url: BASE_URL,
+      reuseExistingServer: false,
+      timeout: 30_000,
+    },
+    {
+      command: `npx wrangler dev --port ${MCP_PORT} --ip ${HOST} --inspector-port 3323 --show-interactive-dev-session=false`,
+      cwd: "..",
+      env: { WRANGLER_SEND_METRICS: "false" },
+      url: `http://${HOST}:${MCP_PORT}/`,
+      reuseExistingServer: false,
+      timeout: 60_000,
+    },
+  ],
 });

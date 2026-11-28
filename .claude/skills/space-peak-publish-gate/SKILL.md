@@ -5,7 +5,7 @@ description: Run the full Space Peak pre-ship gate on a draft, which is MASTER_P
 
 # space-peak-publish-gate
 
-**Precedence.** `00_project_system/MASTER_PLAN.md` PT 3.3 wins on what this gate must cover. Code-OS `rules/writing-and-gates.md` wins on gate behaviour. Where this skill disagrees, it is corrected in the same session.
+**Precedence.** `00_project_system/MASTER_PLAN_PHASE_3.md` PT 3.3 wins on what this gate must cover. Code-OS `rules/writing-and-gates.md` wins on gate behaviour. Where this skill disagrees, it is corrected in the same session.
 
 **This gate waits.** Nothing fires it automatically, by design: it is the deliberate stop before a human decision. It reports and recommends. It does not publish or decide.
 

@@ -5,9 +5,9 @@
 | What | The spacepeak.co website, and the speculative thesis behind it. A concept for a ground-based electromagnetic mass driver bored through a Colorado peak, and the case for why cost-to-orbit is the choke point worth attacking |
 | Site | [spacepeak.co](https://spacepeak.co), built from `main` |
 | Live | Since 2026-11-28, on Paul's word |
-| Where it stands | **Publish** is decided, and Phase 3 is active ([docs/PROJECT.md](docs/PROJECT.md), with the map) |
+| Where it stands | Next work: the [project board](https://github.com/orgs/Colorado-Startups/projects/11) ([docs/PROJECT.md](docs/PROJECT.md), with the map) |
 | Start | [docs/START-HERE.md](docs/START-HERE.md), then [CONTRIBUTING.md](CONTRIBUTING.md) |
-| Contribute | Open to anyone: corrections, sources, drafts, questions and tooling. Questions and ideas go to [Discussions](https://github.com/Colorado-Startups/space-peak/discussions). Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md) |
+| Contribute | Open to anyone: corrections, sources, organisations, questions and tooling. Questions and ideas go to [Discussions](https://github.com/Colorado-Startups/space-peak/discussions). Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md) |
 | Whose | A region, supported by [Colorado Startups](https://coloradostartups.org) and [Colorado Compute](https://coloradoai.us). Siblings: Photon Mountain, Fusion Canyon. [Brand guide](https://colorado-startups.github.io/brand/) |
 
 **A speculative venture thesis, not an engineering proposal.** The physics is sound. The engineering is 2040s-hard. Every fact about a specific mountain in this repository is a starting point for real diligence, not a verified site assessment.
@@ -17,8 +17,8 @@ flowchart LR
   D["data/ and 02_substance/"] --> A["Astro 7 static build<br/>site/ to site/dist"]
   A --> B["Cloudflare Workers Builds<br/>main and each branch"]
   B --> C["Workers static assets<br/>wrangler.jsonc, _headers"]
-  C --> P["Preview host"]
-  C -. "Paul's go-live" .-> S["spacepeak.co"]
+  C -- "each branch" --> P["Preview host"]
+  C -- "main" --> S["spacepeak.co"]
 ```
 
 | Read next | For |

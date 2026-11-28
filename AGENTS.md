@@ -5,10 +5,11 @@ Instructions for every coding agent in this repo. OpenCode reads this file, and 
 | Topic | Rule |
 | --- | --- |
 | What this repo is | A speculative venture thesis for a mass driver in a Colorado peak, and the source of the spacepeak.co website (`00_project_system/MASTER_PLAN.md`, Decision 2026-11-16) |
+| Next work | The [Space Peak project board](https://github.com/orgs/Colorado-Startups/projects/11). Bugs and quick fixes are issues; larger work is a card until a session takes it |
 | Mountain facts | Claims about a peak live in `02_substance/claims_register.md`, each with its status |
 | Before writing prose | Read `01_doctrine/voice.md` |
-| Publication | spacepeak.co is the venue. Paul gives the production go-live |
-| Build | The site in `site/` is Astro 7, static. `npm ci`, then `npm run dev` on port 3320 or `npm run build` to `site/dist`. Cloudflare Workers Builds deploys `main` and each branch |
+| Publication | spacepeak.co is live (2026-11-28, #212). Every merge to `main` deploys to production, so a change to public copy runs the publish gate before it merges |
+| Build | The site in `site/` is Astro 7, static. `npm ci`, then `npm run dev` on port 3320 or `npm run build` to `site/dist`. Cloudflare Workers Builds deploys `main` to spacepeak.co and each branch to a workers.dev preview |
 | Test locally | Light only: one checker, one vitest file, `npm run check` or the dev server |
 | Test in CI | `.github/workflows/ci.yml` runs the suites: self-tests, contract test, the Quality collector test, claims and voice checkers. On a `site/` change it also runs the build, vitest and Playwright with axe in Chromium. Never run browsers or the whole suite here |
 | Changing a rule | Edit `04_tools/space_peak_rules.json`, then run `python3 04_tools/space_peak_contract_test.py` |

@@ -1,13 +1,13 @@
 # MASTER_PLAN.md - Space Peak (Satellite Peak)
 
-Planning architect document for the CodeCraft orchestration system. Written 2026-07-14. Plan only; nothing here authorizes building anything. Per the fleet brief, Space Peak is the lowest priority project in the fleet and is not a hero target, so this is deliberately the shortest master plan in the system: one decision, then branches.
+Space Peak's master plan, written 2026-07-14: one decision, then branches. The phases are history. The decisions below record what changed; the site went live on 2026-11-28. Next work is on the [project board](https://github.com/orgs/Colorado-Startups/projects/11).
 
 ## Plan map
 
 ```mermaid
 flowchart LR
   P1["Phase 1: UA 1.1"] -->|"(a) Park"| P2["Phase 2: struck"]
-  P1 -->|"(b) Publish, Decision 2026-10-05"| P3["Phase 3: active"]
+  P1 -->|"(b) Publish, Decision 2026-10-05"| P3["Phase 3: done, live 2026-11-28"]
   P1 -->|"(c) Develop"| P4["Phase 4: struck"]
 ```
 

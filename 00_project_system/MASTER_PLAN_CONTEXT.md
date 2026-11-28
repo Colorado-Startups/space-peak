@@ -21,7 +21,7 @@ Satellite Peak is a speculative venture thesis, not an engineering proposal: the
 
 ## Current state
 
-Idea-stage. Five files, nothing else:
+On 2026-07-14, when this plan was written: idea-stage, five files and nothing else. Since 2026-11-28 the site is live at spacepeak.co.
 
 <details>
 <summary>The five files</summary>

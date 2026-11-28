@@ -60,9 +60,9 @@ python3 04_tools/space_peak_claims.py --register 02_substance/claims_register.md
 
 ## 5. Where the work is (3 min)
 
-`00_project_system/MASTER_PLAN.md`, Phase 3.
+The [Space Peak project board](https://github.com/orgs/Colorado-Startups/projects/11). Bugs and quick fixes are issues; larger work is a card.
 
-Phase 1's decision is made: publish, standalone, under the Space Peak name. Phases 2 and 4 are struck.
+The master plan's phases are done: spacepeak.co went live on 2026-11-28. `00_project_system/MASTER_PLAN.md` keeps the decisions.
 
 ## 6. Add an organisation
 

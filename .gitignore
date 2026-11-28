@@ -37,3 +37,7 @@ node_modules/
 site/dist/
 site/.astro/
 site/coverage/
+
+# A local Quality collect's own files (README.md, Quality and Process pages). Only quality/data/local.json is committed.
+quality/history/
+quality/data/plan-usage.json

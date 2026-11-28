@@ -16,7 +16,7 @@ flowchart LR
   C -. "Paul's go-live" .-> S["spacepeak.co"]
 ```
 
-### Where data lives
+## Where data lives
 
 | Data | File | Read by |
 | --- | --- | --- |
@@ -64,6 +64,7 @@ site/                The Astro 7 website. wrangler.jsonc deploys site/dist.
 data/                Site data: one YAML file per organisation in data/orgs/, and the startup credits.
 scripts/             The brand and startup credits pulls (scripts/brand/, scripts/resources/).
 docs/                Contributor start-here.
+LICENSES/            The CC0 and 0BSD license texts.
 local/               Operational files. Gitignored; the reviewer reads every path in the diff.
 .claude/             Two skills, one agent, settings.
 .github/             CI, templates, CODEOWNERS, ruleset definitions.
@@ -121,7 +122,7 @@ Every checker is standard library Python, deterministic, and offline. Each ships
 
 `.github/workflows/pages.yml` builds Git Crafter's Quality, Speed and Consumption page and its Process page from `quality/config.json` and `quality/process/config.json`. They measure this repository's pull requests, CI and Claude sessions. Five metrics on the Pages tab are Space Peak's own: sourced orgs, figures shown with their status, orgs per kind, valid open data files and MCP conformance checks passed. `quality/collectors/space-peak.mjs` reads them against the goals in `quality/targets/space-peak.json`. The MCP share comes from a notice that `ci.yml`'s standard job leaves on itself after the Playwright specs, read back through GitHub's Checks API. They are not the thought-leadership piece, and publishing them publishes nothing about a mountain.
 
-Some metrics need this Mac's own data: deploys through Wrangler, the Claude tabs from Claude Code transcripts, and credits. CI cannot read them, so a session runs Git Crafter's local collect and commits `quality/data/local.json` by pull request (Git Crafter `quality/README.md`). The run uses a Git Crafter checkout at the pin, with the two packs in `CODE_OS_PACKS`. It runs `collect.mjs --local --only NAME` once per collector, because a full run would also run vitest and a browser, which stay in CI. Before the commit, `node quality/local-check.mjs --scrub` rewrites the local paths collectors leave. `quality/local-check.test.mjs` then fails on transcript text, home paths, emails, account names or keys. The run's `quality/history/` file and the `quality/data/plan-usage.json` it reads stay on the machine. `pages.yml` checks that the built page shows each measured local metric.
+Some metrics need this Mac's own data: deploys through Wrangler, the Claude tabs from Claude Code transcripts, and credits. CI cannot read them, so a session runs Git Crafter's local collect and commits `quality/data/local.json` by pull request ([Git Crafter's Quality README](https://github.com/SoulCraft-Org/git-crafter/blob/8023bd4683416f6d420bd20d137960b09c06b91e/quality/README.md)). The run uses a Git Crafter checkout at the pin, with the two packs in `CODE_OS_PACKS`. It runs `collect.mjs --local --only NAME` once per collector, because a full run would also run vitest and a browser, which stay in CI. Before the commit, `node quality/local-check.mjs --scrub` rewrites the local paths collectors leave. `quality/local-check.test.mjs` then fails on transcript text, home paths, emails, account names or keys. The run's `quality/history/` file and the `quality/data/plan-usage.json` it reads stay on the machine. `pages.yml` checks that the built page shows each measured local metric.
 
 The same workflow serves the map in `03_deliverables/map/` at `/map/`. The page says "speculative" once, and every summit point keeps its USGS GNIS source. Across the site, a sourced figure shows a small "source" link, and a page with an unconfirmed figure says so in one line (`01_doctrine/voice.md`, Figures on the site). It is a repository deliverable, not the piece.
 

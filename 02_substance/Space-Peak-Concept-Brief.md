@@ -1,6 +1,6 @@
 # Space Peak
 
-### A concept brief for a Colorado mass-driver launch complex
+## A concept brief for a Colorado mass-driver launch complex
 
 *Draft v1, July 2026. A speculative venture thesis, not an engineering proposal. Physics is sound; timelines are 2040s-hard; every "fact" about a specific mountain is a starting point for real diligence, not a verified site assessment.*
 
@@ -46,7 +46,7 @@ The mountain is the romantic part. The business lives or dies on:
 
 1. **Satellites redesigned to survive the ~200 g design target**. A ruggedized-satellite factory is the real moat.
 2. **The vacuum muzzle**, a membrane or plasma window that holds vacuum while passing a Mach-23 slug.
-3. **Reliability record**. "Nines" not yet demonstrated by anyone; this is the key that unlocks overland launch.
+3. **Reliability record**. "Nines" demonstrated by no one so far; this is the key that unlocks overland launch.
 4. **The FAA relationship + a cleared firing lane**, a political achievement as much as an engineering one.
 
 ---

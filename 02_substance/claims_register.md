@@ -14,7 +14,7 @@ This file is how that discipline becomes something a machine can check. `.github
 
 | Status | Meaning |
 | --- | --- |
-| `unverified` | From the brief, not yet checked against a source. Prose must label it speculative. |
+| `unverified` | From the brief, and still to be checked against a source. Prose must label it speculative. |
 | `verified` | Confirmed against a cited source. The source column is filled. |
 | `corrected` | Checked, and the brief was wrong. The corrected value is authoritative. |
 | `unverifiable` | Checked, and no public source settles it. Prose must say so or drop the claim. |
@@ -77,7 +77,7 @@ Notes the table cannot hold:
 
 These rows record the website's definition, not this repository's. On coloradostartups.org, "Space Peak" is also the Colorado Startups region for Colorado Springs and Fountain. That region is a loop of major roads. It is not a launch complex and says nothing about where a mass driver would go. The map draws it as its own layer.
 
-Every row cites one source: `Colorado-Startups/coloradostartups.org`, `data/geo/regions.geojson`, feature `space-peak`, at commit `37232431f9bab6a2a3cb2e09701642f40b446187`. That repository's `data/geo/README.md` says the loop is traced from US Census TIGERweb road lines and was measured on 2026-11-15.
+Every row cites one source: `Colorado-Startups/coloradostartups.org`, [data/geo/regions.geojson](https://github.com/Colorado-Startups/coloradostartups.org/blob/37232431f9bab6a2a3cb2e09701642f40b446187/data/geo/regions.geojson), feature `space-peak`, at commit `37232431f9bab6a2a3cb2e09701642f40b446187`. That repository's [data/geo/README.md](https://github.com/Colorado-Startups/coloradostartups.org/blob/37232431f9bab6a2a3cb2e09701642f40b446187/data/geo/README.md) says the loop is traced from US Census TIGERweb road lines and was measured on 2026-11-15.
 
 | ID | Claim | Status | Source | Notes |
 | --- | --- | --- | --- | --- |
@@ -128,7 +128,7 @@ Figures in `03_deliverables/infographics/` with no other row, found by the fact 
 | E-02 | About 250 rocket launches worldwide in a busy year | `unverified` | | Check against a current launch log; the number moves yearly |
 | E-03 | Reusable rockets already cut dollars per kilogram tenfold | `unverified` | | |
 | E-04 | FAA's 2008 Record of Decision backed licensing Spaceport America, an inland New Mexico site, for suborbital launch | `corrected` | 73 FR 79539, https://www.federalregister.gov/documents/2008/12/29/E8-30845, read 2026-11-27 | Corrected. Was "No inland US site has ever had FAA approval for overland launch". The notice gives the FAA's environmental approval to support a Launch Site Operator License for Spaceport America, in Sierra County. Its Final EIS notice, 73 FR 68492 (E8-27149, read 2026-11-27), covers horizontal and vertical suborbital launch. A site license is not a launch license; each launch needs its own under 14 CFR 450 (E-05). Leads, not reads: an FAA-licensed launch from White Sands, New Mexico, in 1989, and an inland site license at Mojave in 2004. Orbital launch from an inland site is unchecked; Q-03 is the estimate for it |
-| E-05 | The FAA relationship and a cleared firing lane are a political achievement as much as an engineering one | `unverified` | | Make-or-break item 4. The claim keeps the brief's words. 14 CFR 450.1, read 2026-11-27, sets the requirements for a license to launch. A review on 2026-11-27, not yet read here, adds a Part 420 license for a new site and the FAA's term "flight corridor" for a lane. E-04 is the history claim |
+| E-05 | The FAA relationship and a cleared firing lane are a political achievement as much as an engineering one | `unverified` | | Make-or-break item 4. The claim keeps the brief's words. 14 CFR 450.1, read 2026-11-27, sets the requirements for a license to launch. A review on 2026-11-27, still unread here, adds a Part 420 license for a new site and the FAA's term "flight corridor" for a lane. E-04 is the history claim |
 | E-06 | A sonic boom corridor over any populated area is a civic fight | `unverified` | | The brief's risk register calls it the city-council problem |
 | E-07 | Land status is destiny: National Park, never; sacred peak, never; national forest, brutal; Army range or single private owner, tractable | `unverified` | | The brief's risk register. S-18 and S-20 are why the brief says never to its Crestones / Sand Dunes and Blanca Peak rows |
 | E-08 | Prove the technology on a coastal mountain with ocean downrange, safely for a decade; then an inland site gets its second interview | `unverified` | | Risk register. It names two example mountains; the claim leaves them out until each has its own row |
@@ -154,11 +154,11 @@ Probabilities for the site's odds section, one YAML file each in `data/estimates
 
 | ID | Claim | Status | Source | Notes |
 | --- | --- | --- | --- | --- |
-| Q-01 | A kinetic launcher puts a payload in orbit by 2040, at 7 percent | `open` | `data/estimates/q-01.yaml` | draft estimate, not yet approved |
-| Q-02 | A kinetic launcher sends a payload above 100 km by 2035, at 12 percent | `open` | `data/estimates/q-02.yaml` | draft estimate, not yet approved |
-| Q-03 | An orbital launch lifts off from an inland US site by 2040, at 12 percent | `open` | `data/estimates/q-03.yaml` | draft estimate, not yet approved |
-| Q-04 | The world makes over 500 orbital launch attempts in 2030, at 40 percent | `open` | `data/estimates/q-04.yaml` | draft estimate, not yet approved |
-| Q-05 | A published launch price falls below 1,000 dollars per kg by 2035, at 30 percent | `open` | `data/estimates/q-05.yaml` | draft estimate, not yet approved |
+| Q-01 | A kinetic launcher puts a payload in orbit by 2040, at 7 percent | `open` | `data/estimates/q-01.yaml` | draft estimate, awaiting approval |
+| Q-02 | A kinetic launcher sends a payload above 100 km by 2035, at 12 percent | `open` | `data/estimates/q-02.yaml` | draft estimate, awaiting approval |
+| Q-03 | An orbital launch lifts off from an inland US site by 2040, at 12 percent | `open` | `data/estimates/q-03.yaml` | draft estimate, awaiting approval |
+| Q-04 | The world makes over 500 orbital launch attempts in 2030, at 40 percent | `open` | `data/estimates/q-04.yaml` | draft estimate, awaiting approval |
+| Q-05 | A published launch price falls below 1,000 dollars per kg by 2035, at 30 percent | `open` | `data/estimates/q-05.yaml` | draft estimate, awaiting approval |
 
 ## How to add a row
 

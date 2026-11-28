@@ -124,7 +124,7 @@ Set by Paul on 2026-11-28 (issue #153). This is the site's form of the label rul
 | Figure | What the page shows |
 | --- | --- |
 | Sourced and confirmed (`verified`, `corrected`) | Its value, then a small "source" link |
-| Not yet confirmed (`unverified`, `unverifiable`) | Its value, with no link |
-| Any page with an unconfirmed figure | One line, once: "Figures without a source link are not yet confirmed." |
+| Unconfirmed (`unverified`, `unverifiable`) | Its value, with no link |
+| Any page with an unconfirmed figure | One line, once: `UNPROVEN_NOTE` in `site/src/components/figure.ts` |
 
 No status chip, claim ID or read date shows on a page. The register and `/data/claims.json` keep them. Prose in the piece still labels each claim where it stands.

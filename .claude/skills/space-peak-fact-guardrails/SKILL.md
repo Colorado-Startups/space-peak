@@ -37,7 +37,7 @@ Exit 3 means the check could not run. That is not a pass; say so.
 
 Read the file and list every checkable claim in three groups. The script is a regex; you are not. Look especially for claims stated in prose rather than as figures, where the regex is blindest: "the Army already keeps that corridor clear", "one landowner", "nobody has done this".
 
-- **Registered.** It has a row. Note the status.
+- **Registered.** It has a row. Note the status. An `open` row in the Q series is a draft estimate, an opinion that is never verified: the prose must call it a draft estimate.
 - **Unregistered.** It does not. Each needs a row added, or the claim removed.
 - **Current-status.** True only as of now: who owns what, what land status applies, how many launches happened last year.
 

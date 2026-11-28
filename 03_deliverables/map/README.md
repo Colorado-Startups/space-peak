@@ -41,11 +41,10 @@ The brief names the Spanish Peaks as a pair. The map pins West Spanish Peak and 
 
 ## Rebuild the data
 
-The script reads the register and the website's region file. It writes the GeoJSON and records the register's git blob and the date in `generated`.
+The script reads the register and the website's region file. It writes the GeoJSON and records the register's git blob and the date in `generated`. So rerun it after any register edit: `ci.yml` runs `--check`, which fails while the GeoJSON is stale. `--region-url` prints the region file's URL at the commit the R- rows cite, so that pin lives only in the script.
 
 ```bash
-gh api "repos/Colorado-Startups/coloradostartups.org/contents/data/geo/regions.geojson?ref=37232431f9bab6a2a3cb2e09701642f40b446187" \
-  -H "Accept: application/vnd.github.raw" > /tmp/regions.geojson
+curl -fsSL "$(python3 04_tools/space_peak_map.py --region-url)" -o /tmp/regions.geojson
 python3 04_tools/space_peak_map.py --region-geojson /tmp/regions.geojson
 python3 04_tools/space_peak_map.py --region-geojson /tmp/regions.geojson --check
 ```

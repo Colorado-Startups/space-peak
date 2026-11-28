@@ -64,15 +64,15 @@ Phase 1's decision is made: publish, standalone, under the Space Peak name. Phas
 | --- | --- |
 | No code | The **Add your organisation** issue form; a maintainer writes the file |
 | Pull request | One YAML file in `data/orgs/`, named for its `id` |
-| Its rules | `site/src/lib/orgs/schema.ts`; examples in `site/test/fixtures/orgs/valid/` |
+| Its rules | `site/src/lib/orgs/schema.ts`, then the checks in `site/src/lib/orgs/check.ts`; examples in `site/test/fixtures/orgs/valid/` |
 
 ## 7. Where checks run
 
 | Check | Where |
 | --- | --- |
 | One checker, one test file, the dev server | Your machine, briefly |
-| Claims, voice, self-tests, contract test | CI, every pull request |
-| `astro check`, build, vitest, Playwright and axe | CI, when `site/` changes |
+| Claims, voice, self-tests, contract test, the Quality collector tests | CI, every pull request |
+| `astro check`, build, vitest, Playwright and axe, the MCP conformance suite | CI, when `site/`, `data/`, `package.json`, the lockfile, `.nvmrc` or `wrangler.jsonc` changes |
 
 ## 8. Make your first contribution
 

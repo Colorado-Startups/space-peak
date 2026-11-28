@@ -4,6 +4,12 @@ For Claude Code's Code Review service only. It needs a Team or Enterprise plan a
 
 A review finding is input to the `merging` skill. Only the orchestrator merges, with that skill's verdict.
 
+```mermaid
+flowchart LR
+  S("Code Review service, reading this file") -->|"findings"| M("merging skill") -->|"verdict"| O("orchestrator, the only one who merges")
+  L("Local /code-review") --> C("CLAUDE.md, not this file")
+```
+
 ## What Important means here
 
 | Important | Why |

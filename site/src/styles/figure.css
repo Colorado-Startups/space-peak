@@ -1,26 +1,4 @@
-/* <Figure>: a value, then a status chip whose word always names the status, then the source.
-   Colour and border style both differ per status; the word carries it on its own (issue #86). */
+/* <Figure>: a value, then a small "source" link when its register row has one (issue #153). */
 .figure { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2); }
 .figure-value { font-weight: 700; color: var(--c-text); }
 .figure-source { font-size: var(--t-step--1); color: var(--c-text-dim); }
-
-.figure-chip {
-  display: inline-block;
-  padding: 0.1em 0.55em;
-  border: var(--line-edge) solid var(--c-border);
-  border-radius: var(--r-chisel);
-  background: var(--c-ground);
-  color: var(--c-ink);
-  font-size: var(--t-step--1);
-  font-weight: 700;
-  line-height: 1.3;
-}
-.figure-chip--verified { border-color: var(--c-pine); background: var(--c-pine-wash); }
-.figure-chip--corrected { border-color: var(--c-brand-teal); background: var(--c-sky-wash); }
-.figure-chip--open { border-color: var(--c-region-space-peak); border-style: dashed; }
-.figure-chip--unverifiable { border-color: var(--c-text-dim); border-style: dotted; background: var(--c-surface); }
-.figure-chip--unverified {
-  border-color: var(--co-web-accent-warm-darker);
-  background: repeating-linear-gradient(-45deg, var(--co-yellow) 0 0.3em, var(--c-ground) 0.3em 0.6em);
-  text-shadow: 0 0 0.2em var(--c-ground), 0 0 0.2em var(--c-ground);
-}

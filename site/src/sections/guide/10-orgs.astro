@@ -52,7 +52,7 @@ const rows = orgs.map((org) => ({ org, source: org.sources.find((s) => s.id === 
                 <th scope="row">{org.name}</th>
                 <td><span class="kind-chip"><span class="kind-mark" data-kind={org.kind} aria-hidden="true"></span>{KIND_LABEL[org.kind].one}</span></td>
                 <td>{cityLabel(org.city)}</td>
-                <td>{org.fact.text} <a href={source.url}>{source.publisher}</a>, read <time datetime={source.read}>{source.read}</time></td>
+                <td>{org.fact.text} <a href={source.url}>{source.publisher}</a></td>
               </tr>
             ))}
           </tbody>

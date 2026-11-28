@@ -1,6 +1,6 @@
 ---
 // The mass driver's run through a peak, drawn at build time in the speculative yellow hatch. The drawing
-// carries no number: each lettered point is keyed to a register row, which <Figure> shows with its status.
+// carries no number: each lettered point is keyed to a register row, which <Figure> shows.
 import Figure from "../../components/Figure.astro";
 import { launch, markOf, type Anchor } from "../../lib/launch/data";
 
@@ -45,7 +45,7 @@ const tunnel = { x1: PORTAL[0], y1: PORTAL[1], x2: MUZZLE[0], y2: MUZZLE[1] };
           </g>
         ))}
       </svg>
-      <figcaption>Side view, west to east, not to scale. Each value is a claims-register row, with its status.</figcaption>
+      <figcaption>Side view, west to east, not to scale.</figcaption>
     </figure>
     <ol class="profile-key">
       {marks.map((m) => (

@@ -7,7 +7,7 @@ import Base from "../../layouts/Base.astro";
 import Snippet from "../../components/Snippet.astro";
 import Claude from "../../sections/ai/20-claude.astro";
 import OpenCode from "../../sections/ai/40-opencode.astro";
-import { DOCS, READ, snippets } from "../../lib/ai/connect";
+import { DOCS, snippets } from "../../lib/ai/connect";
 import { registerDate } from "../../lib/data/build";
 import { dataCatalog } from "../../lib/jsonld";
 
@@ -30,7 +30,7 @@ const FACTS = ["Free", "No key", "Read-only", "CC0"];
         <h2 id="data-title">Open data</h2>
         <div><Snippet id="ai-catalog" text={s.catalog} /></div>
       </section>
-      <p class="ai-docs">Docs, read {READ}: {DOCS.map(([name, href], i) => <>{i > 0 && ", "}<a href={href}>{name}</a></>)}.</p>
+      <p class="ai-docs">Docs: {DOCS.map(([name, href], i) => <>{i > 0 && ", "}<a href={href}>{name}</a></>)}.</p>
     </div>
     <OpenCode />
   </div>

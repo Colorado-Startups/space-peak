@@ -91,6 +91,8 @@ describe.skipIf(!ready && !process.env.CI)("built pages", () => {
   it("home: one <h1>, the plan's word budgets as warnings, the support line in get listed, the loop hidden until motion is allowed", () => {
     const doc = parse(pages.find((p) => p.route === "/")!.html);
     expect(doc.querySelectorAll("h1")).toHaveLength(1);
+    // Issue #153: the painting's credit is the footer's alone, not repeated under the hero.
+    expect(text(doc.querySelector("main"))).not.toMatch(/Huttarl|CC BY/);
     // Plan budgets, guidelines that warn (issue #154): aerie 15 words beside the brand's lore line (its caption quote), get listed 20.
     const budgets = [
       ["section.aerie", visibleWords(doc.querySelector("section.aerie")!, `${SKIP}, figcaption > span`), 15],

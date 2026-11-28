@@ -59,7 +59,7 @@ const cards = allEstimates().map((e) => {
   /* A drawn chevron, not text, says it opens, as on the place tiles. */
   .odds-card summary::after { content: ""; position: absolute; inset-block-start: var(--s-3); inset-inline-end: var(--s-2); width: 0.5em; height: 0.5em; border-inline-end: var(--line-bold) solid currentColor; border-block-end: var(--line-bold) solid currentColor; transform: rotate(45deg); }
   .odds-card details[open] summary::after { transform: rotate(-135deg); }
-  /* The open status's look, from styles/figure.css: a dashed pink border. */
+  /* A draft's tag: a dashed pink border. */
   .draft-tag { padding: 0.1em 0.55em; border: var(--line-edge) dashed var(--c-region-space-peak); border-radius: var(--r-chisel); font-size: var(--t-step--1); line-height: 1.3; white-space: nowrap; }
   .odds-why { display: grid; gap: var(--s-2); padding-block-start: var(--s-3); font-size: var(--t-step--1); }
   .odds-why p, .odds-sources { margin: 0; }

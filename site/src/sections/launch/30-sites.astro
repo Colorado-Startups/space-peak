@@ -1,14 +1,13 @@
 ---
-// The site tour (step 35): the brief's ranked three, best first, then Pikes Peak as the name and headquarters,
-// then the permanent exclusions. Every value is a register row through <Figure>, with its status. The locator
-// is /maps/south.svg, the map's own drawing of the tour (lib/map/draw.ts); this section draws no map.
-import Figure from "../../components/Figure.astro";
+// The site tour (step 35): the brief's ranked three, best first, then Pikes Peak as the name and headquarters.
+// Every value is a register row through <Figure>, in SiteCard. The locator is /maps/south.svg, the map's own
+// drawing of the tour (lib/map/draw.ts); this section draws no map.
 import SiteCard from "../../components/launch/SiteCard.astro";
 import { launch } from "../../lib/launch/data";
 import { TOUR } from "../../lib/map/data";
 import { frame } from "../../lib/map/draw";
 
-const { ranked, headquarters, exclusions } = launch().sites;
+const { ranked, headquarters } = launch().sites;
 const { width, height } = frame("south");
 ---
 <section aria-labelledby="sites">
@@ -16,27 +15,18 @@ const { width, height } = frame("south");
   <div class="sites-body">
     <figure class="sites-map">
       <img src="/maps/south.svg" alt={`Map of the summits on the tour, each speculative: ${TOUR.join(", ")}.`} width={width} height={height} loading="lazy" decoding="async" />
-      <figcaption>The brief: tunnel through Greenhorn, headquarter on Pikes.</figcaption>
+      <figcaption>Tunnel through Greenhorn, headquarters on Pikes.</figcaption>
     </figure>
     <div class="sites-ranking">
-      <p id="sites-ranking">The brief's honest ranking for a real attempt, best first.</p>
+      <p id="sites-ranking">Ranked, best first.</p>
       <ol class="sites-ranked" aria-labelledby="sites-ranking">
         {ranked.map((p) => <li class="site-card" data-site={p.site}><SiteCard place={p} /></li>)}
       </ol>
     </div>
   </div>
   <div class="site-card site-card--hq" data-site={headquarters.site}>
-    <p class="site-tag">The brief's name and headquarters, not a candidate site</p>
+    <p class="site-tag">The name and headquarters</p>
     <SiteCard place={headquarters} />
-  </div>
-  <div class="exclusions" role="group" aria-labelledby="exclusions">
-    <h3 id="exclusions">Permanent exclusions</h3>
-    <p>The brief's land rule: a National Park, never; a sacred peak, never.</p>
-    <ul>
-      {exclusions.map((p) => (
-        <li data-site={p.site}><strong>{p.name}</strong>{p.claims.map((id) => <Figure claim={id} />)}</li>
-      ))}
-    </ul>
   </div>
 </section>
 
@@ -55,11 +45,7 @@ const { width, height } = frame("south");
     content: counter(rank); display: inline-grid; place-items: center; flex: none; inline-size: var(--size-tap); block-size: var(--size-tap);
     margin-inline-end: var(--s-3); border: var(--line-bold) solid var(--c-text); border-radius: 50%;
   }
-  .site-card--hq { margin-block: var(--s-5); border-inline-start-style: dashed; }
+  .site-card--hq { margin-block: var(--s-5) var(--s-7); border-inline-start-style: dashed; }
   .site-tag { margin: 0 0 var(--s-2); color: var(--c-text-dim); font-size: var(--t-step--1); font-weight: 700; }
-  .exclusions { margin-block-end: var(--s-7); padding: var(--s-4); border: var(--line-bold) dashed var(--c-text-dim); border-radius: var(--r-card); }
-  .exclusions h3 { margin-block-start: 0; }
-  .exclusions ul { display: grid; gap: var(--s-3); margin: 0; padding: 0; list-style: none; max-width: none; }
-  .exclusions li { display: grid; gap: var(--s-1); }
   @media (min-width: 64rem) { .sites-body { grid-template-columns: 2fr 3fr; } }
 </style>

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 // Issue #138: the cadence calculator on /launch/. Minutes between shots give launches a year, as arithmetic
-// labelled not a forecast. The brief's interval (P-08) and the busy-year comparison (E-02) carry their status.
+// under the page's speculative lead. The brief's interval (P-08) and the busy-year comparison (E-02) are figures.
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -78,8 +78,9 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ cadence section",
   const q = (sel: string) => section?.querySelector(sel) ?? null;
   const view = cadenceView(BRIEF_STOP);
 
-  it("says arithmetic on a speculative rate, not a forecast, under the page's speculative lead", () => {
-    expect(doc.getElementById(section!.getAttribute("aria-describedby")!)?.textContent).toBe("Arithmetic on a speculative rate, not a forecast.");
+  it("sits under the page's speculative lead, with no note of its own (issue #153)", () => {
+    expect(section!.hasAttribute("aria-describedby")).toBe(false);
+    expect(section!.textContent).not.toMatch(/forecast|the brief/i);
     expect(doc.querySelector("main .launch-lead .hatch-tag")?.textContent).toBe("speculative");
   });
 
@@ -98,10 +99,10 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ cadence section",
     expect(["aria-live", "for"].map((a) => q("output")?.getAttribute(a))).toEqual(["polite", input.id]);
   });
 
-  it("shows P-08 and E-02 through Figure with their status, and no other register figure", () => {
+  it("shows P-08 and E-02 through Figure, with no status chip, and no other register figure", () => {
     const figures = [...section!.querySelectorAll(".figure")];
     expect(figures.map((f) => f.getAttribute("data-claim"))).toEqual(["P-08", "E-02"]);
-    for (const f of figures) expect(f.querySelector(".figure-chip")?.textContent).toBe(getClaim(f.getAttribute("data-claim")!).status);
+    expect(section!.querySelectorAll(".figure-chip")).toHaveLength(0);
   });
 
   it("keeps outside a figure only the arithmetic's own numbers, in the one place marked as arithmetic", () => {

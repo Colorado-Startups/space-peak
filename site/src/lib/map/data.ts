@@ -7,6 +7,9 @@ import type { Org } from "../orgs/schema";
 /** The brief's ranked three, then Pikes Peak as the name and headquarters. */
 export const TOUR = ["Greenhorn Mountain", "Culebra Peak", "West Spanish Peak", "Pikes Peak"] as const;
 
+/** What a toured summit is on the tour: one of the ranked three, or the name and headquarters. */
+export const roleOf = (summit: string) => (summit === TOUR.at(-1) ? "Name and headquarters" : "Summit");
+
 type Lonlat = [number, number];
 export interface MapData {
   loop: { name: string; roads: string[]; ring: Lonlat[]; source: string; source_url: string };

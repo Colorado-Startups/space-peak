@@ -50,7 +50,7 @@ export function drawMap(data: MapData, view: View): string {
   const summits = data.summits.filter((s) => inside(s.at));
   const orgs = data.orgs.filter((o) => inside(o.at));
   const title = view === "region" ? "Map of the Colorado Startups region loop and Pikes Peak" : "Map of the four summits on the Space Peak tour";
-  const desc = `${data.loop.name}: a loop of ${data.loop.roads.join(", ")}. It is not a launch site. Summits, each speculative: ${summits.map((s) => s.summit).join(", ")}. Organisations shown: ${orgs.length}.`;
+  const desc = `${data.loop.name}: a loop of ${data.loop.roads.join(", ")}. It is not a launch site. Summits on the tour: ${summits.map((s) => s.summit).join(", ")}. Organisations shown: ${orgs.length}.`;
   const out = [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-labelledby="map-title map-desc">`,
     `<title id="map-title">${esc(title)}</title><desc id="map-desc">${esc(desc)}</desc><rect width="${w}" height="${h}" fill="${color("c-surface")}"/>`,
@@ -61,8 +61,7 @@ export function drawMap(data: MapData, view: View): string {
     const [x, y] = xy(s.at);
     out.push(
       `<g data-layer="summit" data-register="${s.register}"><path d="M${n(x)} ${n(y - 9)}L${n(x + 8)} ${n(y + 5)}L${n(x - 8)} ${n(y + 5)}Z" fill="none" stroke="${ink}" stroke-width="2.5" stroke-linejoin="round"/>`,
-      text(x - 14, y, NAME_PX, s.summit, `text-anchor="end" fill="${ink}"`),
-      text(x - 14, y + 18, SMALL_PX, "speculative", `text-anchor="end" font-style="italic" fill="${dim}"`),
+      text(x - 14, y + 6, NAME_PX, s.summit, `text-anchor="end" fill="${ink}"`),
       `</g>`,
     );
   }

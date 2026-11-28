@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { FIELDS, OUT, serialize, subset } from "../../../scripts/resources/pull.mjs";
-import { BUCKETS, amount, host, type Resource } from "../../src/lib/resources";
+import { BUCKETS, amount, host, noteText, type Resource } from "../../src/lib/resources";
 import { init } from "../../src/scripts/guide-filter.client";
 import { DIST_DIR, SITE_DIR, builtPages, distExists } from "./pages";
 
@@ -59,6 +59,14 @@ describe("labels", () => {
     expect(amount(r(null, null))).toBe("No US dollar figure");
     expect(amount(r(960, 14400, true))).toBe("Up to $14,400, computed by the catalog");
     expect(host("https://www.runpod.io/startup-program")).toBe("runpod.io");
+  });
+
+  it("leaves a read date off a note, and keeps the rest of its words", () => {
+    expect(noteText("At the Pro+ list price (kiro.dev/pricing, read 2026-11-02), that is $960")).toBe("At the Pro+ list price (kiro.dev/pricing), that is $960");
+    expect(noteText("Per the provider, read 2026-11-12.")).toBe("Per the provider.");
+    expect(noteText("Per the provider, read 2026-11-12")).toBe("Per the provider");
+    expect(noteText("Read the terms first.")).toBe("Read the terms first.");
+    for (const r of data.rows) expect(noteText(r.amount_note), r.id).not.toMatch(/\bread \d{4}-\d{2}-\d{2}/);
   });
 });
 
@@ -118,5 +126,9 @@ describe.skipIf(!ready && !process.env.CI)("the built /guide/ credits table", ()
   it("names the catalog, at the pinned commit, as the source", () => {
     const url = `https://github.com/${lock.repo}/blob/${lock.commit}/${lock.path}`;
     expect(doc.querySelector(`[aria-labelledby='guide-resources'] a[href="${url}"]`)).not.toBeNull();
+  });
+
+  it("shows no read date, even behind a press (issue #153)", () => {
+    expect(doc.querySelector("[aria-labelledby='guide-resources']")?.textContent).not.toMatch(/\bread \d{4}-\d{2}-\d{2}/);
   });
 });

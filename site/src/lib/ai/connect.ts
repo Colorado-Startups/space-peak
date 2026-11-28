@@ -1,7 +1,6 @@
 // Every snippet the home teaser and /ai/ show, built from the site's canonical origin.
-// Each shape is the one its app's docs give, read on READ; the PR for issue #131 quotes them.
+// Each shape is the one its app's docs give, read on 2026-11-27; the PR for issue #131 quotes them.
 export const SERVER = "spacepeak"; // The name the server gives itself in site/worker/mcp.ts.
-export const READ = "2026-11-27";
 export const DOCS = [
   ["Claude", "https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp"],
   ["Claude Code", "https://code.claude.com/docs/en/mcp"],

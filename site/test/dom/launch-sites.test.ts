@@ -1,6 +1,6 @@
 // Issue #139: /launch/ tours exactly the brief's ranked three, in its order, plus Pikes Peak as the name and
-// headquarters. Every figure carries its register status. Blanca Peak and the Crestones / Great Sand Dunes
-// appear only as permanent exclusions, with the row that says why and no siting language.
+// headquarters, each with its register rows and its Hurdles. Issue #153: plain labels, and no exclusions
+// block or land rule; Blanca Peak and the Crestones / Great Sand Dunes are not shown. test/unit/figure.test.ts checks each figure.
 import { existsSync, readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
 import path from "node:path";
@@ -11,9 +11,6 @@ import { TOUR } from "../../src/lib/map/data";
 import { DIST_DIR } from "./pages";
 
 const RANKED = ["Greenhorn / Wet Mtns", "Culebra Peak", "Spanish Peaks"]; // the brief's "Honest ranking", best first
-const EXCLUDED = { "Blanca Peak": ["S-20"], "Crestones / Sand Dunes": ["S-18"] };
-// The repo's own exclusion check went with the hard lines (MASTER_PLAN, Decision 2026-11-16), so the words live here.
-const SITING = /\b(build|bor(e|ed|ing)|tunnel|launch|fir(e|es|ed|ing)|lane|muzzle|portal|sit(e|es|ed|ing)|candidate|rank|propos|option|best|ideal|perfect)\w*/i;
 const data = launch();
 const { sites, risks } = data;
 const yaml = readFileSync(new URL("../../../data/launch.yaml", import.meta.url), "utf8");
@@ -24,28 +21,20 @@ describe("data/launch.yaml, the tour", () => {
     expect(sites.headquarters.site).toBe("Pikes Peak");
   });
 
-  it("shows every S- and G- row of each toured place, with the brief's veto, and its summit is the map's", () => {
+  it("shows every S- and G- row of each toured place, with the brief's veto as Hurdles, and its summit is the map's", () => {
     for (const p of [...sites.ranked, sites.headquarters]) {
       const want = allClaims().filter((r) => r.site === p.site && ["S", "G"].includes(r.series)).map((r) => r.id);
       expect(rowsOf(p).sort()).toEqual(want.sort());
-      expect(p.veto?.length, `${p.name} shows the brief's veto`).toBeGreaterThan(0);
+      expect(p.veto?.length, `${p.name} shows its Hurdles`).toBeGreaterThan(0);
     }
     const summits = [...sites.ranked, sites.headquarters].map((p) => getClaim(p.claims.find((id) => id.startsWith("G-"))!).claim);
     summits.forEach((claim, i) => expect(claim.startsWith(`${TOUR[i]},`)).toBe(true));
   });
 
-  it("gives each exclusion only the row that says why", () => {
-    expect(Object.fromEntries(sites.exclusions.map((p) => [p.site, p.claims]))).toEqual(EXCLUDED);
-  });
-
-  it("fails on a row of another site, and on a fourth ranked site", () => {
+  it("fails on a row of another site, on a fourth ranked site, and on an exclusions list", () => {
     expect(() => parseLaunch(yaml.replace("[S-01,", "[S-04,"))).toThrow(/S-04 is a row of "Culebra Peak"/);
     expect(() => parseLaunch(yaml.replace("  headquarters:", "    - { name: Pikes, site: Pikes Peak, claims: [G-05] }\n  headquarters:"))).toThrow();
-  });
-
-  it("treats this test's siting words as siting words", () => {
-    for (const s of ["the best site", "bore the peak", "a firing lane", "launch from it"]) expect(s).toMatch(SITING);
-    expect("Sisnaajini, sacred to the Navajo").not.toMatch(SITING);
+    expect(() => parseLaunch(yaml.replace("  headquarters:", "  exclusions: []\n  headquarters:"))).toThrow(/exclusions/);
   });
 });
 
@@ -58,31 +47,31 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ tour", () => {
   const text = (el: Element | null) => (el?.textContent ?? "").replace(/\s+/g, " ").trim();
   const ranked = [...section.querySelectorAll("ol.sites-ranked > li")];
   const hq = section.querySelector(".site-card--hq");
-  const block = section.querySelector(".exclusions");
 
   it("shows exactly three ranked sites in the brief's order, and Pikes Peak outside the ranking", () => {
+    expect(text(section.querySelector("#sites-ranking"))).toBe("Ranked, best first.");
     expect(ranked.map((li) => li.getAttribute("data-site"))).toEqual(RANKED);
     expect(hq?.getAttribute("data-site")).toBe("Pikes Peak");
-    expect(text(hq)).toMatch(/headquarters, not a candidate/);
+    expect(text(hq?.querySelector(".site-tag") ?? null)).toBe("The name and headquarters");
     expect(hq?.closest("ol")).toBeNull();
   });
 
-  it("gives every figure in the tour and the risks its register status, as a chip word", () => {
+  it("shows every row of the tour and the risks as a figure, each place's veto under Hurdles", () => {
     const figures = [...doc.querySelectorAll("section[aria-labelledby='sites'] .figure, section[aria-labelledby='risks'] .figure")];
-    expect(figures.length).toBe(placesOf(data).flatMap(rowsOf).length + risks.flatMap((r) => r.claims).length);
-    for (const f of figures) {
-      const row = getClaim(f.getAttribute("data-claim")!);
-      expect(f.getAttribute("data-status")).toBe(row.status);
-      expect(f.querySelector(".figure-chip")?.textContent).toBe(row.status);
-    }
+    expect(figures.map((f) => f.getAttribute("data-claim"))).toEqual([...placesOf(data).flatMap(rowsOf), ...risks.flatMap((r) => r.claims)]);
+    for (const card of [...ranked, hq]) expect(text(card?.querySelector(".site-veto-label") ?? null)).toBe("Hurdles");
   });
 
-  it("names both exclusions in one block, with no siting language, and nowhere else on the tour", () => {
-    expect(text(block)).toMatch(/Blanca Peak/);
-    expect(text(block)).toMatch(/Crestones \/ Great Sand Dunes/);
-    expect(text(block)).not.toMatch(SITING);
-    expect([...block!.querySelectorAll(".figure")].map((f) => f.getAttribute("data-claim"))).toEqual(Object.values(EXCLUDED).flat());
-    for (const card of [...ranked, hq]) expect(text(card)).not.toMatch(/Blanca|Crestone|Sand Dunes|Sisnaajini/);
+  it("has no exclusions block, and names neither excluded site", () => {
+    const main = doc.querySelector("main");
+    expect(main?.querySelector(".exclusions, #exclusions")).toBeNull();
+    expect(text(main)).not.toMatch(/exclusion|Blanca|Crestone|Sand Dunes|Sisnaajini|the brief|veto/i);
+  });
+
+  it("leaves the brief's land rule (E-07) off the risks, and its words off the page", () => {
+    expect(risks.flatMap((r) => r.claims)).not.toContain("E-07");
+    expect(risks.map((r) => r.label)).not.toContain("Land status");
+    expect(text(doc.querySelector("main"))).not.toMatch(/\b(never|brutal|tractable|sacred|National Park)\b/i);
   });
 
   it("locates the tour on the map's own drawing", () => {

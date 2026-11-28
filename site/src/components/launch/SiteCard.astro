@@ -1,5 +1,5 @@
 ---
-// One place on the /launch/ site tour: its name, its register rows, then the rows of the brief's veto column.
+// One place on the /launch/ site tour: its name, its register rows, then the rows of the brief's veto column as Hurdles.
 import Figure from "../Figure.astro";
 import type { Place } from "../../lib/launch/data";
 
@@ -13,7 +13,7 @@ const { place } = Astro.props;
 <ul class="site-rows">{place.claims.map((id) => <li><Figure claim={id} /></li>)}</ul>
 {place.veto && (
   <>
-    <p class="site-veto-label">The brief's veto</p>
+    <p class="site-veto-label">Hurdles</p>
     <ul class="site-rows site-veto">{place.veto.map((id) => <li><Figure claim={id} /></li>)}</ul>
   </>
 )}

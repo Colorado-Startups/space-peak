@@ -25,3 +25,6 @@ export function amount(r: Pick<Resource, "credit_first" | "credit_first_computed
 
 /** Where a link goes, for its text: the host without "www.". */
 export const host = (link: string) => new URL(link).hostname.replace(/^www\./, "");
+
+/** A catalog note as a visitor reads it: a ", read YYYY-MM-DD" that ends a clause is left off (issue #153). */
+export const noteText = (note: string) => note.replace(/, read \d{4}-\d{2}-\d{2}(?=[).;,]|$)/g, "");

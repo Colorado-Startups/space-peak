@@ -1,7 +1,7 @@
 // The /map/ list twin's groups: every drawn place once, by kind in the key's order, each with its city and source.
 // PlaceList.astro renders these; test/dom/map-page.test.ts runs them on fixture orgs.
 import type { Kind } from "../orgs/kinds";
-import type { MapData } from "./data";
+import { roleOf, type MapData } from "./data";
 
 const CITY: Record<string, string> = {
   "colorado-springs": "Colorado Springs", fountain: "Fountain", "security-widefield": "Security-Widefield",
@@ -23,7 +23,7 @@ export function placeGroups(data: MapData, cities: ReadonlyMap<string, string>):
     title,
     items:
       kind === "summit"
-        ? data.summits.map((s) => ({ name: s.summit, where: "Speculative site", url: s.source_url }))
+        ? data.summits.map((s) => ({ name: s.summit, where: roleOf(s.summit), url: s.source_url }))
         : data.orgs.filter((o) => o.kind === kind).map((o) => ({ name: o.name, where: CITY[cities.get(o.id) ?? ""] ?? "Colorado", url: o.source_url })),
   }));
 }

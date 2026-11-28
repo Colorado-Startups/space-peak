@@ -56,6 +56,8 @@ describe("drawnCounts on fixtures", () => {
       { name: "Example Lab", where: "Fountain", url: "https://example.org/registry" },
       { name: "Example Startup", where: "Fountain", url: "https://example.org/registry" },
     ]);
+    // Issue #153: the ranked three are summits, and Pikes Peak is the name and headquarters.
+    expect(groups[3].items.map((p) => p.where)).toEqual(["Summit", "Summit", "Summit", "Name and headquarters"]);
   });
 });
 
@@ -82,4 +84,8 @@ describe.skipIf(!ready && !process.env.CI)("the built /map/ page", () => {
     for (const f of frames) expect([f.getAttribute("tabindex"), f.getAttribute("role"), Boolean(f.getAttribute("aria-label"))]).toEqual(["0", "region", true]);
   });
   it("loads no MapLibre", () => expect(doc.documentElement.outerHTML).not.toMatch(/maplibre/i));
+  it("says speculative once, and names Pikes Peak the name and headquarters (issue #153)", () => {
+    expect(doc.querySelector("main")?.textContent?.match(/speculative/gi)).toHaveLength(1);
+    expect(doc.querySelector("#places li[data-name='Pikes Peak'] .place-list__where")?.textContent).toBe("Name and headquarters");
+  });
 });

@@ -1,23 +1,18 @@
 ---
 import data from "../../../../data/resources.json";
 import lock from "../../../../data/resources.lock.json";
-import { BUCKETS, BUCKET_LABEL, COVER_LABEL, amount, host, type Bucket, type Resource } from "../../lib/resources";
+import { BUCKETS, BUCKET_LABEL, COVER_LABEL, amount, host, noteText, type Bucket, type Resource } from "../../lib/resources";
 
 // Startup credits: the catalog rows in data/resources.json, written by scripts/resources/pull.mjs and pinned
 // by data/resources.lock.json. The build reads only those two files and fetches nothing.
 const rows = data.rows as Resource[];
 const count = (bucket: Bucket) => rows.filter((r) => r.bucket === bucket).length;
 const catalog = `https://github.com/${lock.repo}/blob/${lock.commit}/${lock.path}`;
-const left = lock.left_out.length;
 const text = (r: Resource) => [r.program, r.provider, ...r.covers.map((c) => COVER_LABEL[c])].join(" ").toLowerCase();
 ---
 <section class="guide" data-guide="need" aria-labelledby="guide-resources">
   <h2 id="guide-resources">Startup credits</h2>
-  <p class="guide-source">
-    {rows.length} of the {rows.length + left} programs in the <a href={catalog}>startup-credits catalog</a> (CC0), checked <time datetime={data.checked}>{data.checked}</time>.
-    {left > 0 && <> The other {left} failed a link check on <time datetime={lock.links_checked}>{lock.links_checked}</time>. </>}
-    Figures are the catalog's. Read the provider's page before you apply.
-  </p>
+  <p class="guide-source">Free credit programs, from the <a href={catalog}>startup-credits catalog</a>.</p>
   <nav class="guide-chips" aria-label="Filter credits by what they need">
     <a href="/guide/#guide-resources" data-kind-chip="" data-count={rows.length}>All <span class="n">{rows.length}</span></a>
     {BUCKETS.map((b) => (
@@ -41,7 +36,7 @@ const text = (r: Resource) => [r.program, r.provider, ...r.covers.map((c) => COV
             <td>{r.provider}</td>
             <td>{BUCKET_LABEL[r.bucket]}</td>
             <td>
-              <details><summary>{amount(r)}</summary><p>{r.amount_note}</p></details>
+              <details><summary>{amount(r)}</summary><p>{noteText(r.amount_note)}</p></details>
               <ul class="covers" aria-label="Pays for">{r.covers.map((c) => <li>{COVER_LABEL[c]}</li>)}</ul>
             </td>
             <td><a href={r.link}>{host(r.link)}</a></td>

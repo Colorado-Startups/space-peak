@@ -1,6 +1,6 @@
 # Go-live
 
-What spacepeak.co needs to go live, who does it, and the evidence ([#188](https://github.com/Colorado-Startups/space-peak/issues/188)).
+What spacepeak.co needed to go live, who did it, and the evidence. Every item is done: live since 2026-11-28 ([#188](https://github.com/Colorado-Startups/space-peak/issues/188)).
 
 ```mermaid
 flowchart LR

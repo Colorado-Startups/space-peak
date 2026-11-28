@@ -1,6 +1,6 @@
 ---
 name: space-peak-publish-gate
-description: Run the full Space Peak pre-ship gate on a draft, which is MASTER_PLAN PT 3.3 as an executable checklist. Use when the user says "pre-ship check", "is this ready to publish", "run the publish gate", or before anything goes live on spacepeak.co.
+description: Run the full Space Peak pre-ship gate on public copy before it merges, since every merge to main deploys spacepeak.co. Use when the user says "pre-ship check", "is this ready to publish", "run the publish gate", or before a pull request that changes what the site says merges.
 ---
 
 # space-peak-publish-gate

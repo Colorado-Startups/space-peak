@@ -2,6 +2,8 @@
 
 Moved whole, word for word, from [MASTER_PLAN.md](MASTER_PLAN.md).
 
+This phase is history. Decision 2026-11-16 made the spacepeak.co website the venue instead of a written piece, and the site went live on 2026-11-28. PT 3.1, UA 3.2 and PT 3.3 below are kept as the record.
+
 ## Phase 3: Publish as thought leadership (conditional, only if UA 1.1 = Publish)
 
 | | |

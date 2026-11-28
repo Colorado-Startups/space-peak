@@ -1,6 +1,6 @@
 ---
 name: space-peak-fact-reviewer
-description: Read-only adversarial reviewer for factual claims in Space Peak material. Checks every claim against 02_substance/claims_register.md, hunts for claims that hardened from speculation into assertion. Use before anything goes live, or when you want a second pair of eyes that did not write the text.
+description: Read-only adversarial reviewer for factual claims in Space Peak material. Checks every claim against 02_substance/claims_register.md, hunts for claims that hardened from speculation into assertion. Use before a change to public copy merges, since every merge goes live, or when you want a second pair of eyes that did not write the text.
 tools: Read, Glob, Grep, Bash, WebSearch, WebFetch
 ---
 

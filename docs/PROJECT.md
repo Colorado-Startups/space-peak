@@ -7,17 +7,19 @@ flowchart LR
   D{"Park, publish or develop?"} -- chosen --> P["Publish, under the Space Peak name, standalone"]
   D -. struck .-> K["Phase 2, Park"]
   D -. struck .-> V["Phase 4, Develop"]
-  P --> S["Phase 3, active<br/>its venue the spacepeak.co website"]
-  S -. "Paul gives the go-live" .-> G["spacepeak.co"]
+  P --> S["Phase 3, done<br/>its venue the spacepeak.co website"]
+  S -- "live since 2026-11-28" --> G["spacepeak.co"]
+  G --> N["Next: the project board"]
 ```
 
 | Item | Where it stands |
 | --- | --- |
 | The decision | **Publish**, under the Space Peak name, as a standalone piece, not under the Photon Mountain umbrella |
-| Phase 3 of the master plan | Active. Its venue is the spacepeak.co website (Decision 2026-11-16) |
+| Phase 3 of the master plan | Done. Its venue is the spacepeak.co website (Decision 2026-11-16), live since 2026-11-28 (#212) |
 | Phases 2 and 4 | Struck |
 | The repository | Public, so anyone can contribute. It is also the source of the spacepeak.co website |
-| The production go-live | Paul gives it |
+| The production go-live | Paul gave it on 2026-11-28. Every merge to `main` now deploys |
+| Next work | The [Space Peak project board](https://github.com/orgs/Colorado-Startups/projects/11) |
 
 ## The map
 

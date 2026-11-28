@@ -12,7 +12,9 @@ name: ci
 # standard job.
 # The standard job (npm ci, then astro check, astro build, vitest with v8 coverage, then Chromium and the
 # Playwright axe spec over the built dist/) runs when the site's files change, or its data: the org schema and
-# checks in site/src/lib/orgs/ run only there, and /about/ says CI checks every listing.
+# checks in site/src/lib/orgs/ run only there, and /about/ says CI checks every listing. Its paths also name
+# each file outside site/ and data/ that the build or a vitest file reads: the claims register, the map
+# GeoJSON, the rules file, and the claims checker, whose rows claims-parse.test.ts compares.
 # Its last line leaves the MCP conformance tally as a notice on the job, which the Quality page reads back as
 # ai.mcp_conformance_share (quality/collectors/space-peak.mjs). It warns, and never fails, when no results exist.
 # Dependabot's github-actions entry bumps the pin.
@@ -59,6 +61,10 @@ jobs:
       standard-paths: |
         site/**
         data/**
+        02_substance/claims_register.md
+        03_deliverables/map/space_peak_map.geojson
+        04_tools/space_peak_rules.json
+        04_tools/space_peak_claims.py
         package.json
         package-lock.json
         .nvmrc

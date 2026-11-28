@@ -1,8 +1,7 @@
 ---
+// The /about/ page. Each about section is its own file in src/sections/about/, rendered in filename order, as on /guide/.
 import Base from "../../layouts/Base.astro";
 import "../../sections/about/about.css";
-
-// Each about section is its own file in src/sections/about/, rendered in filename order, as on /guide/.
 const modules = import.meta.glob<{ default: any }>("../../sections/about/*.astro", { eager: true });
 const sections = Object.keys(modules).sort().map((key) => modules[key].default);
 ---

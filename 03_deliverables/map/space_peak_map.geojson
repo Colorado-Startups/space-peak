@@ -2,9 +2,9 @@
  "type": "FeatureCollection",
  "generated": {
   "by": "04_tools/space_peak_map.py",
-  "date": "2026-11-27",
+  "date": "2026-11-28",
   "register": "02_substance/claims_register.md",
-  "register_git_blob": "c911fa0f6a94356e8b57b5b9cb41a3680e33b895",
+  "register_git_blob": "8eb15ece3714f4cb5880af9397f8e152722782bf",
   "license": "CC0-1.0"
  },
  "features": [

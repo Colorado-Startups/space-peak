@@ -6,13 +6,13 @@ Part of the [Space Peak voice](voice.md). This is the judgement half, and step 5
 
 The concept brief's subtitle does the work in one line. It is a speculative venture thesis, not an engineering proposal. Every fact about a specific mountain is a starting point for real diligence, not a verified site assessment.
 
-Carry that framing into every piece. A reader should never have to infer that a number is unverified from the fact that the document seems speculative overall. The label goes next to the claim.
+Carry that framing into every piece. The claims register's [labelling rule](../02_substance/claims_register.md#labelling-an-unconfirmed-figure) says how a piece labels each claim, in Markdown and on the site.
 
 This is the rule `04_tools/space_peak_claims.py` and `02_substance/claims_register.md` exist to protect. Speculation left unlabelled does not stay speculation. It hardens into an asserted fact somewhere between a draft and a published piece, and nobody can point at the moment it happened.
 
 ```mermaid
 flowchart LR
-  D["A speculative claim in a draft"] -->|"labelled next to the claim"| S["Stays speculation"]
+  D["A speculative claim in a draft"] -->|"labelled, per the register"| S["Stays speculation"]
   D -->|"left unlabelled"| F["Hardens into an asserted fact by the published piece"]
 ```
 

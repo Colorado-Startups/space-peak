@@ -8,17 +8,36 @@ Every checkable claim in the Space Peak material, with a status. The concept bri
 
 This file is how that discipline becomes something a machine can check. `.github/workflows/ci.yml` runs `04_tools/space_peak_claims.py` over every tracked Markdown file on a pull request. It warns and never blocks.
 
-**For writers:** give a checkable claim a row, and label an `unverified` row as unverified in the prose.
+**For writers:** give a checkable claim a row, and label it as [Labelling an unconfirmed figure](#labelling-an-unconfirmed-figure) says.
 
 ## Status vocabulary
 
 | Status | Meaning |
 | --- | --- |
-| `unverified` | From the brief, and still to be checked against a source. Prose must label it speculative. |
+| `unverified` | From the brief, and still to be checked against a source. [Label it](#labelling-an-unconfirmed-figure). |
 | `verified` | Confirmed against a cited source. The source column is filled. |
 | `corrected` | Checked, and the brief was wrong. The corrected value is authoritative. |
-| `unverifiable` | Checked, and no public source settles it. Prose must say so or drop the claim. |
+| `unverifiable` | Checked, and no public source settles it. [Label it](#labelling-an-unconfirmed-figure), or drop the claim. |
 | `open` | A live decision, not a fact awaiting diligence. |
+
+## Labelling an unconfirmed figure
+
+This is the one statement of the rule. Every other file links here.
+
+A reader must see that a figure is unconfirmed without inferring it from the tone of the piece. An `unverified` or `unverifiable` row is unconfirmed.
+
+| Status | In Markdown: the brief, memos, docs | On the site |
+| --- | --- | --- |
+| `verified`, `corrected` | Its source, or the register row that cites it, in the same sentence | The value, then a small "source" link |
+| `unverified` | "unverified" or "speculative" in the same sentence, as in "14,047 (unverified)" | The value with no link. The page says once that such figures are unconfirmed: `UNPROVEN_NOTE` in `site/src/components/figure.ts` |
+| `unverifiable` | It says no public source settles the claim, or drops it | As `unverified` |
+| `open` | It says the row is an estimate or a decision, never a fact | The odds cards say "estimate" |
+
+Paul set the site column on 2026-11-28 (issue #153). A page shows no status chip, claim ID or read date; this file and `/data/claims.json` keep them.
+
+**A goal is not a claim.** The home page's "Colorado's hub for the future of space." is the goal of the launch plan Paul approved on 2026-11-16, in his words. It needs no row and no label. A goal with a number still names itself a goal, per the no-bare-figures warning in `01_doctrine/voice-machine-rules.md`.
+
+`04_tools/space_peak_claims.py` warns (`unlabeled-claim`) when an unconfirmed place claim has no cue in its sentence. Its cues, in `04_tools/space_peak_rules.json`, are wider than this rule, so a clean run is not proof.
 
 ## Site table claims
 

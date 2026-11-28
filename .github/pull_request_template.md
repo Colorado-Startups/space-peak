@@ -9,7 +9,7 @@ mountain is unverified until diligenced. Tick each line or say why it does
 not apply.
 
 - [ ] Every new mountain-specific claim has a row in `02_substance/claims_register.md`
-- [ ] Every claim marked `unverified` is labelled as such in the prose, or cited
+- [ ] Every unconfirmed claim is labelled as the claims register's labelling rule says (`02_substance/claims_register.md`)
 - [ ] No em dashes anywhere
 
 ## Two things no lint catches

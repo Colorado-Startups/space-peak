@@ -13,20 +13,6 @@ Set 2026-11-15 with the first map, `03_deliverables/map/`. A symbol is an argume
 
 ## Figures on the site
 
-Set by Paul on 2026-11-28 (issue #153). This is the site's form of the label rule: [no bare figures](voice-machine-rules.md#warning-no-bare-figures), and [speculation is labelled](voice-judgement.md#speculation-is-labelled-not-implied).
+The claims register's [labelling rule](../02_substance/claims_register.md#labelling-an-unconfirmed-figure) says what a figure shows on the site, and in Markdown. Paul set its site form on 2026-11-28 (issue #153). The register wins on claims, so this file restates none of it.
 
-| Figure | What the page shows |
-| --- | --- |
-| Sourced and confirmed (`verified`, `corrected`) | Its value, then a small "source" link |
-| Unconfirmed (`unverified`, `unverifiable`) | Its value, with no link |
-| Any page with an unconfirmed figure | One line, once: `UNPROVEN_NOTE` in `site/src/components/figure.ts` |
-
-```mermaid
-flowchart LR
-  F["A figure on a page"] --> S{"Its status"}
-  S -->|"verified or corrected"| L["Value, then a small source link"]
-  S -->|"unverified or unverifiable"| U["Value, with no link"]
-  U --> N["UNPROVEN_NOTE, once on the page"]
-```
-
-No status chip, claim ID or read date shows on a page. The register and `/data/claims.json` keep them. Prose in the piece still labels each claim where it stands.
+That rule is how the site carries [no bare figures](voice-machine-rules.md#warning-no-bare-figures) and [speculation is labelled](voice-judgement.md#speculation-is-labelled-not-implied).

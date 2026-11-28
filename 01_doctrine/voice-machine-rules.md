@@ -26,7 +26,7 @@ Every number presented as a fact needs one of three things in the same sentence:
 | --- | --- |
 | **An attribution** | Who says so, and where a reader can check |
 | **A goal label** | "Reaching one launch an hour is a goal" is honest. "The cadence is one launch an hour" is not, yet |
-| **A speculative label** | "On the order of 200 g, unverified" is honest. "200 g" alone is a claim this project has not earned |
+| **A speculative label** | "On the order of 200 g, unverified" is honest. "200 g" alone is a claim this project has not earned. The register's [labelling rule](../02_substance/claims_register.md#labelling-an-unconfirmed-figure) gives each form |
 
 This **warns** and does not block, which is a deliberate change from the upstream Photon Mountain script. That script graded it a failure while its own docstring called the check a heuristic that flags candidates for human review. A gate cannot both call itself a heuristic and block on itself.
 

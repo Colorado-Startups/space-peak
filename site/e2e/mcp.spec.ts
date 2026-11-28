@@ -75,9 +75,10 @@ test("list_claims with limit 50 returns at most 50 claims", async ({ request }) 
   expect(body.claims.length).toBe(Math.min(body.total, 50));
 });
 
+// Bytes, not a string: with a JSON Content-Type, Playwright quotes a string that is not valid JSON.
 for (const [raw, code] of [["{", -32700], ["[]", -32600]] as const) {
   test(`the raw body ${raw} gets 400 and a JSON-RPC error`, async ({ request }) => {
-    const res = await request.post(MCP_URL, { headers: rpc("tools/list").headers, data: raw });
+    const res = await request.post(MCP_URL, { headers: rpc("tools/list").headers, data: Buffer.from(raw) });
     expect(res.status()).toBe(400);
     const body = await res.json();
     expect(body.jsonrpc).toBe("2.0");

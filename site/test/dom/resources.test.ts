@@ -86,7 +86,7 @@ describe("two filtered sections on one page", () => {
       <section data-guide><a data-kind-chip="">All</a><a data-kind-chip="company">Co</a>
         <table><tr data-kind="company" data-text="acme"></tr><tr data-kind="institution" data-text="uccs"></tr></table></section>
       <section data-guide="need"><a data-kind-chip="">All</a><a data-kind-chip="incorporated">Inc</a>
-        <form data-guide-search hidden><input id="q2"></form><p data-guide-status></p>
+        <form data-guide-search><input id="q2"></form><p data-guide-status></p>
         <table><tr data-kind="incorporated" data-text="aws gpu"></tr><tr data-kind="funded_or_partner" data-text="modal gpu"></tr></table></section>`;
     window.history.replaceState(null, "", "/guide/?need=incorporated");
     init(document);

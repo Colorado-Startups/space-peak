@@ -28,7 +28,7 @@ export function llmsTxt(links: NavLink[] = liveLinks()): string {
     ["Optional", [
       link("Source repository", REPO, "the site, the data and the claims register"),
       link("Concept brief", `${REPO}/blob/main/02_substance/Space-Peak-Concept-Brief.md`, "the speculative thesis the site comes from"),
-      link("CC0 1.0 licence", "https://creativecommons.org/publicdomain/zero/1.0/", "every page and file is public domain"),
+      link("CC0 1.0 licence", "https://creativecommons.org/publicdomain/zero/1.0/", "for what Colorado Startups made here; others' work keeps its own terms"),
     ]],
   ];
   return [`# ${HOME.title}`, "", `> ${SUMMARY}`, "", ...sections.flatMap(([title, lines]) => [`## ${title}`, "", ...lines, ""])].join("\n");

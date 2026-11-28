@@ -23,7 +23,7 @@ describe("guide filter on a fixture", () => {
   const fixture = `<section data-guide>
     <a href="/guide/" data-kind-chip="">All</a><a href="/guide/?kind=company" data-kind-chip="company">Companies</a>
     <a href="/guide/?kind=institution" data-kind-chip="institution">Institutions</a>
-    <form data-guide-search hidden><label for="q">Search</label><input id="q"></form>
+    <form data-guide-search><label for="q">Search</label><input id="q"></form>
     <p data-guide-status></p><p data-guide-none hidden></p>
     <table><tbody><tr data-kind="company" data-text="acme fountain"></tr><tr data-kind="institution" data-text="uccs colorado springs"></tr></tbody></table>
   </section>`;
@@ -42,13 +42,12 @@ describe("guide filter on a fixture", () => {
     expect(rowMatches(row, "", "pueblo")).toBe(false);
   });
 
-  it("preselects ?kind=, shows the search field, and filters on a chip click and on typing", () => {
+  it("preselects ?kind=, and filters on a chip click and on typing", () => {
     document.body.innerHTML = fixture;
     window.history.replaceState(null, "", "/guide/?kind=company");
     init(document);
     const rows = [...document.querySelectorAll("tr")];
     const status = document.querySelector("[data-guide-status]")!;
-    expect(document.querySelector("form")!.hidden).toBe(false);
     expect(rows.map((r) => r.hidden)).toEqual([false, true]);
     expect(status.textContent).toBe("Showing 1 of 2");
     expect(document.querySelector("[data-kind-chip='company']")!.getAttribute("aria-current")).toBe("true");
@@ -93,6 +92,15 @@ describe.skipIf(!ready && !inCI)("the built /guide/ page", () => {
   });
 
   it("labels every field", () => expect(unlabeled(guide)).toEqual([]));
+
+  it("ships what the filter shows on a plain load, so the script moves nothing (lab CLS)", () => {
+    for (const section of guide.querySelectorAll<HTMLElement>("[data-guide]")) {
+      const rows = section.querySelectorAll("tr[data-kind]").length;
+      expect(section.querySelector("[data-guide-search]")?.hasAttribute("hidden")).toBe(false);
+      expect(section.querySelector("[data-guide-status]")?.textContent).toBe(`Showing ${rows} of ${rows}`);
+      expect(section.querySelector("[data-kind-chip='']")?.getAttribute("aria-current")).toBe("true");
+    }
+  });
 
   it("reaches every organisation from / in 2 clicks: Guide in the nav, then its source link", () => {
     expect(dom(html("/")).querySelector("header nav a[href='/guide/']"), "Guide in the home nav").not.toBeNull();

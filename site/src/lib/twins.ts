@@ -17,7 +17,7 @@ const item = (label: string, path: string, note?: string) => `- [${label}](${url
 const section = (title: string, lines: string[]) => (lines.length ? [`## ${title}`, "", ...lines, ""] : []);
 const footer = [
   ...section("Open data", [item("Data manifest", "/data/index.json", "every file, its schema and sha256"), item("llms.txt", "/llms.txt", "the map of this site for language models")]),
-  "Licence: CC0 1.0. Reuse anything here without asking.",
+  "Licence: CC0 1.0 for what Colorado Startups made here. Others' work keeps its own terms.",
   "",
 ];
 

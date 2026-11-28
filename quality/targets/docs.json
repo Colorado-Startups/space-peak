@@ -30,6 +30,12 @@
      ]
     },
     {
+     "doc": "02_substance/brief/*.md",
+     "area": [
+      "03_deliverables/"
+     ]
+    },
+    {
      "doc": "00_project_system/MASTER_PLAN.md",
      "area": []
     },

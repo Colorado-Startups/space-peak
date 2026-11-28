@@ -1,16 +1,18 @@
 // @vitest-environment jsdom
 // Issue #138: the cadence calculator on /launch/. Minutes between shots give launches a year, as arithmetic
-// under the page's speculative lead. The brief's interval (P-08) and the busy-year comparison (E-02) are figures.
+// under the page's speculative lead. The brief's interval (P-08) and the world's dated launch count (E-02) are figures.
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { getClaim } from "../../src/lib/claims/parse";
+import { busyYear } from "../../src/lib/launch/busy-year";
 import {
-  BRIEF_MINUTES, BRIEF_STOP, BUSY_YEAR, MIN_SHARE, STOPS, cadenceView, init, launchesPerYear, minutesAt, shares,
+  BRIEF_MINUTES, BRIEF_STOP, MIN_SHARE, STOPS, cadenceView, formatCount, init, launchesPerYear, minutesAt, shares,
 } from "../../src/scripts/cadence.client";
 import { DIST_DIR } from "./pages";
 
 const LAST = STOPS.length - 1;
+const WORLD = 250; // a round count for the arithmetic tests; the page reads its own from E-02
 const share = (root: ParentNode, key: string) => root.querySelector<HTMLElement>(`[data-cadence-bar='${key}']`)!.style.getPropertyValue("--share");
 const move = (input: HTMLInputElement, stop: number) => {
   input.value = String(stop);
@@ -38,21 +40,46 @@ describe("the cadence arithmetic", () => {
   });
 
   it("scales both bars to the larger, keeping a sliver visible", () => {
-    expect(shares(8_760)).toEqual({ rate: 100, world: 2.9 });
-    expect(shares(183)).toEqual({ rate: 73.2, world: 100 });
-    expect(shares(105_120).world).toBe(MIN_SHARE);
+    expect(shares(8_760, WORLD)).toEqual({ rate: 100, world: 2.9 });
+    expect(shares(183, WORLD)).toEqual({ rate: 73.2, world: 100 });
+    expect(shares(105_120, WORLD).world).toBe(MIN_SHARE);
   });
 
-  it("keeps the brief's interval and the busy year equal to their register rows", () => {
+  it("keeps the brief's interval equal to its register row", () => {
     expect(getClaim("P-08").claim).toMatch(/once an hour/);
     expect(BRIEF_MINUTES).toBe(60);
-    expect(getClaim("E-02").claim).toMatch(new RegExp(`^About ${BUSY_YEAR} `));
+  });
+});
+
+describe("the world's launch count, read from E-02", () => {
+  const row = getClaim("E-02");
+
+  it("comes from the row's claim, so the number lives only in the register (issue #198)", () => {
+    const { count, year } = busyYear();
+    expect(Number.isInteger(count) && count > 0 && Number.isInteger(year)).toBe(true);
+    expect(row.claim).toContain(`${count} orbital launch attempts in ${year}`);
+  });
+
+  it("reads a count with thousands commas", () => {
+    expect(busyYear({ ...row, claim: "The world made 1,024 orbital launch attempts in 2031" })).toEqual({ count: 1_024, year: 2_031 });
+  });
+
+  it("fails the build on a claim without a dated count", () => {
+    expect(() => busyYear({ ...row, claim: "About 250 rocket launches worldwide in a busy year" })).toThrow(/E-02: the claim names no/);
+  });
+
+  it("fails the build on a count below 1", () => {
+    expect(() => busyYear({ ...row, claim: "The world made 0 orbital launch attempts in 2024" })).toThrow(/E-02: the launch count must be 1 or more, got 0/);
+  });
+
+  it("fails the build on stray commas rather than reading a wrong count", () => {
+    expect(() => busyYear({ ...row, claim: "The world made 1,0,,2 orbital launch attempts in 2024" })).toThrow(/E-02: the claim names no/);
   });
 });
 
 describe("the cadence script on a fixture", () => {
   it("shows the slider and moves the interval, the result, its spoken value and the bars live", () => {
-    document.body.innerHTML = `<div data-cadence><b data-cadence-minutes>60</b><output><b data-cadence-result>8,760</b></output>
+    document.body.innerHTML = `<div data-cadence data-cadence-world="${WORLD}"><b data-cadence-minutes>60</b><output><b data-cadence-result>8,760</b></output>
       <p data-cadence-slider hidden><input type="range" min="0" max="${LAST}" value="${BRIEF_STOP}"></p>
       <span data-cadence-bar="rate"></span><span data-cadence-bar="world"></span></div>`;
     init(document);
@@ -65,6 +92,12 @@ describe("the cadence script on a fixture", () => {
     expect([input.getAttribute("aria-valuetext"), text("[data-cadence-minutes]"), text("[data-cadence-result]"), share(document, "rate"), share(document, "world")])
       .toEqual(["2,880 minutes", "2,880", "183", "73.2", "100"]);
   });
+
+  it("keeps the static text and the hidden slider when the world count is missing", () => {
+    document.body.innerHTML = `<div data-cadence><p data-cadence-slider hidden><input type="range" min="0" max="${LAST}" value="${BRIEF_STOP}"></p></div>`;
+    init(document);
+    expect(document.querySelector<HTMLElement>("[data-cadence-slider]")!.hidden).toBe(true);
+  });
 });
 
 // CI's standard job builds before `npm test`. Locally a missing dist skips, with a reason.
@@ -76,7 +109,8 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ cadence section",
   const doc = new DOMParser().parseFromString(ready ? readFileSync(file, "utf8") : "", "text/html");
   const section = doc.querySelector("section[aria-labelledby='cadence']"); // the body runs even when skipped
   const q = (sel: string) => section?.querySelector(sel) ?? null;
-  const view = cadenceView(BRIEF_STOP);
+  const world = busyYear();
+  const view = cadenceView(BRIEF_STOP, world.count);
 
   it("sits under the page's speculative lead, with no note of its own (issue #153)", () => {
     expect(section!.hasAttribute("aria-describedby")).toBe(false);
@@ -103,6 +137,15 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ cadence section",
     const figures = [...section!.querySelectorAll(".figure")];
     expect(figures.map((f) => f.getAttribute("data-claim"))).toEqual(["P-08", "E-02"]);
     expect(section!.querySelectorAll(".figure-chip")).toHaveLength(0);
+  });
+
+  it("dates the world's count, links its source, and hands the same count to the script (issue #198)", () => {
+    const e02 = q(".figure[data-claim='E-02']");
+    expect(e02?.querySelector(".figure-value")?.textContent).toBe(`${formatCount(world.count)} in ${world.year}`);
+    const href = e02?.querySelector(".figure-source")?.getAttribute("href");
+    expect(href).toMatch(/^https:\/\//);
+    expect(getClaim("E-02").source).toContain(href!); // the link is the row's own source
+    expect(q("[data-cadence]")?.getAttribute("data-cadence-world")).toBe(String(world.count));
   });
 
   it("keeps outside a figure only the arithmetic's own numbers, in the one place marked as arithmetic", () => {

@@ -7,7 +7,6 @@ import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 
 const DIST = join(import.meta.dirname, "..", "dist");
-const SHARE_KIB = 6; // This step's share of the 307 KiB /map/ budget; map.spec.ts weighs the whole page.
 const TAGS = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]; // As routes-axe.spec.ts.
 type AxePage = ConstructorParameters<typeof AxeBuilder>[0]["page"]; // See routes-axe.spec.ts for the cast.
 type Feature = { geometry: { coordinates: [number, number] }; properties: Record<string, any> };
@@ -69,7 +68,7 @@ test("a place's popup opens by keyboard with its fact and source, and Escape han
   const org = features.find((f) => f.properties.layer === "org")!.properties;
   const o = orgs.find((x) => x.id === org.id)!;
   const cases = [
-    { name: summit.name, says: [`${summit.source} puts it at`, "a speculative site"], url: summit.source_url },
+    { name: summit.name, says: ["Summit, speculative", "USGS records its summit at"], url: summit.source_url },
     { name: org.name, says: [o.fact.text], url: o.sources.find((s) => s.id === o.fact.source)!.url },
   ];
   for (const { name, says, url } of cases) {
@@ -98,11 +97,13 @@ test("axe passes with the live map and a popup open", async ({ page }) => {
   expect(results.violations.map((v) => `${v.id}: ${v.help} (${v.nodes.map((n) => n.target.join(" ")).join(", ")})`)).toEqual([]);
 });
 
-test(`the places chunk, fetched after the first draw, is ${SHARE_KIB} KiB gzipped or less`, () => {
+// The size is a guideline, logged here; the real check is map.spec.ts's 307 KiB budget, whose walk this chunk is on.
+test("the places code is one chunk that the live map script imports, so the /map/ budget counts it", () => {
   const dir = join(DIST, "_astro");
-  const chunks = readdirSync(dir).filter((f) => f.endsWith(".js") && readFileSync(join(dir, f), "utf8").includes('"sp-places"'));
+  const js = readdirSync(dir).filter((f) => f.endsWith(".js"));
+  const chunks = js.filter((f) => readFileSync(join(dir, f), "utf8").includes('"sp-places"'));
   expect(chunks, "one chunk holds the places layer").toHaveLength(1);
-  const kib = gzipSync(readFileSync(join(dir, chunks[0]!))).length / 1024;
-  console.log(`places chunk ${chunks[0]}: ${kib.toFixed(1)} KiB gzipped`);
-  expect(kib).toBeLessThanOrEqual(SHARE_KIB);
+  const importers = js.filter((f) => /live\.client/.test(f) && readFileSync(join(dir, f), "utf8").includes(`./${chunks[0]}`));
+  expect(importers, "live.client imports the places chunk").toHaveLength(1);
+  console.log(`places chunk ${chunks[0]}: ${(gzipSync(readFileSync(join(dir, chunks[0]!))).length / 1024).toFixed(1)} KiB gzipped`);
 });

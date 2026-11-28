@@ -1,7 +1,8 @@
-// The live map's places: the organisations and the brief's four summits from /data/map.geojson, each org's sourced
-// fact from /data/orgs.json. One symbol layer draws them in the key's shapes and colours; a click opens a popup,
-// and each item in the list twin (#places) gets a "Show on map" button, so a keyboard reaches every place.
-// Blanca Peak and the Crestones stay off: map.geojson does not carry them, and /launch/ lists them as permanent exclusions.
+// The live map's places: the organisations and the four tour summits (the three ranked and Pikes Peak) from
+// /data/map.geojson, each org's sourced fact from /data/orgs.json. One symbol layer draws them in the key's shapes and
+// colours; a click opens a popup, and each item in the list twin (#places) gets a "Show on map" button, so a keyboard
+// reaches every place. A popup is plain words: the name, the kind, one sentence and a source link.
+// Blanca Peak and the Crestones stay off the live map entirely (Paul, 2026-11-27): map.geojson does not carry them.
 import type { Map as LiveMap } from "maplibre-gl";
 import { KINDS, type Kind } from "../../../lib/orgs/kinds";
 
@@ -27,8 +28,7 @@ export function placesOf(fc: { features: Feature[] }, orgs: Org[]): Place[] {
     const [p, at] = [f.properties, f.geometry.coordinates];
     if (p.layer === "summit") {
       const where = `${at[1].toFixed(5)} N, ${(-at[0]).toFixed(5)} W`;
-      const claims = p.claims.map((c: { id: string; status: string }) => `${c.id} ${c.status}`).join(", ");
-      return [{ kind: "summit", name: p.name, at, url: p.source_url, source: "USGS GNIS", lines: ["Summit, a speculative site", `${p.source} puts it at ${where}.`, `Its site claims: ${claims}.`] }];
+      return [{ kind: "summit", name: p.name, at, url: p.source_url, source: "USGS", lines: ["Summit, speculative", `USGS records its summit at ${where}.`] }];
     }
     if (p.layer !== "org") return [];
     const o = byId.get(p.id);

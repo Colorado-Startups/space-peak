@@ -69,7 +69,7 @@ const DATASETS: [name: string, paths: string[], description: string][] = [
   ["Space Peak organisations", ["orgs.json", "orgs.csv", "orgs.geojson"],
     "Command bases, institutions and companies in the Colorado Springs region that Space Peak features. Each has a kind, a city, a located point with its precision, one sourced fact and its sources."],
   ["Space Peak claims register", ["claims.json"],
-    "The factual claims the Space Peak thesis makes about a peak or the region, each with its review status, source and notes. They are read from 02_substance/claims_register.md, which wins over this copy."],
+    "The factual claims the Space Peak thesis makes about a peak or the region, each with its review status, source and notes. They are read from 02_substance/claims_register.md, which wins over them."],
   ["Space Peak metrics", ["metrics.json"],
     "Counts derived from the other datasets: organisations by kind and by city, and claims by review status. Every kind, city and status appears, with zero where none exist yet."],
   ["Space Peak map layer", ["map.geojson"],

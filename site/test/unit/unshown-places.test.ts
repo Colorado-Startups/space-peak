@@ -1,12 +1,13 @@
 // Issue #199. Paul, 2026-11-27: the site never shows the Blanca Peak or Crestones exclusions. No file the
 // site serves and no /mcp result names either place, and every claims count matches the rows served.
 // The register keeps its rows (src/lib/claims/served.ts). CI builds before it tests, so the last case
-// reads every built file too.
+// reads every built file there, and fails if the build is missing.
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse } from "yaml";
-import { allClaims } from "../../src/lib/claims/parse";
+import { allClaims, type ClaimRow } from "../../src/lib/claims/parse";
+import { servedClaims } from "../../src/lib/claims/served";
 import { buildFiles, indexJson, registerDate } from "../../src/lib/data/build";
 import { buildMapData } from "../../src/lib/map/data";
 import { orgSchema } from "../../src/lib/orgs/schema";
@@ -16,9 +17,14 @@ import { llmsTxt } from "../../src/pages/llms.txt";
 import worker from "../../worker/mcp";
 import { DIST_DIR, distExists } from "../dom/pages";
 
-// Wider than the rule in served.ts on purpose: no word boundary, so a joined or new spelling still fails.
-const NAMES = /blanca|crestone|sand dunes|sisnaaj/i;
-const named = (entries: [string, unknown][]) => entries.filter(([, body]) => NAMES.test(JSON.stringify(body))).map(([where]) => where);
+// Wider than the rule in served.ts on purpose. It needs no letter before or after a name, drops accents, and
+// takes the gaps a URL or a page may put between words: a space, _, -, +, %20 or &nbsp;. Other spellings pass.
+const GAP = String.raw`(?:[\s_+-]|%20|&nbsp;|&#160;)*`;
+const NAMES = new RegExp(`blanca|crestone|sand${GAP}dunes?|sis${GAP}naa?s?j`, "i");
+const names = (text: string) => NAMES.test(text.normalize("NFKD").replace(/\p{M}/gu, ""));
+const named = (entries: [string, unknown][]) => entries.filter(([, body]) => names(JSON.stringify(body))).map(([where]) => where);
+// The rows left out today. Pinned, so a rule or register change that moves one is a conscious edit here.
+const DROPPED = ["S-17", "S-18", "S-19", "S-20", "G-06", "G-07", "E-07"];
 
 const dir = new URL("../fixtures/orgs/valid/", import.meta.url);
 const orgs = readdirSync(dir).filter((f) => f.endsWith(".yaml"))
@@ -34,7 +40,7 @@ const served = new Map<string, string>([
   ...twins(mapData),
 ]);
 const claims: { id: string }[] = JSON.parse(files.get("claims.json")!).claims;
-const kept = allClaims().filter((row) => !NAMES.test(JSON.stringify(row)));
+const ids = allClaims().map((r) => r.id);
 
 const VERSION = "2026-07-28";
 const META = {
@@ -66,7 +72,8 @@ const body = ([, result]: [string, any]) => JSON.parse(result.content[0].text);
 describe("Blanca Peak and the Crestones", () => {
   it("no /data/ file, Markdown twin or llms.txt names them, and the counts match the rows served", () => {
     expect(named([...served])).toEqual([]);
-    expect(claims.map((c) => c.id)).toEqual(kept.map((r) => r.id));
+    expect(ids.filter((id) => DROPPED.includes(id))).toEqual(DROPPED);
+    expect(claims.map((c) => c.id)).toEqual(ids.filter((id) => !DROPPED.includes(id)));
     const { total, by_status } = JSON.parse(files.get("metrics.json")!).claims;
     expect(total).toBe(claims.length);
     expect(Object.values<number>(by_status).reduce((a, b) => a + b, 0)).toBe(claims.length);
@@ -89,13 +96,22 @@ describe("Blanca Peak and the Crestones", () => {
     expect(body(await tool("get_metrics")).claims.total).toBe(claims.length);
   });
 
+  it("the rule and this test catch each spelling, and keep a row that names neither place", () => {
+    const row = (claim: string): ClaimRow => ({ id: "X-01", series: "X", section: "Fixture", claim, status: "unverified", source: "", notes: "" });
+    const spellings = ["Blanca Peak", "Crestone Peak", "the Crestones", "Great Sand Dunes", "Great_Sand_Dunes", "sand-dunes", "a Sand Dune",
+      "Sisnaajini", "Sisnaajiní", "Sis Naajiní", "Tsisnaasjiní"];
+    expect(servedClaims(spellings.map(row))).toEqual([]);
+    expect(spellings.filter((s) => !names(s))).toEqual([]);
+    expect(servedClaims([row("Casablanca"), row("Culebra Peak")]).map((r) => r.claim)).toEqual(["Casablanca", "Culebra Peak"]);
+  });
+
   // Binary media cannot hold the names as text; everything else the build serves is read as UTF-8.
   const BINARY = /\.(avif|gif|ico|jpe?g|mp4|otf|pdf|png|ttf|wasm|webm|webp|woff2?)$/i;
-  it.runIf(distExists())("no built file names them", () => {
+  it.runIf(distExists() || !!process.env.CI)("no built file names them", () => {
     const built = (readdirSync(DIST_DIR, { recursive: true, withFileTypes: true }))
       .filter((e) => e.isFile() && !BINARY.test(e.name))
       .map((e): [string, string] => [path.relative(DIST_DIR, path.join(e.parentPath, e.name)), readFileSync(path.join(e.parentPath, e.name), "utf8")]);
     expect(built.length).toBeGreaterThan(0);
-    expect(built.filter(([, text]) => NAMES.test(text)).map(([file]) => file)).toEqual([]);
+    expect(built.filter(([, text]) => names(text)).map(([file]) => file)).toEqual([]);
   });
 });

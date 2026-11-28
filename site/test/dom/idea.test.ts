@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 // Home section 5, "The big idea" (step 36, issue #140): every chart and ruler value equals its claims-register row,
-// with that row's status; the ruler is drawn with no script and stays still under reduced motion; about 30 words.
+// and every unproven number carries a marker; the ruler is drawn with no script and stays still under reduced motion.
+// The 30-word budget is our own guideline, so it warns and never fails (Paul, 2026-11-28).
 // e2e/ruler.spec.ts checks the motion itself in a real browser.
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -12,7 +13,9 @@ import { DIST_DIR, SITE_DIR, builtPages, distExists } from "./pages";
 const COST = ["E-09", "E-10", "E-11", "E-12", "E-13"];
 const RULER = ["P-01", "S-14", "P-14", "P-02"]; // orbit, Pikes Peak, the muzzle, the air below it
 const THESIS = "E-14";
-const BUDGET = 30; // about 30 words, issue #140
+const BUDGET = 30; // about 30 words, issue #140: a guideline that warns
+// Statuses a reader cannot take as proven. Only these need a marker beside the number.
+const UNPROVEN = ["unverified", "unverifiable", "open"];
 const SCRIPT = readFileSync(path.join(SITE_DIR, "public", "js", "ruler-rise.js"), "utf8");
 const parse = (html: string) => new DOMParser().parseFromString(html, "text/html");
 const text = (el: Element | null | undefined) => (el?.textContent ?? "").replace(/\s+/g, " ").trim();
@@ -46,7 +49,6 @@ function ideaProblems(doc: Document): string[] {
   const rows = [...(cost?.querySelectorAll(".chart table tbody tr") ?? [])];
   if (rows.length !== ids.length) out.push(`cost chart has ${rows.length} rows for ${ids.length} claims`);
   if (cost?.querySelectorAll(".chart svg[role='img'] g[aria-label='bar'] > *").length !== ids.length) out.push("cost chart draws a bar per row");
-  const chips = [...(cost?.querySelectorAll(".idea-source .figure-chip") ?? [])].map(text);
   for (const [i, tr] of rows.entries()) {
     const id = ids[i];
     if (!id) continue;
@@ -57,12 +59,14 @@ function ideaProblems(doc: Document): string[] {
     const years = /first launched in (\d{4})|first flown from (\d{4}) to (\d{4})/.exec(row.claim)?.slice(1).filter(Boolean) ?? [];
     const label = text(tr.querySelector("th"));
     if (!years.length || !years.every((y) => label.includes(`first fl`) && label.includes(y))) out.push(`${id} label "${label}" does not give its first flight`);
-    if (!chips.includes(row.status)) out.push(`${id} is ${row.status}, and no chip says so`);
+    // A bar has no room for a marker, so each one must be proven.
+    if (UNPROVEN.includes(row.status)) out.push(`${id} is ${row.status}, and a bar cannot mark it unproven`);
   }
   if (!cost?.querySelector(".idea-source a[href^='https://ntrs.nasa.gov/']")) out.push("cost chart links no NASA source");
   if (!text(cost?.querySelector(".idea-source")).includes("2018 list prices, not today's")) out.push("the Falcon bars are not marked as 2018 list prices");
   const thesis = section.querySelector(`.idea-lead .figure[data-claim='${THESIS}']`);
-  if (text(thesis?.querySelector(".figure-chip")) !== getClaim(THESIS).status) out.push(`the thesis does not show ${THESIS}'s status`);
+  if (!thesis) out.push(`the thesis is not ${THESIS}`);
+  else if (UNPROVEN.includes(getClaim(THESIS).status) && !thesis.querySelector(".figure-chip")) out.push("the thesis is unproven and carries no marker");
 
   const ruler = section.querySelector("figure.ruler");
   if (ruler?.getAttribute("data-rise") !== "") out.push(`ruler starts at data-rise="${ruler?.getAttribute("data-rise")}", want drawn`);
@@ -71,16 +75,13 @@ function ideaProblems(doc: Document): string[] {
   if (shownIds.join() !== RULER.join()) out.push(`ruler shows ${shownIds.join()}, want ${RULER.join()}`);
   for (const fig of figs) {
     const id = fig.getAttribute("data-claim")!;
-    const status = getClaim(id).status;
     out.push(...figureProblems(id, text(fig.querySelector(".figure-value"))));
-    if (fig.getAttribute("data-status") !== status || text(fig.querySelector(".figure-chip")) !== status) out.push(`${id} chip is not "${status}"`);
+    if (UNPROVEN.includes(getClaim(id).status) && !fig.querySelector(".figure-chip")) out.push(`${id} is unproven and carries no marker`);
   }
   const muzzle = ruler?.querySelector("li[data-mark='muzzle']");
   if (text(muzzle?.querySelector(".hatch-tag")) !== "speculative") out.push("the muzzle is not tagged speculative");
   if (!/^url\(#/.test(ruler?.querySelector("svg [data-mark='muzzle']")?.getAttribute("fill") ?? "")) out.push("the muzzle band is not hatched");
   if (section.querySelector("details[open]")) out.push("a press starts open");
-  const n = words(section);
-  if (n > BUDGET) out.push(`${n} words, budget ${BUDGET}`);
   return out;
 }
 
@@ -141,7 +142,13 @@ if (!ready && !process.env.CI) console.warn(`[idea] built-page checks skipped: n
 describe.skipIf(!ready && !process.env.CI)("the built home page, section 5", () => {
   const html = ready ? builtPages().find((p) => p.route === "/")?.html ?? "" : "";
   const home = parse(html);
-  it("plots and shows every value from its register row, with its status, within the word budget", () => expect(ideaProblems(home)).toEqual([]));
+  it("plots and shows every value from its register row, each unproven one marked", () => expect(ideaProblems(home)).toEqual([]));
+  it(`keeps to about ${BUDGET} prose words, or warns`, () => {
+    const section = home.querySelector("section.idea");
+    const n = section ? words(section) : 0;
+    if (n > BUDGET) console.warn(`[idea] section 5 has ${n} prose words; the guideline is about ${BUDGET}.`);
+    expect(n).toBeGreaterThan(0);
+  });
   it("keeps one <h1>, after section 2", () => {
     expect(home.querySelectorAll("h1")).toHaveLength(1);
     const [place, idea] = [home.querySelector("section.place"), home.querySelector("section.idea")];

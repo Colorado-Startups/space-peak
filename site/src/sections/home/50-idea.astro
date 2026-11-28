@@ -4,7 +4,7 @@
 // it. The ruler rises once on first view (public/js/ruler-rise.js); with no script, or under reduced motion, it is drawn.
 import Chart from "../../components/charts/Chart.astro";
 import Figure from "../../components/Figure.astro";
-import { chipFor, sourceOf } from "../../components/figure";
+import { sourceOf } from "../../components/figure";
 import { getClaim } from "../../lib/claims/parse";
 import type { ChartSpec } from "../../lib/charts/plot";
 
@@ -29,7 +29,6 @@ const cost: ChartSpec = {
   unit: "USD per kg",
   rows: bars.map(({ label, value }) => ({ label, value })),
 };
-const statuses = [...new Set(bars.map((b) => getClaim(b.claim).status))];
 const source = sourceOf(getClaim(COST[0]![0]!).source);
 if (!source?.url || bars.some((b) => sourceOf(getClaim(b.claim).source)?.url !== source.url)) throw new Error("50-idea: the cost rows no longer share one source");
 
@@ -59,13 +58,12 @@ const TICKS = [0, 5000, 10000, 15000];
       <Chart spec={cost} caption="2018 dollars per kg to low Earth orbit" />
       <p class="idea-source">
         <span><a href={source.url}>Jones, NASA Ames, 2018</a>. Falcon prices are 2018 list prices, not today's.</span>
-        {statuses.map((s) => <span class={chipFor(s).className}>{chipFor(s).word}</span>)}
       </p>
     </div>
     <figure class="ruler" data-rise="">
       <svg viewBox="0 0 360 420" role="img" aria-labelledby="ruler-title ruler-desc" font-size="15">
         <title id="ruler-title">Altitude ruler, the muzzle speculative</title>
-        <desc id="ruler-desc">Side view from sea level. A hatched band marks the muzzle height the brief proposes, with Pikes Peak beside it for scale. Above a break in the scale, an arrow points sideways: low orbit is mostly a matter of sideways speed. The key gives each value with its register status.</desc>
+        <desc id="ruler-desc">Side view from sea level. A hatched band marks the muzzle height this project proposes, with Pikes Peak beside it for scale. Above a break in the scale, an arrow points sideways: low orbit is mostly a matter of sideways speed. The key marks which values are unproven.</desc>
         <defs>
           <pattern id="idea-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <rect width="6" height="12" fill="var(--co-yellow)" />

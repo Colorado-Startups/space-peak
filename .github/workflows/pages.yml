@@ -73,7 +73,7 @@ jobs:
         run: node quality/local-check.mjs --page quality/dist/index.html quality/data/local.json
 
       # The site and code metrics in the job log, so a pull request shows what its Quality build measured.
-      - name: List the site metrics
+      - name: List the site and code metrics
         run: |
           node -e '
             const run = JSON.parse(require("fs").readFileSync("quality/data/latest.json", "utf8"));

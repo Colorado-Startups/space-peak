@@ -1,0 +1,15 @@
+/* /ai/ (issue #131), on one screen at 1280 px: a name and its snippets per row on the left, OpenCode on the right. */
+.ai-head { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-5); align-items: center; margin-block-end: var(--s-3); }
+.ai-head h1 { margin: 0; }
+.ai-facts { display: flex; flex-wrap: wrap; gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
+.ai-facts li { padding: var(--s-1) var(--s-3); border-radius: var(--size-tap); background: var(--c-region-space-peak); color: var(--c-on-region-space-peak); font-weight: 700; font-size: var(--t-step--1); }
+.ai-grid { display: grid; gap: 0 var(--s-6); align-items: start; }
+.ai-row { display: grid; gap: var(--s-2) var(--s-4); padding-block: var(--s-2); border-top: var(--line-hair) solid var(--c-rule); }
+.ai-row h2 { margin: 0; font-size: var(--t-step-1); }
+.ai-row > div { display: grid; gap: var(--s-2); min-width: 0; }
+.ai-row p, .ai-row ol { margin: 0; font-size: var(--t-step--1); }
+.ai-row ol { padding-inline-start: var(--s-5); line-height: 1.4; }
+.ai-configs { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: var(--s-3); }
+.ai-docs { margin-block: var(--s-3) 0; color: var(--c-text-dim); font-size: var(--t-step--1); }
+@media (min-width: 48rem) { .ai-row { grid-template-columns: 7rem minmax(0, 1fr); } .ai-row h2 { padding-block-start: var(--s-2); } }
+@media (min-width: 64rem) { .ai-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .ai-opencode { grid-template-columns: minmax(0, 1fr); } }

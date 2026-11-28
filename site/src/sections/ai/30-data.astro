@@ -1,0 +1,9 @@
+---
+import Snippet from "../../components/Snippet.astro";
+import { snippets } from "../../lib/ai/connect";
+const s = snippets(Astro.site!);
+---
+<section class="ai-row" id="data" aria-labelledby="data-title">
+  <h2 id="data-title">Open data</h2>
+  <div><Snippet id="ai-catalog" text={s.catalog} /></div>
+</section>

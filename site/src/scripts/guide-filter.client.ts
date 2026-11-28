@@ -1,5 +1,6 @@
 // The /guide/ filter: chips and a search field over each table in a [data-guide] section.
-// The page works without it: the tables are full, the chips are plain links, the search fields stay hidden.
+// The page works without it: the tables are full, the chips are plain links, and CSS hides the search fields.
+// The HTML ships what apply() shows on a plain load (search field, count, All as current), so it moves nothing.
 // A section's data-guide value names its query parameter: empty means ?kind= (organisations), "need" means ?need=.
 export const KIND_PARAM = "kind";
 
@@ -65,6 +66,5 @@ function initSection(root: HTMLElement, win: Window): void {
   }
   input?.addEventListener("input", apply);
   form?.addEventListener("submit", (event) => event.preventDefault());
-  if (form) form.hidden = false;
   apply();
 }

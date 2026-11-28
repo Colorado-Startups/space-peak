@@ -1,0 +1,73 @@
+---
+import data from "../../../../data/resources.json";
+import lock from "../../../../data/resources.lock.json";
+import { BUCKETS, BUCKET_LABEL, COVER_LABEL, amount, host, type Bucket, type Resource } from "../../lib/resources";
+
+// Startup credits: the catalog rows in data/resources.json, written by scripts/resources/pull.mjs and pinned
+// by data/resources.lock.json. The build reads only those two files and fetches nothing.
+const rows = data.rows as Resource[];
+const count = (bucket: Bucket) => rows.filter((r) => r.bucket === bucket).length;
+const catalog = `https://github.com/${lock.repo}/blob/${lock.commit}/${lock.path}`;
+const left = lock.left_out.length;
+const text = (r: Resource) => [r.program, r.provider, ...r.covers.map((c) => COVER_LABEL[c])].join(" ").toLowerCase();
+---
+<section class="guide" data-guide="need" aria-labelledby="guide-resources">
+  <h2 id="guide-resources">Startup credits</h2>
+  <p class="guide-source">
+    {rows.length} of the {rows.length + left} programs in the <a href={catalog}>startup-credits catalog</a> (CC0), checked <time datetime={data.checked}>{data.checked}</time>.
+    {left > 0 && <> The other {left} failed a link check on <time datetime={lock.links_checked}>{lock.links_checked}</time>. </>}
+    Figures are the catalog's. Read the provider's page before you apply.
+  </p>
+  <nav class="guide-chips" aria-label="Filter credits by what they need">
+    <a href="/guide/#guide-resources" data-kind-chip="" data-count={rows.length}>All <span class="n">{rows.length}</span></a>
+    {BUCKETS.map((b) => (
+      <a href={`/guide/?need=${b}#guide-resources`} data-kind-chip={b} data-count={count(b)}>Needs {BUCKET_LABEL[b].toLowerCase()} <span class="n">{count(b)}</span></a>
+    ))}
+  </nav>
+  <form class="guide-search" role="search" aria-label="Search credits" data-guide-search hidden>
+    <label for="credits-q">Search by program, provider or use</label>
+    <input id="credits-q" name="q" type="search" autocomplete="off" />
+  </form>
+  <p class="guide-status" data-guide-status aria-live="polite"></p>
+  <p data-guide-none hidden>No program matches. Try another word or need.</p>
+  <div class="guide-scroll">
+    <table>
+      <caption class="visually-hidden">Startup credit programs</caption>
+      <thead><tr><th scope="col">Program</th><th scope="col">Provider</th><th scope="col">Needs</th><th scope="col">What it gives</th><th scope="col">Link</th></tr></thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr id={`credit-${r.id}`} data-kind={r.bucket} data-text={text(r)}>
+            <th scope="row">{r.program}</th>
+            <td>{r.provider}</td>
+            <td>{BUCKET_LABEL[r.bucket]}</td>
+            <td>
+              <details><summary>{amount(r)}</summary><p>{r.amount_note}</p></details>
+              <ul class="covers" aria-label="Pays for">{r.covers.map((c) => <li>{COVER_LABEL[c]}</li>)}</ul>
+            </td>
+            <td><a href={r.link}>{host(r.link)}</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  /* The org table's look (10-orgs.astro), scoped here. */
+  .visually-hidden { position: absolute; width: var(--line-hair); height: var(--line-hair); overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .guide { margin-block-start: var(--s-7); }
+  .guide-source, .guide-status, details p { color: var(--c-text-dim); font-size: var(--t-step--1); }
+  .guide-chips { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-block-end: var(--s-4); }
+  .guide-chips a { display: inline-flex; align-items: center; gap: var(--s-2); min-height: var(--size-tap); padding-inline: var(--s-3); border: var(--line-hair) solid var(--c-border); border-radius: var(--size-tap); text-decoration: none; }
+  .guide-chips a[aria-current="true"] { border-width: var(--line-bold); border-color: var(--c-text); font-weight: 700; }
+  .guide-chips .n { color: var(--c-text-dim); }
+  .guide-search { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; margin-block-end: var(--s-3); }
+  .guide-search input { padding-inline: var(--s-3); border: var(--line-hair) solid var(--c-border); font-size: var(--t-step-0); }
+  .guide-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: var(--s-2) var(--s-3); border-bottom: var(--line-hair) solid var(--c-rule); text-align: start; vertical-align: top; }
+  thead th { border-bottom: var(--line-edge) solid var(--c-text); }
+  details p { margin-block: var(--s-1) var(--s-2); max-inline-size: 40ch; }
+  .covers { display: flex; flex-wrap: wrap; gap: var(--s-1); margin: 0; padding: 0; list-style: none; }
+  .covers li { padding-inline: var(--s-2); border: var(--line-hair) solid var(--c-border); border-radius: var(--size-tap); font-size: var(--t-step--1); }
+</style>

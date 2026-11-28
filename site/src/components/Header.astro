@@ -1,8 +1,17 @@
 ---
 import { liveLinks } from "../lib/nav";
+import Support from "./Support.astro";
 const links = liveLinks();
 ---
 <header>
-  <a class="brand" href="/">Space Peak</a>
+  <a class="brand" href="/"><img class="crest" src="/art/crest-96.webp" srcset="/art/crest-96.webp 1x, /art/crest-192.webp 2x" width="96" height="96" alt="" />Space Peak</a>
+  <Support />
   {links.length > 0 && <nav aria-label="Main">{links.map((l) => <a href={l.href}>{l.label}</a>)}</nav>}
 </header>
+
+<style>
+  .brand { display: inline-flex; align-items: center; gap: var(--s-3); }
+  .crest { inline-size: var(--s-8); block-size: auto; }
+  header :global(.support) { margin: 0; }
+  @media (min-width: 48rem) { .crest { inline-size: var(--s-9); } }
+</style>

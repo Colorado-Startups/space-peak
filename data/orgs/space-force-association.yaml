@@ -1,0 +1,37 @@
+id: space-force-association
+name: Space Force Association
+summary: A 501(c)(3) organization in Colorado Springs that researches, informs and advocates on space power.
+kind: institution
+subkind: nonprofit
+city: colorado-springs
+area: loop
+fact:
+  text: The Space Force Association says it is committed to achieving superior national space power.
+  source: sfa-home
+sources:
+  - id: sfa-home
+    url: https://ussfa.org/
+    publisher: Space Force Association
+    read: 2026-11-27
+    quote: The SFA is committed to achieving superior national space power by shaping a Space Force
+  - id: sfa-501c3
+    url: https://ussfa.org/
+    publisher: Space Force Association
+    read: 2026-11-27
+    quote: SFA is a 501(c)3 Organization.
+  - id: sfa-imprint
+    url: https://ussfa.org/imprint/
+    publisher: Space Force Association
+    read: 2026-11-27
+    quote: Space Force Association 555 E. Pikes Peak Ave Colorado Springs, Co 80903
+  - id: census-geocoder
+    url: https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?benchmark=Public_AR_Current&format=json&address=555+E+Pikes+Peak+Ave%2C+Colorado+Springs%2C+CO+80903
+    publisher: US Census Bureau
+    read: 2026-11-27
+location:
+  lat: 38.83339
+  lon: -104.81393
+  precision: point
+  method: US Census Geocoder match for 555 E. Pikes Peak Ave., the address on ussfa.org/imprint.
+  source: census-geocoder
+status: active

@@ -1,0 +1,27 @@
+id: 1st-space-brigade
+name: 1st Space Brigade
+summary: A tenant unit at Fort Carson, on the garrison's tenants page.
+kind: command_base
+subkind: unit
+city: colorado-springs
+area: nearby
+fact:
+  text: Fort Carson lists the 1st Space Brigade among its tenant units.
+  source: carson-tenants
+sources:
+  - id: carson-tenants
+    url: https://home.army.mil/carson/units-tenants/tenants
+    publisher: U.S. Army Garrison, Fort Carson
+    read: 2026-11-27
+    quote: 1st Space Brigade
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Fort+Carson%27
+    publisher: U.S. Census Bureau TIGERweb
+    read: 2026-11-27
+location:
+  lat: 38.5608226
+  lon: -104.8280969
+  precision: campus
+  method: Interior point of the Fort Carson polygon in the Census TIGERweb Military Installations layer; the tenant page names no building.
+  source: census-tigerweb
+status: active

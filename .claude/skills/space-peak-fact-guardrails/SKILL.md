@@ -7,7 +7,7 @@ description: Walk the Space Peak honesty gate against a named file, checking eve
 
 **Precedence.** `02_substance/claims_register.md` wins on claims and their status. `04_tools/space_peak_rules.json` wins on term lists and severities. Code-OS `rules/writing-and-gates.md` wins on gate design. Where this skill disagrees, **it is corrected in the same session**.
 
-**This gate waits.** `ci.yml` runs the mechanical half on every pull request. This skill adds the web verification and register update no check can do.
+**This gate waits.** `ci.yml` runs the mechanical half on every pull request. It adds the web verification and register update no check can do.
 
 Use it when a file for external use states facts, figures or land statuses, and at MASTER_PLAN PT 3.3, the pre-ship gate. Skip pure process docs with no factual claims.
 
@@ -18,7 +18,7 @@ Use it when a file for external use states facts, figures or land statuses, and 
 
 ## 1. Mechanical
 
-Ask for the target file if not given.
+Ask for the target file if missing.
 
 ```bash
 python3 04_tools/space_peak_claims.py --self-test
@@ -29,7 +29,7 @@ Self-test must pass first. Report every finding.
 
 | Output | Means |
 |---|---|
-| `unregistered-claim`, `unlabeled-claim` | **Warn**. Regex detection of place-shaped nouns is a heuristic, and the label often sits in a neighbouring sentence the script cannot see. You judge |
+| `unregistered-claim`, `unlabeled-claim` | **Warn**. Regex detection of place-shaped nouns is a heuristic; the label often sits in a neighbouring sentence the script cannot see. You judge |
 | Exit 3 | The check could not run. Not a pass: say so |
 
 ## 2. Sort every checkable claim
@@ -38,7 +38,7 @@ The script is a regex; you are not. Look hardest at prose, not figures, where it
 
 | Group | Test | Do |
 |---|---|---|
-| Registered | It has a row | Note its status. An `open` Q row is an estimate, an opinion never verified: the prose must call it one. It is a draft estimate until its file says `approved: true` |
+| Registered | It has a row | Note its status. An `open` Q row is an estimate, an opinion never verified, and a draft until its file says `approved: true`: the prose must say so |
 | Unregistered | No row | Add a row, or remove the claim |
 | Current-status | True only as of now: who owns what, which land status applies, how many launches last year | Step 3 |
 
@@ -57,7 +57,7 @@ Search the web **in this session**. Recall does not count; these move. Record th
 
 ## 4. Update the register
 
-Every verdict becomes a register edit in the same pull request as the prose. A verification living only in a chat log has not happened.
+Each verdict becomes a register edit in the prose's pull request. A verification only in a chat log has not happened.
 
 ## 5. A claims ledger for cut text
 

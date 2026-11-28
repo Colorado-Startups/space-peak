@@ -25,7 +25,9 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ page", () => {
 
   it("gives every figure its register row's status, as a chip word", () => {
     const data = launch();
-    expect(figures.map((f) => f.getAttribute("data-claim"))).toEqual([...data.profile.map((e) => e.claim), ...data.make_or_break]);
+    const cited = [...data.profile.map((e) => e.claim), ...data.make_or_break];
+    // Later sections, such as the cadence (test/dom/cadence.test.ts), add their own figures after these.
+    expect(figures.map((f) => f.getAttribute("data-claim")).slice(0, cited.length)).toEqual(cited);
     for (const f of figures) {
       const row = getClaim(f.getAttribute("data-claim")!);
       expect(f.getAttribute("data-status")).toBe(row.status);
@@ -33,10 +35,11 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ page", () => {
     }
   });
 
-  it("puts every number on the page inside a figure", () => {
+  it("puts every number on the page inside a figure, or in arithmetic labelled not a forecast", () => {
     const walker = doc.createTreeWalker(main, 4);
     const loose: string[] = [];
-    for (let n = walker.nextNode(); n; n = walker.nextNode()) if (/\d/.test(n.textContent!) && !n.parentElement!.closest(".figure")) loose.push(n.textContent!.trim());
+    // [data-arithmetic] is the cadence calculator's working; test/dom/cadence.test.ts checks its label and its numbers.
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) if (/\d/.test(n.textContent!) && !n.parentElement!.closest(".figure, [data-arithmetic]")) loose.push(n.textContent!.trim());
     expect(loose).toEqual([]);
   });
 

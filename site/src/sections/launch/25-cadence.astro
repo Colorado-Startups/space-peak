@@ -1,0 +1,66 @@
+---
+// The cadence calculator (step 34): one shot every so many minutes, as launches a year. Arithmetic, not a forecast.
+// The brief's rate (P-08) and the busy-year comparison (E-02) come through <Figure> with their status.
+// With no script the brief's interval and its result are static text; scripts/cadence.client.ts moves them live.
+// data-arithmetic marks the numbers the arithmetic makes, so the page test allows them outside a figure.
+import Figure from "../../components/Figure.astro";
+import { BRIEF_STOP, MINUTES_A_YEAR, STOPS, cadenceView, formatCount } from "../../scripts/cadence.client";
+
+const view = cadenceView(BRIEF_STOP);
+const ends = [STOPS[0], STOPS[STOPS.length - 1]].map(formatCount);
+---
+<section aria-labelledby="cadence" aria-describedby="cadence-note">
+  <h2 id="cadence">Cadence</h2>
+  <p id="cadence-note">Arithmetic on a speculative rate, not a forecast.</p>
+  <div class="cadence" data-cadence data-arithmetic>
+    <p class="cadence-sum">
+      <span class="cadence-term"><b>{formatCount(MINUTES_A_YEAR)}</b> minutes a year</span>
+      <span class="cadence-op">÷</span>
+      <span class="cadence-term"><b data-cadence-minutes>{view.minutesText}</b> <label for="cadence-minutes">minutes between shots</label></span>
+      <span class="cadence-op">=</span>
+      <output class="cadence-term" for="cadence-minutes" aria-live="polite" aria-atomic="true"><b data-cadence-result>{view.launchesText}</b> launches a year</output>
+    </p>
+    <p class="cadence-slider" data-cadence-slider hidden>
+      <input id="cadence-minutes" type="range" min="0" max={STOPS.length - 1} step="1" value={BRIEF_STOP} aria-valuetext={`${view.minutesText} minutes`} />
+      <span class="cadence-ends" aria-hidden="true"><span>{ends[0]}</span><span>{ends[1]}</span></span>
+    </p>
+    <p>It starts at the brief's <Figure claim="P-08" value="once an hour or better" /></p>
+    <div class="cadence-bars">
+      <p class="cadence-row">
+        <span class="cadence-label">Mass driver, this rate</span>
+        <span class="cadence-track" aria-hidden="true"><span class="cadence-bar cadence-bar--rate" data-cadence-bar="rate" style={`--share: ${view.share.rate}`}></span></span>
+      </p>
+      <p class="cadence-row">
+        <span class="cadence-label">World, a busy year <Figure claim="E-02" value="about 250" /></span>
+        <span class="cadence-track" aria-hidden="true"><span class="cadence-bar cadence-bar--world" data-cadence-bar="world" style={`--share: ${view.share.world}`}></span></span>
+      </p>
+    </div>
+  </div>
+  <script>
+    // A dynamic import keeps Astro from inlining the script, which the CSP (script-src 'self') would block.
+    import("../../scripts/cadence.client.ts").then((m) => m.init(document));
+  </script>
+</section>
+
+<style>
+  .cadence { display: grid; gap: var(--s-5); margin-block-end: var(--s-7); max-width: var(--t-measure); }
+  .cadence p { margin: 0; }
+  .cadence-sum { display: flex; flex-wrap: wrap; align-items: end; gap: var(--s-2) var(--s-4); }
+  .cadence-term { display: inline-grid; color: var(--c-text-dim); font-size: var(--t-step--1); }
+  .cadence-term b, .cadence-op { color: var(--c-text); font-size: var(--t-step-3); line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .cadence-slider { display: grid; gap: var(--s-1); }
+  .cadence-slider input { inline-size: 100%; accent-color: var(--c-text); }
+  .cadence-ends { display: flex; justify-content: space-between; color: var(--c-text-dim); font-size: var(--t-step--1); }
+  .cadence-bars { display: grid; gap: var(--s-4); }
+  .cadence-row { display: grid; gap: var(--s-2); }
+  .cadence-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2); color: var(--c-text-dim); font-size: var(--t-step--1); font-weight: 700; }
+  .cadence-track { display: block; block-size: var(--s-6); background: var(--c-surface); border-radius: var(--r-chisel); }
+  .cadence-bar { display: block; block-size: 100%; inline-size: calc(var(--share) * 1%); border-radius: var(--r-chisel); }
+  /* The mass driver's bar wears the speculative hatch, as on an unverified chip (styles/figure.css). */
+  .cadence-bar--rate {
+    background: repeating-linear-gradient(-45deg, var(--co-yellow) 0 0.3em, var(--c-ground) 0.3em 0.6em);
+    box-shadow: inset 0 0 0 var(--line-edge) var(--c-text);
+  }
+  .cadence-bar--world { background: var(--c-text-dim); }
+  @media (prefers-reduced-motion: no-preference) { .cadence-bar { transition: inline-size 0.2s ease-out; } }
+</style>

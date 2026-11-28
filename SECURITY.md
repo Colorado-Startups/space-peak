@@ -4,7 +4,7 @@
 | --- | --- |
 | Preferred | [GitHub private vulnerability reporting](https://github.com/Colorado-Startups/space-peak/security/advisories/new) |
 | Email | info@coloradostartups.org |
-| Machine-readable | [`/.well-known/security.txt`](https://spacepeak.coloradostartups.workers.dev/.well-known/security.txt) (RFC 9116), from `site/public/.well-known/security.txt` |
+| Machine-readable | [`/.well-known/security.txt`](https://spacepeak.co/.well-known/security.txt) (RFC 9116), from `site/public/.well-known/security.txt` |
 | Never | A public issue |
 
 No bounty. Acknowledgement within seven days is the goal.

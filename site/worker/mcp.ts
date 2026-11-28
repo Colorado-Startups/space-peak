@@ -74,7 +74,12 @@ const INSTRUCTIONS = [
 ].join(" ");
 
 export function buildServer(data: OpenData): McpServer {
-  const server = new McpServer({ name: "spacepeak", title: "Space Peak", version: "1.0.0" }, { instructions: INSTRUCTIONS });
+  // The six tools are fixed when the site builds, and each request gets a new server, so the list never
+  // changes and no change notice could reach a client. The SDK declares listChanged: true unless told.
+  const server = new McpServer({ name: "spacepeak", title: "Space Peak", version: "1.0.0" }, {
+    instructions: INSTRUCTIONS,
+    capabilities: { tools: { listChanged: false } },
+  });
   const limit = z.int().min(1).max(MAX).optional().describe(`At most this many items, 1 to ${MAX}; 10 when left out`);
   const id = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/).max(100);
 

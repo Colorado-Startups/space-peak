@@ -46,6 +46,7 @@ test("the five metrics sit on the Pages tab with sourced goals, and the targets'
   assert.match(ci, /test:e2e\n\s+node quality\/collectors\/space-peak\.mjs --mcp-notice site\/test-results\n/, "the standard job leaves the notice after the e2e suite");
   const spec = readFileSync(join(REPO, "site/e2e/mcp.spec.ts"), "utf8");
   assert.ok(spec.includes('"conformance-baseline.yml"') && spec.includes('outputPath("results")'), "mcp.spec.ts writes the baseline and results the CLI reads");
+  assert.ok(spec.includes('from "./mcp-not-applicable.json"'), "mcp.spec.ts takes its baseline from the reviewed not-applicable list");
 });
 
 const SUBKIND = { command_base: "installation", institution: "college", company: "startup" };
@@ -169,7 +170,7 @@ const fakeGh = (notes, jobs = [{ id: 7, name: "ci / standard", conclusion: "succ
 });
 const mcp = async (gh, repo = "o/r") => (await collect({ root: fixture({}), gh, repo }))["ai.mcp_conformance_share"];
 
-test("mcp: a repeated id counts once at its worst, SKIPPED and INFO are not run, and a baselined check is never a pass", () => {
+test("mcp: a repeated id counts once at its worst, SKIPPED and INFO are not run, and a listed check is not applicable", () => {
   const dir = results({
     "tools-list": [check("a", "SUCCESS"), check("b", "SUCCESS"), check("a", "SUCCESS"), check("i", "INFO")],
     "server-stateless": [check("ok", "SUCCESS"), check("sep-x", "FAILURE"), check("w", "SUCCESS"), check("w", "WARNING")],
@@ -177,8 +178,8 @@ test("mcp: a repeated id counts once at its worst, SKIPPED and INFO are not run,
     "skipped-one": [check("s", "SKIPPED")],
   }, ["server-stateless:sep-x", "prompts-list"]);
   assert.deepEqual(conformance(dir), {
-    run: 7, passed: 3, baselined: 3, failed: 1,
-    baselined_ids: ["prompts-list", "server-stateless:sep-x"], failed_ids: ["server-stateless:w"],
+    run: 7, passed: 3, not_applicable: 3, failed: 1,
+    not_applicable_ids: ["prompts-list", "server-stateless:sep-x"], failed_ids: ["server-stateless:w"],
   });
   assert.equal(conformance(fixture({})), null, "no results is null, never 100");
 });
@@ -190,7 +191,7 @@ test("mcp: the CLI leaves one notice whose message is the tally, and warns with 
   assert.deepEqual(JSON.parse(note.message), conformance(dir), "the escaped id survives the round trip");
   const empty = fixture({});
   assert.deepEqual(annotation(cli(empty)), { annotation_level: "warning", title: MCP_TITLE, message: `no MCP conformance results under ${empty}` });
-  const long = mcpNotice({ run: 300, passed: 0, baselined: 300, failed: 0, baselined_ids: Array.from({ length: 300 }, (_, i) => `scenario-${i}:a-long-check-id`), failed_ids: [] });
+  const long = mcpNotice({ run: 300, passed: 0, not_applicable: 300, failed: 0, not_applicable_ids: Array.from({ length: 300 }, (_, i) => `scenario-${i}:a-long-check-id`), failed_ids: [] });
   assert.ok(long.length < 4096 && JSON.parse(annotation(long).message).ids_cut, "past 4,000 characters the id lists drop and the counts stay");
 });
 
@@ -200,11 +201,21 @@ test("mcp: the newest run whose standard job ran gives the share; all checks pas
   assert.match(good.source, /: run 1 \(2026-11-26, aaaaaaa\)$/);
 });
 
-test("mcp: baselined checks count as failures, so the share is below goal", async () => {
-  const dir = results({ "tools-list": [check("a", "SUCCESS"), check("b", "SUCCESS"), check("c", "SUCCESS")], "prompts-list": [check("p", "SUCCESS"), check("q", "FAILURE")] }, ["prompts-list"]);
-  const below = await mcp(fakeGh([{ annotation_level: "notice", title: "other", message: "{}" }, annotation(cli(dir))]));
-  assert.equal(below.value, 60, "3 of 5: the 2 baselined checks are not passes");
-  assert.deepEqual(below.detail.map((d) => [d.label, d.value]), [["passed", 3], ["baselined", 2], ["failed", 0], ["on the baseline: prompts-list", 1]]);
+test("mcp: checks that do not apply are left out of the share; a failure that applies is below goal", async () => {
+  const scored = (byScenario) => mcp(fakeGh([{ annotation_level: "notice", title: "other", message: "{}" }, annotation(cli(results(byScenario, ["prompts-list"])))]));
+  const at = await scored({ "tools-list": [check("a", "SUCCESS"), check("b", "SUCCESS")], "prompts-list": [check("p", "SUCCESS"), check("q", "FAILURE")] });
+  assert.equal(at.value, 100, "2 of 2 that apply: the 2 prompts-list checks are left out");
+  assert.deepEqual(at.detail.map((d) => [d.label, d.value]), [["passed", 2], ["failed", 0], ["not applicable", 2], ["not applicable: prompts-list", 1]]);
+  const below = await scored({ "tools-list": [check("a", "SUCCESS"), check("b", "SUCCESS"), check("c", "FAILURE")], "prompts-list": [check("q", "FAILURE")] });
+  assert.equal(below.value, 66.7, "2 of the 3 that apply");
+  const none = await scored({ "prompts-list": [check("q", "FAILURE")] });
+  assert.match(none.could_not_check, /ran no conformance check that applies to \/mcp$/);
+});
+
+test("mcp: a tally from before step 48 still counts its baselined checks against the share", async () => {
+  const old = await mcp(fakeGh([{ annotation_level: "notice", title: MCP_TITLE, message: '{"run":5,"passed":3,"baselined":2,"failed":0,"baselined_ids":["prompts-list"],"failed_ids":[]}' }]));
+  assert.equal(old.value, 60, "3 of 5, as the share read before");
+  assert.deepEqual(old.detail.map((d) => [d.label, d.value]), [["passed", 3], ["failed", 0], ["not applicable", 0], ["baselined", 2], ["on the baseline: prompts-list", 1]]);
 });
 
 test("mcp: no annotation, a warning, a bad message, no run that ran the job, a refused read, no client or no repo is not measured", async () => {

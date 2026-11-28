@@ -54,7 +54,7 @@ function unsourced(o) {
 
 // Whether check.ts's checkOrgs can read the org without throwing: the fields it reads, shaped as the schema shapes them.
 const checkable = (o) =>
-  typeof o?.name === "string" && Array.isArray(o.sources) && typeof o.fact?.source === "string" && typeof o.location?.source === "string" &&
+  typeof o?.name === "string" && typeof o.summary === "string" && Array.isArray(o.sources) && typeof o.fact?.source === "string" && typeof o.location?.source === "string" &&
   Number.isFinite(o.location.lat) && Number.isFinite(o.location.lon) && (!factSource(o) || URL.canParse(factSource(o).url));
 
 async function orgMetrics(root, p) {

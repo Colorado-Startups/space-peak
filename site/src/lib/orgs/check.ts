@@ -1,9 +1,10 @@
 import type { Org } from "./schema";
 
-// Checks across the parsed orgs that one file's schema cannot see: area, duplicates, source age.
-// Source age is a guideline (issue #154): an old read is a warning, and only errors fail CI.
+// Checks across the parsed orgs that one file's schema cannot see: area, duplicates, source age, summary length.
+// Source age and summary length are guidelines (issue #154): each is a warning, and only errors fail CI.
 export const NEARBY_KM = 60;
 export const MAX_AGE_DAYS = 365;
+export const SUMMARY_CHARS = 200;
 
 export type Ring = [number, number][];
 export type Issue = { org: string; path: string; message: string; level: "error" | "warning" };
@@ -67,6 +68,7 @@ export function checkOrgs(orgs: Org[], rings: Ring[], today = new Date().toISOSt
       if (km === 0) add("area", "area nearby, but the point is inside the region: use loop");
       else if (km > NEARBY_KM) add("location", `area nearby, but the point is ${km.toFixed(1)} km out (limit ${NEARBY_KM})`);
     }
+    if (org.summary.length > SUMMARY_CHARS) add("summary", `summary is ${org.summary.length} characters (guideline ${SUMMARY_CHARS})`, "warning");
     const name = nameKey(org.name);
     if (names.has(name)) add("name", `same name as ${names.get(name)}`);
     else names.set(name, org.id);

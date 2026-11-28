@@ -20,7 +20,8 @@ describe("draft estimates", () => {
     for (const e of estimates) {
       const row = getClaim(registerId(e));
       expect(row.status).toBe("open");
-      expect(row.notes).toBe("draft estimate, awaiting approval");
+      // The note carries the estimate file's own date, so the row's figure has a date beside it.
+      expect(row.notes).toBe(`draft estimate of ${e.date}, awaiting approval`);
       for (const id of e.claims) expect(() => getClaim(id)).not.toThrow();
     }
   });

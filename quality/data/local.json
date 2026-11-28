@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-28T03:18:44.374Z",
-  "commit": "5960fbd33ea8771167cbd98e0b15576ee4fcc2d9",
+  "generated_at": "2026-11-28T06:20:56.377Z",
+  "commit": "ecddb7d63248bb41b90a856dc6349977907cbbd8",
   "mode": "local",
   "collectors": [
     "deploy",
@@ -287,66 +287,61 @@
     "deploy.waiting_merges": {
       "value": 0,
       "detail": [],
-      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; merges on main touching any path that production does not hold now; detail is hours each has waited; the latest code deploy, 2026-11-28T03:14Z, holds 5960fbd (main when it was uploaded)",
-      "read_at": "2026-11-28T03:17:49.802Z",
+      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; merges on main touching any path that production does not hold now; detail is hours each has waited; the latest code deploy, 2026-11-28T06:19Z, holds ecddb7d (main when it was uploaded)",
+      "read_at": "2026-11-28T06:19:57.717Z",
       "unit": "merges"
     },
     "deploy.oldest_waiting_hours": {
       "value": 0,
-      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; hours since the oldest merge production does not hold was merged, 0 when none waits; the latest code deploy, 2026-11-28T03:14Z, holds 5960fbd (main when it was uploaded)",
-      "read_at": "2026-11-28T03:17:49.802Z",
+      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; hours since the oldest merge production does not hold was merged, 0 when none waits; the latest code deploy, 2026-11-28T06:19Z, holds ecddb7d (main when it was uploaded)",
+      "read_at": "2026-11-28T06:19:57.717Z",
       "unit": "h"
     },
     "deploy.latest_lead_hours": {
       "value": 0,
       "detail": [
         {
-          "label": "5960fbd",
-          "value": 0,
-          "unit": "h"
-        },
-        {
-          "label": "0f815a2",
+          "label": "ecddb7d",
           "value": 0,
           "unit": "h"
         }
       ],
-      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; the latest deploy that shipped a merge, 2026-11-28T03:13Z (5960fbd): hours from its earliest merge to the deploy",
-      "read_at": "2026-11-28T03:17:49.802Z",
+      "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; the latest deploy that shipped a merge, 2026-11-28T06:19Z (ecddb7d): hours from its earliest merge to the deploy",
+      "read_at": "2026-11-28T06:19:57.717Z",
       "unit": "h"
     },
     "deploy.latest_failed": {
       "value": 0,
       "detail": [
         {
-          "label": "2026-11-28 03:14 5960fbd",
+          "label": "2026-11-28 06:19 ecddb7d",
           "value": 0,
           "unit": ""
         }
       ],
       "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; a deploy failed when the next one rolled it back or when it first shipped a PR that a bug issue names in a \"Regressed-by: #N\" line (gh issue list -R Colorado-Startups/space-peak --search \"Regressed-by\" in:body); restored at the rollback or at the first deploy after the issue closed; 1 when the latest code deploy failed or was itself a rollback",
-      "read_at": "2026-11-28T03:17:49.802Z",
+      "read_at": "2026-11-28T06:19:57.717Z",
       "unit": ""
     },
     "deploy.failure_rate_last10": {
       "value": 0,
       "detail": [
         {
-          "label": "2026-11-28 02:07",
-          "value": 57,
+          "label": "2026-11-28 05:46",
+          "value": 89,
           "unit": "merges",
-          "commit": "3e977d8",
+          "commit": "abfc5aa",
           "commit_from": "time",
-          "lead_hours": 269.7,
+          "lead_hours": 6.4,
           "rollback": false,
           "failed": null,
           "restore_hours": null
         },
         {
-          "label": "2026-11-28 02:37",
+          "label": "2026-11-28 05:51",
           "value": 2,
           "unit": "merges",
-          "commit": "22619ff",
+          "commit": "7032593",
           "commit_from": "time",
           "lead_hours": 0,
           "rollback": false,
@@ -354,76 +349,10 @@
           "restore_hours": null
         },
         {
-          "label": "2026-11-28 02:38",
-          "value": 0,
-          "unit": "merges",
-          "commit": "22619ff",
-          "commit_from": "time",
-          "lead_hours": null,
-          "rollback": false,
-          "failed": null,
-          "restore_hours": null
-        },
-        {
-          "label": "2026-11-28 02:39",
-          "value": 1,
-          "unit": "merges",
-          "commit": "6170e07",
-          "commit_from": "time",
-          "lead_hours": 0,
-          "rollback": false,
-          "failed": null,
-          "restore_hours": null
-        },
-        {
-          "label": "2026-11-28 02:49",
-          "value": 1,
-          "unit": "merges",
-          "commit": "748604a",
-          "commit_from": "time",
-          "lead_hours": 0,
-          "rollback": false,
-          "failed": null,
-          "restore_hours": null
-        },
-        {
-          "label": "2026-11-28 03:01",
-          "value": 1,
-          "unit": "merges",
-          "commit": "dbf2d57",
-          "commit_from": "time",
-          "lead_hours": 0,
-          "rollback": false,
-          "failed": null,
-          "restore_hours": null
-        },
-        {
-          "label": "2026-11-28 03:05",
-          "value": 3,
-          "unit": "merges",
-          "commit": "7c73456",
-          "commit_from": "time",
-          "lead_hours": 0,
-          "rollback": false,
-          "failed": null,
-          "restore_hours": null
-        },
-        {
-          "label": "2026-11-28 03:05",
-          "value": 0,
-          "unit": "merges",
-          "commit": "7c73456",
-          "commit_from": "time",
-          "lead_hours": null,
-          "rollback": false,
-          "failed": null,
-          "restore_hours": null
-        },
-        {
-          "label": "2026-11-28 03:13",
+          "label": "2026-11-28 05:52",
           "value": 2,
           "unit": "merges",
-          "commit": "5960fbd",
+          "commit": "b0f7edf",
           "commit_from": "time",
           "lead_hours": 0,
           "rollback": false,
@@ -431,19 +360,85 @@
           "restore_hours": null
         },
         {
-          "label": "2026-11-28 03:14",
+          "label": "2026-11-28 05:53",
           "value": 0,
           "unit": "merges",
-          "commit": "5960fbd",
+          "commit": "b0f7edf",
           "commit_from": "time",
           "lead_hours": null,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 05:54",
+          "value": 0,
+          "unit": "merges",
+          "commit": "b0f7edf",
+          "commit_from": "time",
+          "lead_hours": null,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 05:56",
+          "value": 1,
+          "unit": "merges",
+          "commit": "c919885",
+          "commit_from": "time",
+          "lead_hours": 0,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 05:59",
+          "value": 2,
+          "unit": "merges",
+          "commit": "db7b8f9",
+          "commit_from": "time",
+          "lead_hours": 0,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 05:59",
+          "value": 0,
+          "unit": "merges",
+          "commit": "db7b8f9",
+          "commit_from": "time",
+          "lead_hours": null,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 06:02",
+          "value": 1,
+          "unit": "merges",
+          "commit": "0a6a779",
+          "commit_from": "time",
+          "lead_hours": 0,
+          "rollback": false,
+          "failed": null,
+          "restore_hours": null
+        },
+        {
+          "label": "2026-11-28 06:19",
+          "value": 1,
+          "unit": "merges",
+          "commit": "ecddb7d",
+          "commit_from": "time",
+          "lead_hours": 0,
           "rollback": false,
           "failed": null,
           "restore_hours": null
         }
       ],
       "source": "npx wrangler deployments list --json and npx wrangler versions list --json (read-only, the 10 most recent of each) in .; git log --first-parent origin/main; a deploy failed when the next one rolled it back or when it first shipped a PR that a bug issue names in a \"Regressed-by: #N\" line (gh issue list -R Colorado-Startups/space-peak --search \"Regressed-by\" in:body); restored at the rollback or at the first deploy after the issue closed; the last 10 code deploys (secret-only deploys left out), N = 10 because Wrangler lists only the 10 most recent",
-      "read_at": "2026-11-28T03:17:49.802Z",
+      "read_at": "2026-11-28T06:19:57.717Z",
       "unit": "%"
     },
     "deploy.latest_restore_hours": {
@@ -452,21 +447,21 @@
       "unit": "h"
     },
     "deploy.latest_build_minutes": {
-      "value": 4,
+      "value": 5,
       "detail": [
+        {
+          "label": "ci",
+          "value": 2,
+          "unit": "min"
+        },
         {
           "label": "pages",
           "value": 3,
           "unit": "min"
-        },
-        {
-          "label": "ci",
-          "value": 1,
-          "unit": "min"
         }
       ],
-      "source": "latest: the workflow runs the push to main of the latest production deploy's commit started (gh api actions/runs?head_sha=&event=push, then runs/{id}/jobs), each job rounded up to the whole minute as GitHub bills it (docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions); Workers Builds minutes are not read; the deploy of 2026-11-28T03:14Z (5960fbd)",
-      "read_at": "2026-11-28T03:17:49.802Z",
+      "source": "latest: the workflow runs the push to main of the latest production deploy's commit started (gh api actions/runs?head_sha=&event=push, then runs/{id}/jobs), each job rounded up to the whole minute as GitHub bills it (docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions); Workers Builds minutes are not read; the deploy of 2026-11-28T06:19Z (ecddb7d)",
+      "read_at": "2026-11-28T06:19:57.717Z",
       "unit": "min"
     },
     "design.raw_hex": {
@@ -1208,34 +1203,34 @@
       "unit": "KiB"
     },
     "blockers.costly": {
-      "value": 1,
+      "value": 0,
       "detail": [
         {
           "label": "pinned review",
           "group": "Quality",
-          "fires": 11,
-          "false_alarm": 9.1,
-          "hours": 1.28,
-          "tokens": 6465107,
-          "value": 6465107,
-          "verdict": "helps"
+          "fires": 0,
+          "false_alarm": null,
+          "hours": null,
+          "tokens": 2975640,
+          "value": 2975640,
+          "verdict": "not-measured"
         },
         {
           "label": "git pre-commit hook",
           "group": "Quality",
-          "fires": 23,
+          "fires": 35,
           "false_alarm": null,
           "hours": 0,
-          "tokens": 108,
-          "value": 108,
+          "tokens": 2864,
+          "value": 2864,
           "verdict": "not-measured"
         },
         {
           "label": "CI checks",
           "group": "Quality",
-          "fires": 63,
+          "fires": 32,
           "false_alarm": 0,
-          "hours": 1.81,
+          "hours": 1.05,
           "tokens": null,
           "value": null,
           "verdict": "helps"
@@ -1243,9 +1238,9 @@
         {
           "label": "git pre-push hook",
           "group": "Quality",
-          "fires": 17,
+          "fires": 25,
           "false_alarm": null,
-          "hours": 0.01,
+          "hours": 0,
           "tokens": null,
           "value": null,
           "verdict": "not-measured"
@@ -1253,137 +1248,107 @@
         {
           "label": "permission rules",
           "group": "Speed",
-          "fires": 6,
-          "false_alarm": 83.3,
-          "hours": 0.01,
-          "tokens": 1925956,
-          "value": 1925956,
-          "verdict": "costs"
+          "fires": 2,
+          "false_alarm": 0,
+          "hours": 0,
+          "tokens": 337818,
+          "value": 337818,
+          "verdict": "helps"
         },
         {
           "label": "managed CLAUDE.md",
           "group": "Tokens",
-          "fires": 641,
+          "fires": 284,
           "false_alarm": null,
           "hours": null,
-          "tokens": 1082649,
-          "value": 1082649,
+          "tokens": 479676,
+          "value": 479676,
           "verdict": "not-measured"
         },
         {
           "label": "rules/delegation.md",
           "group": "Tokens",
-          "fires": 641,
+          "fires": 284,
           "false_alarm": null,
           "hours": null,
-          "tokens": 499339,
-          "value": 499339,
+          "tokens": 221236,
+          "value": 221236,
           "verdict": "not-measured"
         },
         {
           "label": "rules/compute.md",
           "group": "Tokens",
-          "fires": 641,
+          "fires": 284,
           "false_alarm": null,
           "hours": null,
-          "tokens": 344858,
-          "value": 344858,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "session start hooks",
-          "group": "Tokens",
-          "fires": 25,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 316575,
-          "value": 316575,
+          "tokens": 152792,
+          "value": 152792,
           "verdict": "not-measured"
         },
         {
           "label": "rules/writing-and-gates.md",
           "group": "Tokens",
-          "fires": 641,
+          "fires": 284,
           "false_alarm": null,
           "hours": null,
-          "tokens": 306398,
-          "value": 306398,
+          "tokens": 135752,
+          "value": 135752,
           "verdict": "not-measured"
         },
         {
           "label": "rules/delegation-detail.md",
           "group": "Tokens",
-          "fires": 641,
+          "fires": 284,
           "false_alarm": null,
           "hours": null,
-          "tokens": 246785,
-          "value": 246785,
+          "tokens": 109340,
+          "value": 109340,
           "verdict": "not-measured"
         },
         {
           "label": "memory index",
           "group": "Tokens",
-          "fires": 641,
+          "fires": 284,
           "false_alarm": null,
           "hours": null,
-          "tokens": 190377,
-          "value": 190377,
+          "tokens": 97128,
+          "value": 97128,
           "verdict": "not-measured"
         },
         {
           "label": "rules/keys.md",
           "group": "Tokens",
-          "fires": 641,
+          "fires": 284,
           "false_alarm": null,
           "hours": null,
-          "tokens": 130123,
-          "value": 130123,
+          "tokens": 57652,
+          "value": 57652,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "session start hooks",
+          "group": "Tokens",
+          "fires": 4,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 50127,
+          "value": 50127,
           "verdict": "not-measured"
         },
         {
           "label": "repo CLAUDE.md",
           "group": "Tokens",
-          "fires": 641,
+          "fires": 284,
           "false_alarm": null,
           "hours": null,
-          "tokens": 79484,
-          "value": 79484,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:Edit",
-          "group": "Tokens",
-          "fires": 71,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 28540,
-          "value": 28540,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:Write",
-          "group": "Tokens",
-          "fires": 71,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 10990,
-          "value": 10990,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "app: preview reminder",
-          "group": "Tokens",
-          "fires": 1,
-          "false_alarm": null,
-          "hours": null,
-          "tokens": 1150,
-          "value": 1150,
+          "tokens": 36636,
+          "value": 36636,
           "verdict": "not-measured"
         },
         {
           "label": "bash guard notes",
           "group": "Tokens",
-          "fires": 559,
+          "fires": 760,
           "false_alarm": null,
           "hours": 0.01,
           "tokens": 0,
@@ -1393,7 +1358,7 @@
         {
           "label": "hook: PostToolUse:Bash",
           "group": "Tokens",
-          "fires": 544,
+          "fires": 732,
           "false_alarm": null,
           "hours": 0.01,
           "tokens": 0,
@@ -1403,7 +1368,7 @@
         {
           "label": "hook: PostToolUse:Agent",
           "group": "Tokens",
-          "fires": 18,
+          "fires": 20,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1413,7 +1378,17 @@
         {
           "label": "hook: PostToolUse:Artifact",
           "group": "Tokens",
-          "fires": 6,
+          "fires": 1,
+          "false_alarm": null,
+          "hours": 0,
+          "tokens": 0,
+          "value": 0,
+          "verdict": "not-measured"
+        },
+        {
+          "label": "hook: PostToolUse:Edit",
+          "group": "Tokens",
+          "fires": 67,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1423,7 +1398,7 @@
         {
           "label": "hook: PostToolUse:Read",
           "group": "Tokens",
-          "fires": 8,
+          "fires": 18,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1433,7 +1408,7 @@
         {
           "label": "hook: PostToolUse:SendMessage",
           "group": "Tokens",
-          "fires": 10,
+          "fires": 20,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1443,7 +1418,7 @@
         {
           "label": "hook: PostToolUse:Skill",
           "group": "Tokens",
-          "fires": 2,
+          "fires": 1,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1453,7 +1428,7 @@
         {
           "label": "hook: PostToolUse:ToolSearch",
           "group": "Tokens",
-          "fires": 18,
+          "fires": 6,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1463,7 +1438,7 @@
         {
           "label": "hook: PostToolUse:WebFetch",
           "group": "Tokens",
-          "fires": 16,
+          "fires": 7,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1471,139 +1446,9 @@
           "verdict": "not-measured"
         },
         {
-          "label": "hook: PostToolUse:WebSearch",
+          "label": "hook: PostToolUse:Write",
           "group": "Tokens",
-          "fires": 19,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__browser_batch",
-          "group": "Tokens",
-          "fires": 17,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__computer",
-          "group": "Tokens",
-          "fires": 11,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__javascript_tool",
-          "group": "Tokens",
-          "fires": 30,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__navigate",
-          "group": "Tokens",
-          "fires": 6,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_logs",
-          "group": "Tokens",
-          "fires": 1,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_start",
-          "group": "Tokens",
-          "fires": 8,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_stop",
-          "group": "Tokens",
-          "fires": 6,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__resize_window",
-          "group": "Tokens",
-          "fires": 15,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__tabs_context",
-          "group": "Tokens",
-          "fires": 1,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__ccd_pr__get_status",
-          "group": "Tokens",
-          "fires": 10,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__ccd_pr__set_monitor",
-          "group": "Tokens",
-          "fires": 2,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__ccd_session__start_session",
-          "group": "Tokens",
-          "fires": 5,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__ccd_session_mgmt__get_session",
-          "group": "Tokens",
-          "fires": 1,
+          "fires": 72,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1613,7 +1458,7 @@
         {
           "label": "hook: PostToolUse:mcp__ccd_session_mgmt__get_usage",
           "group": "Tokens",
-          "fires": 1,
+          "fires": 2,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1623,7 +1468,7 @@
         {
           "label": "hook: PostToolUse:mcp__ccd_session_mgmt__send_message",
           "group": "Tokens",
-          "fires": 9,
+          "fires": 15,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1633,7 +1478,7 @@
         {
           "label": "hook: PostToolUse:mcp__ccd_turn__update_plan",
           "group": "Tokens",
-          "fires": 69,
+          "fires": 9,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1643,17 +1488,7 @@
         {
           "label": "hook: PostToolUse:mcp__ccd_turn__wrap_up",
           "group": "Tokens",
-          "fires": 25,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PostToolUse:mcp__claude-in-chrome__tabs_context_mcp",
-          "group": "Tokens",
-          "fires": 1,
+          "fires": 15,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1663,7 +1498,7 @@
         {
           "label": "hook: PreToolUse:Agent",
           "group": "Tokens",
-          "fires": 18,
+          "fires": 20,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1673,7 +1508,7 @@
         {
           "label": "hook: PreToolUse:Artifact",
           "group": "Tokens",
-          "fires": 6,
+          "fires": 1,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1683,7 +1518,7 @@
         {
           "label": "hook: PreToolUse:Edit",
           "group": "Tokens",
-          "fires": 66,
+          "fires": 67,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1693,7 +1528,7 @@
         {
           "label": "hook: PreToolUse:Read",
           "group": "Tokens",
-          "fires": 8,
+          "fires": 18,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1703,7 +1538,7 @@
         {
           "label": "hook: PreToolUse:SendMessage",
           "group": "Tokens",
-          "fires": 10,
+          "fires": 20,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1713,7 +1548,7 @@
         {
           "label": "hook: PreToolUse:Skill",
           "group": "Tokens",
-          "fires": 2,
+          "fires": 1,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1723,7 +1558,7 @@
         {
           "label": "hook: PreToolUse:ToolSearch",
           "group": "Tokens",
-          "fires": 18,
+          "fires": 6,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1733,17 +1568,7 @@
         {
           "label": "hook: PreToolUse:WebFetch",
           "group": "Tokens",
-          "fires": 16,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:WebSearch",
-          "group": "Tokens",
-          "fires": 19,
+          "fires": 7,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1753,137 +1578,7 @@
         {
           "label": "hook: PreToolUse:Write",
           "group": "Tokens",
-          "fires": 65,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__browser_batch",
-          "group": "Tokens",
-          "fires": 17,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__computer",
-          "group": "Tokens",
-          "fires": 11,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__javascript_tool",
-          "group": "Tokens",
-          "fires": 30,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__navigate",
-          "group": "Tokens",
-          "fires": 6,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_logs",
-          "group": "Tokens",
-          "fires": 1,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_start",
-          "group": "Tokens",
-          "fires": 8,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_stop",
-          "group": "Tokens",
-          "fires": 7,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__resize_window",
-          "group": "Tokens",
-          "fires": 15,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__tabs_context",
-          "group": "Tokens",
-          "fires": 1,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__ccd_pr__get_status",
-          "group": "Tokens",
-          "fires": 10,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__ccd_pr__set_monitor",
-          "group": "Tokens",
-          "fires": 2,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__ccd_session__start_session",
-          "group": "Tokens",
-          "fires": 5,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__ccd_session_mgmt__get_session",
-          "group": "Tokens",
-          "fires": 1,
+          "fires": 72,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1893,7 +1588,7 @@
         {
           "label": "hook: PreToolUse:mcp__ccd_session_mgmt__get_usage",
           "group": "Tokens",
-          "fires": 1,
+          "fires": 2,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1903,7 +1598,7 @@
         {
           "label": "hook: PreToolUse:mcp__ccd_session_mgmt__send_message",
           "group": "Tokens",
-          "fires": 9,
+          "fires": 15,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1913,7 +1608,7 @@
         {
           "label": "hook: PreToolUse:mcp__ccd_turn__update_plan",
           "group": "Tokens",
-          "fires": 69,
+          "fires": 9,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1923,27 +1618,7 @@
         {
           "label": "hook: PreToolUse:mcp__ccd_turn__wrap_up",
           "group": "Tokens",
-          "fires": 25,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__claude-in-chrome__navigate",
-          "group": "Tokens",
-          "fires": 1,
-          "false_alarm": null,
-          "hours": 0,
-          "tokens": 0,
-          "value": 0,
-          "verdict": "not-measured"
-        },
-        {
-          "label": "hook: PreToolUse:mcp__claude-in-chrome__tabs_context_mcp",
-          "group": "Tokens",
-          "fires": 1,
+          "fires": 15,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1953,7 +1628,7 @@
         {
           "label": "hook: Stop",
           "group": "Tokens",
-          "fires": 42,
+          "fires": 53,
           "false_alarm": null,
           "hours": 0,
           "tokens": 0,
@@ -1961,8 +1636,8 @@
           "verdict": "not-measured"
         }
       ],
-      "source": "every blocker read above: fires, hours and tokens summed over the last 1000 tool calls (1000 wanted), 2026-11-28 02:18 to 2026-11-28 03:18 UTC, the pinned review and CI checks over the last 20 merged PRs; verdict() in quality/collectors/blockers/blockers.mjs",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "source": "every blocker read above: fires, hours and tokens summed over the last 1000 tool calls (1000 wanted), 2026-11-28 05:12 to 2026-11-28 06:19 UTC, the pinned review and CI checks over the last 20 merged PRs; verdict() in quality/collectors/blockers/blockers.mjs",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "blockers"
     },
     "blockers.enforcement_reverts": {
@@ -1970,36 +1645,36 @@
       "detail": [
         {
           "label": "enforcement PRs merged",
-          "value": 2,
+          "value": 5,
           "unit": "PRs"
         }
       ],
       "source": "the last 20 merged PRs touching ^\\.github\\/workflows\\/, ^\\.githooks\\/, ^\\.claude\\/hooks\\/, (^|\\/)(bash|write)_guard[\\w.]*$, (^|\\/)settings[^/]*\\.json$, _rules\\.json$, (^|\\/)verify\\.sh$, (^|\\/)manifest\\.json$, (^|\\/)cloud-test\\.json$, (^|\\/)protected_clauses\\.json$ (gh api graphql files), against later merged PRs titled Revert that name them (gh pr list, title and body) and bug issues opened since the oldest of them merged that name them as the cause, with a Regressed-by line or a cause phrase such as \"caused by #N\" (gh issue list --type Bug)",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "PRs"
     },
     "blockers.guard_blocks_per_100_calls": {
-      "value": 0.6,
+      "value": 0.2,
       "detail": [
         {
           "label": "permission rules",
-          "value": 0.6
+          "value": 0.2
         }
       ],
-      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: Claude Code permission refusals (Auto mode, deny rules and built-in safety checks) and hook blocks (hookify and app hooks), per 100 tool calls over the last 1000 tool calls (1000 wanted), 2026-11-28 02:18 to 2026-11-28 03:18 UTC; 6 refusals",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: Claude Code permission refusals (Auto mode, deny rules and built-in safety checks) and hook blocks (hookify and app hooks), per 100 tool calls over the last 1000 tool calls (1000 wanted), 2026-11-28 05:12 to 2026-11-28 06:19 UTC; 2 refusals",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "blocks"
     },
     "blockers.latest_block_seconds": {
-      "value": 8.4,
+      "value": 1.1,
       "detail": [
         {
           "label": "permission rules",
-          "value": 8.4
+          "value": 1.1
         }
       ],
-      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: refusals by the retired bash and write guards (old transcripts), app hooks, permission checks and git hooks, over the last 1000 tool calls (1000 wanted), 2026-11-28 02:18 to 2026-11-28 03:18 UTC; the latest block (permission rules, 2026-11-28 03:17 UTC) to the next call, at most 10 minutes; beside it, each blocker's latest",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: refusals by the retired bash and write guards (old transcripts), app hooks, permission checks and git hooks, over the last 1000 tool calls (1000 wanted), 2026-11-28 05:12 to 2026-11-28 06:19 UTC; the latest block (permission rules, 2026-11-28 05:45 UTC) to the next call, at most 10 minutes; beside it, each blocker's latest",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "s"
     },
     "blockers.git_commit_seconds": {
@@ -2012,17 +1687,17 @@
         },
         {
           "label": "p90",
-          "value": 0.8,
+          "value": 0.5,
           "unit": "s"
         },
         {
           "label": "slowest",
-          "value": 1.1,
+          "value": 1.4,
           "unit": "s"
         }
       ],
-      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: the last 20 Bash calls that run git commit alone, tool call to tool result; 20 read, from 2026-11-27 23:31 UTC",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: the last 20 Bash calls that run git commit alone, tool call to tool result; 20 read, from 2026-11-28 03:35 UTC",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "s"
     },
     "blockers.git_push_seconds": {
@@ -2035,7 +1710,7 @@
         },
         {
           "label": "p90",
-          "value": 6.9,
+          "value": 6.4,
           "unit": "s"
         },
         {
@@ -2044,68 +1719,64 @@
           "unit": "s"
         }
       ],
-      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: the last 20 Bash calls that run git push alone, tool call to tool result; 20 read, from 2026-11-12 22:10 UTC",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: the last 20 Bash calls that run git push alone, tool call to tool result; 20 read, from 2026-11-27 23:36 UTC",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "s"
     },
     "blockers.pushes_per_merged_pr": {
-      "value": 3.15,
+      "value": 1.6,
       "detail": [
         {
           "label": "1 push",
-          "value": 4,
+          "value": 9,
           "unit": "PRs"
         },
         {
           "label": "2 pushes",
-          "value": 4,
+          "value": 10,
           "unit": "PRs"
         },
         {
           "label": "3 pushes",
-          "value": 4,
+          "value": 1,
           "unit": "PRs"
         },
         {
           "label": "4 or more",
-          "value": 8,
+          "value": 0,
           "unit": "PRs"
         }
       ],
-      "source": "gh api graphql: merged pullRequests, 20 to a query, with pinned reviews and every check run attempt of their last 30 commits; the last 20 merged PRs, 20 read, merged 2026-11-27 23:29 to 2026-11-28 03:13 UTC",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "source": "gh api graphql: merged pullRequests, 20 to a query, with pinned reviews and every check run attempt of their last 30 commits; the last 20 merged PRs, 20 read, merged 2026-11-28 05:11 to 2026-11-28 06:18 UTC",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "pushes"
     },
     "blockers.latest_block_tokens": {
-      "value": 287648,
+      "value": 168909,
       "detail": [
         {
           "label": "permission rules",
-          "value": 287648
+          "value": 168909
         }
       ],
-      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: refusals by the retired bash and write guards (old transcripts), app hooks, permission checks and git hooks, over the last 1000 tool calls (1000 wanted), 2026-11-28 02:18 to 2026-11-28 03:18 UTC; message.usage of the call that answered the latest block (permission rules, 2026-11-28 03:17 UTC), in full, one share when blocks refused together share it; 1548 of them new tokens (input, output, cache write), the rest the conversation that call read again; beside it, each blocker's latest",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: refusals by the retired bash and write guards (old transcripts), app hooks, permission checks and git hooks, over the last 1000 tool calls (1000 wanted), 2026-11-28 05:12 to 2026-11-28 06:19 UTC; message.usage of the call that answered the latest block (permission rules, 2026-11-28 05:45 UTC), in full, one share when blocks refused together share it; 1478 of them new tokens (input, output, cache write), the rest the conversation that call read again; beside it, each blocker's latest",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "tokens"
     },
     "blockers.hook_tokens_per_session": {
-      "value": 66073,
+      "value": 125516,
       "detail": [
         {
           "label": "session start hooks",
-          "value": 63315
+          "value": 123615
         },
         {
           "label": "hook: PostToolUse:Edit",
-          "value": 1890
+          "value": 1328
         },
         {
-          "label": "hook: PostToolUse:Write",
-          "value": 638
-        },
-        {
-          "label": "app: preview reminder",
-          "value": 230
+          "label": "git pre-commit warnings",
+          "value": 573
         },
         {
           "label": "bash guard notes",
@@ -2128,10 +1799,6 @@
           "value": 0
         },
         {
-          "label": "hook: PostToolUse:Skill",
-          "value": 0
-        },
-        {
           "label": "hook: PostToolUse:ToolSearch",
           "value": 0
         },
@@ -2144,35 +1811,7 @@
           "value": 0
         },
         {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__browser_batch",
-          "value": 0
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__computer",
-          "value": 0
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__javascript_tool",
-          "value": 0
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__navigate",
-          "value": 0
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_start",
-          "value": 0
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__preview_stop",
-          "value": 0
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__resize_window",
-          "value": 0
-        },
-        {
-          "label": "hook: PostToolUse:mcp__Claude_Browser__tabs_context",
+          "label": "hook: PostToolUse:Write",
           "value": 0
         },
         {
@@ -2212,10 +1851,6 @@
           "value": 0
         },
         {
-          "label": "hook: PreToolUse:Skill",
-          "value": 0
-        },
-        {
           "label": "hook: PreToolUse:ToolSearch",
           "value": 0
         },
@@ -2229,38 +1864,6 @@
         },
         {
           "label": "hook: PreToolUse:Write",
-          "value": 0
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__browser_batch",
-          "value": 0
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__computer",
-          "value": 0
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__javascript_tool",
-          "value": 0
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__navigate",
-          "value": 0
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_start",
-          "value": 0
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__preview_stop",
-          "value": 0
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__resize_window",
-          "value": 0
-        },
-        {
-          "label": "hook: PreToolUse:mcp__Claude_Browser__tabs_context",
           "value": 0
         },
         {
@@ -2289,20 +1892,20 @@
         },
         {
           "label": "tool calls a session, these sessions",
-          "value": 97.6,
+          "value": 248,
           "unit": ""
         }
       ],
-      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: hook attachments and git WARN and INFRA lines, characters / 4, times the calls that read them again up to the next compaction, summed per session, mean over the last 5 main sessions by start, each with its subagents; 5 read, started 2026-11-28 02:33 to 2026-11-28 03:12 UTC",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: hook attachments and git WARN and INFRA lines, characters / 4, times the calls that read them again up to the next compaction, summed per session, mean over the last 5 main sessions by start, each with its subagents; 5 read, started 2026-11-28 03:12 to 2026-11-28 04:33 UTC",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "tokens"
     },
     "blockers.review_tokens_per_pr": {
-      "value": 323255,
+      "value": 148782,
       "detail": [
         {
           "label": "review subagent tokens",
-          "value": 6465107,
+          "value": 2975640,
           "unit": "tokens"
         },
         {
@@ -2311,113 +1914,88 @@
           "unit": "PRs"
         },
         {
-          "label": "#114",
-          "value": 594612,
+          "label": "#170",
+          "value": 392342,
           "unit": "tokens"
         },
         {
-          "label": "#118",
-          "value": 516781,
+          "label": "#166",
+          "value": 240170,
           "unit": "tokens"
         },
         {
-          "label": "#108",
-          "value": 469863,
+          "label": "#181",
+          "value": 232437,
           "unit": "tokens"
         },
         {
-          "label": "#119",
-          "value": 410215,
+          "label": "#177",
+          "value": 206627,
           "unit": "tokens"
         },
         {
-          "label": "#126",
-          "value": 355741,
+          "label": "#173",
+          "value": 175282,
           "unit": "tokens"
         },
         {
-          "label": "#133",
-          "value": 353215,
+          "label": "#179",
+          "value": 170839,
           "unit": "tokens"
         },
         {
-          "label": "#112",
-          "value": 351067,
+          "label": "#164",
+          "value": 148733,
           "unit": "tokens"
         },
         {
-          "label": "#116",
-          "value": 349211,
+          "label": "#167",
+          "value": 148646,
           "unit": "tokens"
         },
         {
-          "label": "#141",
-          "value": 318393,
+          "label": "#180",
+          "value": 145819,
           "unit": "tokens"
         },
         {
-          "label": "#127",
-          "value": 311749,
+          "label": "#178",
+          "value": 137768,
           "unit": "tokens"
         },
         {
-          "label": "#107",
-          "value": 291347,
+          "label": "#165",
+          "value": 128537,
           "unit": "tokens"
         },
         {
-          "label": "#136",
-          "value": 275281,
+          "label": "#176",
+          "value": 128150,
           "unit": "tokens"
         },
         {
-          "label": "#111",
-          "value": 267815,
+          "label": "#161",
+          "value": 115453,
           "unit": "tokens"
         },
         {
-          "label": "#137",
-          "value": 264112,
+          "label": "#162",
+          "value": 115453,
           "unit": "tokens"
         },
         {
-          "label": "#117",
-          "value": 242596,
-          "unit": "tokens"
-        },
-        {
-          "label": "#143",
-          "value": 171460,
-          "unit": "tokens"
-        },
-        {
-          "label": "#132",
-          "value": 136876,
-          "unit": "tokens"
-        },
-        {
-          "label": "#135",
-          "value": 135480,
-          "unit": "tokens"
-        },
-        {
-          "label": "#134",
-          "value": 127677,
-          "unit": "tokens"
-        },
-        {
-          "label": "#121",
-          "value": 111515,
+          "label": "#168",
+          "value": 65402,
           "unit": "tokens"
         },
         {
           "label": "review subagents naming no PR",
-          "value": 410101,
+          "value": 423983,
           "unit": "tokens"
         }
       ],
-      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: subagents whose meta.json says review, message.usage; one whose Agent call names PRs is charged to them, one naming none counts after the merge before the last 20 merged PRs up to the newest merge; gh api graphql: merged pullRequests, 20 to a query, with pinned reviews and every check run attempt of their last 30 commits; the last 20 merged PRs, 20 read, merged 2026-11-27 23:29 to 2026-11-28 03:13 UTC",
-      "read_at": "2026-11-28T03:18:15.945Z",
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: subagents whose meta.json says review, message.usage; one whose Agent call names PRs is charged to them, one naming none counts after the merge before the last 20 merged PRs up to the newest merge; gh api graphql: merged pullRequests, 20 to a query, with pinned reviews and every check run attempt of their last 30 commits; the last 20 merged PRs, 20 read, merged 2026-11-28 05:11 to 2026-11-28 06:18 UTC",
+      "read_at": "2026-11-28T06:20:25.289Z",
       "unit": "tokens"
     },
     "claude_settings.valid": {
@@ -2465,7 +2043,7 @@
       "unit": "%"
     },
     "claude_settings.setup_files": {
-      "value": 75,
+      "value": 100,
       "source": "state: each path in params.setup_files exists in the repo (setupMetric() in collectors/claude/claude-settings.mjs)",
       "detail": [
         {
@@ -2485,26 +2063,16 @@
         },
         {
           "label": ".claude/skills/bump-pins/SKILL.md",
-          "value": 0,
+          "value": 1,
           "unit": "in place"
         }
       ],
       "unit": "%"
     },
     "claude_settings.prompts_per_100_calls": {
-      "value": 0.9,
-      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: this repo's transcripts: the permissionDecision of each tool result, newest 1,000 that carry one; a prompt is a source starting user (user_temporary, user_permanent). ExitPlanMode and AskUserQuestion are left out: asking is their job. N = 1,000 tool calls, so new work replaces old within hours; 1000 read, 2026-11-28T02:17 to 2026-11-28T03:17 UTC",
+      "value": 0,
+      "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: this repo's transcripts: the permissionDecision of each tool result, newest 1,000 that carry one; a prompt is a source starting user (user_temporary, user_permanent). ExitPlanMode and AskUserQuestion are left out: asking is their job. N = 1,000 tool calls, so new work replaces old within hours; 1000 read, 2026-11-28T05:12 to 2026-11-28T06:19 UTC",
       "detail": [
-        {
-          "label": "rule:mcpServerPolicy",
-          "value": 5,
-          "unit": "prompts"
-        },
-        {
-          "label": "rule:userSettings",
-          "value": 4,
-          "unit": "prompts"
-        },
         {
           "label": "tool calls read",
           "value": 1000,
@@ -2533,20 +2101,20 @@
         }
       ],
       "source": "gh api graphql: each linked pullRequest, 50 to a query, with PULL_FIELDS from github.mjs plus state, author type, commits and head checks; the last 20 opened Claude PRs that merged or closed",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "%"
     },
     "claude.first_push_green_share": {
-      "value": 55,
+      "value": 100,
       "detail": [
         {
           "label": "green",
-          "value": 11,
+          "value": 20,
           "unit": "PRs"
         },
         {
           "label": "red",
-          "value": 9,
+          "value": 0,
           "unit": "PRs"
         },
         {
@@ -2563,25 +2131,10 @@
           "label": "no checks",
           "value": 0,
           "unit": "PRs"
-        },
-        {
-          "label": "failed: ci / ci-ok",
-          "value": 9,
-          "unit": "PRs"
-        },
-        {
-          "label": "failed: ci / standard",
-          "value": 7,
-          "unit": "PRs"
-        },
-        {
-          "label": "failed: ci / short",
-          "value": 1,
-          "unit": "PRs"
         }
       ],
       "source": "gh api graphql: each linked pullRequest, 50 to a query, with PULL_FIELDS from github.mjs plus state, author type, commits and head checks; gh api graphql commit statusCheckRollup; a cancelled check is no verdict, and no check (params.not_code_checks: they read the PR, not run it) is left out; the last 20 opened Claude PRs",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "%"
     },
     "claude.escaped_bugs_per_10_prs": {
@@ -2604,29 +2157,29 @@
         }
       ],
       "source": "gh issue list -R <repo> --type Bug --state all --json number,title,body,createdAt; bugs naming a Claude PR as the cause (a Regressed-by: #N line, or a phrase such as \"introduced in #N\" or \"caused by #N\"; a mention for context is no cause) filed after it merged, up to now, per 10 of the last 20 merged Claude PRs",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "bugs"
     },
     "claude.code_prs_with_tests_share": {
-      "value": 100,
+      "value": 66.7,
       "detail": [
         {
           "label": "code and a test",
-          "value": 15,
+          "value": 2,
           "unit": "PRs"
         },
         {
           "label": "code without a test",
-          "value": 0,
+          "value": 1,
           "unit": "PRs"
         }
       ],
       "source": "gh api graphql: each linked pullRequest, 50 to a query, with PULL_FIELDS from github.mjs plus state, author type, commits and head checks; the last 20 merged Claude PRs; file paths only",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "%"
     },
     "claude.hours_session_to_pr": {
-      "value": 0.19,
+      "value": 1.01,
       "detail": [
         {
           "label": "PRs opened",
@@ -2635,127 +2188,127 @@
         },
         {
           "label": "p90",
-          "value": 271.27,
+          "value": 29.17,
           "unit": "h"
         },
         {
           "label": "all time, median",
-          "value": 0.12,
+          "value": 0.25,
           "unit": "h"
         }
       ],
       "source": "gh api graphql: each linked pullRequest, 50 to a query, with PULL_FIELDS from github.mjs plus state, author type, commits and head checks; the last 20 opened Claude PRs; ~/.claude/projects/<this repo's project folder>/**/*.jsonl: first timestamp of the linking session",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "h"
     },
     "claude.tokens_per_merged_pr": {
-      "value": 599596,
+      "value": 509687,
       "detail": [
         {
           "label": "cache write",
-          "value": 498760,
+          "value": 437951,
           "unit": "tokens"
         },
         {
           "label": "output",
-          "value": 100659,
+          "value": 71607,
           "unit": "tokens"
         },
         {
           "label": "fresh input",
-          "value": 177,
+          "value": 129,
           "unit": "tokens"
         }
       ],
       "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: message.usage, one count per message.id; the last 10 merged Claude PRs, each with its linking session's tokens split evenly over the PRs that session opened and merged",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "tokens"
     },
     "claude.cache_read_share": {
-      "value": 98,
+      "value": 98.5,
       "detail": [
         {
           "label": "cache read",
-          "value": 299044853,
+          "value": 377584888,
           "unit": "tokens"
         },
         {
           "label": "cache write",
-          "value": 6108194,
+          "value": 5866333,
           "unit": "tokens"
         },
         {
           "label": "fresh input",
-          "value": 2100,
+          "value": 2112,
           "unit": "tokens"
         }
       ],
       "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: message.usage, one count per message.id; the last 1000 model calls (1000 read)",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "%"
     },
     "claude.cost_per_merged_pr_usd": {
-      "value": 9.46,
+      "value": 5.62,
       "detail": [
         {
           "label": "API-equivalent cost, these PRs",
-          "value": 94.59,
+          "value": 11.25,
           "unit": "USD"
         },
         {
           "label": "merged PRs with a costed session",
-          "value": 10,
+          "value": 2,
           "unit": "PRs"
         },
         {
           "label": "merged PRs without one, left out",
-          "value": 0,
+          "value": 8,
           "unit": "PRs"
         },
         {
           "label": "all time, per merged PR",
-          "value": 5.41,
+          "value": 5.32,
           "unit": "USD"
         }
       ],
       "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: last cost-state record per session; the last 10 merged Claude PRs whose linking session has one, its totalCostUSD split evenly over the PRs that session opened and merged",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "USD"
     },
     "claude.context_per_call": {
-      "value": 307164,
+      "value": 259600,
       "detail": [
         {
           "label": "main sessions, median",
-          "value": 326131,
+          "value": 728135,
           "unit": "tokens"
         },
         {
           "label": "subagents, median",
-          "value": 128695,
+          "value": 226611,
           "unit": "tokens"
         },
         {
           "label": "p90, all calls",
-          "value": 438737,
+          "value": 846191,
           "unit": "tokens"
         },
         {
           "label": "all time, median",
-          "value": 220863,
+          "value": 249325,
           "unit": "tokens"
         }
       ],
       "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: message.usage, one count per message.id; the last 1000 model calls",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "tokens"
     },
     "claude.compactions_per_10_prs": {
-      "value": 0.19,
+      "value": 0.13,
       "detail": [
         {
           "label": "compactions, these PRs",
-          "value": 0.38,
+          "value": 0.27,
           "unit": "compactions"
         },
         {
@@ -2770,40 +2323,40 @@
         },
         {
           "label": "all time, per 10 merged PRs",
-          "value": 0.17,
+          "value": 0.22,
           "unit": "compactions"
         }
       ],
       "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: type system, subtype compact_boundary (a field observed in transcripts, not in Anthropic's public docs); per 10 of the last 20 merged Claude PRs, each with its linking session's compactions split evenly over the PRs that session opened and merged",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "compactions"
     },
     "claude.subagent_cost_share": {
-      "value": 10.9,
+      "value": 52.5,
       "detail": [
         {
           "label": "main sessions",
-          "value": 101.39,
+          "value": 57.52,
           "unit": "USD"
         },
         {
           "label": "subagents",
-          "value": 12.35,
+          "value": 63.59,
           "unit": "USD"
         },
         {
           "label": "subagents on claude-opus-5-5",
-          "value": 5.96,
+          "value": 57.12,
           "unit": "USD"
         },
         {
           "label": "subagents on claude-sonnet-5-5",
-          "value": 5.85,
+          "value": 5.91,
           "unit": "USD"
         },
         {
           "label": "subagents on claude-haiku-5-5",
-          "value": 0.53,
+          "value": 0.56,
           "unit": "USD"
         },
         {
@@ -2813,7 +2366,7 @@
         }
       ],
       "source": "~/.claude/projects/<this repo's project folder>/**/*.jsonl: message.usage, one count per message.id; the last 1000 model calls, of them rows from Claude Code 2.1.307 on (or, with no version, from 2026-10-21): earlier subagent transcripts held placeholder usage (github.com/anthropics/claude-code/releases/tag/v2.1.307); each call priced by priceCall in claude.mjs: its model's input and output price per million, the long tier over 100000 prompt tokens, 5-minute writes x1.25, 1-hour writes x2 and reads at the model's cache_read_x, else x0.1, of input (params.prices, https://platform.claude.com/docs/en/about-claude/pricing)",
-      "read_at": "2026-11-28T03:18:01.807Z",
+      "read_at": "2026-11-28T06:20:04.090Z",
       "unit": "%"
     },
     "desktop_app.connectors_broken": {
@@ -2831,7 +2384,7 @@
         }
       ],
       "source": "state: the last tool listing of the newest desktop session",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "servers"
     },
     "desktop_app.plugins_unused": {
@@ -3274,7 +2827,7 @@
         }
       ],
       "source": "state: the newest desktop session's listings against the calls of the account's last 200 sessions (entrypoint in params.usage_entrypoints) across every project folder and Cowork session, with their subagents; N = 200 sessions, 200 read",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "plugins"
     },
     "desktop_app.connectors_unused": {
@@ -3307,20 +2860,20 @@
         }
       ],
       "source": "state: the newest desktop session's listings against the calls of the account's last 200 sessions (entrypoint in params.usage_entrypoints) across every project folder and Cowork session, with their subagents; N = 200 sessions, 200 read",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "servers"
     },
     "desktop_app.turns_closed": {
-      "value": 100,
+      "value": 75,
       "detail": [
         {
           "label": "work turns judged",
-          "value": 12,
+          "value": 20,
           "unit": "turns"
         },
         {
           "label": "with a task list and a recap",
-          "value": 12,
+          "value": 15,
           "unit": "turns"
         },
         {
@@ -3330,12 +2883,12 @@
         },
         {
           "label": "left out: still open",
-          "value": 1,
+          "value": 0,
           "unit": "turns"
         }
       ],
       "source": "the last 20 work turns a person started; N = 20 turns",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "%"
     },
     "desktop_app.plans_first_pass": {
@@ -3358,7 +2911,7 @@
         }
       ],
       "source": "the last 20 sessions that showed a plan: the share of first-shown plans (the first, or one after an approval) whose params.plan_exit_tool result is no error; N = 20 plan sessions",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "%"
     },
     "desktop_app.sub_sessions_closed": {
@@ -3376,12 +2929,12 @@
         },
         {
           "label": "left out: started in a live session",
-          "value": 42,
+          "value": 47,
           "unit": "sessions"
         }
       ],
       "source": "the last 10 sub-sessions started; N = 10 sub-sessions",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "%"
     },
     "desktop_app.subagents_killed": {
@@ -3389,7 +2942,7 @@
       "detail": [
         {
           "label": "subagent notices",
-          "value": 38,
+          "value": 50,
           "unit": "notices"
         },
         {
@@ -3399,33 +2952,33 @@
         }
       ],
       "source": "the last 50 notices that answer an Agent call; N = 50 notices",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "%"
     },
     "desktop_app.connectors_pending": {
-      "value": 11,
+      "value": 19,
       "detail": [
         {
           "label": "still connecting",
-          "value": 11,
+          "value": 19,
           "unit": "servers"
         }
       ],
       "source": "state: the first tool listing of the newest desktop session, the app's own servers set aside",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "servers"
     },
     "desktop_app.parallel_share": {
-      "value": 99.2,
+      "value": 99.4,
       "detail": [
         {
           "label": "turns with two or more Agent calls",
-          "value": 14,
+          "value": 20,
           "unit": "turns"
         },
         {
           "label": "Agent calls",
-          "value": 119,
+          "value": 157,
           "unit": "calls"
         },
         {
@@ -3435,11 +2988,11 @@
         }
       ],
       "source": "the last 20 turns with two or more Agent calls; N = 20 turns",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "%"
     },
     "desktop_app.listing_tokens": {
-      "value": 53978,
+      "value": 54250,
       "detail": [
         {
           "label": "tool names",
@@ -3448,7 +3001,7 @@
         },
         {
           "label": "skills",
-          "value": 11083,
+          "value": 11355,
           "unit": "tokens"
         },
         {
@@ -3463,11 +3016,11 @@
         }
       ],
       "source": "state: bytes / 4 of the four listings of the newest desktop session, every delta added up",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "tokens"
     },
     "desktop_app.subagent_start_tokens": {
-      "value": 128548,
+      "value": 129014,
       "detail": [
         {
           "label": "subagent runs read",
@@ -3475,18 +3028,18 @@
           "unit": "runs"
         },
         {
-          "label": "pr-review-toolkit:code-reviewer (17 runs)",
-          "value": 128548,
+          "label": "general-purpose (8 runs)",
+          "value": 129014,
           "unit": "tokens"
         },
         {
-          "label": "space-peak-fact-reviewer (3 runs)",
-          "value": 15538,
+          "label": "pr-review-toolkit:code-reviewer (12 runs)",
+          "value": 128408,
           "unit": "tokens"
         }
       ],
       "source": "the last 20 subagent runs: the context of each run's first model call, the median of each agent type, the largest; N = 20 runs",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "tokens"
     },
     "desktop_app.plugins_untrusted": {
@@ -3514,21 +3067,21 @@
         }
       ],
       "source": "state: enabled plugins from Claude Code install records (user settings, this repo's settings) and the desktop app plugin manifest under params.cowork_dir, each placed by its marketplace name in params.official_marketplaces, params.directory_marketplaces or params.community_marketplaces, else third-party; marketplaces from the repo owner's GitHub account, params.own_marketplaces and params.kept_plugins set aside",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "plugins"
     },
     "desktop_app.plugins_replaceable": {
       "value": 0,
       "detail": [],
       "source": "state: the custom skills, agents and hook commands in the user's and this repo's params.claude_dir_name folders, against anthropic-equivalents.json and against the official-tier catalogs Claude Code has cloned (a community or third-party plugin whose name an official marketplace also lists)",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "items"
     },
     "desktop_app.plugins_stale": {
       "value": 0,
       "detail": [],
       "source": "state: Claude Code install records no settings source enables, plugins in flagged-plugins.json, and enabled plugins whose last_updated in plugin-catalog-cache.json (fetched 2026-09-13) is older than params.stale_days",
-      "read_at": "2026-11-28T03:18:36.356Z",
+      "read_at": "2026-11-28T06:20:48.059Z",
       "unit": "plugins"
     },
     "instructions.protected_clauses_missing": {
@@ -3537,8 +3090,13 @@
       "unit": "clauses"
     },
     "instructions.unused": {
-      "value": 1,
+      "value": 2,
       "detail": [
+        {
+          "label": "skill: bump-pins",
+          "value": 0,
+          "unit": "uses"
+        },
         {
           "label": "skill: space-peak-publish-gate",
           "value": 0,
@@ -3546,7 +3104,7 @@
         },
         {
           "label": "agent: space-peak-fact-reviewer",
-          "value": 8,
+          "value": 7,
           "unit": "uses"
         },
         {
@@ -3555,8 +3113,8 @@
           "unit": "uses"
         }
       ],
-      "source": "the last 50 main sessions by start, each with its subagents: Skill calls and typed slash commands by name, Agent calls by subagent_type (none is general-purpose), and a paths rule when a Read, Edit, Write, MultiEdit, NotebookEdit call touched a matching file under the session's folder; a rule with no paths loads every session and is left out, and so is a rule in params.kept_rules (none); 50 sessions read, from 2026-11-12 20:35 UTC; 3 items",
-      "read_at": "2026-11-28T03:18:33.872Z",
+      "source": "the last 50 main sessions by start, each with its subagents: Skill calls and typed slash commands by name, Agent calls by subagent_type (none is general-purpose), and a paths rule when a Read, Edit, Write, MultiEdit, NotebookEdit call touched a matching file under the session's folder; a rule with no paths loads every session and is left out, and so is a rule in params.kept_rules (none); 50 sessions read, from 2026-11-16 18:21 UTC; 4 items",
+      "read_at": "2026-11-28T06:20:45.616Z",
       "unit": "items"
     },
     "instructions.lines_before_action": {
@@ -3569,16 +3127,16 @@
         },
         {
           "label": "memory index head",
-          "value": 7,
+          "value": 8,
           "unit": "lines"
         }
       ],
       "source": "state: line breaks of each always-loaded file the repo controls (params repo_claude_md, repo_rules, the user_rules whose source the repo holds by installed_from_code_os, a rule with paths left out) and the MEMORY index head; the largest; 2 files",
-      "read_at": "2026-11-28T03:18:33.872Z",
+      "read_at": "2026-11-28T06:20:45.616Z",
       "unit": "lines"
     },
     "claude.instruction_tokens": {
-      "value": 4194,
+      "value": 4199,
       "detail": [
         {
           "label": "managed CLAUDE.md",
@@ -3587,7 +3145,7 @@
         },
         {
           "label": "repo CLAUDE.md",
-          "value": 124,
+          "value": 129,
           "unit": "tokens"
         },
         {
@@ -3597,28 +3155,28 @@
         }
       ],
       "source": "state: bytes / 4 of managed CLAUDE.md, user CLAUDE.md, repo CLAUDE.md, house rules, repo rules (params managed_claude_md /Library/Application Support/ClaudeCode/CLAUDE.md; user_claude_md ~/.claude/CLAUDE.md; repo_claude_md CLAUDE.md + .claude/CLAUDE.md + CLAUDE.local.md; user_rules ~/.claude/rules; repo_rules .claude/rules; a rule whose frontmatter has paths is left out); the MEMORY index is counted apart",
-      "read_at": "2026-11-28T03:18:33.872Z",
+      "read_at": "2026-11-28T06:20:45.616Z",
       "unit": "tokens"
     },
     "instructions.memory_index_tokens": {
-      "value": 297,
+      "value": 342,
       "detail": [
         {
           "label": "lines that load",
-          "value": 7,
+          "value": 8,
           "unit": "lines"
         }
       ],
       "source": "state: bytes / 4 of memory/MEMORY.md in the ~/.claude/projects folder ending <this repo's project folder>, up to its first 200 lines or 25600 bytes, whichever comes first (the part that loads)",
-      "read_at": "2026-11-28T03:18:33.872Z",
+      "read_at": "2026-11-28T06:20:45.616Z",
       "unit": "tokens"
     },
     "instructions.description_tokens": {
-      "value": 853,
+      "value": 907,
       "detail": [
         {
-          "label": "project skills (2)",
-          "value": 153,
+          "label": "project skills (3)",
+          "value": 206,
           "unit": "tokens"
         },
         {
@@ -3672,18 +3230,18 @@
           "unit": "tokens"
         },
         {
-          "label": "installed skills: comfy",
-          "value": 48,
+          "label": "project skills: bump-pins",
+          "value": 54,
           "unit": "tokens"
         },
         {
-          "label": "installed skills: merging",
-          "value": 44,
+          "label": "installed skills: comfy",
+          "value": 48,
           "unit": "tokens"
         }
       ],
-      "source": "state: bytes / 4 of the name, description and when_to_use frontmatter of every SKILL.md under params repo_skills (.claude/skills) and user_skills (~/.claude/skills), and every agent file under repo_agents (.claude/agents); 11 read",
-      "read_at": "2026-11-28T03:18:33.872Z",
+      "source": "state: bytes / 4 of the name, description and when_to_use frontmatter of every SKILL.md under params repo_skills (.claude/skills) and user_skills (~/.claude/skills), and every agent file under repo_agents (.claude/agents); 12 read",
+      "read_at": "2026-11-28T06:20:45.616Z",
       "unit": "tokens"
     },
     "lead_time.hours": {
@@ -3696,11 +3254,11 @@
       "value": 0,
       "detail": [],
       "source": "sentences of 8 or more words, markdown and case ignored, in /Library/Application Support/ClaudeCode/CLAUDE.md, ~/.claude/CLAUDE.md, ~/.claude/rules/*.md, the repo CLAUDE.md and the memory index",
-      "read_at": "2026-11-28T03:18:35.401Z",
+      "read_at": "2026-11-28T06:20:46.920Z",
       "unit": "sentences"
     },
     "simplicity.broken_refs": {
-      "value": 15,
+      "value": 11,
       "detail": [
         {
           "label": "rules/comfy.md: tools/comfy_guard.py",
@@ -3756,30 +3314,10 @@
           "label": "rules/keys.md: tools/claude_deny.json",
           "value": 1,
           "unit": "references"
-        },
-        {
-          "label": "memory/space-peak-repo-location.md: .claude/worktrees/",
-          "value": 1,
-          "unit": "references"
-        },
-        {
-          "label": "memory/space-peak-repo-location.md: <a path under home>",
-          "value": 1,
-          "unit": "references"
-        },
-        {
-          "label": "memory/space-peak-repo-location.md: <a path under home>",
-          "value": 1,
-          "unit": "references"
-        },
-        {
-          "label": "memory/spacepeak-launch-plan.md: data/estimates/q-03",
-          "value": 1,
-          "unit": "references"
         }
       ],
       "source": "paths in code spans and markdown links of ~/.claude/rules/*.md, the repo CLAUDE.md and the memory, resolved from home, the naming file's folder, the repo and the Git Crafter checkout; a path in a never or do-not line, or named as another's (another-repo's `x`), is left out; so is the managed CLAUDE.md, which may name other accounts' paths and which an administrator owns; living docs are docs.dead_paths on the Docs tab",
-      "read_at": "2026-11-28T03:18:35.401Z",
+      "read_at": "2026-11-28T06:20:46.920Z",
       "unit": "references"
     },
     "simplicity.copy_drift": {
@@ -3788,11 +3326,11 @@
       "unit": "copies"
     },
     "simplicity.undated_figures": {
-      "value": 31,
+      "value": 12,
       "detail": [
         {
           "label": "no read date",
-          "value": 31,
+          "value": 12,
           "unit": "figures"
         },
         {
@@ -3801,64 +3339,68 @@
           "unit": "figures"
         },
         {
-          "label": "02_substance/claims_register.md",
-          "value": 16,
-          "unit": "figures"
-        },
-        {
-          "label": "02_substance/Space-Peak-Concept-Brief.md",
-          "value": 14,
+          "label": "02_substance/brief/2-site-tour.md",
+          "value": 7,
           "unit": "figures"
         },
         {
           "label": ".claude/skills/space-peak-fact-guardrails/SKILL.md",
           "value": 1,
           "unit": "figures"
+        },
+        {
+          "label": "02_substance/Space-Peak-Concept-Brief.md",
+          "value": 1,
+          "unit": "figures"
+        },
+        {
+          "label": "02_substance/brief/1-why-a-mountain.md",
+          "value": 1,
+          "unit": "figures"
+        },
+        {
+          "label": "02_substance/brief/3-the-name.md",
+          "value": 1,
+          "unit": "figures"
+        },
+        {
+          "label": "SECURITY.md",
+          "value": 1,
+          "unit": "figures"
         }
       ],
-      "source": "the Docs tab's doc set (params.doc_set on quality/targets/docs.json, less its doc_set_left_out, skipping its skip_dirs) less params.not_living; a figure is a percent, money, a comma-grouped number or a number with a unit, outside code; its sentence or table row needs a YYYY-MM-DD within 30 days; 18 docs",
-      "read_at": "2026-11-28T03:18:35.401Z",
+      "source": "the Docs tab's doc set (params.doc_set on quality/targets/docs.json, less its doc_set_left_out, skipping its skip_dirs) less params.not_living; a figure is a percent, money, a comma-grouped number or a number with a unit, outside code; its sentence or table row needs a YYYY-MM-DD within 30 days; 37 docs",
+      "read_at": "2026-11-28T06:20:46.920Z",
       "unit": "figures"
     },
     "simplicity.memory_stale_refs": {
-      "value": 2,
-      "detail": [
-        {
-          "label": "memory/space-peak-repo-location.md",
-          "value": 3,
-          "unit": "names"
-        },
-        {
-          "label": "memory/spacepeak-launch-plan.md",
-          "value": 1,
-          "unit": "names"
-        }
-      ],
+      "value": 0,
+      "detail": [],
       "source": "memory notes (not the index): paths as in simplicity.broken_refs, and --flags of commands the repo ships, in code spans, that git grep finds in neither the repo nor the Git Crafter checkout",
-      "read_at": "2026-11-28T03:18:35.401Z",
+      "read_at": "2026-11-28T06:20:46.920Z",
       "unit": "notes"
     },
     "tokens.latest_pr_rework_tokens": {
-      "value": 9893,
+      "value": 0,
       "by_repo": {
-        "space-peak": 9893
+        "space-peak": 0
       },
       "detail": [
         {
           "label": "space-peak",
-          "value": 7257121,
+          "value": 7036685,
           "unit": "tokens",
           "share": 100,
-          "cache_read_share": 98,
+          "cache_read_share": 98.5,
           "merged": 20,
-          "tokens_per_pr": 630728,
+          "tokens_per_pr": 356025,
           "waste_share": 0,
-          "latest_rework": 9893,
-          "per_hour": 1633663
+          "latest_rework": 0,
+          "per_hour": 1296299
         }
       ],
-      "source": "~/.claude/projects/*/**/*.jsonl: message.usage input + output + cache write, one count per message.id; 27 project folders in 1 repos (space-peak); 257 left out: 119 no git remote, 111 a repo outside params.owners and params.repos, 27 no transcript records a cwd; pr-link entries joined with gh api graphql (state, merge time, pinned reviews), 50 PRs to a query; reviewRounds in blockers.mjs: the linking session's tokens after the first pinned review that found something, until the merge, on the latest merged PR among the last 20 merged linked PRs; the table's tokens and shares are over the last 1000 model calls, its PR columns over each repo's own last 20, its rework column each repo's latest merged PR, its per-hour column over the last 5 sessions with a cost record, by start; 4 GraphQL calls; the latest, space-peak#141, merged 2026-11-28",
-      "read_at": "2026-11-28T03:18:24.582Z",
+      "source": "~/.claude/projects/*/**/*.jsonl: message.usage input + output + cache write, one count per message.id; 27 project folders in 1 repos (space-peak); 257 left out: 119 no git remote, 111 a repo outside params.owners and params.repos, 27 no transcript records a cwd; pr-link entries joined with gh api graphql (state, merge time, pinned reviews), 50 PRs to a query; reviewRounds in blockers.mjs: the linking session's tokens after the first pinned review that found something, until the merge, on the latest merged PR among the last 20 merged linked PRs; the table's tokens and shares are over the last 1000 model calls, its PR columns over each repo's own last 20, its rework column each repo's latest merged PR, its per-hour column over the last 5 sessions with a cost record, by start; 7 GraphQL calls; the latest, space-peak#181, merged 2026-11-28",
+      "read_at": "2026-11-28T06:20:34.770Z",
       "unit": "tokens"
     },
     "tokens.waste_share": {
@@ -3874,7 +3416,7 @@
         },
         {
           "label": "on merged PRs",
-          "value": 12634227,
+          "value": 7120509,
           "unit": "tokens"
         },
         {
@@ -3884,70 +3426,70 @@
         }
       ],
       "source": "~/.claude/projects/*/**/*.jsonl: message.usage input + output + cache write, one count per message.id; 27 project folders in 1 repos (space-peak); 257 left out: 119 no git remote, 111 a repo outside params.owners and params.repos, 27 no transcript records a cwd; pr-link entries joined with gh api graphql (state, merge time, pinned reviews), 50 PRs to a query; the last 20 opened linked PRs that merged or closed, each with its linking session's tokens split evenly over that session's merged and closed PRs",
-      "read_at": "2026-11-28T03:18:24.582Z",
+      "read_at": "2026-11-28T06:20:34.770Z",
       "unit": "%"
     },
     "tokens.plan_used": {
-      "value": 23,
+      "value": 41,
       "detail": [
         {
           "label": "Weekly · all models",
-          "value": 23,
+          "value": 41,
           "unit": "%"
         },
         {
           "label": "Weekly · Fable",
-          "value": 19,
+          "value": 35,
           "unit": "%"
         },
         {
           "label": "days until the tightest resets",
-          "value": 5.8,
+          "value": 5.7,
           "unit": "days"
         }
       ],
-      "source": "state: quality/data/plan-usage.json, the app's get_usage weekly windows as a session last read them: percent used now of the tightest one (Weekly · all models), read 2026-11-28T03:17Z",
-      "read_at": "2026-11-28T03:18:24.582Z",
+      "source": "state: quality/data/plan-usage.json, the app's get_usage weekly windows as a session last read them: percent used now of the tightest one (Weekly · all models), read 2026-11-28T06:20Z",
+      "read_at": "2026-11-28T06:20:34.770Z",
       "unit": "%"
     },
     "tokens.latest_subagent_return_tokens": {
-      "value": 421,
+      "value": 694,
       "by_repo": {
-        "space-peak": 421
+        "space-peak": 694
       },
       "detail": [
         {
-          "label": "space-peak, 2026-11-28 03:17 UTC",
-          "value": 421,
+          "label": "space-peak, 2026-11-28 06:14 UTC",
+          "value": 694,
           "unit": "tokens"
         },
         {
-          "label": "space-peak, 2026-11-28 03:17 UTC",
-          "value": 5237,
+          "label": "space-peak, 2026-11-28 06:06 UTC",
+          "value": 4404,
           "unit": "tokens"
         },
         {
-          "label": "space-peak, 2026-11-28 03:12 UTC",
-          "value": 58,
+          "label": "space-peak, 2026-11-28 05:58 UTC",
+          "value": 708,
           "unit": "tokens"
         },
         {
-          "label": "space-peak, 2026-11-28 03:12 UTC",
-          "value": 220,
+          "label": "space-peak, 2026-11-28 05:56 UTC",
+          "value": 526,
           "unit": "tokens"
         },
         {
-          "label": "space-peak, 2026-11-28 03:00 UTC",
-          "value": 302,
+          "label": "space-peak, 2026-11-28 05:52 UTC",
+          "value": 86,
           "unit": "tokens"
         }
       ],
       "source": "~/.claude/projects/*/**/*.jsonl: message.usage input + output + cache write, one count per message.id; 27 project folders in 1 repos (space-peak); 257 left out: 119 no git remote, 111 a repo outside params.owners and params.repos, 27 no transcript records a cwd; a subagent transcript's last reply's text at 4 characters a token, which is what it returns to its parent (thinking is never returned; a reply with no text counts its output_tokens); the latest of the last 20 subagents to finish",
-      "read_at": "2026-11-28T03:18:24.582Z",
+      "read_at": "2026-11-28T06:20:34.770Z",
       "unit": "tokens"
     },
     "tokens.review_fix_rounds_per_pr": {
-      "value": 0.5,
+      "value": 0,
       "detail": [
         {
           "label": "merged PRs",
@@ -3956,17 +3498,17 @@
         },
         {
           "label": "with a round that found something",
-          "value": 5,
+          "value": 0,
           "unit": "PRs"
         },
         {
           "label": "rounds that found something",
-          "value": 5,
+          "value": 0,
           "unit": "rounds"
         }
       ],
       "source": "~/.claude/projects/*/**/*.jsonl: message.usage input + output + cache write, one count per message.id; 27 project folders in 1 repos (space-peak); 257 left out: 119 no git remote, 111 a repo outside params.owners and params.repos, 27 no transcript records a cwd; pr-link entries joined with gh api graphql (state, merge time, pinned reviews), 50 PRs to a query; reviewRounds in blockers.mjs: pinned review rounds that found something, mean over the last 10 merged linked PRs",
-      "read_at": "2026-11-28T03:18:24.582Z",
+      "read_at": "2026-11-28T06:20:34.770Z",
       "unit": "rounds"
     },
     "credits.idle_replaceable": {
@@ -4020,6 +3562,12 @@
     "ai.files_valid_share": {
       "could_not_check": "No collector reported this metric.",
       "source": "state now: site/dist/data/index.json and every file it lists, each against its sha256 there and its JSON Schema under site/dist/data/schemas/ (zod fromJSONSchema), orgs.csv row by row; a schema file must load as a JSON Schema",
+      "weak": true,
+      "unit": "%"
+    },
+    "ai.mcp_conformance_share": {
+      "could_not_check": "No collector reported this metric.",
+      "source": "latest: the MCP conformance annotation that node quality/collectors/space-peak.mjs --mcp-notice leaves on ci.yml job standard, read through the Checks API from the newest of the last 10 successful ci.yml runs on pushes to main whose standard job ran. A check id counts once per scenario; SKIPPED and INFO checks are not run; a check site/e2e/mcp-not-applicable.json names is run and left out of the share",
       "weak": true,
       "unit": "%"
     }

@@ -35,7 +35,7 @@ const cards = allEstimates().map((e) => {
           <div class="odds-why">
             <p class="odds-question">{e.question}</p>
             <p>{e.reasoning}</p>
-            <p class="odds-meta">{e.estimator}, <time datetime={e.date}>{e.date}</time>. Answer due <time datetime={e.resolves.date}>{e.resolves.date}</time>.</p>
+            <p class="odds-meta">By Claude, <time datetime={e.date}>{e.date}</time>.{e.approved && <> Approved by Paul, <time datetime={e.approved_on}>{e.approved_on}</time>.</>} Answer due <time datetime={e.resolves.date}>{e.resolves.date}</time>.</p>
             <ul class="odds-sources">
               {e.sources.map((s) => <li><a href={s.url}>{s.publisher}</a></li>)}
             </ul>

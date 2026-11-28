@@ -53,6 +53,8 @@ function cardProblems(card: Element, e: Estimate): string[] {
   const why = text(press?.querySelector(":scope > :not(summary)"));
   for (const [what, want] of [["question", e.question], ["reasoning", e.reasoning], ["date", e.date]] as const)
     if (!why.includes(want.replace(/\s+/g, " ").trim())) out.push(`${e.id} press does not show its ${what}`);
+  // An approved estimate names Paul's approval date apart from its own, so neither date stands in for the other.
+  if (e.approved && !why.includes(`Approved by Paul, ${e.approved_on}`)) out.push(`${e.id} press does not show Paul's approval date`);
   for (const s of e.sources) if (!press?.querySelector(`a[href="${s.url}"]`)) out.push(`${e.id} press does not link ${s.url}`);
   if (press?.hasAttribute("open")) out.push(`${e.id} starts open`);
   return out;
@@ -82,7 +84,7 @@ const card = (e: Estimate) => {
   const dots = Array.from({ length: 100 }, (_, i) => `<circle fill="${i < filled ? "var(--c-region-space-peak)" : "var(--c-rule)"}"></circle>`).join("");
   return `<li class="odds-card" data-estimate="${e.id}" data-register="${registerId(e)}" data-status="open"><figure class="chart"><svg role="img" aria-label="${e.question}">${dots}</svg><figcaption>${pct(e)}%</figcaption>
     <details><summary>Data as a table</summary><table><tbody><tr><th>${percentOf(e.p)}</th><td>${filled}</td><td>100</td></tr></tbody></table></details></figure>
-    <details><summary><span class="odds-label">A label for ${/\b(20\d{2})\b/.exec(e.question)![1]}</span>${tagHtml(e.approved)}</summary><div><p>${e.question}</p><p>${e.reasoning}</p><p>${e.date}</p>
+    <details><summary><span class="odds-label">A label for ${/\b(20\d{2})\b/.exec(e.question)![1]}</span>${tagHtml(e.approved)}</summary><div><p>${e.question}</p><p>${e.reasoning}</p><p>By Claude, ${e.date}.${e.approved ? ` Approved by Paul, ${e.approved_on}.` : ""}</p>
     ${e.sources.map((s) => `<a href="${s.url}">${s.publisher}</a>`).join("")}</div></details></li>`;
 };
 const GOOD = `<section class="odds"><h2>The odds</h2><ul>${ESTIMATES.map(card).join("")}</ul></section>`;
@@ -98,6 +100,7 @@ describe("the odds check", () => {
     ["an estimate shown as a verified figure", GOOD.replace("</summary>", '<span class="figure-chip">verified</span></summary>'), /shown as a register figure/],
     ["a label without its year", GOOD.replace(`A label for ${q1Year}`, "A label"), /q-01 label "A label" drops its year/],
     ["reasoning missing", GOOD.replace(`<p>${q1.reasoning}</p>`, ""), /q-01 press does not show its reasoning/],
+    ["an approval without its date", GOOD.replace(/ Approved by Paul, [\d-]+\./, ""), /q-01 press does not show Paul's approval date/],
     ["a press open at load", GOOD.replace('<details><summary><span class="odds-label">', '<details open><summary><span class="odds-label">'), /q-01 starts open/],
     ["a card missing", GOOD.replace(card(q1), ""), /want every estimate/],
     ["a script", GOOD.replace("</ul>", "</ul><script src='/x.js'></script>"), /loads a script/],

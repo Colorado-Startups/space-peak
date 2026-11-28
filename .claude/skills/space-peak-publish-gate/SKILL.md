@@ -65,7 +65,7 @@ The map and any SVG shipping with the piece carry the same labelling discipline 
 
 ### 9. Naming
 
-**Resolved 2026-10-08.** The name is **Space Peak** everywhere, with no second name and no project-versus-venture split. Register row N-04 is `corrected`, issue #2 took Route 2, and `01_doctrine/voice.md` carries the decision under Terminology.
+**Resolved 2026-10-08.** The name is **Space Peak** everywhere, with no second name and no project-versus-venture split. Register row N-04 is `corrected`, issue #2 took Route 2, and `01_doctrine/voice-terminology.md` carries the decision.
 
 So this is now a consistency check rather than a blocker:
 

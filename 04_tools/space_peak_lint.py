@@ -4,12 +4,13 @@
 Rules source, in precedence order:
   1. Code-OS rules/writing-and-gates.md   canonical, wins
   2. 04_tools/space_peak_rules.json         machine-readable copy
-  3. 01_doctrine/voice.md                   project prose, must agree with 2
+  3. 01_doctrine/voice.md and its parts     project prose, must agree with 2
   4. this script                            reads 2, decides nothing
 
 If this script and the JSON disagree, the JSON wins. If the JSON and the
 house rules file disagree, the house rules win and both get corrected in
-the same session. The contract test enforces that 3 still agrees with 2.
+the same session. A reviewer keeps 3 in step with 2: no contract has read
+voice.md since #32.
 
 Deterministic, no network, standard library only.
 

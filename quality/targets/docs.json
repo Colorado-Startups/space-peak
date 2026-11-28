@@ -41,6 +41,37 @@
      ]
     },
     {
+     "doc": "01_doctrine/voice-machine-rules.md",
+     "area": [
+      "04_tools/space_peak_rules.json",
+      "04_tools/space_peak_lint.py"
+     ]
+    },
+    {
+     "doc": "01_doctrine/voice-plain-words.md",
+     "area": [
+      "04_tools/space_peak_rules.json",
+      "04_tools/space_peak_lint.py"
+     ]
+    },
+    {
+     "doc": "01_doctrine/voice-judgement.md",
+     "area": [
+      "04_tools/space_peak_claims.py",
+      "02_substance/claims_register.md",
+      ".claude/skills/space-peak-publish-gate/SKILL.md"
+     ]
+    },
+    {
+     "doc": "01_doctrine/voice-map-and-site.md",
+     "area": [
+      "03_deliverables/map/",
+      ":(exclude)03_deliverables/map/space_peak_map.geojson",
+      "site/src/components/figure.ts",
+      "site/src/pages/map/"
+     ]
+    },
+    {
      "doc": "03_deliverables/map/README.md",
      "area": [
       "03_deliverables/map/",

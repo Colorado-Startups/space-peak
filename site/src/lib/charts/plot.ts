@@ -113,7 +113,8 @@ function plotOf(spec: ChartSpec) {
     color: { type: "identity" },
     x: { domain: [0, 9], inset: 8 },
     y: { domain: [0, 9], inset: 8, reverse: true },
-    marks: [Plot.dot(cells, { x: "x", y: "y", fill: "fill", r: 11 })],
+    // The svg is a named img; its 100 cells are decoration, and a named group with no role fails axe (#149).
+    marks: [Plot.dot(cells, { x: "x", y: "y", fill: "fill", r: 11, ariaHidden: "true" })],
   });
 }
 

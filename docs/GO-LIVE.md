@@ -21,7 +21,7 @@ flowchart LR
 | Say "go live" | Paul | Done | Paul's words in chat, 2026-11-28 |
 | Claude review token, a sign-in | Paul | Open, not needed to go live | `security.claude_review_share` reads 0%, a miss, on the [Quality page](https://colorado-startups.github.io/space-peak/) (2026-11-28) |
 | Admin-read token, a sign-in | Paul | Open, not needed to go live | 23 metrics stay unmeasured and unscored, per the Quality page |
-| spacepeak.co on the Worker, the www redirect, HTTPS | Claude | Step 50, [#211](https://github.com/Colorado-Startups/space-peak/issues/211) | No routes in `wrangler.jsonc`; spacepeak.co has no address record (dig, 2026-11-28) |
+| spacepeak.co on the Worker, the www redirect, HTTPS | Claude | Step 50, [#211](https://github.com/Colorado-Startups/space-peak/issues/211) | The route is in `wrangler.jsonc` ([#212](https://github.com/Colorado-Startups/space-peak/pull/212)). The www rule follows the merge |
 | AI crawlers allowed | Claude | Step 50 checks the zone | The preview's robots.txt allows all agents, AI input and AI training |
 
 ## Evidence

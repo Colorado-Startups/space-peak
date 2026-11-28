@@ -14,7 +14,8 @@ const HOST = "127.0.0.1";
 const BASE_URL = `http://${HOST}:${PORT}`;
 // The /mcp Worker runs under `wrangler dev` over the same dist/, through the package's mcp script, which reads
 // ../wrangler.jsonc. 3322 for the Worker, 3323 for its inspector (set in that script): both in this account's
-// block, not vendor defaults.
+// block, not vendor defaults. --infer-origin-from-routes=false keeps each request's own Host, so the
+// conformance test's DNS-rebinding check reaches the Worker instead of seeing the spacepeak.co route.
 const MCP_PORT = 3322;
 export const MCP_URL = `http://${HOST}:${MCP_PORT}/mcp`;
 

@@ -47,4 +47,4 @@ Each file in `data/estimates/` now says `approved: true` and `approved_on: 2026-
 
 ### Decision 2026-11-28: Live on spacepeak.co
 
-Paul said "go live" on 2026-11-28. spacepeak.co serves the site, www redirects there, and the preview stays out of search ([#211](https://github.com/Colorado-Startups/space-peak/issues/211)).
+Paul said "go live" on 2026-11-28. spacepeak.co serves the site, and www redirects to it. The preview stays out of search ([#211](https://github.com/Colorado-Startups/space-peak/issues/211)).

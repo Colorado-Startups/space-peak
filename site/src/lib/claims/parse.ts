@@ -24,6 +24,28 @@ const HEADING_RE = /^##\s+(.+?)\s*$/;
 const splitCells = (line: string) => line.replace(/^\|+|\|+$/g, "").split("|").map((c) => c.trim());
 const isStatus = (s: string): s is ClaimStatus => (STATUSES as readonly string[]).includes(s);
 
+/** The lower-cased names when a table row is a claims-table header, else null. */
+function claimHeader(cells: string[]): string[] | null {
+  const names = cells.map((c) => c.toLowerCase());
+  return CLAIM_COLUMNS.every((col) => names.includes(col)) ? names : null;
+}
+
+/** One claims-table row under its header. Throws on a bad row. */
+function claimRow(line: string, header: string[], section: string, seen: Set<string>): ClaimRow {
+  const cells = splitCells(line);
+  if (cells.length !== header.length)
+    throw new Error(`claims row has ${cells.length} cells, header has ${header.length}: ${line}`);
+  const cell = Object.fromEntries(header.map((name, i) => [name, cells[i]]));
+  const idMatch = ID_RE.exec(cell.id);
+  if (!idMatch || seen.has(cell.id)) throw new Error(`bad or duplicate claim id: ${cell.id}`);
+  seen.add(cell.id);
+  const status = cell.status.replace(/^`+|`+$/g, "");
+  if (!isStatus(status)) throw new Error(`${cell.id}: unknown status ${cell.status}`);
+  const site = "site" in cell ? { site: cell.site } : {};
+  const { claim, source, notes } = cell;
+  return { id: cell.id, series: idMatch[1], section, ...site, claim, status, source, notes };
+}
+
 /** Every row of every table whose header has ID, Claim, Status, Source and Notes. Throws on a bad row. */
 export function parseRegister(text: string): ClaimRow[] {
   const rows: ClaimRow[] = [];
@@ -34,28 +56,9 @@ export function parseRegister(text: string): ClaimRow[] {
     const line = raw.trim();
     const heading = HEADING_RE.exec(line);
     if (heading) section = heading[1];
-    if (heading || !line.startsWith("|")) {
-      header = null;
-      continue;
-    }
-    const cells = splitCells(line);
-    if (!header) {
-      const names = cells.map((c) => c.toLowerCase());
-      if (CLAIM_COLUMNS.every((col) => names.includes(col))) header = names;
-      continue;
-    }
-    if (/^[|\-: ]+$/.test(line)) continue;
-    if (cells.length !== header.length)
-      throw new Error(`claims row has ${cells.length} cells, header has ${header.length}: ${line}`);
-    const cell = Object.fromEntries(header.map((name, i) => [name, cells[i]]));
-    const idMatch = ID_RE.exec(cell.id);
-    if (!idMatch || seen.has(cell.id)) throw new Error(`bad or duplicate claim id: ${cell.id}`);
-    seen.add(cell.id);
-    const status = cell.status.replace(/^`+|`+$/g, "");
-    if (!isStatus(status)) throw new Error(`${cell.id}: unknown status ${cell.status}`);
-    const site = "site" in cell ? { site: cell.site } : {};
-    const { claim, source, notes } = cell;
-    rows.push({ id: cell.id, series: idMatch[1], section, ...site, claim, status, source, notes });
+    if (heading || !line.startsWith("|")) header = null;
+    else if (!header) header = claimHeader(splitCells(line));
+    else if (!/^[|\-: ]+$/.test(line)) rows.push(claimRow(line, header, section, seen));
   }
   return rows;
 }

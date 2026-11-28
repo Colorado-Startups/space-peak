@@ -117,6 +117,22 @@ function figureMiss(status, link, notes) {
   return notes === 1 ? null : `${status}, on a page that says so ${notes} times, not once`;
 }
 
+/** One built page's figures: how many, and why each one that does not show its status misses. */
+function pageFigures(JSDOM, dist, page, status) {
+  const { window } = new JSDOM(readFileSync(page, "utf8"));
+  const notes = window.document.querySelectorAll("[data-unproven-note]").length;
+  const figures = [...window.document.querySelectorAll("[data-claim], .figure")];
+  const misses = [];
+  for (const fig of figures) {
+    const id = fig.getAttribute("data-claim");
+    const link = fig.querySelector("a.figure-source")?.getAttribute("href") ?? "";
+    const bad = figureMiss(status.get(id), link, notes);
+    if (bad) misses.push(`${relative(dist, page)} ${id ?? "(no data-claim)"}: ${bad}`);
+  }
+  window.close();
+  return { total: figures.length, misses };
+}
+
 async function figureShare(root, p) {
   const source = `state now: elements with data-claim or class figure on the ${p.site_dir} pages; per ${p.site_dir}/${p.data_claims}, a verified or corrected one needs an https source link, an unverified or unverifiable one no link and a page with one [data-unproven-note], and any other status is a miss`;
   const dist = resolve(root, p.site_dir);
@@ -131,22 +147,23 @@ async function figureShare(root, p) {
     const misses = [];
     let total = 0;
     for (const page of pages) {
-      const { window } = new JSDOM(readFileSync(page, "utf8"));
-      const notes = window.document.querySelectorAll("[data-unproven-note]").length;
-      for (const fig of window.document.querySelectorAll("[data-claim], .figure")) {
-        total += 1;
-        const id = fig.getAttribute("data-claim");
-        const want = status.get(id);
-        const link = fig.querySelector("a.figure-source")?.getAttribute("href") ?? "";
-        const bad = figureMiss(want, link, notes);
-        if (bad) misses.push(`${relative(dist, page)} ${id ?? "(no data-claim)"}: ${bad}`);
-      }
-      window.close();
+      const got = pageFigures(JSDOM, dist, page, status);
+      total += got.total;
+      misses.push(...got.misses);
     }
     return total ? share(total - misses.length, misses, source, "figures") : no(`the ${pages.length} built pages show no figure yet`, source);
   } catch (err) {
     return no(`could not read the pages: ${first(err)}`, source);
   }
+}
+
+// Inside quotes, two quote marks are one quote in the cell.
+const doubledQuote = (text, i, quoted) => quoted && text[i] === '"' && text[i + 1] === '"';
+
+// A comma or a line break outside quotes ends the cell; a line break also starts the next row.
+function endCell(rows, cell, c) {
+  rows.at(-1).push(c === "\n" ? cell.replace(/\r$/, "") : cell);
+  if (c === "\n") rows.push([]);
 }
 
 /** RFC 4180 rows as objects keyed by the header row; a quoted cell may hold commas, quotes and line breaks. */
@@ -156,15 +173,14 @@ export function csvObjects(text) {
   let quoted = false;
   for (let i = 0; i < text.length; i += 1) {
     const c = text[i];
-    if (quoted && c === '"' && text[i + 1] === '"') {
+    if (doubledQuote(text, i, quoted)) {
       cell += '"';
       i += 1;
     } else if (c === '"') quoted = !quoted;
     else if (quoted || (c !== "," && c !== "\n")) cell += c;
     else {
-      rows.at(-1).push(c === "\n" ? cell.replace(/\r$/, "") : cell);
+      endCell(rows, cell, c);
       cell = "";
-      if (c === "\n") rows.push([]);
     }
   }
   if (cell) rows.at(-1).push(cell);
@@ -286,6 +302,38 @@ function readTally(message) {
 
 const checkRunId = (job) => /\/check-runs\/(\d+)$/.exec(String(job.check_run_url ?? ""))?.[1] ?? job.id;
 
+/** The detail rows of a tally: the counts, then each check id it lists. */
+function tallyRows(t) {
+  const ids = (key, kind) => (Array.isArray(t[key]) ? t[key] : []).map((id) => ({ label: `${kind}: ${id}`, value: 1, unit: "" }));
+  return [
+    ...["passed", "failed", "not_applicable", ...(t.baselined ? ["baselined"] : [])].map((key) => ({ label: key.replace("_", " "), value: t[key], unit: "checks" })),
+    ...ids("failed_ids", "failed"),
+    ...ids("baselined_ids", "on the baseline"),
+    ...ids("not_applicable_ids", "not applicable"),
+    ...(t.ids_cut ? [{ label: "check ids left out to fit the annotation", value: 1, unit: "" }] : []),
+  ];
+}
+
+/** The share from one successful run's annotation, or null when its job did not run. */
+async function runShare(gh, repo, run, { workflow, job }, source) {
+  const jobs = (await gh.rest(`repos/${repo}/actions/runs/${run.id}/jobs?per_page=100`))?.jobs ?? [];
+  const ran = jobs.find((j) => (j.name === job || String(j.name).endsWith(` / ${job}`)) && j.conclusion === "success");
+  if (!ran) return null;
+  const read = `${source}: run ${run.id} (${String(run.created_at).slice(0, 10)}, ${String(run.head_sha).slice(0, 7)})`;
+  const notes = await gh.rest(`repos/${repo}/check-runs/${checkRunId(ran)}/annotations?per_page=100`);
+  const ours = (level) => (Array.isArray(notes) ? notes : []).find((a) => a?.title === MCP_TITLE && a.annotation_level === level);
+  const note = ours("notice");
+  if (!note) {
+    const warned = ours("warning");
+    return no(warned ? `${workflow} run ${run.id}'s ${job} job warned: ${first(warned.message)}` : `${workflow} run ${run.id}'s ${job} job left no ${MCP_TITLE} annotation`, read);
+  }
+  const { t, why } = readTally(note.message);
+  if (!t) return no(`the ${MCP_TITLE} annotation on ${workflow} run ${run.id}: ${why}`, read);
+  const applies = t.run - t.not_applicable;
+  if (!applies) return no(`${workflow} run ${run.id} ran no conformance check that applies to /mcp`, read);
+  return ok(pct(t.passed, applies), read, tallyRows(t));
+}
+
 async function mcpShare(p, gh, repo) {
   const { workflow, job, branch, runs } = p.mcp;
   const source = `latest: the ${MCP_TITLE} annotation that node quality/collectors/space-peak.mjs --mcp-notice leaves on ${workflow} job ${job}, in the newest of the last ${runs} successful ${branch} runs whose ${job} job ran. A check site/e2e/mcp-not-applicable.json names is run and left out of the share`;
@@ -294,30 +342,8 @@ async function mcpShare(p, gh, repo) {
   try {
     const list = await gh.rest(`repos/${repo}/actions/workflows/${workflow}/runs?branch=${branch}&event=push&status=success&per_page=${runs}`);
     for (const run of list?.workflow_runs ?? []) {
-      const jobs = (await gh.rest(`repos/${repo}/actions/runs/${run.id}/jobs?per_page=100`))?.jobs ?? [];
-      const ran = jobs.find((j) => (j.name === job || String(j.name).endsWith(` / ${job}`)) && j.conclusion === "success");
-      if (!ran) continue;
-      const read = `${source}: run ${run.id} (${String(run.created_at).slice(0, 10)}, ${String(run.head_sha).slice(0, 7)})`;
-      const notes = await gh.rest(`repos/${repo}/check-runs/${checkRunId(ran)}/annotations?per_page=100`);
-      const ours = (level) => (Array.isArray(notes) ? notes : []).find((a) => a?.title === MCP_TITLE && a.annotation_level === level);
-      const note = ours("notice");
-      if (!note) {
-        const warned = ours("warning");
-        return no(warned ? `${workflow} run ${run.id}'s ${job} job warned: ${first(warned.message)}` : `${workflow} run ${run.id}'s ${job} job left no ${MCP_TITLE} annotation`, read);
-      }
-      const { t, why } = readTally(note.message);
-      if (!t) return no(`the ${MCP_TITLE} annotation on ${workflow} run ${run.id}: ${why}`, read);
-      const applies = t.run - t.not_applicable;
-      if (!applies) return no(`${workflow} run ${run.id} ran no conformance check that applies to /mcp`, read);
-      const ids = (key, kind) => (Array.isArray(t[key]) ? t[key] : []).map((id) => ({ label: `${kind}: ${id}`, value: 1, unit: "" }));
-      const rows = [
-        ...["passed", "failed", "not_applicable", ...(t.baselined ? ["baselined"] : [])].map((key) => ({ label: key.replace("_", " "), value: t[key], unit: "checks" })),
-        ...ids("failed_ids", "failed"),
-        ...ids("baselined_ids", "on the baseline"),
-        ...ids("not_applicable_ids", "not applicable"),
-        ...(t.ids_cut ? [{ label: "check ids left out to fit the annotation", value: 1, unit: "" }] : []),
-      ];
-      return ok(pct(t.passed, applies), read, rows);
+      const got = await runShare(gh, repo, run, p.mcp, source);
+      if (got) return got;
     }
     return no(`none of the last ${runs} successful ${workflow} runs on ${branch} ran its ${job} job`, source);
   } catch (err) {

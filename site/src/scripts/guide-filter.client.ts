@@ -1,10 +1,11 @@
-// The /guide/ filter: kind chips and a search field over the organisations table.
-// The page works without it: the table is full, the chips are plain links, the search field stays hidden.
+// The /guide/ filter: chips and a search field over each table in a [data-guide] section.
+// The page works without it: the tables are full, the chips are plain links, the search fields stay hidden.
+// A section's data-guide value names its query parameter: empty means ?kind= (organisations), "need" means ?need=.
 export const KIND_PARAM = "kind";
 
-/** The kind a `?kind=` query names, or "" for all. An unknown kind means all. */
-export function readKind(search: string, kinds: readonly string[]): string {
-  const kind = new URLSearchParams(search).get(KIND_PARAM) ?? "";
+/** The value a `?kind=` (or `?<param>=`) query names, or "" for all. An unknown value means all. */
+export function readKind(search: string, kinds: readonly string[], param = KIND_PARAM): string {
+  const kind = new URLSearchParams(search).get(param) ?? "";
   return kinds.includes(kind) ? kind : "";
 }
 
@@ -15,9 +16,13 @@ export function rowMatches(row: { kind: string; text: string }, kind: string, qu
 }
 
 export function init(doc: Document): void {
-  const root = doc.querySelector<HTMLElement>("[data-guide]");
   const win = doc.defaultView;
-  if (!root || !win) return;
+  if (!win) return;
+  for (const root of doc.querySelectorAll<HTMLElement>("[data-guide]")) initSection(root, win);
+}
+
+function initSection(root: HTMLElement, win: Window): void {
+  const param = root.dataset.guide || KIND_PARAM;
   const rows = [...root.querySelectorAll<HTMLTableRowElement>("tr[data-kind]")];
   const chips = [...root.querySelectorAll<HTMLAnchorElement>("a[data-kind-chip]")];
   const kinds = chips.map((c) => c.dataset.kindChip ?? "").filter(Boolean);
@@ -25,7 +30,7 @@ export function init(doc: Document): void {
   const input = form?.querySelector("input") ?? null;
   const none = root.querySelector<HTMLElement>("[data-guide-none]");
   const status = root.querySelector<HTMLElement>("[data-guide-status]");
-  let kind = readKind(win.location.search, kinds);
+  let kind = readKind(win.location.search, kinds, param);
 
   const apply = () => {
     let shown = 0;
@@ -46,8 +51,8 @@ export function init(doc: Document): void {
       event.preventDefault();
       kind = chip.dataset.kindChip ?? "";
       const url = new URL(win.location.href);
-      if (kind) url.searchParams.set(KIND_PARAM, kind);
-      else url.searchParams.delete(KIND_PARAM);
+      if (kind) url.searchParams.set(param, kind);
+      else url.searchParams.delete(param);
       win.history.replaceState(null, "", url);
       apply();
     });

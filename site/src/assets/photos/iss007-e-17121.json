@@ -1,0 +1,21 @@
+{
+  "file": "iss007-e-17121.webp",
+  "sha256": "0832b4184cb63f879e716869ae1afca110e9f95addeafa585806c125b556b622",
+  "id": "ISS007-E-17121",
+  "caption": "Colorado Springs from the space station, 2003.",
+  "alt": "Colorado Springs and the foothills of the Front Range, photographed from the International Space Station.",
+  "taken": "2003-10-12",
+  "features": "COLORADO SPRINGS, FRONT RANGE",
+  "source_url": "https://eol.jsc.nasa.gov/SearchPhotos/photo.pl?mission=ISS007&roll=E&frame=17121",
+  "original": {
+    "url": "https://eol.jsc.nasa.gov/DatabaseImages/ESC/large/ISS007/ISS007-E-17121.JPG",
+    "sha256": "cd64a61f6604b25fbe50bc43293d97ee3e852584d00a9e198c6c14164a6b2d78",
+    "pixels": "3032 x 2064"
+  },
+  "edits": "Cropped to the top 3032 x 2021 pixels, which drops the strip with the burned-in frame ID, then resized to 1200 x 800 webp.",
+  "rights": "Public domain. The terms say NASA material is not protected by copyright unless noted.",
+  "terms_url": "https://eol.jsc.nasa.gov/FAQ/default.htm#terms",
+  "credit": "Image courtesy of the Earth Science and Remote Sensing Unit, NASA Johnson Space Center",
+  "no_endorsement": "No NASA endorsement is implied.",
+  "read": "2026-11-27"
+}

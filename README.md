@@ -107,7 +107,7 @@ A checker that cannot run exits 3. In CI that fails the job, since a runner alwa
 
 ## Running the checks yourself
 
-Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs the self-tests, the contract test, and the claims and voice checkers over every tracked Markdown file (the `short:` block). When `site/` changes it also runs `astro check`, the build, vitest and the Playwright axe spec in Chromium (the `standard:` block).
+Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs the self-tests, the contract test, the Quality collector test, and the claims and voice checkers over every tracked Markdown file (the `short:` block). When `site/` changes it also runs `astro check`, the build, vitest and the Playwright specs in Chromium (the `standard:` block).
 
 One checker on the Mac is fine while you change it:
 
@@ -119,7 +119,7 @@ Every checker is standard library Python, deterministic, and offline. Each ships
 
 ## Quality and Process pages
 
-`.github/workflows/pages.yml` builds Git Crafter's Quality, Speed and Consumption page and its Process page from `quality/config.json` and `quality/process/config.json`. They measure this repository's pull requests, CI and Claude sessions. They are not the thought-leadership piece, and publishing them publishes nothing about a mountain.
+`.github/workflows/pages.yml` builds Git Crafter's Quality, Speed and Consumption page and its Process page from `quality/config.json` and `quality/process/config.json`. They measure this repository's pull requests, CI and Claude sessions. Four metrics on the Pages tab are Space Peak's own: sourced orgs, figure status chips, orgs per kind and valid open data files. `quality/collectors/space-peak.mjs` reads them against the goals in `quality/targets/space-peak.json`. They are not the thought-leadership piece, and publishing them publishes nothing about a mountain.
 
 The same workflow serves the map in `03_deliverables/map/` at `/map/`. The map shows summits, so every claim on it carries its register status and every point its USGS GNIS source. It is a repository deliverable, not the piece.
 
@@ -131,7 +131,10 @@ This scaffolding is built to be copied into sibling projects such as Photon Moun
 
 Everything Colorado Startups wrote here is dedicated to the public domain under [CC0 1.0](LICENSE). Use it for anything, with no credit needed. The code (`04_tools/`, `.github/workflows/`) is also offered under [0BSD](LICENSES/0BSD.txt), whichever you prefer.
 
-Two things here belong to others and keep their own terms:
+These belong to others and keep their own terms. The site's `/about/` page credits the same list, and `site/test/dom/about.test.ts` checks that the two match.
 
-- `CODE_OF_CONDUCT.md` is adapted from the Contributor Covenant 3.0, licensed CC BY-SA 4.0.
-- The basemap tiles in `03_deliverables/map/index.html` load at view time from OpenFreeMap (OpenMapTiles, OpenStreetMap contributors), and its terrain from Mapterhorn. The map displays their credit. Its stored data is CC0: USGS GNIS points and US Census road lines.
+- The painting in `site/public/art/` is AI-made from a source photo by Huttarl, edited, under [CC BY 2.5](https://creativecommons.org/licenses/by/2.5/). See `site/public/art/NOTICE.md`.
+- The site's display font, Aileron by [Dot Colon](https://www.dotcolon.net/fonts/aileron/), is [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).
+- The site's body font, Atkinson Hyperlegible by the [Braille Institute](https://www.brailleinstitute.org/freefont/), is under the [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/atkinsonhyperlegible/OFL.txt). Both fonts download at build time.
+- `CODE_OF_CONDUCT.md` is adapted from the [Contributor Covenant 3.0](https://www.contributor-covenant.org/version/3/0/), licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+- The basemap tiles in `03_deliverables/map/index.html` load at view time from [OpenFreeMap](https://openfreemap.org/) ([OpenMapTiles](https://openmaptiles.org/), [© OpenStreetMap contributors](https://www.openstreetmap.org/copyright)), and its terrain from [Mapterhorn](https://mapterhorn.com/attribution). The map displays their credit. Its stored data is CC0: USGS GNIS points and US Census road lines.

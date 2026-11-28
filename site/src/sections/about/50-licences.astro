@@ -1,0 +1,23 @@
+---
+import { CREDITS } from "./facts";
+// The live map's credit row shows once its component exists, as nav links wait for their page.
+const liveMap = Object.keys(import.meta.glob("../../components/map/LiveMap.astro")).length > 0;
+const rows = CREDITS.filter((c) => !c.liveMap || liveMap);
+---
+<section aria-labelledby="about-licences" data-about="licences">
+  <h2 id="about-licences">Licences</h2>
+  <p>Reuse anything Colorado Startups made here, with no credit needed. Others' work keeps its own terms.</p>
+  <div class="scroll">
+    <table class="credits">
+      <thead><tr><th scope="col">Part</th><th scope="col">From</th><th scope="col">Terms</th></tr></thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr data-credit={r.id}>
+            <th scope="row">{r.part}</th>
+            {[r.from, r.terms].map((parts) => <td>{parts.map((p) => (typeof p === "string" ? p : <a href={p.href}>{p.text}</a>))}</td>)}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>

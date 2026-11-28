@@ -1,0 +1,15 @@
+---
+import { STEPS } from "./facts";
+---
+<section aria-labelledby="about-listing" data-about="listing">
+  <h2 id="about-listing">How a listing gets in</h2>
+  <ol class="flow" role="list" data-flow>
+    {STEPS.map(({ label, detail }, i) => (
+      <li>
+        <span class="n" aria-hidden="true">{i + 1}</span>
+        <a class="step" href={label.href}>{label.text}</a>
+        <span class="detail">{detail.map((p) => (typeof p === "string" ? p : <a href={p.href}>{p.text}</a>))}</span>
+      </li>
+    ))}
+  </ol>
+</section>

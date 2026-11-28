@@ -1,0 +1,23 @@
+name: Accessibility problem
+description: Something on spacepeak.co is hard to see, hear, read or use.
+title: "[a11y] "
+labels: ["accessibility"]
+type: Task
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      placeholder: https://spacepeak.co/map/
+    validations: { required: true }
+  - type: textarea
+    id: problem
+    attributes:
+      label: What went wrong
+      description: What you tried, and what happened instead.
+    validations: { required: true }
+  - type: input
+    id: setup
+    attributes:
+      label: Browser, device and any assistive technology
+      placeholder: Safari on iPhone with VoiceOver

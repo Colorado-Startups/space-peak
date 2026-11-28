@@ -1,0 +1,17 @@
+---
+import { CLOUDFLARE_PRIVACY, HEADERS, HOSTS, WORKERS_LOGS } from "./facts";
+---
+<section aria-labelledby="about-privacy" data-about="privacy">
+  <h2 id="about-privacy">Privacy</h2>
+  <ul class="tiles" role="list">
+    <li data-fact="cookies"><b class="big">0</b> cookies. Nothing here sets one.</li>
+    <li data-fact="tracking"><b class="big">0</b> tracking scripts. Every script comes from this site.</li>
+    <li data-fact="hosts">
+      <b class="big">{HOSTS.length}</b> outside hosts, both for map tiles:{" "}
+      {HOSTS.map((h, i) => <>{i > 0 && " and "}<span data-host={h.host}>{h.name}</span></>)}.
+    </li>
+  </ul>
+  <p>Fonts and images come from this site. Its <a href={HEADERS}>security policy</a> blocks scripts and files from anywhere else.</p>
+  <p>Calls to <code>/mcp</code> run a Cloudflare Worker with <a href={WORKERS_LOGS}>Workers Logs</a> on.</p>
+  <p>Cloudflare serves the site. Its <a href={CLOUDFLARE_PRIVACY}>privacy policy</a> covers its own logs.</p>
+</section>

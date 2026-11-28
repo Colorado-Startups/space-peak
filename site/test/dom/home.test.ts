@@ -73,7 +73,10 @@ describe.skipIf(!ready && !inCI)("the built home page, sections 3 and 4", () => 
     expect(kinds, "section.kinds").not.toBeNull();
     expect(pipeline, "section.pipeline").not.toBeNull();
     const order = [...home.querySelectorAll("main > section")].map((s) => s.className.split(" ")[0]);
-    expect(order.slice(0, 3)).toEqual(["hero", "kinds", "pipeline"]);
+    // Relative order only: other steps add their own home sections between and after these.
+    expect(order[0]).toBe("hero");
+    expect(order.indexOf("kinds")).toBeGreaterThan(0);
+    expect(order.indexOf("pipeline")).toBe(order.indexOf("kinds") + 1);
   });
 
   it("counts per kind equal the data and the guide's chips, and each tile opens the guide on its kind", () => {

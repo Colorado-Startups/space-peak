@@ -1,7 +1,8 @@
 ---
-// /map/: the drawing, its key and its list twin. Step 27 adds a "Live map" button to .map-actions.
+// /map/: the live map on press, the drawing, its key and its list twin. The drawing is the map until the press.
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
+import LiveMap from "../../components/map/LiveMap.astro";
 import PlaceList from "../../components/map/PlaceList.astro";
 import SpaceMap from "../../components/map/SpaceMap.astro";
 import { loadMapData } from "../../lib/map/data";
@@ -16,7 +17,7 @@ const cities = new Map((await getCollection("orgs")).map((e) => [e.data.id, e.da
 <Base title="Map | Space Peak" description="The Colorado Startups region, the four summits on the Space Peak tour, and the organisations near them.">
   <h1>The map</h1>
   <p>The region around Colorado Springs, the four speculative summits, and who works nearby.</p>
-  <div class="map-actions"><a class="button" href="#places">Jump to the list</a></div>
+  <LiveMap><a class="button" href="#places">Jump to the list</a></LiveMap>
   <SpaceMap data={data} />
   <PlaceList data={data} cities={cities} />
 </Base>

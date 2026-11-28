@@ -1,0 +1,16 @@
+---
+import Snippet from "../../components/Snippet.astro";
+import { CLAUDE_STEPS, snippets } from "../../lib/ai/connect";
+const s = snippets(Astro.site!);
+---
+<section class="ai-row" id="claude" aria-labelledby="claude-title">
+  <h2 id="claude-title">Claude</h2>
+  <div>
+    <Snippet id="ai-mcp" text={s.mcp} />
+    <ol>{CLAUDE_STEPS.map((step) => <li>{step}</li>)}</ol>
+  </div>
+</section>
+<section class="ai-row" id="claude-code" aria-labelledby="claude-code-title">
+  <h2 id="claude-code-title">Claude Code</h2>
+  <div><Snippet id="ai-claude-code" text={s.claudeCode} /></div>
+</section>

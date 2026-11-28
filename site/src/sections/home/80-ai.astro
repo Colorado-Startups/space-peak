@@ -1,0 +1,28 @@
+---
+// Home section 8 (step 43, issue #131): three ways in, about 20 words. Each title links to its row on /ai/.
+// public/js/copy.js is the same script /ai/ loads.
+import Snippet from "../../components/Snippet.astro";
+import { snippets } from "../../lib/ai/connect";
+const s = snippets(Astro.site!);
+const TILES = [
+  { id: "chat", title: "Any chat", text: s.llms },
+  { id: "claude", title: "Claude", text: s.mcp },
+  { id: "opencode", title: "OpenCode", text: s.opencode },
+];
+---
+<section class="ai-teaser" aria-labelledby="ai-teaser-title">
+  <h2 id="ai-teaser-title">Use it with your AI</h2>
+  <ul class="tiles" role="list">
+    {TILES.map((t) => <li><Snippet id={`home-${t.id}`} text={t.text}><h3 slot="label"><a href={`/ai/#${t.id}`}>{t.title}</a></h3></Snippet></li>)}
+  </ul>
+  <script is:inline src="/js/copy.js" defer></script>
+</section>
+
+<style>
+  .ai-teaser { margin-block-end: var(--s-7); }
+  .tiles { display: grid; gap: var(--s-4); max-width: none; margin: 0; padding: 0; list-style: none; }
+  .tiles li { padding: var(--s-4); border: var(--line-hair) solid var(--c-rule); border-radius: var(--r-card); }
+  h3 { margin: 0; font-size: var(--t-step-1); }
+  h3 a { display: inline-flex; align-items: center; min-height: var(--size-tap); }
+  @media (min-width: 48rem) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+</style>

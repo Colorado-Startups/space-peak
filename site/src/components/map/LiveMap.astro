@@ -1,0 +1,23 @@
+---
+// The live map's press: a button, a status line and an empty frame. Nothing map-related downloads until the press;
+// then live.client.ts brings MapLibre, OpenFreeMap tiles and Mapterhorn relief. The drawing and list stay below.
+// The slot holds the page's other actions, so they share one row.
+---
+<div class="map-actions">
+  <button type="button" class="button" data-live-press aria-controls="live-map">Open the live map</button>
+  <slot />
+</div>
+<p class="live-status" data-live-status role="status"></p>
+<div class="live-map" id="live-map" data-live-map role="region" aria-label="Live map" hidden></div>
+<script>
+  // A dynamic import keeps Astro from inlining this, which the CSP (script-src 'self') would block,
+  // and keeps the map's code off the page until the press.
+  document.querySelector("[data-live-press]")?.addEventListener("click", () => import("./live.client").then((m) => m.open(document)));
+</script>
+
+<style>
+  button.button { border: 0; font-family: inherit; font-size: var(--t-step-0); cursor: pointer; }
+  .live-status { margin: 0 0 var(--s-4); color: var(--c-text-dim); }
+  .live-status:empty { margin: 0; }
+  .live-map { height: min(70vh, 36rem); margin-block-end: var(--s-5); border: var(--line-hair) solid var(--c-rule); background: var(--c-surface); }
+</style>

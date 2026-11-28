@@ -5,7 +5,8 @@ resolves:
   criteria: Yes if the FAA licence record and one independent launch log show an orbital launch attempt, rocket or kinetic, from a US site at least 150 km from the nearest ocean coastline.
 p: 0.12
 reasoning: >-
-  Register row E-04 says no inland US site has had FAA approval for overland launch, and that row is still unverified.
+  Register row E-04, corrected on 2026-11-27, finds an FAA Record of Decision from 2008 backing a license for Spaceport America, an inland New Mexico site, for suborbital launch.
+  Orbital launch from an inland site is unchecked there.
   The FAA Spaceports by State page lists Spaceport America in New Mexico as licensed for horizontal and vertical launch until December 14, 2028.
   The same page calls the Pacific Spaceport Complex in Alaska one of only four orbital vertical rocket launch sites in the United States.
 claims: [E-04]

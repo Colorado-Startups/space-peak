@@ -5,7 +5,7 @@ import { JSDOM } from "jsdom";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { getClaim } from "../../src/lib/claims/parse";
-import { launch } from "../../src/lib/launch/data";
+import { launch, launchClaims } from "../../src/lib/launch/data";
 import { liveLinks } from "../../src/lib/nav";
 import { DIST_DIR } from "./pages";
 
@@ -25,7 +25,7 @@ describe.skipIf(!ready && !process.env.CI)("the built /launch/ page", () => {
 
   it("gives every figure its register row's status, as a chip word", () => {
     const data = launch();
-    expect(figures.map((f) => f.getAttribute("data-claim"))).toEqual([...data.profile.map((e) => e.claim), ...data.make_or_break]);
+    expect(figures.map((f) => f.getAttribute("data-claim"))).toEqual(launchClaims(data));
     for (const f of figures) {
       const row = getClaim(f.getAttribute("data-claim")!);
       expect(f.getAttribute("data-status")).toBe(row.status);

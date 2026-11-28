@@ -55,12 +55,12 @@ The mountain is the romantic part. The business lives or dies on:
 
 Selection criteria, in priority order: **southern latitude** (more free spin from Earth's rotation), **clean east/southeast firing lane over empty land**, **good granite**, **road/rail access**, **fewest stakeholders**.
 
-*Every elevation, land status, ownership and firing-lane claim in this table is unverified (claims register S-01 to S-20), except the Pikes Peak landmark (S-16) and the Crestones land status (S-18).*
+*Every elevation, land status, ownership and firing-lane claim in this table is unverified (claims register S-01 to S-21). The exceptions are the Pikes Peak landmark (S-16), the Crestones land status (S-18), Blanca's sacred status (S-20) and Culebra's latitude (S-05, corrected).*
 
 | Site | Elev (ft) | Why it's interesting | The veto |
 |---|---|---|---|
 | **Greenhorn / Wet Mtns** | ~12,300 (unverified) | Fires east straight over **Piñon Canyon** Army live-fire land. DoD already keeps the corridor empty & controlled. **Engineering winner.** | Lower altitude; still federal land |
-| **Culebra Peak** | 14,047 (unverified) | **Southernmost 14er** (~37.1°N, best spin); **privately owned** (Cielo Vista Ranch) = one landowner, not the USFS | Private-deal complexity; watershed |
+| **Culebra Peak** | 14,047 (unverified) | **Colorado's southernmost 14er** (~37.1°N, best spin); **privately owned** (Cielo Vista Ranch) = one landowner, not the USFS | Private-deal complexity; watershed |
 | **Spanish Peaks** | ~13,600 (unverified) | Standalone cones; **emptiest sky**, open SE shot over Comanche National Grassland; less mountain to bore | Federal land; lower |
 | **Almagre ("Baldy")** | 12,367 (unverified) | Same granite batholith as Pikes, workforce next door, existing towers/road; SE lane over Fort Carson ranges | USFS; city watershed on its flanks |
 | **Pikes Peak** | 14,115 (unverified) | The **brand** + workforce + road & cog rail | 39°N, fires east over Kansas/metro; Nat'l Historic Landmark; donut shop |
@@ -93,7 +93,7 @@ It also matches its siblings. Photon Mountain and Fusion Canyon name a field plu
 
 - **Timeline:** physics is sound; engineering is 2040s-hard. This is a long-horizon bet wearing a near-term costume.
 - **The muzzle vacuum seal** and **satellite survivability at the ~200 g design target** are unsolved at production scale.
-- **Overland launch** has never been FAA-approved from an inland US site (unverified, register E-04), earned only by a long clean reliability record. A mass-driver failure is *not* a rocket explosion (no fuel, no staged debris; at most an ablative shell + a dense slug on a predictable arc if the circularization motor fails), closer to aviation's risk profile than artillery's. That's the argument that eventually opens overland launch, but it must be *demonstrated*, not asserted.
+- **Overland launch** from an inland US site has FAA backing only for suborbital flight, at Spaceport America in 2008 (register E-04, corrected). Orbital launch inland is unchecked, and either is earned only by a long clean reliability record. A mass-driver failure is *not* a rocket explosion (no fuel, no staged debris; at most an ablative shell + a dense slug on a predictable arc if the circularization motor fails), closer to aviation's risk profile than artillery's. That's the argument that eventually opens overland launch, but it must be *demonstrated*, not asserted.
 - **Sonic boom corridor** over any populated area is a civic fight (the city-council problem).
 - **Land status** is destiny: National Park = never; sacred peak = never; national forest = brutal; Army range or single private owner = tractable.
 - **Realistic path:** prove the tech on a coastal/ocean-downrange mountain (Mauna Kea, Chimborazo-class), run it boringly safely for a decade, *then* an inland granite site with a cleared lane gets its second interview.

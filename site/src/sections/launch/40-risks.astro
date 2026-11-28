@@ -1,0 +1,27 @@
+---
+// The brief's honest risk register (step 35), in its order: each risk's register rows, with their status.
+import Figure from "../../components/Figure.astro";
+import { launch } from "../../lib/launch/data";
+
+const risks = launch().risks;
+---
+<section aria-labelledby="risks">
+  <h2 id="risks">The risks</h2>
+  <p>The brief's own risk register, each line as its register rows. A corrected row marks where the brief was wrong.</p>
+  <dl class="risks">
+    {risks.map((r) => (
+      <div>
+        <dt>{r.label}</dt>
+        {r.claims.map((id) => <dd><Figure claim={id} /></dd>)}
+      </div>
+    ))}
+  </dl>
+</section>
+
+<style>
+  .risks { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); margin: 0 0 var(--s-7); }
+  .risks div { padding: var(--s-4); border: var(--line-hair) solid var(--c-rule); border-block-start: var(--line-bold) solid var(--c-text); border-radius: var(--r-card); }
+  .risks dt { margin-block-end: var(--s-2); font-weight: 700; }
+  .risks dd { margin: 0; }
+  .risks dd + dd { margin-block-start: var(--s-3); }
+</style>

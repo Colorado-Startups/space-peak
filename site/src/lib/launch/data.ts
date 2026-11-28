@@ -12,19 +12,45 @@ export type Anchor = (typeof ANCHORS)[number];
 const claimId = z.string().regex(/^[A-Z]-\d+$/, "must be a register ID such as P-03");
 const label = z.string().trim().min(1).regex(/^\D+$/, "no bare number: a value comes from a register row");
 
+// A card on the site tour. `site` is the register's Site column, so each row is checked to be that site's.
+// `veto` holds the rows of the brief's veto column for that place.
+const place = z.strictObject({ name: label, site: z.string().trim().min(1), claims: z.array(claimId).min(1), veto: z.array(claimId).optional() });
+
 export const launchSchema = z.strictObject({
   profile: z
     .array(z.strictObject({ at: z.enum(ANCHORS), label, claim: claimId }))
     .min(1)
     .refine((p) => new Set(p.map((e) => e.at)).size === p.length, "each point is marked once"),
   make_or_break: z.array(claimId).min(1),
+  sites: z.strictObject({ ranked: z.array(place).length(3), headquarters: place, exclusions: z.array(place).min(1) }),
+  risks: z.array(z.strictObject({ label, claims: z.array(claimId).min(1) })).min(1),
 });
 export type Launch = z.infer<typeof launchSchema>;
+export type Place = Launch["sites"]["headquarters"];
 
-/** Parse and check the file. Throws on a bad shape or on a claim the register does not have. */
+/** Every place on the tour, in page order: the ranked three, the headquarters, then the exclusions. */
+export const placesOf = (d: Launch): Place[] => [...d.sites.ranked, d.sites.headquarters, ...d.sites.exclusions];
+
+/** A place's rows: its own, then its veto's. */
+export const rowsOf = (p: Place): string[] => [...p.claims, ...(p.veto ?? [])];
+
+/** Every claim the page shows, in page order. */
+export const launchClaims = (d: Launch): string[] => [
+  ...d.profile.map((e) => e.claim),
+  ...d.make_or_break,
+  ...placesOf(d).flatMap(rowsOf),
+  ...d.risks.flatMap((r) => r.claims),
+];
+
+/** Parse and check the file. Throws on a bad shape, on a claim the register does not have, or on a row of another site. */
 export function parseLaunch(text: string, lookup: (id: string) => ClaimRow = getClaim): Launch {
   const data = launchSchema.parse(parse(text));
-  for (const id of [...data.profile.map((e) => e.claim), ...data.make_or_break]) lookup(id);
+  for (const id of launchClaims(data)) lookup(id);
+  for (const p of placesOf(data))
+    for (const id of rowsOf(p)) {
+      const site = lookup(id).site;
+      if (site !== p.site) throw new Error(`${p.name}: ${id} is a row of "${site ?? "no site"}", not "${p.site}"`);
+    }
   return data;
 }
 

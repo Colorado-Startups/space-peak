@@ -23,7 +23,8 @@
    "site_dir": "site/dist",
    "data_index": "data/index.json",
    "data_claims": "data/claims.json",
-   "sources": ["site/src", "data", "02_substance/claims_register.md"]
+   "sources": ["site/src", "data", "02_substance/claims_register.md"],
+   "mcp": { "workflow": "ci.yml", "job": "standard", "branch": "main", "runs": 10 }
   }
  },
  {
@@ -73,6 +74,23 @@
   "direction": "higher",
   "goal_source": "Space Peak's own goal, from launch plan step 46 (Colorado-Startups/space-peak#125), which Paul approved on 2026-11-16. Step 39 publishes each /data/ file with a JSON Schema and a sha256 in /data/index.json, so a reader or an agent can check every file. Near is 90%, one file in ten.",
   "source": "state now: site/dist/data/index.json and every file it lists, each against its sha256 there and its JSON Schema under site/dist/data/schemas/ (zod fromJSONSchema), orgs.csv row by row; a schema file must load as a JSON Schema",
+  "needs": "none",
+  "chart": "table",
+  "defined": "2026-11-27"
+ },
+ {
+  "id": "ai.mcp_conformance_share",
+  "tab": "pages",
+  "kind": "quality",
+  "group": "Space Peak",
+  "label": "MCP conformance checks passed",
+  "means": "Share of MCP conformance checks that /mcp passes. A check on the known-failures list is not a pass.",
+  "unit": "%",
+  "goal": 100,
+  "near": 90,
+  "direction": "higher",
+  "goal_source": "Space Peak's own goal, from launch plan step 46 (Colorado-Startups/space-peak#125), which Paul approved on 2026-11-16. The checks are the MCP conformance suite at the 2026-07-28 requirements, which site/e2e/mcp.spec.ts runs against /mcp. Near is 90%, one check in ten.",
+  "source": "latest: the MCP conformance annotation that node quality/collectors/space-peak.mjs --mcp-notice leaves on ci.yml job standard, read through the Checks API from the newest of the last 10 successful ci.yml runs on pushes to main whose standard job ran. A check id counts once per scenario; SKIPPED and INFO checks are not run; a check on mcp.spec.ts's BASELINE is run, never passed",
   "needs": "none",
   "chart": "table",
   "defined": "2026-11-27"

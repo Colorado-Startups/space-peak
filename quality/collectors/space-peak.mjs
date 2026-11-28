@@ -1,11 +1,18 @@
-// Space Peak's own metrics on the Pages tab, read from the repo and its built site.
+// Space Peak's own metrics on the Pages tab, read from the repo, its built site and its CI.
 // The contract is Git Crafter's quality/collectors/README.md (v7.0.2): targets/space-peak.json pairs
-// with this file by name, repo values come from params, and nothing here throws. A missing file
-// or package is could_not_check with its reason, never 0.
+// with this file by name, repo values come from params, and nothing here throws. A missing file,
+// package or run is could_not_check with its reason, never 0.
+//
+// ci.yml's standard job runs this file as a CLI after the e2e suite:
+//   node quality/collectors/space-peak.mjs --mcp-notice site/test-results
+// It prints one ::notice workflow command whose message is the MCP conformance tally as JSON.
+// GitHub keeps it as an annotation on that job's check run, and ai.mcp_conformance_share reads it
+// back through the Checks API. Git Crafter's ci-standard.yml has no artifact step, and the job log
+// is never read.
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 export const area = "space-peak";
 
@@ -19,7 +26,15 @@ export const DEFAULTS = {
   data_index: "data/index.json",
   data_claims: "data/claims.json",
   sources: ["site/src", "data", "02_substance/claims_register.md"],
+  mcp: { workflow: "ci.yml", job: "standard", branch: "main", runs: 10 },
 };
+
+// The annotation's title, which the CLI writes and the collector finds.
+export const MCP_TITLE = "MCP conformance";
+// GitHub's runner cuts an annotation message at 4,096 characters (actions/runner,
+// src/Runner.Worker/ExecutionContext.cs, _maxIssueMessageLength, read 2026-11-27). Past this
+// length the id lists drop, so the JSON stays whole and the counts stay.
+const NOTICE_CHARS = 4000;
 
 const ok = (value, source, detail) => ({ value, ...(detail ? { detail } : {}), source, read_at: new Date().toISOString() });
 const no = (reason, source) => ({ could_not_check: reason, source });
@@ -190,10 +205,135 @@ async function filesShare(root, p) {
   }
 }
 
-/** The four metrics, each measured or could_not_check with its reason. */
-export async function collect({ root = process.cwd(), params = {} } = {}) {
-  const p = { ...DEFAULTS, ...params };
-  const [orgs, figures, data] = await Promise.all([orgMetrics(root, p), figureShare(root, p), filesShare(root, p)]);
-  return { ...orgs, "site.figures_with_status_share": figures, "ai.files_valid_share": data };
+// A scenario's folder under the suite's -o folder: server-<scenario>-<ISO time with : and . as ->.
+const SCENARIO = /(?:^|\/)server-(.+)-\d{4}-\d\d-\d\dT\d\d-\d\d-\d\d-\d{3}Z$/;
+const SEVERITY = { FAILURE: 3, WARNING: 2, SUCCESS: 1 };
+
+// A scenario's checks once per id, at the most severe status (ties keep the last), as the suite's own
+// collapseDuplicateChecks does; INFO and SKIPPED checks are not run.
+function collapse(checks) {
+  const byId = new Map();
+  for (const c of Array.isArray(checks) ? checks : []) {
+    if (!c || c.status === "INFO") continue;
+    const had = byId.get(c.id);
+    if (!had || (SEVERITY[c.status] ?? 0) >= (SEVERITY[had.status] ?? 0)) byId.set(c.id, c);
+  }
+  return [...byId.values()].filter((c) => c.status !== "SKIPPED");
 }
 
+/**
+ * The MCP conformance tally under dir, or null with no results. It reads the checks.json files and the
+ * expected-failures baseline that site/e2e/mcp.spec.ts writes there. A check its baseline names, as
+ * `<scenario>` or `<scenario>:<check-id>`, is run and baselined, never passed. Any other check is
+ * passed on SUCCESS and failed on FAILURE or WARNING, as the suite judges it.
+ */
+export function conformance(dir) {
+  const all = files(dir);
+  const results = all.filter((f) => basename(f) === "checks.json").sort();
+  if (!results.length) return null;
+  const base = all.find((f) => basename(f) === "conformance-baseline.yml");
+  const listed = new Set(base ? [...readFileSync(base, "utf8").matchAll(/^\s+- (\S+)\s*$/gm)].map((m) => m[1]) : []);
+  const tally = { run: 0, passed: 0, baselined: 0, failed: 0, baselined_ids: new Set(), failed_ids: [] };
+  for (const f of results) {
+    const at = relative(dir, dirname(f));
+    const scenario = SCENARIO.exec(at)?.[1] ?? at;
+    for (const c of collapse(JSON.parse(readFileSync(f, "utf8")))) {
+      const entry = [scenario, `${scenario}:${c.id}`].find((e) => listed.has(e));
+      tally.run += 1;
+      if (entry) {
+        tally.baselined += 1;
+        tally.baselined_ids.add(entry);
+      } else if (c.status === "SUCCESS") tally.passed += 1;
+      else {
+        tally.failed += 1;
+        tally.failed_ids.push(`${scenario}:${c.id}`);
+      }
+    }
+  }
+  return { ...tally, baselined_ids: [...tally.baselined_ids].sort(), failed_ids: tally.failed_ids.sort() };
+}
+
+/** The ::notice workflow command for a tally: its message is the tally as JSON, escaped as GitHub reads it. */
+export function mcpNotice(tally) {
+  const full = JSON.stringify(tally);
+  const body = full.length <= NOTICE_CHARS ? full : JSON.stringify({ ...tally, baselined_ids: [], failed_ids: [], ids_cut: true });
+  return `::notice title=${MCP_TITLE}::${body.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A")}`;
+}
+
+const count = (n) => Number.isInteger(n) && n >= 0;
+
+// The tally in an annotation's message, or why it is not one.
+function readTally(message) {
+  let t;
+  try {
+    t = JSON.parse(message);
+  } catch {
+    return { why: "its message is not JSON" };
+  }
+  const whole = t && ["run", "passed", "baselined", "failed"].every((k) => count(t[k])) && t.passed + t.baselined + t.failed === t.run;
+  return whole ? { t } : { why: "its counts are missing or do not add up to run" };
+}
+
+const checkRunId = (job) => /\/check-runs\/(\d+)$/.exec(String(job.check_run_url ?? ""))?.[1] ?? job.id;
+
+async function mcpShare(p, gh, repo) {
+  const { workflow, job, branch, runs } = p.mcp;
+  const source = `latest: the ${MCP_TITLE} annotation that node quality/collectors/space-peak.mjs --mcp-notice leaves on ${workflow} job ${job}, in the newest of the last ${runs} successful ${branch} runs whose ${job} job ran. A check on site/e2e/mcp.spec.ts's BASELINE is run, never passed`;
+  if (!repo) return no("no repo: params.repo, GITHUB_REPOSITORY and the origin remote name none", source);
+  if (!gh) return no("no GitHub client: Git Crafter's collect.mjs passes lib", source);
+  try {
+    const list = await gh.rest(`repos/${repo}/actions/workflows/${workflow}/runs?branch=${branch}&event=push&status=success&per_page=${runs}`);
+    for (const run of list?.workflow_runs ?? []) {
+      const jobs = (await gh.rest(`repos/${repo}/actions/runs/${run.id}/jobs?per_page=100`))?.jobs ?? [];
+      const ran = jobs.find((j) => (j.name === job || String(j.name).endsWith(` / ${job}`)) && j.conclusion === "success");
+      if (!ran) continue;
+      const read = `${source}: run ${run.id} (${String(run.created_at).slice(0, 10)}, ${String(run.head_sha).slice(0, 7)})`;
+      const notes = await gh.rest(`repos/${repo}/check-runs/${checkRunId(ran)}/annotations?per_page=100`);
+      const ours = (level) => (Array.isArray(notes) ? notes : []).find((a) => a?.title === MCP_TITLE && a.annotation_level === level);
+      const note = ours("notice");
+      if (!note) {
+        const warned = ours("warning");
+        return no(warned ? `${workflow} run ${run.id}'s ${job} job warned: ${first(warned.message)}` : `${workflow} run ${run.id}'s ${job} job left no ${MCP_TITLE} annotation`, read);
+      }
+      const { t, why } = readTally(note.message);
+      if (!t) return no(`the ${MCP_TITLE} annotation on ${workflow} run ${run.id}: ${why}`, read);
+      if (!t.run) return no(`${workflow} run ${run.id} ran no conformance check`, read);
+      const ids = (key, kind) => (Array.isArray(t[key]) ? t[key] : []).map((id) => ({ label: `${kind}: ${id}`, value: 1, unit: "" }));
+      const rows = [
+        ...["passed", "baselined", "failed"].map((label) => ({ label, value: t[label], unit: "checks" })),
+        ...ids("failed_ids", "failed"),
+        ...ids("baselined_ids", "on the baseline"),
+        ...(t.ids_cut ? [{ label: "check ids left out to fit the annotation", value: 1, unit: "" }] : []),
+      ];
+      return ok(pct(t.passed, t.run), read, rows);
+    }
+    return no(`none of the last ${runs} successful ${workflow} runs on ${branch} ran its ${job} job`, source);
+  } catch (err) {
+    return no(`could not read the ${workflow} runs: ${first(err)}`, source);
+  }
+}
+
+/** The five metrics, each measured or could_not_check with its reason. gh and repo default to Git Crafter's lib. */
+export async function collect({ root = process.cwd(), params = {}, lib, gh = lib?.ghClient ? lib.ghClient() : null, repo } = {}) {
+  const p = { ...DEFAULTS, ...params, mcp: { ...DEFAULTS.mcp, ...params.mcp } };
+  const slug = repo ?? (lib?.ownRepo ? await lib.ownRepo(root, p).catch(() => "") : (p.repo ?? process.env.GITHUB_REPOSITORY ?? ""));
+  const [orgs, figures, data, mcp] = await Promise.all([orgMetrics(root, p), figureShare(root, p), filesShare(root, p), mcpShare(p, gh, /^[\w.-]+\/[\w.-]+$/.test(slug) ? slug : null)]);
+  return { ...orgs, "site.figures_with_status_share": figures, "ai.files_valid_share": data, "ai.mcp_conformance_share": mcp };
+}
+
+// The CLI. No results is a warning, never a failed job: the metric then reads not measured.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const [flag, dir] = process.argv.slice(2);
+  if (flag !== "--mcp-notice" || !dir) {
+    console.error("usage: node quality/collectors/space-peak.mjs --mcp-notice DIR");
+    process.exit(2);
+  }
+  const warn = (why) => console.log(`::warning title=${MCP_TITLE}::${why.replace(/%/g, "%25")}`);
+  try {
+    const got = conformance(resolve(dir));
+    if (got) console.log(mcpNotice(got));
+    else warn(`no MCP conformance results under ${dir}`);
+  } catch (err) {
+    warn(`could not read the results under ${dir}: ${first(err)}`);
+  }
+}

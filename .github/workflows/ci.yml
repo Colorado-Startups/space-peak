@@ -10,6 +10,8 @@ name: ci
 # The standard job (npm ci, then astro check, astro build, vitest with v8 coverage, then Chromium and the
 # Playwright axe spec over the built dist/) runs when the site's files change, or its data: the org schema and
 # checks in site/src/lib/orgs/ run only there, and /about/ says CI checks every listing.
+# Its last line leaves the MCP conformance tally as a notice on the job, which the Quality page reads back as
+# ai.mcp_conformance_share (quality/collectors/space-peak.mjs). It warns, and never fails, when no results exist.
 # Dependabot's github-actions entry bumps the pin.
 on:
   pull_request:
@@ -51,3 +53,4 @@ jobs:
         npm test
         npm run -w @spacepeak/site e2e:install
         npm run -w @spacepeak/site test:e2e
+        node quality/collectors/space-peak.mjs --mcp-notice site/test-results

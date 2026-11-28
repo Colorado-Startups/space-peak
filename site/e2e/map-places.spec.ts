@@ -101,7 +101,8 @@ test("axe passes with the live map and a popup open", async ({ page }) => {
 test("the places code is one chunk that the live map script imports, so the /map/ budget counts it", () => {
   const dir = join(DIST, "_astro");
   const js = readdirSync(dir).filter((f) => f.endsWith(".js"));
-  const chunks = js.filter((f) => readFileSync(join(dir, f), "utf8").includes('"sp-places"'));
+  // The button text survives minifying as written; a bare string literal can change its quotes.
+  const chunks = js.filter((f) => readFileSync(join(dir, f), "utf8").includes("Show on map: "));
   expect(chunks, "one chunk holds the places layer").toHaveLength(1);
   const importers = js.filter((f) => /live\.client/.test(f) && readFileSync(join(dir, f), "utf8").includes(`./${chunks[0]}`));
   expect(importers, "live.client imports the places chunk").toHaveLength(1);

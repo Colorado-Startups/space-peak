@@ -2,7 +2,6 @@
 // /data/map.geojson, each org's sourced fact from /data/orgs.json. One symbol layer draws them in the key's shapes and
 // colours; a click opens a popup, and each item in the list twin (#places) gets a "Show on map" button, so a keyboard
 // reaches every place. A popup is plain words: the name, the kind, one sentence and a source link.
-// Blanca Peak and the Crestones stay off the live map entirely (Paul, 2026-11-27): map.geojson does not carry them.
 import type { Map as LiveMap } from "maplibre-gl";
 import { KINDS, type Kind } from "../../../lib/orgs/kinds";
 
@@ -28,7 +27,9 @@ export function placesOf(fc: { features: Feature[] }, orgs: Org[]): Place[] {
     const [p, at] = [f.properties, f.geometry.coordinates];
     if (p.layer === "summit") {
       const where = `${at[1].toFixed(5)} N, ${(-at[0]).toFixed(5)} W`;
-      return [{ kind: "summit", name: p.name, at, url: p.source_url, source: "USGS", lines: ["Summit, speculative", `USGS records its summit at ${where}.`] }];
+      // Pikes Peak gives the project its name and its headquarters; the other three are the ranked summits.
+      const kind = p.name === "Pikes Peak" ? "Name and headquarters" : "Summit";
+      return [{ kind: "summit", name: p.name, at, url: p.source_url, source: "USGS", lines: [kind, `USGS records its summit at ${where}.`] }];
     }
     if (p.layer !== "org") return [];
     const o = byId.get(p.id);
@@ -90,7 +91,7 @@ export async function addPlaces(map: LiveMap, lib: typeof import("maplibre-gl"),
   const font = map.getStyle().layers.map((l) => (l.layout as Record<string, unknown> | undefined)?.["text-font"]).find(Array.isArray);
   if (map.getStyle().glyphs && font) map.addLayer({
     id: "sp-summit-names", type: "symbol", source: "sp-places", filter: ["==", ["get", "kind"], "summit"],
-    layout: { "text-field": ["concat", ["get", "name"], "\nspeculative"], "text-font": font as string[], "text-size": 14, "text-anchor": "right", "text-offset": [-1.2, 0] },
+    layout: { "text-field": ["get", "name"], "text-font": font as string[], "text-size": 14, "text-anchor": "right", "text-offset": [-1.2, 0] },
     paint: { "text-color": ink("summit"), "text-halo-color": ground, "text-halo-width": 2 },
   });
   doc.head.append(Object.assign(doc.createElement("style"), { textContent: CSS }));

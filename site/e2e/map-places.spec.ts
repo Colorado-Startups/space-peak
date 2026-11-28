@@ -9,6 +9,7 @@ import { gzipSync } from "node:zlib";
 const DIST = join(import.meta.dirname, "..", "dist");
 const TAGS = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]; // As routes-axe.spec.ts.
 type AxePage = ConstructorParameters<typeof AxeBuilder>[0]["page"]; // See routes-axe.spec.ts for the cast.
+const KIND: Record<string, string> = { command_base: "Command or base", institution: "University or institution", company: "Company or startup" };
 type Feature = { geometry: { coordinates: [number, number] }; properties: Record<string, any> };
 const read = (path: string) => JSON.parse(readFileSync(join(DIST, path), "utf8"));
 const features: Feature[] = read("data/map.geojson").features;
@@ -65,20 +66,24 @@ test("every org and summit in map.geojson draws once, in its kind", async ({ pag
 test("a place's popup opens by keyboard with its fact and source, and Escape hands focus back", async ({ page }) => {
   await openLiveMap(page);
   const summit = features.find((f) => f.properties.layer === "summit")!.properties;
+  const pikes = features.find((f) => f.properties.layer === "summit" && f.properties.name === "Pikes Peak")!.properties;
   const org = features.find((f) => f.properties.layer === "org")!.properties;
   const o = orgs.find((x) => x.id === org.id)!;
   const cases = [
-    { name: summit.name, says: ["Summit, speculative", "USGS records its summit at"], url: summit.source_url },
-    { name: org.name, says: [o.fact.text], url: o.sources.find((s) => s.id === o.fact.source)!.url },
+    { name: summit.name, kind: "Summit", says: ["USGS records its summit at"], url: summit.source_url },
+    { name: pikes.name, kind: "Name and headquarters", says: ["USGS records its summit at"], url: pikes.source_url },
+    { name: org.name, kind: KIND[org.kind]!, says: [o.fact.text], url: o.sources.find((s) => s.id === o.fact.source)!.url },
   ];
-  for (const { name, says, url } of cases) {
+  for (const { name, kind, says, url } of cases) {
     const show = page.getByRole("button", { name: `Show on map: ${name}` });
     await show.focus();
     await page.keyboard.press("Enter");
     const popup = page.locator(".maplibregl-popup");
     await expect(popup.locator("strong"), "focus moves to the place's name").toBeFocused();
     await expect(popup.locator("strong")).toHaveText(name);
+    await expect(popup.locator("p").first(), "the kind, in plain words").toHaveText(kind);
     for (const text of says) await expect(popup).toContainText(text);
+    await expect(popup).not.toContainText("speculative"); // The page says it once, above the map.
     await page.keyboard.press("Tab");
     const link = popup.getByRole("link", { name: /^Source: / });
     await expect(link).toBeFocused();

@@ -15,6 +15,14 @@ sources:
     url: https://www.faa.gov/space/spaceports_by_state
     publisher: FAA
     read: 2026-11-28
+  - id: faa-rod-2008
+    url: https://www.federalregister.gov/documents/2008/12/29/E8-30845/office-of-commercial-space-transportation-notice-of-approval-on-a-record-of-decision-rod-for-the
+    publisher: Federal Register
+    read: 2026-11-28
+  - id: faa-final-eis-2008
+    url: https://www.federalregister.gov/documents/2008/11/18/E8-27149/office-of-commercial-space-transportation-notice-of-availability-and-request-for-comment-on-a-final
+    publisher: Federal Register
+    read: 2026-11-28
 estimator: By Claude, approved by Paul
 date: 2026-11-16
 approved: true

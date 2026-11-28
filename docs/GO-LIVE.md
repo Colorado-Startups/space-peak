@@ -1,0 +1,53 @@
+# Go-live
+
+What spacepeak.co needs before it goes live, who does it, and the evidence. Step 49 wrote it ([#188](https://github.com/Colorado-Startups/space-peak/issues/188)). Step 50 waits on Paul's own "go live".
+
+```mermaid
+flowchart LR
+  A["Evidence and fact checks (Claude)"] --> B["Paul reads the preview"] --> C["Paul says go live"] --> D["Step 50: domain, HTTPS, crawlers (Claude)"]
+```
+
+## The list
+
+| Item | Owner | State | Evidence |
+| --- | --- | --- | --- |
+| The five odds approved | Paul | Done | [#176](https://github.com/Colorado-Startups/space-peak/pull/176), [#180](https://github.com/Colorado-Startups/space-peak/pull/180) |
+| Evidence on the preview | Claude | Done | [Evidence](#evidence) |
+| Publish gate and one fact-reviewer pass | Claude | Done | [Fact checks](#fact-checks) |
+| Open data leaves out the Blanca and Crestones rows | Claude | Before step 50 | [#199](https://github.com/Colorado-Startups/space-peak/issues/199) |
+| The world's launch count on `/launch/` brought up to date | Claude | Before step 50 | [#198](https://github.com/Colorado-Startups/space-peak/issues/198) |
+| Read the preview | Paul | Waiting | [spacepeak.coloradostartups.workers.dev](https://spacepeak.coloradostartups.workers.dev/) |
+| Say "go live" | Paul | Waiting | Paul's words in chat |
+| Claude review token, a sign-in | Paul | Open, not needed to go live | Without it, `security.claude_review_share` reads 0%, a miss, per the [Quality page](https://colorado-startups.github.io/space-peak/) |
+| Admin-read token, a sign-in | Paul | Open, not needed to go live | 23 settings and security metrics stay unmeasured and unscored, per the Quality page |
+| spacepeak.co on the Worker, the www redirect, HTTPS | Claude | Step 50, after Paul's yes | No routes in `wrangler.jsonc`; spacepeak.co has no address record (dig, 2026-11-28) |
+| AI crawlers allowed | Claude | Step 50 checks the zone | The preview's robots.txt allows all agents, AI input and AI training |
+
+## Evidence
+
+Read 2026-11-28.
+
+| Evidence | Result | Source |
+| --- | --- | --- |
+| Latest `ci.yml` run on main with the site job | 52 Playwright tests pass, axe on every route at 375 px and 1280 px | [run 46116838515](https://github.com/Colorado-Startups/space-peak/actions/runs/46116838515), at fc49b06 |
+| Lab vitals, worst of `/` and `/404.html` | LCP 0.7 s, CLS 0, TBT 0 ms, per the Quality page | [Design and Usability tabs](https://colorado-startups.github.io/space-peak/) |
+| Quality page | Master 88 at 06a0610, per the page | [colorado-startups.github.io/space-peak](https://colorado-startups.github.io/space-peak/) |
+
+Each page loaded in a browser at 375 px and 1280 px. On each: status 200, one h1, no sideways page scroll, every image loaded and sized, no Blanca or Crestones text. Screenshots were read, not committed. The pane ran hidden, so its timings are not lab numbers.
+
+| Page | Also checked | Found |
+| --- | --- | --- |
+| `/` | Masthead, painting, odds | The lead line read as fact; it now says it is our thesis |
+| `/map/` | Region drawing | At 375 px it opens on its empty west edge: [#194](https://github.com/Colorado-Startups/space-peak/issues/194) |
+| `/guide/` | Filter, search, both tables | The filter script moved the table after first paint. Fixed in this step |
+| `/launch/` | Profile, cadence, sites | The cadence slider loads below the fold |
+| `/ai/` | Copy buttons, setup steps | Nothing |
+| `/about/` | Listing flow, credits table | Its credits table scrolls in its own box |
+
+## Fact checks
+
+| Check | Result |
+| --- | --- |
+| Sources in `data/estimates/q-03.yaml` and `q-04.yaml` | Each cited line confirmed in a browser. q-03 adds the two 2008 Federal Register notices it cites |
+| Publish gate over the six built pages | Self-tests pass; lint and claims find nothing blocking |
+| Fact-reviewer | Six findings. Fixed here: q-03's sources, the home lead, the licence line in llms.txt. Filed: [#198](https://github.com/Colorado-Startups/space-peak/issues/198), [#199](https://github.com/Colorado-Startups/space-peak/issues/199), [#200](https://github.com/Colorado-Startups/space-peak/issues/200), [#201](https://github.com/Colorado-Startups/space-peak/issues/201) |

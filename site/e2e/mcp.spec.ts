@@ -1,6 +1,8 @@
 // /mcp over `wrangler dev` (the second webServer in playwright.config.ts): the six tools, the limit cap,
 // malformed bodies, the Origin rule, and the MCP conformance suite at the 2026-07-28 requirements.
-// CI only; nothing runs it on this Mac.
+// CI only; nothing runs it on this Mac. After the specs, ci.yml's standard job tallies the suite's
+// results and conformance-baseline.yml into the notice ai.mcp_conformance_share reads
+// (quality/collectors/space-peak.mjs --mcp-notice), so keep those two names.
 import { execFile } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { promisify } from "node:util";

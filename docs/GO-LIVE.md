@@ -11,27 +11,25 @@ flowchart LR
 
 | Item | Owner | State | Evidence |
 | --- | --- | --- | --- |
-| The five odds approved | Paul | Done | [#176](https://github.com/Colorado-Startups/space-peak/pull/176), [#180](https://github.com/Colorado-Startups/space-peak/pull/180) |
+| Five odds approved | Paul | Done | [#176](https://github.com/Colorado-Startups/space-peak/pull/176), [#180](https://github.com/Colorado-Startups/space-peak/pull/180) |
 | Evidence on the preview | Claude | Done | [Evidence](#evidence) |
-| Publish gate and one fact-reviewer pass | Claude | Done | [Fact checks](#fact-checks) |
+| Publish gate, fact-reviewer pass | Claude | Done | [Fact checks](#fact-checks) |
 | Open data leaves out the Blanca and Crestones rows | Claude | Before step 50 | [#199](https://github.com/Colorado-Startups/space-peak/issues/199) |
 | The world's launch count on `/launch/` brought up to date | Claude | Before step 50 | [#198](https://github.com/Colorado-Startups/space-peak/issues/198) |
 | Read the preview | Paul | Waiting | [spacepeak.coloradostartups.workers.dev](https://spacepeak.coloradostartups.workers.dev/) |
 | Say "go live" | Paul | Waiting | Paul's words in chat |
-| Claude review token, a sign-in | Paul | Open, not needed to go live | Without it, `security.claude_review_share` reads 0%, a miss, per the [Quality page](https://colorado-startups.github.io/space-peak/) |
+| Claude review token, a sign-in | Paul | Open, not needed to go live | Without it, `security.claude_review_share` reads 0% on 2026-11-28, a miss, per the [Quality page](https://colorado-startups.github.io/space-peak/) |
 | Admin-read token, a sign-in | Paul | Open, not needed to go live | 23 settings and security metrics stay unmeasured and unscored, per the Quality page |
 | spacepeak.co on the Worker, the www redirect, HTTPS | Claude | Step 50, after Paul's yes | No routes in `wrangler.jsonc`; spacepeak.co has no address record (dig, 2026-11-28) |
 | AI crawlers allowed | Claude | Step 50 checks the zone | The preview's robots.txt allows all agents, AI input and AI training |
 
 ## Evidence
 
-Read 2026-11-28.
-
 | Evidence | Result | Source |
 | --- | --- | --- |
 | Latest `ci.yml` run on main with the site job | 52 Playwright tests pass, axe on every route at 375 px and 1280 px | [run 46116838515](https://github.com/Colorado-Startups/space-peak/actions/runs/46116838515), at fc49b06 |
-| Lab vitals, worst of `/` and `/404.html` | LCP 0.7 s, CLS 0, TBT 0 ms, per the Quality page | [Design and Usability tabs](https://colorado-startups.github.io/space-peak/) |
-| Quality page | Master 88 at 06a0610, per the page | [colorado-startups.github.io/space-peak](https://colorado-startups.github.io/space-peak/) |
+| Lab vitals, worst of `/` and `/404.html` | LCP 0.7 s, CLS 0, TBT 0 ms, per the Quality page, 2026-11-28 | [Design and Usability tabs](https://colorado-startups.github.io/space-peak/) |
+| Quality page | Master 88 at 06a0610, per the page, 2026-11-28 | [colorado-startups.github.io/space-peak](https://colorado-startups.github.io/space-peak/) |
 
 Each page loaded in a browser at 375 px and 1280 px. On each: status 200, one h1, no sideways page scroll, every image loaded and sized, no Blanca or Crestones text. Screenshots were read, not committed. The pane ran hidden, so its timings are not lab numbers.
 

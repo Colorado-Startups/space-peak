@@ -52,8 +52,10 @@ describe("Markdown twins", () => {
   it("/ai/ twin holds every URL, command, Claude step and doc link the page shows", () => {
     expect(ai).toMatch(/^# Use it with your AI\n\n> Free\. No key\. Read-only\. CC0\.\n/);
     expect(ai.match(/^## .+$/gm)).toEqual(["## Any chat", "## Claude", "## Claude Code", "## OpenCode", `## Docs (read ${DOCS_READ})`, "## Open data"]);
-    expect(readFileSync(new URL("../../src/lib/ai/connect.ts", import.meta.url), "utf8")).toContain(`read on ${DOCS_READ}`);
-    for (const u of [s.llms, s.site, s.mcp, s.catalog]) expect(ai).toContain(u);
+    const connect = readFileSync(new URL("../../src/lib/ai/connect.ts", import.meta.url), "utf8");
+    expect(connect.match(/read on (\d{4}-\d{2}-\d{2})/)?.[1]).toBe(DOCS_READ);
+    expect(ai).toContain(`\nConnector URL: \`${s.mcp}\`\n`);
+    for (const u of [s.llms, s.site, s.catalog]) expect(ai).toContain(u);
     CLAUDE_STEPS.forEach((step, i) => expect(ai).toContain(`\n${i + 1}. ${step}\n`));
     for (const [name, href] of DOCS) expect(ai).toContain(`- [${name}](${href})`);
     expect(fences("bash")).toEqual([s.claudeCode, s.opencode]);

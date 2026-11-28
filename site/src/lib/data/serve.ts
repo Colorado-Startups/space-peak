@@ -1,7 +1,7 @@
-// Shared by the /data/ endpoints; the leading underscore keeps it out of the routes.
+// The GET handlers behind the /data/ endpoints. Each serves one file that build.ts builds, once per site build.
 import { getCollection } from "astro:content";
-import { allClaims } from "../../lib/claims/parse";
-import { buildFiles, indexJson, mediaType, registerDate } from "../../lib/data/build";
+import { allClaims } from "../claims/parse";
+import { buildFiles, indexJson, mediaType, registerDate } from "./build";
 
 const date = registerDate();
 let files: Promise<Map<string, string>> | undefined;
@@ -10,4 +10,5 @@ const respond = (path: string, body: string) => new Response(body, { headers: { 
 
 /** A GET handler that serves one built file. */
 export const serve = (path: string) => async () => respond(path, (await dataFiles()).get(path)!);
+/** The GET handler for /data/index.json: every file, with its hash and the register's date. */
 export const serveIndex = async () => respond("index.json", indexJson(await dataFiles(), date));

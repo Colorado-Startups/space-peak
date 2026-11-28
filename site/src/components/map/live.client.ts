@@ -1,5 +1,7 @@
 // The live map, fetched only on the press: LiveMap.astro's script imports this file on the first click, and this
 // file brings MapLibre. Until then, and whenever WebGL2 or the tiles fail, the drawing and the list are the map.
+// Both as URLs: a CSS import, even a dynamic one, would put MapLibre's stylesheet on the page before the press.
+import cssUrl from "maplibre-gl/dist/maplibre-gl.css?url";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
 import { BASE_STYLE, CREDITS, liveStyle, regionOf } from "./live/region";
 
@@ -14,6 +16,15 @@ async function json(url: string): Promise<any> {
   const res = await fetch(url, { signal: AbortSignal.timeout(WAIT_MS) });
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
   return res.json();
+}
+
+function sheet(doc: Document, href: string): Promise<void> {
+  return new Promise((done, failed) => {
+    const link = Object.assign(doc.createElement("link"), { rel: "stylesheet", href });
+    link.addEventListener("load", () => done());
+    link.addEventListener("error", () => failed(new Error(`${href} did not load`)));
+    doc.head.append(link);
+  });
 }
 
 /** One press: open the live map in [data-live-map], or say in [data-live-status] why the drawing stays. */
@@ -38,7 +49,7 @@ export async function open(doc: Document): Promise<void> {
   let ready;
   try {
     const [maplibre, , base, fc] = await Promise.all([
-      import("maplibre-gl"), import("maplibre-gl/dist/maplibre-gl.css"), json(BASE_STYLE), json("/data/map.geojson"),
+      import("maplibre-gl"), sheet(doc, cssUrl), json(BASE_STYLE), json("/data/map.geojson"),
     ]);
     const region = regionOf(fc);
     const ink = getComputedStyle(doc.documentElement).getPropertyValue("--c-community").trim();

@@ -4,9 +4,10 @@ import { Font } from "astro:assets";
 import HeadMeta from "../components/HeadMeta.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-const { title, description } = Astro.props as { title: string; description: string };
+const { title, description, jsonld } = Astro.props as { title: string; description: string; jsonld?: import("../lib/jsonld").Node[] };
+// Only the display font preloads: on the lab's slow mobile link, body-font preloads held back the hero painting's LCP (PR #108).
 ---
 <html lang="en">
-  <head><HeadMeta title={title} description={description} /><Font cssVariable="--font-display" preload /><Font cssVariable="--font-body" preload /></head>
+  <head><HeadMeta title={title} description={description} jsonld={jsonld} /><Font cssVariable="--font-display" preload /><Font cssVariable="--font-body" /></head>
   <body><a class="skip-link" href="#main">Skip to content</a><Header /><main id="main"><slot /></main><Footer /></body>
 </html>

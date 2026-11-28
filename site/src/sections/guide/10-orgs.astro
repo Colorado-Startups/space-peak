@@ -1,0 +1,88 @@
+---
+import { getCollection } from "astro:content";
+import { KINDS, type Kind } from "../../lib/orgs/kinds";
+
+// Who is here: every organisation that is not closed, from data/orgs/ through the orgs collection.
+const KIND_LABEL: Record<Kind, { many: string; one: string }> = {
+  command_base: { many: "Commands and bases", one: "Command or base" },
+  institution: { many: "Institutions", one: "Institution" },
+  company: { many: "Companies", one: "Company" },
+};
+const CITY_LABEL: Record<string, string> = { "security-widefield": "Security-Widefield" };
+const cityLabel = (city: string) =>
+  CITY_LABEL[city] ?? city.split("-").map((w) => w[0].toUpperCase() + w.slice(1)).join(" ");
+
+const orgs = (await getCollection("orgs"))
+  .map((entry) => entry.data)
+  .filter((org) => org.status !== "closed")
+  .sort((a, b) => a.name.localeCompare(b.name, "en"));
+const count = (kind: Kind) => orgs.filter((org) => org.kind === kind).length;
+const rows = orgs.map((org) => ({ org, source: org.sources.find((s) => s.id === org.fact.source)! }));
+---
+<section class="guide" data-guide aria-labelledby="guide-orgs">
+  <h2 id="guide-orgs" class="visually-hidden">Organisations</h2>
+  {orgs.length === 0 ? (
+    <div class="guide-empty" data-guide-empty>
+      <p>Organisations are still being added. Each one arrives with a sourced fact.</p>
+      <p><a href="/data/orgs.json">The data file</a> fills in as they land.</p>
+    </div>
+  ) : (
+    <>
+      <nav class="guide-chips" aria-label="Filter by kind">
+        <a href="/guide/" data-kind-chip="" data-count={orgs.length}>All <span class="n">{orgs.length}</span></a>
+        {KINDS.map((kind) => (
+          <a href={`/guide/?kind=${kind}`} data-kind-chip={kind} data-count={count(kind)}>
+            <span class="kind-mark" data-kind={kind} aria-hidden="true"></span>{KIND_LABEL[kind].many} <span class="n">{count(kind)}</span>
+          </a>
+        ))}
+      </nav>
+      <form class="guide-search" role="search" data-guide-search hidden>
+        <label for="guide-q">Search by name, city or fact</label>
+        <input id="guide-q" name="q" type="search" autocomplete="off" />
+      </form>
+      <p class="guide-status" data-guide-status aria-live="polite"></p>
+      <p class="guide-none" data-guide-none hidden>No organisation matches. Try another word or kind.</p>
+      <div class="guide-scroll">
+        <table>
+          <caption class="visually-hidden">Organisations in the Space Peak region</caption>
+          <thead><tr><th scope="col">Name</th><th scope="col">Kind</th><th scope="col">City</th><th scope="col">Fact and source</th></tr></thead>
+          <tbody>
+            {rows.map(({ org, source }) => (
+              <tr id={`org-${org.id}`} data-kind={org.kind} data-text={[org.name, cityLabel(org.city), org.fact.text].join(" ").toLowerCase()}>
+                <th scope="row">{org.name}</th>
+                <td><span class="kind-chip"><span class="kind-mark" data-kind={org.kind} aria-hidden="true"></span>{KIND_LABEL[org.kind].one}</span></td>
+                <td>{cityLabel(org.city)}</td>
+                <td>{org.fact.text} <a href={source.url}>{source.publisher}</a>, read <time datetime={source.read}>{source.read}</time></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <script>
+        // A dynamic import keeps Astro from inlining the script, which the CSP (script-src 'self') would block.
+        import("../../scripts/guide-filter.client.ts").then((m) => m.init(document));
+      </script>
+    </>
+  )}
+</section>
+
+<style>
+  .visually-hidden { position: absolute; width: var(--line-hair); height: var(--line-hair); overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .guide-chips { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-block-end: var(--s-4); }
+  .guide-chips a { display: inline-flex; align-items: center; gap: var(--s-2); min-height: var(--size-tap); padding-inline: var(--s-3); border: var(--line-hair) solid var(--c-border); border-radius: var(--size-tap); text-decoration: none; }
+  .guide-chips a[aria-current="true"] { border-width: var(--line-bold); border-color: var(--c-text); font-weight: 700; }
+  .guide-chips .n { color: var(--c-text-dim); }
+  .guide-search { display: flex; flex-wrap: wrap; gap: var(--s-2); align-items: center; margin-block-end: var(--s-3); }
+  .guide-search input { padding-inline: var(--s-3); border: var(--line-hair) solid var(--c-border); font-size: var(--t-step-0); }
+  .guide-status { color: var(--c-text-dim); font-size: var(--t-step--1); }
+  .guide-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: var(--s-2) var(--s-3); border-bottom: var(--line-hair) solid var(--c-rule); text-align: start; vertical-align: top; }
+  thead th { border-bottom: var(--line-edge) solid var(--c-text); }
+  .kind-chip { display: inline-flex; align-items: center; gap: var(--s-2); white-space: nowrap; }
+  /* Kind looks, as on the map: blue square, green diamond, purple circle. */
+  .kind-mark { display: inline-block; flex: none; width: calc(var(--size-check) * 0.75); height: calc(var(--size-check) * 0.75); }
+  .kind-mark[data-kind="command_base"] { background: var(--c-kind-blue); }
+  .kind-mark[data-kind="institution"] { background: var(--c-kind-green); transform: rotate(45deg) scale(0.85); }
+  .kind-mark[data-kind="company"] { background: var(--c-kind-purple); border-radius: 50%; }
+</style>

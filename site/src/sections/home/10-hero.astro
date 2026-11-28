@@ -1,0 +1,31 @@
+---
+// The home hero (step 22, issue #90): name, one line, one button, then the painting with its flight arc.
+// The painting is the LCP element, so it is preloaded and fetched at high priority. No script.
+import "../../styles/hero.css";
+import { liveLinks } from "../../lib/nav";
+import { drawHero } from "../../lib/hero/draw";
+
+const map = liveLinks().find((link) => link.href === "/map/");
+// 680w is the Lighthouse mobile pick (a 380 px slot at 1.75x needs 665 px); keep it at 30 KB or less for LCP (PR #108).
+const srcset = "/art/springs-680.webp 680w, /art/springs-720.webp 720w, /art/springs-1440.webp 1440w";
+// main is 1180 px wide at most, inside 1 rem of body padding a side.
+const sizes = "(min-width: 76rem) 1180px, calc(100vw - 2rem)";
+---
+<link rel="preload" as="image" href="/art/springs-720.webp" imagesrcset={srcset} imagesizes={sizes} fetchpriority="high" />
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-words">
+    <div class="hero-name">
+      <img class="hero-crest" src="/art/crest-96.webp" srcset="/art/crest-96.webp 1x, /art/crest-192.webp 2x" alt="" width="96" height="96" decoding="async" />
+      <h1 id="hero-title">Space Peak</h1>
+    </div>
+    <p class="hero-line">Colorado's hub for the future of space.</p>
+    {map && <a class="button" href={map.href}>Explore the map</a>}
+  </div>
+  <figure class="hero-art">
+    <div class="hero-frame">
+      <img src="/art/springs-720.webp" srcset={srcset} sizes={sizes} alt="A painting of Pikes Peak above stone spires built as aeries, with a griffin and gyrocopters in flight." width="1440" height="720" fetchpriority="high" decoding="async" />
+      <Fragment set:html={drawHero()} />
+    </div>
+    <figcaption class="hero-credit">AI-made painting. Source photo by Huttarl, <a href="https://creativecommons.org/licenses/by/2.5/">CC BY 2.5</a>.</figcaption>
+  </figure>
+</section>

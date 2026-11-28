@@ -1,0 +1,27 @@
+id: space-base-delta-1
+name: Space Base Delta 1
+summary: Unit that hosts real property at four installations, including Peterson SFB.
+kind: command_base
+subkind: unit
+city: colorado-springs
+area: nearby
+fact:
+  text: Space Base Delta 1 hosts real property at four installations, including Peterson SFB.
+  source: sbd1-page
+sources:
+  - id: sbd1-page
+    url: https://www.petersonschriever.spaceforce.mil/SpaceBaseDelta1/
+    publisher: Peterson and Schriever Space Force Base
+    read: 2026-11-27
+    quote: it currently hosts real property at four installations to include Peterson SFB
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Peterson+Space+Force+Base%27
+    publisher: U.S. Census Bureau TIGERweb
+    read: 2026-11-27
+location:
+  lat: 38.8196534
+  lon: -104.6961291
+  precision: campus
+  method: Interior point of the Peterson Space Force Base polygon in the Census TIGERweb Military Installations layer.
+  source: census-tigerweb
+status: active

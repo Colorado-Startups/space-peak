@@ -1,0 +1,28 @@
+id: millennium-space-systems
+name: Millennium Space Systems
+summary: A wholly owned subsidiary of The Boeing Company, with an office on Tech Center Drive in Colorado Springs.
+kind: company
+subkind: supplier
+city: colorado-springs
+area: nearby
+fact:
+  text: Millennium Space Systems lists a Colorado Springs office at 5555 Tech Center Drive, Suite 400.
+  source: millennium-address
+sources:
+  - id: millennium-home
+    url: https://www.millennium-space.com/
+    publisher: Millennium Space Systems
+    read: 2026-11-27
+    quote: a wholly-owned subsidiary of The Boeing Company
+  - id: millennium-address
+    url: https://www.millennium-space.com/
+    publisher: Millennium Space Systems
+    read: 2026-11-27
+    quote: Colorado Springs Office 5555 Tech Center Drive, Suite 400 Colorado Springs, CO 80919
+location:
+  lat: 38.91354
+  lon: -104.82682
+  precision: point
+  method: US Census Geocoder (Public_AR_Current) on the address the company publishes.
+  source: millennium-address
+status: active

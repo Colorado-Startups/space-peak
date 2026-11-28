@@ -1,0 +1,27 @@
+id: combat-forces-command
+name: U.S. Space Force Combat Forces Command
+summary: Space Force command that was Space Operations Command (SpOC) until November 3, 2025.
+kind: command_base
+subkind: command
+city: colorado-springs
+area: nearby
+fact:
+  text: Space Operations Command was redesignated Combat Forces Command on November 3, 2025.
+  source: cfc-about
+sources:
+  - id: cfc-about
+    url: https://www.ussf-cfc.spaceforce.mil/About-Us/About-Combat-Forces-Command
+    publisher: U.S. Space Force Combat Forces Command
+    read: 2026-11-27
+    quote: On November 3, 2025, SpOC was re-designated as USSF Combat Forces Command.
+  - id: census-tigerweb
+    url: https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/Special_Land_Use_Areas/MapServer/3/query?outFields=NAME,INTPTLAT,INTPTLON&returnGeometry=false&f=json&where=NAME%3D%27Peterson+Space+Force+Base%27
+    publisher: U.S. Census Bureau TIGERweb
+    read: 2026-11-27
+location:
+  lat: 38.8196534
+  lon: -104.6961291
+  precision: campus
+  method: Interior point of the Peterson Space Force Base polygon in the Census TIGERweb Military Installations layer.
+  source: census-tigerweb
+status: active

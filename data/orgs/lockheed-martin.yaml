@@ -1,0 +1,31 @@
+id: lockheed-martin
+name: Lockheed Martin
+summary: A company with teams in Denver, Boulder, Littleton and Colorado Springs, where it built a facility.
+kind: company
+subkind: prime
+city: colorado-springs
+area: loop
+fact:
+  text: Lockheed Martin built a facility in Colorado Springs.
+  source: lockheed-pulsar
+sources:
+  - id: lockheed-pulsar
+    url: https://news.lockheedmartin.com/news-releases?item=128807
+    publisher: Lockheed Martin
+    read: 2026-11-27
+    quote: "a new, state-of-the art facility built by Lockheed Martin (NYSE: LMT) in Colorado Springs"
+  - id: lockheed-colorado
+    url: https://www.lockheedmartin.com/en-us/careers/locations/colorado.html
+    publisher: Lockheed Martin
+    read: 2026-11-27
+    quote: Our teams in Denver, Boulder, Littleton, and Colorado Springs drive innovation
+location:
+  lat: 38.867255
+  lon: -104.760749
+  precision: city
+  method: US Census 2024 Gazetteer internal point for Colorado Springs city; the page names the city but no street address.
+  source: lockheed-colorado
+cs_ref:
+  collection: resources
+  id: lockheed-martin
+status: active

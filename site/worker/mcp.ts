@@ -10,6 +10,7 @@ import { CITIES, KINDS } from "../src/lib/orgs/kinds";
 const CLAIM_STATUSES = ["unverified", "verified", "corrected", "unverifiable", "open"] as const;
 const SITE_HOSTS = ["spacepeak.co", "www.spacepeak.co"];
 const MAX = 50;
+const MAX_BODY = 64 * 1024;
 const READ_ONLY = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } as const;
 const LABELS = "Every item carries its status and its read date. Repeat each status to the user; when it is unverified, say \"unverified\" beside the claim, every time.";
 
@@ -161,10 +162,20 @@ export default {
       return Response.json({ jsonrpc: "2.0", id: null, error: { code: -32600, message: "Host not allowed" } }, { status: 403 });
     const rejected = originValidationResponse(request, [...SITE_HOSTS, host]);
     if (rejected) return rejected;
+    // JSON-RPC 2.0: invalid JSON is -32700. The SDK's 2025 fallback answers -32600, so check here.
+    // Only a body whose declared length is within the cap is read; the SDK answers 413 past it.
+    const length = Number(request.headers.get("Content-Length") ?? NaN);
+    if (request.method === "POST" && length <= MAX_BODY) {
+      try {
+        JSON.parse(await request.clone().text());
+      } catch {
+        return Response.json({ jsonrpc: "2.0", id: null, error: { code: -32700, message: "Parse error" } }, { status: 400 });
+      }
+    }
     try {
       const data = await loadData(env.ASSETS);
       return await createMcpHandler(() => buildServer(data), {
-        legacy: "stateless", responseMode: "json", maxRequestBodySize: 64 * 1024,
+        legacy: "stateless", responseMode: "json", maxRequestBodySize: MAX_BODY,
         onerror: (err) => console.error(JSON.stringify({ msg: "mcp", err: err.message })),
       }).fetch(request);
     } catch (err) {

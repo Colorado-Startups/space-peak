@@ -72,7 +72,7 @@ jobs:
         run: |
           node -e '
             const run = JSON.parse(require("fs").readFileSync("quality/data/latest.json", "utf8"));
-            const walk = (o) => Object.entries(o ?? {}).forEach(([k, v]) => /^(design|usability|tests\.axe|security\.headers)/.test(k)
+            const walk = (o) => Object.entries(o ?? {}).forEach(([k, v]) => /^(design|usability|tests\.axe|security\.headers|site\.|ai\.)/.test(k)
               ? console.log(k, v?.could_not_check ? `not measured: ${v.could_not_check}` : v?.value)
               : v && typeof v === "object" && walk(v));
             walk(run);'

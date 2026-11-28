@@ -59,6 +59,7 @@ const csvCell = (v: string) => (/[",\r\n]/.test(v) ? `"${v.replaceAll('"', '""')
 const tally = (keys: readonly string[], values: string[]) => Object.fromEntries(keys.map((k) => [k, values.filter((v) => v === k).length]));
 const sourceUrl = (org: Org, id: string) => org.sources.find((s) => s.id === id)!.url;
 const TYPES: Record<string, string> = { json: "application/json", csv: "text/csv", geojson: "application/geo+json" };
+/** The media type a /data/ file is served with, by its extension. */
 export const mediaType = (path: string) => TYPES[path.split(".").pop()!];
 const FILE_SCHEMA: Record<string, SchemaName> = { "orgs.csv": "orgs-csv-row", "orgs.geojson": "orgs-geojson" };
 const schemaFor = (path: string) =>

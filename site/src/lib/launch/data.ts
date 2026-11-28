@@ -55,6 +55,7 @@ export function parseLaunch(text: string, lookup: (id: string) => ClaimRow = get
 }
 
 let cached: Launch | undefined;
+/** data/launch.yaml, parsed and checked once. */
 export const launch = (): Launch => (cached ??= parseLaunch(launchText));
 
 /** The key's letters, A for the first entry. */

@@ -100,6 +100,7 @@ HEADING_RE = re.compile(r"^##\s+(.+?)\s*$")
 
 
 def split_cells(raw):
+    """The trimmed cells of one Markdown table row."""
     return [c.strip() for c in raw.strip().strip("|").split("|")]
 
 
@@ -178,12 +179,14 @@ def parse_register(path, rules):
 
 
 def strip_noise(line):
+    """The line with inline code blanked and each link read as LINKED-SOURCE."""
     line = INLINE_CODE_RE.sub(" ", line)
     line = LINK_RE.sub(" LINKED-SOURCE ", line)
     return line
 
 
 def has_cue(sentence, cues):
+    """True when the sentence holds any of the cues, in any case."""
     low = sentence.lower()
     return any(cue in low for cue in cues)
 
@@ -234,6 +237,7 @@ def classify_claim(sentence, rules, registered, unverified):
 
 
 def lint_file(path, rules, registered, unverified):
+    """Every claims finding in one file, as (line_no, severity, check, message)."""
     try:
         with open(path, encoding="utf-8") as fh:
             text = fh.read()
@@ -258,6 +262,7 @@ def lint_file(path, rules, registered, unverified):
 
 
 def report(path, findings):
+    """Print one file's findings and its FAIL and WARN counts, or that it is clean."""
     if not findings:
         print(f"{path}: clean")
         return

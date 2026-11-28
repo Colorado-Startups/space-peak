@@ -15,6 +15,7 @@ export function rowMatches(row: { kind: string; text: string }, kind: string, qu
   return (!kind || row.kind === kind) && (!q || row.text.includes(q));
 }
 
+/** Wires the filter in every [data-guide] section of the page. */
 export function init(doc: Document): void {
   const win = doc.defaultView;
   if (!win) return;

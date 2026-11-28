@@ -24,6 +24,7 @@ const KIND_TOKEN: Record<Kind, string> = { command_base: "co-web-primary", insti
 const n = (v: number) => String(Math.round(v * 10) / 10);
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+/** One view's frame: its size in px, a [lon, lat] to [x, y] projection, and a test for a point inside it. */
 export function frame(view: View) {
   const v = VIEWS[view];
   const k = v.width / ((v.east - v.west) * COS);

@@ -11,6 +11,7 @@ const link = (label: string, href: string, note: string) => `- [${label}](${href
 /** The /data/ files: the built set (its names do not depend on the data), plus the manifest and the map layer. */
 export const dataFiles = () => ["index.json", ...buildFiles([], [], "").keys(), "map.geojson"].filter((p) => !p.startsWith("schemas/"));
 
+/** The /llms.txt text: the title and summary, then the live pages, their twins and the open data files as links. */
 export function llmsTxt(links: NavLink[] = liveLinks()): string {
   const schemaNote = (p: string) => {
     const name = SCHEMA_OF[p] ?? p.replace(/\.json$/, "");
@@ -33,4 +34,5 @@ export function llmsTxt(links: NavLink[] = liveLinks()): string {
   return [`# ${HOME.title}`, "", `> ${SUMMARY}`, "", ...sections.flatMap(([title, lines]) => [`## ${title}`, "", ...lines, ""])].join("\n");
 }
 
+/** GET /llms.txt, as plain text. */
 export const GET: APIRoute = () => new Response(llmsTxt(), { headers: { "Content-Type": "text/plain; charset=utf-8" } });

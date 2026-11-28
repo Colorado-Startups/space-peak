@@ -140,7 +140,7 @@
       { "glob": "04_tools/space_peak_rules.json", "reason": "Is the list of banned terms." },
       { "glob": "01_doctrine/voice.md", "reason": "States the rules, so it quotes bad examples beside good ones." },
       { "glob": "01_doctrine/voice-plain-words.md", "reason": "The voice doctrine's plain-words part lists the hedge words and AI tells by name, beside the conditionals it leaves unflagged." },
-      { "glob": "00_project_system/MASTER_PLAN.md", "reason": "Historical planning record, frozen as written 2026-07-14." }
+      { "glob": "00_project_system/MASTER_PLAN*.md", "reason": "The dated record of Paul's decisions and the 2026-07-14 plan, kept word for word, so its long-sentence and hedge warnings stay." }
     ]
   },
 

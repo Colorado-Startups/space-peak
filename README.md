@@ -106,7 +106,7 @@ A checker that cannot run exits 3. In CI that fails the job, since a runner alwa
 
 ## Running the checks yourself
 
-Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs the self-tests, the contract test, and the claims and voice checkers over every tracked Markdown file (the `short:` block). When `site/` changes it also runs `astro check`, the build, vitest and the Playwright axe spec in Chromium (the `standard:` block).
+Cloud first, the Mac last and small (Paul, 2026-11-02). Push your branch: `ci.yml` runs the self-tests, the contract test, the Quality collector test, and the claims and voice checkers over every tracked Markdown file (the `short:` block). When `site/` changes it also runs `astro check`, the build, vitest and the Playwright specs in Chromium (the `standard:` block). That job then prints the MCP conformance tally the Quality page reads.
 
 One checker on the Mac is fine while you change it:
 
@@ -118,7 +118,7 @@ Every checker is standard library Python, deterministic, and offline. Each ships
 
 ## Quality and Process pages
 
-`.github/workflows/pages.yml` builds Git Crafter's Quality, Speed and Consumption page and its Process page from `quality/config.json` and `quality/process/config.json`. They measure this repository's pull requests, CI and Claude sessions. They are not the thought-leadership piece, and publishing them publishes nothing about a mountain.
+`.github/workflows/pages.yml` builds Git Crafter's Quality, Speed and Consumption page and its Process page from `quality/config.json` and `quality/process/config.json`. They measure this repository's pull requests, CI and Claude sessions. Five metrics on the Pages tab are Space Peak's own: sourced orgs, figure status chips, orgs per kind, valid open data files and MCP conformance. `quality/collectors/space-peak.mjs` reads them against the goals in `quality/targets/space-peak.json`. They are not the thought-leadership piece, and publishing them publishes nothing about a mountain.
 
 The same workflow serves the map in `03_deliverables/map/` at `/map/`. The map shows summits, so every claim on it carries its register status and every point its USGS GNIS source. It is a repository deliverable, not the piece.
 

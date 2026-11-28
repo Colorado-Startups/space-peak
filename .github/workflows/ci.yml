@@ -30,6 +30,7 @@ jobs:
         python3 -I 04_tools/space_peak_lint.py --self-test
         python3 -I 04_tools/space_peak_map.py --self-test
         python3 -I 04_tools/space_peak_contract_test.py
+        node --test quality/collectors/space-peak.test.mjs
         curl -fsSL "$(python3 -I 04_tools/space_peak_map.py --region-url)" -o "$RUNNER_TEMP/regions.geojson"
         python3 -I 04_tools/space_peak_map.py --check --region-geojson "$RUNNER_TEMP/regions.geojson"
         git ls-files -z '*.md' | xargs -0 python3 -I 04_tools/space_peak_claims.py --register 02_substance/claims_register.md
@@ -46,3 +47,4 @@ jobs:
         npm test
         npm run -w @spacepeak/site e2e:install
         npm run -w @spacepeak/site test:e2e
+        node quality/collectors/space-peak.mjs --mcp-line site/test-results

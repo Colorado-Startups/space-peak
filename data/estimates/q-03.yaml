@@ -14,7 +14,7 @@ sources:
   - id: faa-spaceports
     url: https://www.faa.gov/space/spaceports_by_state
     publisher: FAA
-    read: 2026-11-16
+    read: 2026-11-28
 estimator: By Claude, approved by Paul
 date: 2026-11-16
 approved: true

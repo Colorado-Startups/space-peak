@@ -13,7 +13,7 @@ Produces a verdict and a report. It does not publish and does not decide.
 
 ## Inputs
 
-1. The draft path. Usually `03_deliverables/DRAFT-thought-leadership.md`.
+1. The path of the draft or page to ship. The site's pages live under `site/src/`.
 
 ## The gate
 

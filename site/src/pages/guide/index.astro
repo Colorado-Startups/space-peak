@@ -1,10 +1,9 @@
 ---
+// The /guide/ page. Each guide section is its own file in src/sections/guide/, rendered in filename order
+// (10-orgs, ...), so a later step adds a section by adding a file.
 import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import { itemList } from "../../lib/jsonld";
-
-// Each guide section is its own file in src/sections/guide/, rendered in filename order (10-orgs, ...),
-// so a later step adds a section by adding a file.
 const modules = import.meta.glob<{ default: any }>("../../sections/guide/*.astro", { eager: true });
 const sections = Object.keys(modules).sort().map((key) => modules[key].default);
 // The guide as a schema.org ItemList, each entry pointing at its row in the table (closed orgs have no row).

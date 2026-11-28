@@ -1,3 +1,5 @@
+// The schema each data/orgs/*.yaml file must match, and the check that a file's id is its file name.
+
 import { z } from "zod";
 import { AREAS, CITIES, KINDS, PRECISIONS, STATUSES, SUBKINDS } from "./kinds";
 

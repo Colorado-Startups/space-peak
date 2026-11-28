@@ -1,7 +1,7 @@
-import type { Org } from "./schema";
-
 // Checks across the parsed orgs that one file's schema cannot see: area, duplicates, source age, summary length.
 // Source age and summary length are guidelines (issue #154): each is a warning, and only errors fail CI.
+import type { Org } from "./schema";
+
 export const NEARBY_KM = 60;
 export const MAX_AGE_DAYS = 365;
 export const SUMMARY_CHARS = 200;

@@ -20,6 +20,10 @@
     {
      "glob": "CODE_OF_CONDUCT.md",
      "why": "the Contributor Covenant 3.0 text, adopted word for word under its own CC BY-SA 4.0 licence; this project does not write or shorten it"
+    },
+    {
+     "glob": "02_substance/claims_register.md",
+     "why": "a data table read by lookup, not a doc read end to end: the one source that site/src/lib/claims/parse.ts, 04_tools/space_peak_claims.py, the map generator's register pin and the MCP server parse, so it stays one file, on the footing of the data/ files"
     }
    ],
    "areas": [
